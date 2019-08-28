@@ -1,1 +1,25 @@
-.
+anscombe.csv	
+attention.csv	
+brain_networks.csv	
+car_crashes.csv	
+diamonds.csv	
+dots.csv	
+exercise.csv	
+flights.csv	
+fmri.csv	
+gammas.csv	
+iris.csv	
+mpg.csv	
+planets.csv	
+tips.csv	
+titanic.csv	
+
+
+usage :
+ex)
+import seaborn as sns
+
+iris = sns.load_dataset("iris")    
+titanic = sns.load_dataset("titanic")    
+tips = sns.load_dataset("tips")    
+flights = sns.load_dataset("flights")    
