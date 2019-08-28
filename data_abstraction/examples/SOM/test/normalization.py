@@ -48,3 +48,24 @@ class VarianceNormalizer(Normalizer):
         return n_vect * st + me
     
     
+class RangeNormalizer(Normalizer):
+
+    name = 'range'
+
+
+class LogNormalizer(Normalizer):
+
+    name = 'log'
+
+
+class LogisticNormalizer(Normalizer):
+
+    name = 'logistic'
+
+
+class HistDNormalizer(Normalizer):
+    name = 'histd'
+
+
+class HistCNormalizer(Normalizer):
+    name = 'histc'
