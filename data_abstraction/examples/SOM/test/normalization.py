@@ -3,7 +3,6 @@ import sys
 import inspect
 
 class NormalizerFactory(object):
-
     @staticmethod
     def build(type_name):
         for name, obj in inspect.getmembers(sys.modules[__name__]):
@@ -15,7 +14,6 @@ class NormalizerFactory(object):
             
             
 class Normalizer(object):
-
     def normalize(self, data):
         raise NotImplementedError()
 
@@ -27,7 +25,6 @@ class Normalizer(object):
         
         
 class VarianceNormalizer(Normalizer):
-
     name = 'var'
 
     def _mean_and_standard_dev(self, data):
@@ -49,17 +46,14 @@ class VarianceNormalizer(Normalizer):
     
     
 class RangeNormalizer(Normalizer):
-
     name = 'range'
 
 
 class LogNormalizer(Normalizer):
-
     name = 'log'
 
 
 class LogisticNormalizer(Normalizer):
-
     name = 'logistic'
 
 
