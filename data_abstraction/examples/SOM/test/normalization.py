@@ -26,3 +26,25 @@ class Normalizer(object):
         raise NotImplementedError()
         
         
+class VarianceNormalizer(Normalizer):
+
+    name = 'var'
+
+    def _mean_and_standard_dev(self, data):
+        return np.mean(data, axis=0), np.std(data, axis=0)
+
+    def normalize(self, data):
+        me, st = self._mean_and_standard_dev(data)
+        st[st == 0] = 1  # prevent: when sd = 0, normalized result = NaN
+        return (data-me)/st
+
+    def normalize_by(self, raw_data, data):
+        me, st = self._mean_and_standard_dev(raw_data)
+        st[st == 0] = 1  # prevent: when sd = 0, normalized result = NaN
+        return (data-me)/st
+
+    def denormalize_by(self, data_by, n_vect):
+        me, st = self._mean_and_standard_dev(data_by)
+        return n_vect * st + me
+    
+    
