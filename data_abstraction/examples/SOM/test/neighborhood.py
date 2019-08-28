@@ -13,3 +13,16 @@ class NeighborhoodFactory(object):
         else:
             raise Exception(
                 "Unsupported neighborhood function '%s'" % neighborhood_func)
+
+            
+            
+class GaussianNeighborhood(object):
+
+    name = 'gaussian'
+
+    @staticmethod
+    def calculate(distance_matrix, radius, dim):
+        return np.exp(-1.0*distance_matrix/(2.0*radius**2)).reshape(dim, dim)
+
+    def __call__(self, *args, **kwargs):
+        return self.calculate(*args)
