@@ -14,3 +14,15 @@ class NormalizerFactory(object):
             raise Exception("Unknown normalization type '%s'" % type_name)
             
             
+class Normalizer(object):
+
+    def normalize(self, data):
+        raise NotImplementedError()
+
+    def normalize_by(self, raw_data, data):
+        raise NotImplementedError()
+
+    def denormalize_by(self, raw_data, data):
+        raise NotImplementedError()
+        
+        
