@@ -8,6 +8,6 @@ Python version 3.5x
 
 
 # list
-SOM for test
-miniSOM for test
+- SOM for test
+- miniSOM for test
 
