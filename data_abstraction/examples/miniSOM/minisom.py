@@ -35,3 +35,31 @@ def _build_iteration_indexes(data_len, num_iterations,
         return _wrap_index__in_verbose(iterations)
     else:
         return iterations
+
+      
+def _wrap_index__in_verbose(iterations):
+    """Yields the values in iterations printing the status on the stdout."""
+    m = len(iterations)
+    digits = len(str(m))
+    progress = '\r [ {s:{d}} / {m} ] {s:3.0f}% - ? it/s'
+    progress = progress.format(m=m, d=digits, s=0)
+    stdout.write(progress)
+    beginning = time()
+    for i, it in enumerate(iterations):
+        yield it
+        it_per_sec = (i+1) / ((time() - beginning) + float_info.min)
+        sec_left = ((m-i) / float(it_per_sec))
+        time_left = str(timedelta(seconds=sec_left))[:7]
+        progress = '\r [ {i:{d}} / {m} ]'.format(i=i+1, d=digits, m=m)
+        progress += ' {p:3.0f}%'.format(p=100*(i+1)/m)
+        progress += ' - {it_per_sec:4.2f} it/s'.format(it_per_sec=it_per_sec)
+        progress += ' - {time_left} left '.format(time_left=time_left)
+        stdout.write(progress)
+     
+      
+def fast_norm(x):
+    """Returns norm-2 of a 1-D numpy array.
+    * faster than linalg.norm in case of 1-D arrays (numpy 1.9.2rc1).
+    """
+    return sqrt(dot(x, x.T))
+  
