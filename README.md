@@ -4,7 +4,10 @@ Sejong university.
 
 
 # installation 
+Python version 3.5x
 
 
+# list
+SOM for test
+miniSOM for test
 
-# usage
