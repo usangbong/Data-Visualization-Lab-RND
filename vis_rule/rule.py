@@ -117,3 +117,7 @@ print("col data classes:")
 print(dataSummary[3])
 print("col data types:")
 print(KEYS)
+
+KEYS_COUNT = countingType(KEYS)
+print("-----DATA TYPES-----")
+print("%d Dimension, %d Measure." %(KEYS_COUNT[0], KEYS_COUNT[1]))
