@@ -54,3 +54,27 @@ def countingType(_keys):
 		else:
 			_counting[1] += 1
 	return _counting
+
+def visType(_d, _m):
+	_vis = []
+	if _d == 0 and _m == 2:
+		_vis.append("scatter")
+		_vis.append("heatmap")
+	elif _d == 1 and _m == 1:
+		_vis.append("bar")
+		_vis.append("line")
+		_vis.append("pie")
+	elif _d == 1 and _m == 2:
+		_vis.append("bar")
+		_vis.append("line")
+	elif _d == 1 and _m == 3:
+		_vis.append("bar")
+		_vis.append("line")
+	elif _d == 2 and _m == 0:
+		_vis.append("scatter")
+		_vis.append("heatmap")
+	elif _d == 2 and _m == 1:
+		_vis.append("scatter")
+	else:
+		_vis.append("scatter")
+	return _vis
