@@ -37,3 +37,10 @@ def decompositionDataset(_filename):
 
 	_summary.append(_types)
 	return _summary
+
+def typeDeterminant(_rowNum, _val):
+	remove_dup = list(set(_val))
+	if _rowNum == len(remove_dup) or len(remove_dup) > 30:
+		return MEASURE
+	else:
+		return DIMENSION
