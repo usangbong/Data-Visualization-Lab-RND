@@ -106,3 +106,14 @@ for c in range(dataSummary[2]):
 	else:
 		KEYS.append(MEASURE)
 		
+print("-----DATASET-----")
+print("dataset:")
+print(dataSummary[0])
+print("row len:")
+print(dataSummary[1])
+print("col len:")
+print(dataSummary[2])
+print("col data classes:")
+print(dataSummary[3])
+print("col data types:")
+print(KEYS)
