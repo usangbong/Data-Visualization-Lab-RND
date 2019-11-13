@@ -91,3 +91,5 @@ def possibleVis(_keysCount):
 			for v in range(len(_v)):
 				_pv.append("%dd%dm-%s" %(i,j,_v[v]))
 	return _pv
+
+dataSummary = decompositionDataset(filename)
