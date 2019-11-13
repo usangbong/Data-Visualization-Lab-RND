@@ -4,10 +4,11 @@ Sejong university.
 
 
 # installation 
-Python version 3.5x
+Cross-platform: Python version 3.5x
+??: ??
 
 
-# list
+# list(cross-platform)
 - SOM for test
 - miniSOM for test
 
