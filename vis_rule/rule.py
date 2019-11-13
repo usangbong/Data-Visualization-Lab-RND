@@ -44,3 +44,13 @@ def typeDeterminant(_rowNum, _val):
 		return MEASURE
 	else:
 		return DIMENSION
+
+def countingType(_keys):
+	# 0: Dimension, 1: Measure
+	_counting = [0, 0]
+	for i in range(len(_keys)):
+		if _keys[i] == DIMENSION:
+			_counting[0] += 1
+		else:
+			_counting[1] += 1
+	return _counting
