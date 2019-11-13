@@ -121,3 +121,7 @@ print(KEYS)
 KEYS_COUNT = countingType(KEYS)
 print("-----DATA TYPES-----")
 print("%d Dimension, %d Measure." %(KEYS_COUNT[0], KEYS_COUNT[1]))
+
+print("-----VISUALIZATION TYPES-----")
+VIS = possibleVis(KEYS_COUNT)
+print(VIS)
