@@ -16,3 +16,24 @@ KEYS_COUNT = []
 VIS = []
 DIMENSION = "D"
 MEASURE = "M"
+
+def decompositionDataset(_filename):
+	_summary = []
+
+	# read csv file
+	csv_reader = pd.read_csv(_filename)
+	# get numbers of row & col
+	numberOfRow = csv_reader.shape[0]
+	numberOfCol = csv_reader.shape[1]
+	dataset = np.array(csv_reader)
+
+	_summary.append(dataset)
+	_summary.append(numberOfRow)
+	_summary.append(numberOfCol)
+
+	_types = []
+	for i in range(0, numberOfCol):
+		_types.append(str(type(dataset[0][i])))
+
+	_summary.append(_types)
+	return _summary
