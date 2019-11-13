@@ -93,3 +93,16 @@ def possibleVis(_keysCount):
 	return _pv
 
 dataSummary = decompositionDataset(filename)
+
+for c in range(dataSummary[2]):
+	if dataSummary[3][c] == colTypes[0]:
+		KEYS.append(DIMENSION)
+	elif dataSummary[3][c] == colTypes[2]:
+		_cols = []
+		for r in range(dataSummary[1]):
+			_cols.append(dataSummary[0][r][c])
+		_k = typeDeterminant(dataSummary[1], _cols)
+		KEYS.append(_k)
+	else:
+		KEYS.append(MEASURE)
+		
