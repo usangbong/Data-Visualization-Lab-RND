@@ -78,3 +78,16 @@ def visType(_d, _m):
 	else:
 		_vis.append("scatter")
 	return _vis
+
+def possibleVis(_keysCount):
+	_pv = []
+
+	for i in range(_keysCount[0]+1):
+		for j in range(_keysCount[1]+1):
+			if i==0 and j <2:
+				continue
+			_v = visType(i, j)
+			
+			for v in range(len(_v)):
+				_pv.append("%dd%dm-%s" %(i,j,_v[v]))
+	return _pv
