@@ -38,3 +38,7 @@ struct bmu {
 	int c;
 };
 
+typedef struct bmu t_bmu;
+t_bmu *Bmu = NULL;
+int Bmu_size=1;
+
