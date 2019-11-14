@@ -90,3 +90,12 @@ void average_vec(int n)
         aver[i]/=n;
     }
 }
+
+void min_vec(double k)
+{
+    min=malloc(N_conf.n_in*sizeof(double));
+    int i;
+    for(i=0;i<N_conf.n_in;i++)
+        min[i]=aver[i]-k;
+}
+
