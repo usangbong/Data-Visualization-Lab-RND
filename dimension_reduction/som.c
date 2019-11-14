@@ -313,3 +313,84 @@ void print_map()
     }
 }
 
+void training()
+{
+    int i,j,p,u,it;
+    double min_d,dist;
+
+    Bmu=malloc(sizeof(t_bmu));
+
+    for(p=0;p<N_conf.train;p++)
+    {
+        int cur_n_it;
+        if(!p)
+        {
+            cur_n_it=N_conf.ftrain;
+        }
+        else
+        {
+            cur_n_it=N_conf.nb_it-N_conf.ftrain;
+            N_conf.minAlpha=0.07;
+            Net.nhd_r=1;
+        }
+
+        for(it=0;it<cur_n_it;it++)
+        {
+            calc_alpha(it,cur_n_it);
+
+            if(it%(N_conf.ftrain/2)==0&&it!=0&&p==0)
+            {
+                Net.nhd_r-=1;
+            }
+
+
+            array_shuffle(150);
+
+            for(u=0;u<150;u++)
+            {
+
+                Net.captors=array_vec[index_array[u]].arr;
+                min_d=1000.;
+                for(i=0;i<N_conf.n_l_out;i++)
+                {
+                    for(j=0;j<N_conf.n_c_out;j++)
+                    {
+                        dist=euc_distance(Net.captors,Net.map[i][j].w,N_conf.n_in);
+                        Net.map[i][j].act=dist;
+                        if(dist<min_d)
+                        {
+                            min_d=dist;
+                            if(Bmu_size>1)
+                            {
+                                Bmu_size=1;
+                                Bmu=realloc(Bmu,Bmu_size*sizeof(t_bmu));
+                            }
+                            Bmu[0].act=dist;
+                            Bmu[0].r=i;
+                            Bmu[0].c=j;
+                        }
+                        else if(dist==min_d)
+                        {
+
+                            Bmu_size++;
+                            Bmu=realloc(Bmu,Bmu_size*sizeof(t_bmu));
+                            Bmu[Bmu_size-1].act=dist;
+                            Bmu[Bmu_size-1].r=i;
+                            Bmu[Bmu_size-1].c=j;
+
+                        }
+                    }
+                }
+
+                if(Bmu_size>1)
+                {
+                    int t=rand()%(Bmu_size);
+                    Bmu[0]=Bmu[t];
+                }
+
+                strcpy(Net.map[Bmu[0].r][Bmu[0].c].etiq, array_vec[index_array[u]].name);
+                update(Bmu);
+            }
+        }
+    }
+}
