@@ -99,3 +99,12 @@ void min_vec(double k)
         min[i]=aver[i]-k;
 }
 
+void max_vec(double k)
+{
+    max=malloc(N_conf.n_in*sizeof(double));
+    int i;
+    for(i=0;i<N_conf.n_in;i++)
+        max[i]=aver[i]+k;
+}
+
+
