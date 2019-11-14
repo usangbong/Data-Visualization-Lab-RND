@@ -300,3 +300,16 @@ void create_neuron_map()
 	}
 }
 
+void print_map()
+{
+    int i,j;
+    for(i=0;i<N_conf.n_l_out;i++)
+    {
+        for(j=0;j<N_conf.n_c_out;j++)
+            {
+                printf("%s ",Net.map[i][j].etiq);
+            }
+        printf("\n");
+    }
+}
+
