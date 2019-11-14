@@ -38,6 +38,7 @@ struct bmu {
 	int c;
 };
 
+
 struct vec
 	{
         double *arr;
@@ -60,3 +61,14 @@ struct net
   double alpha; // learning coeficient
   char *etiq;
 } Net;
+
+void alloc_array_struct(int n)
+{
+    array_vec=malloc(n*sizeof(struct vec));
+    int i;
+    for(i=0;i<n;i++)
+    {
+        array_vec[i].arr=malloc(N_conf.n_in*sizeof(double));
+        array_vec[i].name=malloc(20*sizeof(char));
+    }
+}
