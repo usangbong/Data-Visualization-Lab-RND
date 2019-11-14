@@ -233,3 +233,15 @@ void update(t_bmu* b_mu)
             }
     }
 }
+
+void init_n_conf()
+{
+    N_conf.n_l_out=6;
+	N_conf.n_c_out=10;
+    N_conf.n_out=N_conf.n_l_out*N_conf.n_c_out;
+    N_conf.n_in=4;
+    N_conf.nb_it=30000;
+    N_conf.minAlpha=0.7;
+    N_conf.ftrain=N_conf.nb_it/5;
+    N_conf.train=2;
+}
