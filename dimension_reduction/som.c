@@ -394,3 +394,39 @@ void training()
         }
     }
 }
+
+
+
+int main()
+{
+    init_n_conf();
+
+    alloc_array_struct(150);
+
+	read_data();
+    denorm_array_vec(150);
+
+    average_vec(150);
+    min_vec(0.005);
+    max_vec(0.005);
+
+    init_shuffle(150);
+
+    //create neuron map with random neuron
+	create_neuron_map();
+	printf("starting map:\n");
+	print_map();
+    printf("\n");
+
+    Net.nhd_r=6;
+    Net.alpha=0;
+
+    training();
+    printf("after:\n");
+    print_map();
+    free(aver);
+    free(min);
+    free(max);
+
+	return 0;
+}
