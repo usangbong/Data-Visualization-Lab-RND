@@ -154,3 +154,12 @@ double* init_rand_w()
 }
 
 
+int * index_array;
+
+void init_shuffle(int n)
+{
+    index_array=malloc(sizeof(int)*n);
+    int i;
+    for(i=0;i<n;i++)
+        index_array[i]=i;
+}
