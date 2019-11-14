@@ -42,3 +42,11 @@ typedef struct bmu t_bmu;
 t_bmu *Bmu = NULL;
 int Bmu_size=1;
 
+struct net
+{
+  int nhd_r;  // neighbourhood radius
+  t_node **map;
+  double *captors; // current data vector
+  double alpha; // learning coeficient
+  char *etiq;
+} Net;
