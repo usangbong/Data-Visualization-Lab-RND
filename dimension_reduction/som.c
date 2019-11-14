@@ -38,6 +38,16 @@ struct bmu {
 	int c;
 };
 
+struct vec
+	{
+        double *arr;
+        char *name;
+        double norm;
+	};
+
+struct vec * array_vec;
+
+
 typedef struct bmu t_bmu;
 t_bmu *Bmu = NULL;
 int Bmu_size=1;
