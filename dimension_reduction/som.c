@@ -163,3 +163,16 @@ void init_shuffle(int n)
     for(i=0;i<n;i++)
         index_array[i]=i;
 }
+
+void array_shuffle(int n)
+{
+    int i,r_and,k;
+    srand(time(NULL));
+    for(i=0;i<n;i++)
+        {
+            r_and=rand()%n;
+            k=index_array[i];
+            index_array[i]=index_array[r_and];
+            index_array[r_and]=k;
+        }
+}
