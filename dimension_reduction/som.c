@@ -116,3 +116,13 @@ void norm_array_vec(int i,int size)
         sum+=SQR(array_vec[i].arr[j]);
     array_vec[i].norm=sqrt(sum);
 }
+
+void denorm_array_vec(int n)
+{
+    int i,j;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<N_conf.n_in;j++)
+            array_vec[i].arr[j]/=array_vec[i].norm;
+    }
+}
