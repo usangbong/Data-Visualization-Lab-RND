@@ -8,3 +8,6 @@ SOM.c code from https://github.com/tsotne95/SOM/blob/master/som.c
 #include <string.h>
 #include <math.h>
 #include <time.h>
+
+#define SQR(x) ((x)*(x)) //square
+
