@@ -279,3 +279,24 @@ void read_data()
     free(str);
 }
 
+void create_neuron_map()
+{
+    int i,j;
+    Net.map=malloc(N_conf.n_l_out*sizeof(t_node *));
+	for(i=0;i<N_conf.n_l_out;i++)
+	{
+		Net.map[i]=malloc(N_conf.n_c_out*sizeof(t_node));
+	}
+	for(i=0;i<N_conf.n_l_out;i++)
+	{
+		for (j=0;j<N_conf.n_c_out;j++)
+		{
+
+            Net.map[i][j].w=(double*)malloc(sizeof(double)*N_conf.n_in);
+			Net.map[i][j].w=init_rand_w();
+			Net.map[i][j].etiq=malloc(20*sizeof(char));
+			strcpy(Net.map[i][j].etiq, ".");
+		}
+	}
+}
+
