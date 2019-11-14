@@ -189,3 +189,7 @@ double euc_distance(double *a1, double *a2, int n)
 }
 
 
+void calc_alpha(int it_n, int tot_it)
+{
+	Net.alpha = N_conf.minAlpha * (1 - ((double)it_n/(double)tot_it));
+}
