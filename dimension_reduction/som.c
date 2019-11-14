@@ -22,3 +22,19 @@ struct N_config
   int train; //training layer operation num
   int ftrain; //first layer operation num
 }N_conf;
+
+struct node //neuron (node) struct
+{
+  double act; //euc. dist.
+  char *etiq;
+  double *w; //weight (memory) vector
+};
+
+typedef struct node t_node;
+
+struct bmu {
+	double act; // euclidian distance
+	int r;
+	int c;
+};
+
