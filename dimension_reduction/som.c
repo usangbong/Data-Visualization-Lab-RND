@@ -126,3 +126,31 @@ void denorm_array_vec(int n)
             array_vec[i].arr[j]/=array_vec[i].norm;
     }
 }
+
+
+double* init_rand_w()
+{
+    int i;
+    double k=(double)rand()/RAND_MAX;
+    double *tmp_w=malloc(N_conf.n_in*sizeof(double));
+
+    for(i=0;i<N_conf.n_in;i++)
+        {
+            tmp_w[i]=k*(max[i]-min[i])+min[i];
+        }
+
+    double norm=0.;
+
+    for(i=0;i<N_conf.n_in;i++)
+    {
+        norm+=SQR(tmp_w[i]);
+    }
+
+    for(i=0;i<N_conf.n_in;i++)
+    {
+            tmp_w[i]/=norm;
+    }
+    return tmp_w;
+}
+
+
