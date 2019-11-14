@@ -176,3 +176,16 @@ void array_shuffle(int n)
             index_array[r_and]=k;
         }
 }
+
+double euc_distance(double *a1, double *a2, int n)
+{
+	double sum=0.;
+	int i;
+	for(i=0;i<n;i++)
+	{
+		sum+=(SQR(a1[i] - a2[i]));
+	}
+	return sqrt(sum);
+}
+
+
