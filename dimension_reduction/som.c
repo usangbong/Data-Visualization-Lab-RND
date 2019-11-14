@@ -72,3 +72,21 @@ void alloc_array_struct(int n)
         array_vec[i].name=malloc(20*sizeof(char));
     }
 }
+
+
+double *aver,*min,*max;
+
+void average_vec(int n)
+{
+    aver=malloc(N_conf.n_in*sizeof(double));
+    memset(aver,0,N_conf.n_in*sizeof(double));
+
+    int i,j;
+
+    for(i=0;i<N_conf.n_in;i++)
+    {
+        for(j=0;j<n;j++)
+            aver[i]+=array_vec[j].arr[i];
+        aver[i]/=n;
+    }
+}
