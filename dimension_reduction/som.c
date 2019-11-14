@@ -193,3 +193,43 @@ void calc_alpha(int it_n, int tot_it)
 {
 	Net.alpha = N_conf.minAlpha * (1 - ((double)it_n/(double)tot_it));
 }
+
+void update(t_bmu* b_mu)
+{
+    int nr=Net.nhd_r;
+    int i,j,x1,x2,y1,y2;//top and bottom
+
+    for(;nr>=0;nr--)
+    {
+        if(b_mu->r-nr<0)
+            x1=0;
+        else
+            x1=b_mu->r-nr;
+        if(b_mu->c-nr<0)
+            y1=0;
+        else
+            y1=b_mu->c-nr;
+
+        if(b_mu->r+nr>N_conf.n_l_out-1)
+            x2=N_conf.n_l_out-1;
+        else
+            x2=b_mu->r+nr;
+        if(b_mu->c+nr>N_conf.n_c_out-1)
+            y2=N_conf.n_c_out-1;
+        else
+            y2=b_mu->c+nr;
+
+        for(i=x1;i<=x2;i++)
+            for(j=y1;j<=y2;j++)
+            {
+
+                int k;
+
+                for(k=0;k<N_conf.n_in;k++)
+                    {
+
+                        Net.map[i][j].w[k]+=Net.alpha*(Net.captors[k]-Net.map[i][j].w[k]);
+                    }
+            }
+    }
+}
