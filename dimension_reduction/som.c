@@ -11,3 +11,14 @@ SOM.c code from https://github.com/tsotne95/SOM/blob/master/som.c
 
 #define SQR(x) ((x)*(x)) //square
 
+struct N_config
+{
+  int n_in; //capter(data vector) size
+  int n_l_out; // neuron map row number
+  int n_c_out; // neuron map column number
+  int n_out; //total neuron (n_l_out * n_c_out)
+  int nb_it; // iteration number
+  double minAlpha;//starting value
+  int train; //training layer operation num
+  int ftrain; //first layer operation num
+}N_conf;
