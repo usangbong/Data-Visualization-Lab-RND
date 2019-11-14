@@ -245,3 +245,37 @@ void init_n_conf()
     N_conf.ftrain=N_conf.nb_it/5;
     N_conf.train=2;
 }
+
+void read_data()
+{
+    FILE * in;
+
+	char *str=malloc(sizeof(char)*500);
+	in=fopen("iris.data","r");
+
+    int i,j;
+	for(i=0;i<150;i++)
+	{
+        fscanf(in,"%s",str);
+        char *tok=strtok(str,",");
+
+        for(j=0;j<N_conf.n_in;j++)
+            {
+                array_vec[i].arr[j]=atof(tok);
+                tok=strtok(NULL,",");
+            }
+
+        if (strcmp(tok, "Iris-setosa") == 0)
+			strcpy(array_vec[i].name,"A");
+        else if(strcmp(tok,"Iris-versicolor")==0)
+            strcpy(array_vec[i].name,"B");
+        else
+            strcpy(array_vec[i].name,"C");
+
+        norm_array_vec(i,N_conf.n_in);
+	}
+
+	fclose(in);
+    free(str);
+}
+
