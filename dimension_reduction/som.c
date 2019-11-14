@@ -108,3 +108,11 @@ void max_vec(double k)
 }
 
 
+void norm_array_vec(int i,int size)
+{
+    double sum=0.;
+    int j;
+    for(j=0;j<size;j++)
+        sum+=SQR(array_vec[i].arr[j]);
+    array_vec[i].norm=sqrt(sum);
+}
