@@ -73,3 +73,33 @@ class VisFunctions :
 		print(print_str)
 		#fig.show()
 		
+	def _1d2m_bar(self, _FileName, _dim, _name1, _data1, _name2, _data2, _type='group', _color=['indianred', 'lightsalmon'], _xaxis=None) :
+		fig = go.Figure()
+		fig.add_trace(go.Bar(
+			x=_dim,
+			y=_data1,
+			name=_name1,
+			marker_color=_color[0]
+		))
+		fig.add_trace(go.Bar(
+			x=_dim,
+			y=_data2,
+			name=_name2,
+			marker_color=_color[1]
+		))
+		if _xaxis==None :
+			fig.update_layout(barmode=_type, xaxis_tickangle=-45)
+		else :
+			fig.update_layout(barmode=_type, xaxis_tickangle=-45, xaxis=_xaxis)
+		
+		flag=True
+		try:
+			fig.write_html(_FileName+".html", auto_open=False)
+			fig.write_image(_FileName+".png")
+		except OSError:
+			flag=False
+		print_str = "[2][bar_1d2m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
+		print(print_str)
+		#fig.show()
+		
+		
