@@ -15,3 +15,12 @@ if __name__=='__main__':
 		os.makedirs(baseHtmlPath)
 	if not os.path.exists(baseHtmlPath+"/resource"):
 		os.makedirs(baseHtmlPath+"/resource")
+		
+	_dv = dv.DataToVis()
+	arrColumn, arrData, pdDataset = _dv.csvReadToDatasets(datafilename)
+	key = _dv.DM_KeyChecker(datafilename)
+	d, m = _dv.dim_measure_permutations(key)
+	_dv.visChecker(d, m, arrColumn, arrData, pdDataset)
+	arrVisType = _dv.printOptimizer()
+	
+	
