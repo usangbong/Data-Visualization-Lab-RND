@@ -138,3 +138,24 @@ class VisFunctions :
 		print_str = "[2][bar_line_1d3m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
 		print(print_str)
 		#fig.show()		
+
+		
+	def _1d1m_pie(self, _FileName, _dim, _name1, _data) :
+		_color=['rgb(141,211,199)', 'rgb(255,255,179)', 'rgb(190,186,218)', 'rgb(251,128,114)', 'rgb(128,177,211)', 'rgb(253,180,98)', 'rgb(179,222,105)', 'rgb(252,205,229)', 'rgb(217,217,217)', 'rgb(188,128,189)', 'rgb(204,235,197)', 'rgb(255,237,111)']
+		fig = go.Figure()
+		fig.add_trace(go.Pie(
+			labels=_dim,
+			values=_data,
+			text = _data,
+			textposition='auto'
+		))
+		fig.update_traces(hoverinfo='label+percent+name', textinfo='none')
+		flag=True
+		try:
+			fig.write_html(_FileName+".html", auto_open=False)
+			fig.write_image(_FileName+".png")
+		except OSError:
+			flag=False
+		print_str = "[2][pie_1d1m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
+		print(print_str)
+		#fig.show()
