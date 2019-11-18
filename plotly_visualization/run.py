@@ -23,4 +23,6 @@ if __name__=='__main__':
 	_dv.visChecker(d, m, arrColumn, arrData, pdDataset)
 	arrVisType = _dv.printOptimizer()
 	
-	
+	_dv.visualizationToHTMLsAndPngs(arrVisType, baseHtmlPath+"/resource", arrColumn, arrData, pdDataset)
+	file, vis = _dv.getFilename_Visfunc()
+	_dv.GenTotalVisHtml(file, baseHtmlPath)
