@@ -2,3 +2,5 @@
 import os
 import argparse
 import dataToVis as dv
+
+if __name__=='__main__':
