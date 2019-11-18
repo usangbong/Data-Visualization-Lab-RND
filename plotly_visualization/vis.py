@@ -172,3 +172,17 @@ class VisFunctions :
 		print_str = "[2][scatter_0d2m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
 		print(print_str)
 		#fig.show()
+
+
+	def _0d2m_pandas_scatter(self, _FileName, _pandasDataset, _xaxis, _yaxis) :
+		fig = px.scatter(_pandasDataset, x=_xaxis, y=_yaxis)
+		flag=True
+		try:
+			fig.write_html(_FileName+".html", auto_open=False)
+			fig.write_image(_FileName+".png")
+		except OSError:
+			flag=False
+		print_str = "[2][scatter_0d2m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
+		print(print_str)
+		#fig.show()
+		
