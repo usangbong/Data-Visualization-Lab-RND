@@ -50,5 +50,26 @@ class VisFunctions :
 		else : #d>1 m>=1
 			print("!!!!!!!!")
 			
-	
+			
+	def _1d1m_bar(self, _FileName, _dim, _name, _data, _color='indianred', _xaxis=None) :
+		fig = go.Figure()
+		fig.add_trace(go.Bar(
+			x=_dim,
+			y=_data,
+			name=_name,
+			marker_color=_color
+		))
+		if _xaxis==None :
+			fig.update_layout(barmode='group', xaxis_tickangle=-45)
+		else :
+			fig.update_layout(barmode='group', xaxis_tickangle=-45, xaxis=_xaxis)
+		flag=True
+		try:
+			fig.write_html(_FileName+".html", auto_open=False)
+			fig.write_image(_FileName+".png")
+		except OSError:
+			flag=False
+		print_str = "[2][bar_1d1m]["+("success" if flag else "fail")+"]["+_FileName+".html]"
+		print(print_str)
+		#fig.show()
 		
