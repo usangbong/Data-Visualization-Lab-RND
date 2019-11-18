@@ -11,3 +11,7 @@ if __name__=='__main__':
 	datafilename = args.datafile
 	baseHtmlPath = args.savePath
   
+	if not os.path.exists(baseHtmlPath):
+		os.makedirs(baseHtmlPath)
+	if not os.path.exists(baseHtmlPath+"/resource"):
+		os.makedirs(baseHtmlPath+"/resource")
