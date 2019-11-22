@@ -79,8 +79,8 @@ def idt(data, dis_threshold, dur_threshold):
 		else:
 			current += 1 #this will remove the first point
 			last = current #this is not necessary
-
-
+			
+	return centroidsX, centroidsY, time0, time1
 	
 	
 def get_dispersion(points):
