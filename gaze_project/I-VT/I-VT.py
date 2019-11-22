@@ -78,3 +78,35 @@ def ivt(data, v_threshold):
 	time0 = []
 	time1 = []
   
+	for f in fixations:
+		cX = 0
+		cY = 0
+        
+		if(len(f) == 1):
+			i = f[0]
+			cX = (float(data[i][x]) + float(data[i+1][x]))/2.0
+			cY = (float(data[i][y]) + float(data[i+1][y]))/2.0
+			t0 = float(data[i][timestamp])
+			t1 = float(data[i+1][timestamp])
+            
+		else:
+			t0 = float(data[f[0]][timestamp])
+			t1 = float(data[f[len(f)-1]+1][timestamp])
+            
+			for e in range(len(f)):
+                
+				cX += float(data[f[e]][x]) 
+				cY += float(data[f[e]][y])
+
+			cX += float(data[f[len(f)-1]+1][x]) 
+			cY += float(data[f[len(f)-1]+1][y]) 
+			
+			cX = cX / float(len(f)+1)
+			cY = cY / float(len(f)+1)
+            
+		centroidsX.append(cX)
+		centroidsY.append(cY)
+		time0.append(t0)
+		time1.append(t1)
+		
+		
