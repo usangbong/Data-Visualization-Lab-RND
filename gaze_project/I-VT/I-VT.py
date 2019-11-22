@@ -26,4 +26,27 @@ def ivt(data, v_threshold):
     
 	Xs = data[:,x]
 	Ys = data[:,y]
+	
+	difX = []
+	difY = []
+	tdif = []
+	
+
+	for i in range(len(data) - 1):
+		difX.append(float(Xs[i+1]) - float(Xs[i]))
+		difY.append(float(Ys[i+1]) - float(Ys[i]))
+		tdif.append(float(times[i+1]) - float(times[i]))
+        
+	
+	print tdif
+	dif = np.sqrt(np.power(difX,2) + np.power(difY,2)) #in pix
+	
+	velocity = dif / tdif
+	#print velocity in pix/sec
+	#print tdif
+
+	mvmts = [] #length is len(data)-1
+	
+	
+	
   
