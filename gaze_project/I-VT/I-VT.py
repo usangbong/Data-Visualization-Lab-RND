@@ -109,4 +109,4 @@ def ivt(data, v_threshold):
 		time0.append(t0)
 		time1.append(t1)
 		
-		
+	return centroidsX, centroidsY, time0, time1	
