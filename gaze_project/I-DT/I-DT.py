@@ -55,6 +55,26 @@ def idt(data, dis_threshold, dur_threshold):
        
 			#dispersion threshold is exceeded
 			#fixation at the centroid [current,last]
+		
+			cX = 0
+			cY = 0
+            
+			for f in range(current, last + 1):
+				cX += float(data[f][x])
+				cY += float(data[f][y])
+
+			cX = cX / float(last - current + 1)
+			cY = cY / float(last - current + 1)
+                
+			t0 = float(data[current][timestamp])
+			t1 = float(data[last][timestamp])
+            
+			centroidsX.append(cX)
+			centroidsY.append(cY)
+			time0.append(t0)
+			time1.append(t1)
+            
+			current = last + 1 #this will move the pointer to a novel window
 
 
 	
