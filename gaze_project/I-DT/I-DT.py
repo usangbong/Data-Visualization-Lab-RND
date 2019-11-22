@@ -15,3 +15,12 @@ group_size = 6
 gaze_cue = 7
 
 def idt(data, dis_threshold, dur_threshold):
+  window_range = [0,0]
+	current = 0 #pointer to represent the current beginning point of the window
+	last = 0
+  
+	#final lists for fixation info
+	centroidsX = []
+	centroidsY = []
+	time0 = []
+	time1 = []
