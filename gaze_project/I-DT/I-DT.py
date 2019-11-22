@@ -24,6 +24,18 @@ def idt(data, dis_threshold, dur_threshold):
 	centroidsY = []
 	time0 = []
 	time1 = []
+	
+	while (current < len(data)):
+        
+		t0 = float(data[current][timestamp]) #beginning time
+		t1 = t0 + float(dur_threshold)     #time after a min. fix. threshold has been observed
+
+		for r in range(current, len(data)): 
+			if(float(data[r][timestamp])>= t0 and float(data[r][timestamp])<= t1):
+				#print "if",r
+				last = r #this will find the last index still in the duration threshold
+
+		window_range = [current,last]
 
 	
 	
