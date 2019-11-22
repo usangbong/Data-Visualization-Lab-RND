@@ -41,6 +41,21 @@ def idt(data, dis_threshold, dur_threshold):
 		#print "window", current, last
 		dispersion = get_dispersion(data[current:last+1])
 		#a[2:5] gives 2,3,4. To include last one, [2:6]
+		
+		if (dispersion <= dis_threshold):
+
+			#add new points
+			while(dispersion <= dis_threshold and last + 1 < len(data)):
+
+				last += 1
+				window_range = [current,last]
+				#print current, last, "*"
+				#print "*"
+				dispersion = get_dispersion(data[current:last+1])
+       
+			#dispersion threshold is exceeded
+			#fixation at the centroid [current,last]
+
 
 	
 	
