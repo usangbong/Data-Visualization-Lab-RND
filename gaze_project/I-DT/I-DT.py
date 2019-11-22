@@ -28,3 +28,8 @@ def idt(data, dis_threshold, dur_threshold):
 	
 	
 def get_dispersion(points):
+	dispersion = 0
+    	argxmin = np.min(points[:,x].astype(np.float))
+	argxmax = np.max(points[:,x].astype(np.float))
+    	argymin = np.min(points[:,y].astype(np.float))
+	argymax = np.max(points[:,y].astype(np.float))
