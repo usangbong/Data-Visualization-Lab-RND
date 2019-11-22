@@ -69,5 +69,12 @@ def ivt(data, v_threshold):
 			fs.append(m)
 			
 			
-	
+	if(len(fs) > 0):
+		fixations.append(fs)
+
+	#print fixations
+	centroidsX = []
+	centroidsY = []
+	time0 = []
+	time1 = []
   
