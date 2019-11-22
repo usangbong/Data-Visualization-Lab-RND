@@ -13,3 +13,5 @@ y = 4
 user_id = 5
 group_size = 6
 gaze_cue = 7
+
+def idt(data, dis_threshold, dur_threshold):
