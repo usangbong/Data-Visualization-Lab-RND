@@ -75,6 +75,10 @@ def idt(data, dis_threshold, dur_threshold):
 			time1.append(t1)
             
 			current = last + 1 #this will move the pointer to a novel window
+		
+		else:
+			current += 1 #this will remove the first point
+			last = current #this is not necessary
 
 
 	
