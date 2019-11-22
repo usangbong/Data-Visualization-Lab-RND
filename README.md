@@ -11,3 +11,4 @@ Cross-platform: Python version 3.5x
 - miniSOM for test
 
 # Gaze Project
+- Fixation filter for Identifying fixation&saccade
