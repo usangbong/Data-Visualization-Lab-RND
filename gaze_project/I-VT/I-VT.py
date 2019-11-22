@@ -15,10 +15,9 @@ group_size = 6
 gaze_cue = 7
 
 def ivt(data, v_threshold):
-  times = data[:,timestamp]
-    
+	times = data[:,timestamp]    
 	ts = []
-    
+	
 	for t in times:
 		ts.append(float(t)/1000.0)
      
@@ -31,13 +30,11 @@ def ivt(data, v_threshold):
 	difY = []
 	tdif = []
 	
-
 	for i in range(len(data) - 1):
 		difX.append(float(Xs[i+1]) - float(Xs[i]))
 		difY.append(float(Ys[i+1]) - float(Ys[i]))
 		tdif.append(float(times[i+1]) - float(times[i]))
-        
-	
+        	
 	print tdif
 	dif = np.sqrt(np.power(difX,2) + np.power(difY,2)) #in pix
 	
