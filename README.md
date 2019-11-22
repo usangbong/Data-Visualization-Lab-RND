@@ -12,3 +12,5 @@ Cross-platform: Python version 3.5x
 
 # Gaze Project
 - Fixation filter for Identifying fixation&saccade
+  - I-VT
+  - I-DT
