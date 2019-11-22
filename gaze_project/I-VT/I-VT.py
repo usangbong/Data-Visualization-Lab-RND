@@ -1,3 +1,4 @@
+#I-VT & I-DT clustering algoritm: reference https://github.com/ecekt/eyegaze.git
 #ece k.t.
 from __future__ import division
 import numpy as np
@@ -12,3 +13,5 @@ y = 4
 user_id = 5
 group_size = 6
 gaze_cue = 7
+
+def ivt(data, v_threshold):
