@@ -33,3 +33,8 @@ def get_dispersion(points):
 	argxmax = np.max(points[:,x].astype(np.float))
     	argymin = np.min(points[:,y].astype(np.float))
 	argymax = np.max(points[:,y].astype(np.float))
+	
+	dispersion = ((argxmax - argxmin) + (argymax - argymin))/2
+	#TODO: look for other ways of calculating dispersion
+	
+	return dispersion
