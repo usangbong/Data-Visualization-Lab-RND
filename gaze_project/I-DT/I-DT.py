@@ -36,6 +36,11 @@ def idt(data, dis_threshold, dur_threshold):
 				last = r #this will find the last index still in the duration threshold
 
 		window_range = [current,last]
+		
+		#now check the dispersion in this window
+		#print "window", current, last
+		dispersion = get_dispersion(data[current:last+1])
+		#a[2:5] gives 2,3,4. To include last one, [2:6]
 
 	
 	
