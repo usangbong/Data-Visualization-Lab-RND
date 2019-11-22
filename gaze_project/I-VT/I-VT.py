@@ -15,3 +15,15 @@ group_size = 6
 gaze_cue = 7
 
 def ivt(data, v_threshold):
+  times = data[:,timestamp]
+    
+	ts = []
+    
+	for t in times:
+		ts.append(float(t)/1000.0)
+     
+	times = ts #TOD0: CHECK if times in sec
+    
+	Xs = data[:,x]
+	Ys = data[:,y]
+  
