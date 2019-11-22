@@ -47,6 +47,27 @@ def ivt(data, v_threshold):
 
 	mvmts = [] #length is len(data)-1
 	
-	
+	for v in velocity:
+		if (v < v_threshold):
+			#fixation
+			mvmts.append(1)
+			#print v, v_threshold
+		else:
+			mvmts.append(0)
+
+	fixations = []
+	fs = []
+
+	#print mvmts
+    
+	for m in range(len(mvmts)):
+		if(mvmts[m] == 0):
+			if(len(fs) > 0):
+				fixations.append(fs)
+				fs = []
+		else:
+			fs.append(m)
+			
+			
 	
   
