@@ -24,3 +24,7 @@ def idt(data, dis_threshold, dur_threshold):
 	centroidsY = []
 	time0 = []
 	time1 = []
+
+	
+	
+def get_dispersion(points):
