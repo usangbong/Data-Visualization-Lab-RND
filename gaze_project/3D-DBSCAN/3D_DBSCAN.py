@@ -196,3 +196,10 @@ print(csv_df)
 csv_df.to_csv("data/clusted_"+dataname,header=False,index=False)
 #########################################################################
 #########################################################################
+import math
+
+fig = plt.figure(figsize=(20, 20))
+ax=[]
+for i in range(1,n_clusters_+1):    
+    ax.append(fig.add_subplot(8,4,i))
+    
