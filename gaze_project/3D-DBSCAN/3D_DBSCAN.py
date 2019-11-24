@@ -165,3 +165,17 @@ for i in range(1,len(clusters)+1):
     fig_sub[i-1].set_ylim([1080, 0])
     fig_sub[i-1].imshow(img, extent=[0, 1920, 1080, 0])
     
+savecsv=[]
+counts=[]
+for i in range(1,len(clusters)+1):
+    fig_sub_count+=1
+    tmpres=[]
+    count=0
+    for j in clusters[i-1]:
+        fig_sub[fig_sub_count-1].scatter(j[1], j[2], c='b', marker='o')
+        tmpres.append(str(int(j[0]/other))+"/"+str(int(j[1]))+"/"+str(int(j[2])))
+        count+=1
+    tmpres="/".join(tmpres)
+    savecsv.append(tmpres)
+    counts.append(count)
+print(savecsv)
