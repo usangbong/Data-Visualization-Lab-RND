@@ -144,3 +144,10 @@ df['timecount']=df['timecount'].multiply(other = other)
 db = DBSCAN(eps=eps, min_samples=3).fit(df.values)
 labels = db.labels_
 
+from collections import Counter
+print(Counter(labels))
+
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+print(n_clusters_)
+
