@@ -137,3 +137,10 @@ for i in range(1,len(clusters)+1):
         fig_sub[fig_sub_count-1].scatter(j[1], j[2], c='r', marker='o')
 #########################################################################
 #########################################################################
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+df['timecount']=df['timecount'].multiply(other = other) 
+
+db = DBSCAN(eps=eps, min_samples=3).fit(df.values)
+labels = db.labels_
+
