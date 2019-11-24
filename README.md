@@ -2,7 +2,7 @@ Data Visualization Lab.
 Sejong university.
 
 
-# installation
+# Installation
 Cross-platform: Python version 3.5x
 ???: ???
 
@@ -17,3 +17,4 @@ Cross-platform: Python version 3.5x
 - Fixation filter for Identifying fixation&saccade
   - I-VT
   - I-DT
+  - 3Dimensional DBSCAN using IQR(Interquqrtile Range)
