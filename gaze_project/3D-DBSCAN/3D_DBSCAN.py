@@ -73,3 +73,16 @@ for index, row in df.iterrows():
 
 #########################################################################
 #########################################################################
+import math
+Cnt = 0
+sumdist=0
+dist_data = np.array([])
+for i in raw_data_time_cl:
+    dist=0
+    if len(i)>1:    
+        for j in range(0,len(i)-1):
+            dist=math.sqrt(pow(i[j][0]-i[j+1][0],2)+pow(i[j][1]-i[j+1][1],2))
+            sumdist+=dist/2
+            dist_data = np.append(dist_data, dist)
+            Cnt+=1
+            
