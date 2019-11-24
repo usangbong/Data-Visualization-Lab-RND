@@ -13,3 +13,7 @@ tips.shape
 tips.head()
 
 tips.groupby(['sex', 'day']).size()
+
+# Basic box plot
+plt.boxplot(tips['tip'])
+plt.show()
