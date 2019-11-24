@@ -96,3 +96,8 @@ hibun=0.80
 dist_data = np.sort(dist_data)
 eps = dist_data[round(dist_data.size*hibun)]+1.5*(dist_data[round(dist_data.size*hibun)]-dist_data[round(dist_data.size*lebun)])
 other = dist_data[round(dist_data.size*hibun)]           
+
+print(dist_data.size)
+print(eps)
+print(other)
+print(df.values)
