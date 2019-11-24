@@ -131,3 +131,7 @@ for i in range(1,len(clusters)+1):
     fig_sub[i-1].set_ylim([1080, 0])
     fig_sub[i-1].imshow(img, extent=[0, 1920, 1080, 0])
     
+for i in range(1,len(clusters)+1):
+    fig_sub_count+=1
+    for j in clusters[i-1]:
+        fig_sub[fig_sub_count-1].scatter(j[1], j[2], c='r', marker='o')
