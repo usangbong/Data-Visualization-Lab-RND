@@ -62,3 +62,11 @@ for i in range(1,count+1):
     sublist[i-1].imshow(img, extent=[0, 1920, 1080, 0])
     
     
+for index, row in df.iterrows():
+    if current_t!=row['timecount']:
+        current_t=row['timecount']
+        asc=(asc+1)%7
+        subcount+=1
+        raw_data_time_cl.append([])
+    raw_data_time_cl[subcount-1].append([row['x'], row['y']])
+    sublist[subcount-1].scatter(row['x'], row['y'], c='r', marker='o')
