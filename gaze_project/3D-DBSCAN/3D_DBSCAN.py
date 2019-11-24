@@ -151,3 +151,10 @@ n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 
 print(n_clusters_)
 
+clusters = [df.values[labels == i] for i in range(n_clusters_)]
+
+
+fig = plt.figure(figsize=(20, 20))
+fig_sub = []
+fig_sub_count=0
+
