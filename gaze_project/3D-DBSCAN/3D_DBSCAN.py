@@ -181,6 +181,16 @@ for i in range(1,len(clusters)+1):
 print(savecsv)
 #########################################################################
 #########################################################################
+
 range(1,len(clusters)+1)
+
 #########################################################################
 #########################################################################
+maxd = max(counts)
+print(maxd)
+for i in range(len(counts)):
+    counts[i]=counts[i]/maxd
+d = {'data': savecsv, 'counts': counts}
+csv_df = pd.DataFrame(d)
+print(csv_df)
+csv_df.to_csv("data/clusted_"+dataname,header=False,index=False)
