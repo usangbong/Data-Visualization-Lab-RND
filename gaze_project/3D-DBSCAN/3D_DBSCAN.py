@@ -222,3 +222,25 @@ for q in range(1,n_clusters_+1):
         dn=d/h
         P=(15/16)*(1-dn**2)**2
         return P
+    
+    #PROCESSING
+    intensity_list=[]
+    for j in range(len(xc)):
+        intensity_row=[]
+        for k in range(len(xc[0])):
+            kde_value_list=[]
+            for i in range(len(x)):
+                #CALCULATE DISTANCE
+                d=math.sqrt((xc[j][k]-x[i])**2+(yc[j][k]-y[i])**2) 
+                if d<=h:
+                    p=kde_quartic(d,h)
+                else:
+                    p=0
+                kde_value_list.append(p)
+            p_total=sum(kde_value_list)
+            intensity_row.append(p_total)
+        intensity_list.append(intensity_row)
+
+    intensity=np.array(intensity_list)
+    
+    ax[q-1].pcolormesh(x_mesh,y_mesh,intensity)
