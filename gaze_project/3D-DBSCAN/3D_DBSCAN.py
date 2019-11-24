@@ -123,3 +123,11 @@ clusters = [df.values[labels == i] for i in range(n_clusters_)]
 fig = plt.figure(figsize=(20, 20))
 fig_sub = []
 fig_sub_count=0
+
+for i in range(1,len(clusters)+1):
+    fig_sub.append(fig.add_subplot(7,9,i))
+    fig_sub[i-1].title.set_text(i-1)
+    fig_sub[i-1].set_xlim([0, 1920])
+    fig_sub[i-1].set_ylim([1080, 0])
+    fig_sub[i-1].imshow(img, extent=[0, 1920, 1080, 0])
+    
