@@ -203,3 +203,22 @@ ax=[]
 for i in range(1,n_clusters_+1):    
     ax.append(fig.add_subplot(8,4,i))
     
+for q in range(1,n_clusters_+1):    
+    ax[q-1].set_ylim([54, 0])
+    x=clusters[q-1][:,1]/20
+    y=clusters[q-1][:,2]/20
+
+    grid_size=1
+    h=10
+
+    x_grid=np.arange(0,96)
+    y_grid=np.arange(0,54)
+    x_mesh,y_mesh=np.meshgrid(x_grid,y_grid)
+
+    xc=x_mesh+(grid_size/2)
+    yc=y_mesh+(grid_size/2)
+
+    def kde_quartic(d,h):
+        dn=d/h
+        P=(15/16)*(1-dn**2)**2
+        return P
