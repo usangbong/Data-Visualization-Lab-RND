@@ -86,3 +86,13 @@ for i in raw_data_time_cl:
             dist_data = np.append(dist_data, dist)
             Cnt+=1
             
+fig, axs = plt.subplots(1, 1, sharey=True, tight_layout=True)
+
+axs.hist(dist_data, bins=100)
+
+lebun=0.20
+hibun=0.80
+
+dist_data = np.sort(dist_data)
+eps = dist_data[round(dist_data.size*hibun)]+1.5*(dist_data[round(dist_data.size*hibun)]-dist_data[round(dist_data.size*lebun)])
+other = dist_data[round(dist_data.size*hibun)]           
