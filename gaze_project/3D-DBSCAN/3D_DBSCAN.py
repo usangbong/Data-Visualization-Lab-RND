@@ -103,4 +103,10 @@ print(other)
 print(df.values)
 #########################################################################
 #########################################################################
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+data = np.random.rand(500,3)
+
+db = DBSCAN(eps=eps, min_samples=1).fit(df.values)
+labels = db.labels_
 
