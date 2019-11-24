@@ -38,4 +38,3 @@ ax.boxplot([tips['total_bill'], tips['tip']], sym="b*")
 plt.title('Multiple box plots of tips on one Axes')
 plt.xticks([1, 2], ['total_bill', 'tip'])
 plt.show()
-
