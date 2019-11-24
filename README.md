@@ -1,5 +1,6 @@
 Data Visualization Lab.
 Sejong university.
+Seoul, South Korea.
 
 
 # Installation
