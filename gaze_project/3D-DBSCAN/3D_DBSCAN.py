@@ -22,3 +22,16 @@ np.random.seed(19680801)
 
 fig = plt.figure(figsize=(20, 20))
 ax = fig.add_subplot(1,1,1, projection='3d')
+
+# For each set of style and range settings, plot n random points in the box
+# defined by x in [23, 32], y in [0, 100], z in [zlow, zhigh].
+current_t = -1
+cmap = ['r','g','b','c','m','y','k']
+asc = -1
+count=0
+for index, row in df.iterrows():
+    if current_t!=row['timecount']:
+        current_t=row['timecount']
+        asc=(asc+1)%7
+        count+=1
+    ax.scatter(row['x'], row['y'], row['timecount'], c=cmap[asc], marker='o')
