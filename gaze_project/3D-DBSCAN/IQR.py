@@ -17,3 +17,9 @@ tips.groupby(['sex', 'day']).size()
 # Basic box plot
 plt.boxplot(tips['tip'])
 plt.show()
+
+# setting outlier symbol, title, xlabel
+plt.boxplot(tips['tip'], sym="bo")
+plt.title('Box plot of tip')
+plt.xticks([1], ['tip'])
+plt.show()
