@@ -11,3 +11,5 @@ tips = sns.load_dataset('tips')
 
 tips.shape
 tips.head()
+
+tips.groupby(['sex', 'day']).size()
