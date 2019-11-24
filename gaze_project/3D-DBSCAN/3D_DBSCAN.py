@@ -110,3 +110,9 @@ data = np.random.rand(500,3)
 db = DBSCAN(eps=eps, min_samples=1).fit(df.values)
 labels = db.labels_
 
+from collections import Counter
+print(Counter(labels))
+
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+print(n_clusters_)
