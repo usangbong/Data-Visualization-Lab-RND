@@ -1,3 +1,4 @@
+#########################################################################
 # DBSCAN 코드 레퍼런스 찾아서 표기해야 함
 # This import registers the 3D projection, but is otherwise unused.
 
@@ -40,3 +41,9 @@ ax.set_xlabel('X Label')
 ax.set_ylabel('Y Label')
 ax.set_zlabel('Z Label')
 print(count)
+#########################################################################
+#########################################################################
+X = np.random.normal(0, 1, 100)
+Y = np.random.normal(0, 1, 100)
+
+fig = plt.figure(figsize=(20, 20))
