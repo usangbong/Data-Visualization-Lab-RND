@@ -54,3 +54,11 @@ subcount=0
 print(count)
 raw_data_time_cl = []
 
+for i in range(1,count+1):
+    sublist.append(fig.add_subplot(5,ycount,i))
+    sublist[i-1].title.set_text(i-1)
+    sublist[i-1].set_xlim([0, 1920])
+    sublist[i-1].set_ylim([1080, 0])
+    sublist[i-1].imshow(img, extent=[0, 1920, 1080, 0])
+    
+    
