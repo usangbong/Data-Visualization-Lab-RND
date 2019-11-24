@@ -70,3 +70,6 @@ for index, row in df.iterrows():
         raw_data_time_cl.append([])
     raw_data_time_cl[subcount-1].append([row['x'], row['y']])
     sublist[subcount-1].scatter(row['x'], row['y'], c='r', marker='o')
+
+#########################################################################
+#########################################################################
