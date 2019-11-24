@@ -12,3 +12,10 @@ img = plt.imread("test.png")
 
 df = pd.read_csv(dataname,sep=",", dtype={'x':float,'y':float,'timecount':float},header=None,names=["no","userid","timestamp","timecount","x","y"])
 
+temp_tc =df['timecount']
+#df['timecount']=df['timecount'].multiply(other = 30) 
+df['timecount']=df['timecount']-df['timecount'][0]
+df = df.drop(columns=['no', 'userid', 'timestamp'])
+
+# Fixing random state for reproducibility
+np.random.seed(19680801)
