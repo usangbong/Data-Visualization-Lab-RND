@@ -47,3 +47,10 @@ X = np.random.normal(0, 1, 100)
 Y = np.random.normal(0, 1, 100)
 
 fig = plt.figure(figsize=(20, 20))
+
+ycount = round(count/5)+1
+sublist = []
+subcount=0
+print(count)
+raw_data_time_cl = []
+
