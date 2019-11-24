@@ -19,3 +19,6 @@ df = df.drop(columns=['no', 'userid', 'timestamp'])
 
 # Fixing random state for reproducibility
 np.random.seed(19680801)
+
+fig = plt.figure(figsize=(20, 20))
+ax = fig.add_subplot(1,1,1, projection='3d')
