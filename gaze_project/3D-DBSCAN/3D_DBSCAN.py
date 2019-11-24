@@ -9,3 +9,6 @@ import pandas as pd
 
 dataname='tdata9.csv'
 img = plt.imread("test.png")
+
+df = pd.read_csv(dataname,sep=",", dtype={'x':float,'y':float,'timecount':float},header=None,names=["no","userid","timestamp","timecount","x","y"])
+
