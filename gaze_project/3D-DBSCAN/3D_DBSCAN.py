@@ -35,3 +35,8 @@ for index, row in df.iterrows():
         asc=(asc+1)%7
         count+=1
     ax.scatter(row['x'], row['y'], row['timecount'], c=cmap[asc], marker='o')
+
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+print(count)
