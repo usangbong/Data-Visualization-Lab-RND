@@ -11,6 +11,7 @@ colTypes = ["<class 'str'>", "<class 'char'>", "<class 'int'>", "<class 'float'>
 filename = "./test.csv"
 dataSummary = []
 
+
 KEYS = []
 KEYS_COUNT = []
 VIS = []
