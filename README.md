@@ -1,5 +1,5 @@
 Data Visualization Lab.
-Sejong niversity.
+Sejong University.
 Seoul, South Korea.
 
 
