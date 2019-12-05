@@ -2,6 +2,8 @@ Data Visualization Lab.
 Sejong University.
 Seoul, South Korea.
 
+members
+
 
 # Installation
 Cross-platform: Python version 3.5x
