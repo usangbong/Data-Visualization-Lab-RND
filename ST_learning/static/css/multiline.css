@@ -1,0 +1,25 @@
+body {
+      font: 5px sans-serif;
+      font-weight: bold;
+    }
+
+    .axis{
+      font-size: 5px;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #FFF;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    .line {
+      fill: none;
+      stroke: orange;
+      stroke-width: 1px;
+    }

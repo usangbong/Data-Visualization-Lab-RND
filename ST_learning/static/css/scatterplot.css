@@ -1,0 +1,38 @@
+svg {
+  font: 5px sans-serif;
+  padding: 5px;
+
+}
+.axis,
+.frame {
+  shape-rendering: crispEdges;
+}
+.axis line {
+  stroke: #ddd;
+}
+.axis path {
+  display: none;
+}
+.axis text{
+  fill : white;
+}
+.cell text {
+  font-weight: bold;
+  text-transform: capitalize;
+  fill: white;
+}
+.frame {
+  fill: none;
+  stroke: #aaa;
+}
+circle {
+  fill-opacity: .6;
+}
+circle.hidden {
+  fill: #ccc !important;
+}
+.extent {
+  fill: #000;
+  fill-opacity: .125;
+  stroke: #fff;
+}
