@@ -6,8 +6,8 @@ members temp
 
 
 # Installation
--Cross-platform: Python version 3.5x
--BRL
+- Cross-platform: Python version 3.5x
+- BRL
   - edge_matrix: python 3.5
 ???: ???
 
