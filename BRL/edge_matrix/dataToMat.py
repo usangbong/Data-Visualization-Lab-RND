@@ -18,3 +18,12 @@ class DataToMat:
 				self._row.append(0)
 			self.rows.append(self._row)
 		self.matrix = self.rows
+	
+	def countLinkedNode(self, _data):
+		for _r in _data:
+			self.i_index = int(_r[2])
+			self.j_index = int(_r[3])
+			self.getVal = self.matrix[self.i_index][self.j_index]
+			self.getVal = int(self.getVal)
+			self.getVal += 1
+			self.matrix[self.i_index][self.j_index] = self.getVal
