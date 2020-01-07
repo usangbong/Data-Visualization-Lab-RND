@@ -9,20 +9,27 @@ members temp
 - Cross-platform: Python version 3.5x
 - BRL
   - edge_matrix: python 3.5
-???: ???
+- Gaze Projects
+  - I-VT: 
+  - I-DT: 
+  - 3Dimensional DBSCAN using IQR (Interquqrtile Range): 
+ 
 
 # Cross-platform Project
 - SOM (Sangbong Yoo)
 - miniSOM (Sangbong Yoo)
 
+
 # Profiling Project
 - ...
 
+
 # BRL Project
 - edge_matrix (Sangbong Yoo): python 3.5
+
 
 # Gaze Project
 - Fixation filter for Identifying fixation&saccade
   - I-VT
   - I-DT
-  - 3Dimensional DBSCAN using IQR(Interquqrtile Range)
+  - 3Dimensional DBSCAN using IQR (Interquqrtile Range)
