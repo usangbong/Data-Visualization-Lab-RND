@@ -31,3 +31,8 @@ class DataToMat:
 	def printMatrix(self):
 		for _r in self.matrix:
 			print(_r)
+	
+	def makeMatrix(self, _data):
+		self.makeMatrixFrame()
+		self.countLinkedNode(_data)
+		return self.matrix
