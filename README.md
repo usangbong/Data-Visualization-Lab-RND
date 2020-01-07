@@ -16,6 +16,9 @@ Cross-platform: Python version 3.5x
 # Profiling Project
 - ...
 
+# BRL Project
+- edge_matrix (Sangbong Yoo): python 3.5
+
 # Gaze Project
 - Fixation filter for Identifying fixation&saccade
   - I-VT
