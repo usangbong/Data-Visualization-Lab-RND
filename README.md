@@ -10,9 +10,9 @@ members temp
 - BRL
   - edge_matrix: python 3.5
 - Gaze Projects
-  - I-VT: 
-  - I-DT: 
-  - 3Dimensional DBSCAN using IQR (Interquqrtile Range): 
+  - I-VT: python ??
+  - I-DT: python ??
+  - 3Dimensional DBSCAN using IQR (Interquqrtile Range): python ??
  
 
 # Cross-platform Project
