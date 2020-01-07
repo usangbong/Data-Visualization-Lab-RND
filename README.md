@@ -6,12 +6,14 @@ members temp
 
 
 # Installation
-Cross-platform: Python version 3.5x
+-Cross-platform: Python version 3.5x
+-BRL
+  - edge_matrix: python 3.5
 ???: ???
 
 # Cross-platform Project
-- SOM for test
-- miniSOM for test
+- SOM (Sangbong Yoo)
+- miniSOM (Sangbong Yoo)
 
 # Profiling Project
 - ...
