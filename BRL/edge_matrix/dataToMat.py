@@ -27,3 +27,7 @@ class DataToMat:
 			self.getVal = int(self.getVal)
 			self.getVal += 1
 			self.matrix[self.i_index][self.j_index] = self.getVal
+			
+	def printMatrix(self):
+		for _r in self.matrix:
+			print(_r)
