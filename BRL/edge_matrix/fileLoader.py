@@ -11,3 +11,17 @@ class FileLoader:
 		
 		self.dataIndex = []
 		self.numberOfMatrial = 4
+	
+	def refineRow(self, _rawRow):
+		_strs = _rawRow.split(' ')
+		_row = []
+		for _d in _strs:
+			if _d != "":
+				_row.append(_d)
+		_l = len(_row)
+		_td = _row[_l-1].split('\n')
+		_row[_l-1] = _td[0]
+
+		_refinedRow = _row
+		return _refinedRow
+	
