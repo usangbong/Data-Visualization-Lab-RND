@@ -25,3 +25,19 @@ class FileLoader:
 		_refinedRow = _row
 		return _refinedRow
 	
+	def setFileName(self, _filename):
+		self.dataFileName = _filename
+
+	def setDataParameters(self, _linelen, _numberofmatrial):
+		self.leneLen = _linelen
+		self.numberOfMatrial = _numberofmatrial
+
+	def removeSpace(self):
+		for _mat in self.matrials:
+			for _r in _mat:
+				for i in range(0, len(_r)):
+					if _r[i] == '':
+						_r.remove('')
+						
+						
+	
