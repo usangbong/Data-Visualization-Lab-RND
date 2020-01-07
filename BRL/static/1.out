@@ -1,0 +1,28 @@
+ ***********************************************
+ PAAP-3D RESULTS PRINTOUT.  FILE  = 1       .OUT
+ ***********************************************
+ PROBLEM NAME  = 1       
+ PROBLEM TITLE =  Symmetrical cable-stayed bridge        
+
+
+ ********************************
+*RESULTS FOR ANALYSIS SEGMENT   1
+ ********************************
+ ANALYSIS TYPE  = *STAT
+ ANALYSIS TITLE =                        Static Analysis 3
+
+ TOTAL OF NODES              =     106
+ TOTAL OF ELEMENT GROUPS     =       3
+ TOTAL OF ELEMENTS           =     185
+
+*OUTSTART
+
+ DISPLACEMENT HISTORY OF NODE         20, ANALYSIS SEGMENT   1
+
+  Step   Load_Fact        X-Tran        Y-Tran        Z-Tran        X-Rotn        Y-Rotn        Z-Rotn         Twist
+
+     1  6.2500E-02   0.00000E+00   0.00000E+00   0.00000E+00   0.00000E+00   0.00000E+00   0.00000E+00   0.00000E+00
+
+ *---------------------------------*
+*ANALYSIS TERMINATED : ABNORMAL EXIT
+ *---------------------------------*
