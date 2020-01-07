@@ -112,3 +112,23 @@ class FileLoader:
 
 		return self.matrials					
 	
+	def printMatirals(self):
+		print("------------------------")
+		print("matrial type: 1")
+		for __m in self.matrials[0]:
+			print(__m)
+
+		print("------------------------")
+		print("matrial type: 2")
+		for __m in self.matrials[1]:
+			print(__m)
+
+		print("------------------------")
+		print("matrial type: 3")
+		for __m in self.matrials[2]:
+			print(__m)
+
+		print("------------------------")
+		print("matrial type: 4")
+		for __m in self.matrials[3]:
+			print(__m)
