@@ -1,0 +1,4 @@
+python 3.5
+
+PyQt5
+pillow
