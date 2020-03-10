@@ -33,3 +33,14 @@ members temp
   - I-VT
   - I-DT
   - 3Dimensional DBSCAN using IQR (Interquqrtile Range)
+  - Gaze viewer
+- Extract gaze related features
+  - center-bias
+  - curvature
+  - wavelet
+  - entropy
+  - face
+  - horizontal line
+  - log spectrum
+  - optical flow
+  - Intensity, color, orientation
