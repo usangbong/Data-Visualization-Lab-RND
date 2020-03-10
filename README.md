@@ -16,8 +16,8 @@ members temp
  
 
 # Cross-platform Project
-- SOM (Sangbong Yoo)
-- miniSOM (Sangbong Yoo)
+- SOM
+- miniSOM
 
 
 # Profiling Project
@@ -44,3 +44,7 @@ members temp
   - log spectrum
   - optical flow
   - Intensity, color, orientation
+
+# VR
+- 찬영
+- 수빈
