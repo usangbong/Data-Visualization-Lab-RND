@@ -9,3 +9,10 @@ def create_dir(_dirpath):
     except OSError:
         print("Error: creating directory."+_dirpath)
         
+def csvWriter(_outputfilename, _data):
+    f = open(_outputfilename, 'w', newline='', encoding='utf-8')
+    c = csv.writer(f)
+    for _row in _data:
+        c.writerow(_row)
+    f.close()
+    
