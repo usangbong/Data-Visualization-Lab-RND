@@ -16,3 +16,9 @@ def csvWriter(_outputfilename, _data):
         c.writerow(_row)
     f.close()
     
+IMG_DIR = "../vs/"
+file_list = os.listdir(IMG_DIR)
+
+OUT_DIR = "./out/"
+create_dir(OUT_DIR)
+
