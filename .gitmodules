@@ -1,0 +1,3 @@
+[submodule "TobiiTracker"]
+	path = TobiiTracker
+	url = https://github.com/Yejining/TobiiTracker
