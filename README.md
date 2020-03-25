@@ -13,7 +13,7 @@ members temp
   - I-VT: python ??
   - I-DT: python ??
   - 3Dimensional DBSCAN using IQR (Interquqrtile Range): python ??
- 
+
 
 # Cross-platform Project
 - SOM
@@ -44,6 +44,12 @@ members temp
   - log spectrum
   - optical flow
   - Intensity, color, orientation
+- TobiiTracker
+  - Tobii에서 시선 데이터 수집, csv 파일로 저장
+- GazeTracker
+  - 배경화면 설정 후 시선 데이터 수집
+- GazeTrackerGame
+  - 시선 기반 게임(readme 업데이트 예정)
 
 # VR
 - 찬영
