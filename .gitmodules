@@ -4,3 +4,6 @@
 [submodule "GazeTracker"]
 	path = GazeTracker
 	url = https://github.com/Yejining/GazeTracker
+[submodule "GazeTrackerGame"]
+	path = GazeTrackerGame
+	url = https://github.com/Yejining/GazeTrackerGame
