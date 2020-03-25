@@ -1,3 +1,6 @@
 [submodule "TobiiTracker"]
 	path = TobiiTracker
 	url = https://github.com/Yejining/TobiiTracker
+[submodule "GazeTracker"]
+	path = GazeTracker
+	url = https://github.com/Yejining/GazeTracker
