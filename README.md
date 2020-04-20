@@ -3,15 +3,19 @@ Sejong University,
 Seoul, South Korea.
 
 # Members
-- Hanbyul Yeon - Postdoc
-- Seokyeon Kim - Ph.D
-- Sangbong Yoo - Ph.D
-- Hyesook Son - Master
-- Yejin Kim - Undergraduate
-- Changyoung Yonn - Undergraduate
-- Subin Yim - Undergraduate
-- Miyeon Lee - Undergraduate
-- Hawon Lee - Undergraduate
+- Postdoc
+  - Hanbyul Yeon
+- Ph.D 
+  - Seokyeon Kim
+  - Sangbong Yoo
+- Master
+  - Hyesook Son
+- Undergraduate
+  - Yejin Kim
+  - Changyoung Yonn
+  - Subin Yim
+  - Miyeon Lee
+  - Hawon Lee
 
 
 # Installation
