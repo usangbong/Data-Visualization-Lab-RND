@@ -2,6 +2,8 @@ Data Visualization Lab.
 Sejong University,
 Seoul, South Korea.
 
+vis.sejong.ac.kr
+
 # Members
 - Postdoc
   - Hanbyul Yeon
