@@ -2,7 +2,22 @@ Data Visualization Lab.
 Sejong University,
 Seoul, South Korea.
 
-members temp
+vis.sejong.ac.kr
+
+# Members
+- Postdoc
+  - Hanbyul Yeon
+- Ph.D 
+  - Seokyeon Kim
+  - Sangbong Yoo
+- Master
+  - Hyesook Son
+- Undergraduate
+  - Yejin Kim
+  - Changyoung Yonn
+  - Subin Yim
+  - Miyeon Lee
+  - Hawon Lee
 
 
 # Installation

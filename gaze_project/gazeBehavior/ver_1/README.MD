@@ -1,0 +1,3 @@
+- Python 3.5
+- Flask web server
+- d3.js for visualization
