@@ -10,3 +10,6 @@
 [submodule "Survey"]
 	path = Survey
 	url = https://github.com/Yejining/Survey
+[submodule "AutoCOVID19"]
+	path = AutoCOVID19
+	url = https://github.com/Yejining/AutoCOVID19
