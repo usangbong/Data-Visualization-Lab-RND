@@ -16,7 +16,6 @@ vis.sejong.ac.kr
   - Yejin Kim
   - Changyoung Yonn
   - Subin Yim
-  - Miyeon Lee
   - Hawon Lee
 
 
