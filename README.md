@@ -6,19 +6,24 @@ vis.sejong.ac.kr
 
 # Members
 - Professor
-
+  - Yun Jang
 - Postdoc
   - Hanbyul Yeon
 - Ph.D 
   - Seokyeon Kim
   - Sangbong Yoo
+  - Mingyu Pi
 - Master
   - Hyesook Son
 - Undergraduate
   - Yejin Kim
   - Changyoung Yonn
   - Subin Yim
-  
+- Alumni
+  - Seongmin Jeong
+  - Hewon Baek
+  - Hyunjin Kang
+  - Daekyo Jeong
 
 # Installation
 - Cross-platform: Python version 3.5x
