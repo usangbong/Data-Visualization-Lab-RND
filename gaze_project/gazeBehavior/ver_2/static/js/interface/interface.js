@@ -1,3 +1,10 @@
+let stiGrid = [];
+let AOIarray = [];
+let selectedAppendCell = [];
+let AOIcolorBrewer_12class_set3 = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"];
+let SELECTED_AOI = -999;
+let selectedDeleteCell = [];
+
 let temp = [];
 let __t = [];
 let _t = {
@@ -204,15 +211,14 @@ function selectAOIgrid(dataset, setRow, setCol){
 	// UI setting: "ADD" & "CLEAR" button
 	let AOIselector = $('#aoi_selector');
 	AOIselector.append("<br>");
-	let AOIGrid = $(`
-		<button onclick="AOI_add_function()">ADD</button>
-		<button onclick="AOI_clear_function()">CLEAR</button>
-	`);
-	AOIselector.append(AOIGrid);
+	//<button onclick="AOI_add_function()">ADD</button>
+	//let AOIGrid = $(`
+	//	<button id="clear_btn" onclick="AOI_clear_function()">CLEAR</button>
+	//`);
+	//AOIselector.append(AOIGrid);
 
-	let stiGrid = [];
-	let xpos = 1;
-	let ypos = 1;
+	let xpos = 5;
+	let ypos = 5;
 	let width = 30;
 	let height = 30;
 	let click = 0;
@@ -226,7 +232,8 @@ function selectAOIgrid(dataset, setRow, setCol){
 				y: ypos,
 				width: width,
 				height: height,
-				click: click
+				click: click,
+				group: 0
 			};
 
 			_row.push(_col);
@@ -234,13 +241,128 @@ function selectAOIgrid(dataset, setRow, setCol){
 		}
 		stiGrid.push(_row);
 
-		xpos = 1;
+		xpos = 5;
 		ypos += height;
 	}
 
-	let grid = d3.select("body").append("svg")
-		.attr("width", "510px")
-		.attr("height", "510px");
+	d3.select("#aoi_selector").append("button")
+		.text("ADD")
+		.on("click", function(){
+			SELECTED_AOI = -999;
+			if(selectedAppendCell.length != 0){
+				// push grid cell array in AOIarray
+				let _add = [];
+				for(let i=0; i<selectedAppendCell.length; i++){
+					_add.push(selectedAppendCell[i])
+					let _r = selectedAppendCell[i][0];
+					let _c = selectedAppendCell[i][1];
+
+					// set AOI group
+					stiGrid[_r][_c].group = AOIarray.length+1;
+					//stiGrid[_r][_c].click = -999;
+					//console.log(stiGrid[_r][_c]);
+				}
+				AOIarray.push(_add);
+
+				// clear selectedAppendCell
+				selectedAppendCell = [];
+			}
+
+			let grid = d3.select("#aoi_selector").selectAll("svg");
+			let row = grid.selectAll(".row")
+				.data(stiGrid);
+
+			let column = row.selectAll(".square")
+				.data(function(d){return d;});
+
+			column.exit().remove();
+			column.enter().append("rect")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", function(d){return d.width;})
+				.attr("height", function(d){return d.height;})
+				.style("fill", "red")
+				.style("stroke", "#222");
+
+			column.transition()
+				.duration(500)
+				.attr("x", function(d){return d.x;})
+				.attr("y", function(d){return d.y;})
+				.style("fill", function(d, i){
+					if(d.group == 0){
+						return "#fff";
+					}else{
+						return AOIcolorBrewer_12class_set3[(d.group)+1];
+					}
+				});
+		});
+
+	d3.select("#aoi_selector").append("button")
+		.text("DELETE")
+		.on("click", function(){
+			if(selectedDeleteCell.length != 0){
+				// push grid cell array in AOIarray
+				let _dell = [];
+				for(let i=0; i<selectedDeleteCell.length; i++){
+					_dell.push(selectedDeleteCell[i])
+					let _r = selectedDeleteCell[i][0];
+					let _c = selectedDeleteCell[i][1];
+
+					// set AOI group
+					stiGrid[_r][_c].group = 0;
+					stiGrid[_r][_c].click = 0;
+					//console.log(stiGrid[_r][_c]);
+				}
+				for(let i=0; i<_dell.length; i++){
+					let dellIdx = 0;
+					for(let j=0; j<AOIarray[SELECTED_AOI-1].length; j++){
+						if((AOIarray[SELECTED_AOI-1][j][0] == _dell[i][0]) && (AOIarray[SELECTED_AOI-1][j][1] == _dell[i][1])){
+							dellIdx = j;
+							console.log(dellIdx);
+							break;
+						}
+
+					}
+					AOIarray[SELECTED_AOI-1].splice(dellIdx,1);
+				}
+
+				// clear selectedDeleteCell
+				selectedDeleteCell = [];
+			}
+			SELECTED_AOI = -999;
+
+			let grid = d3.select("#aoi_selector").selectAll("svg");
+			let row = grid.selectAll(".row")
+				.data(stiGrid);
+
+			let column = row.selectAll(".square")
+				.data(function(d){return d;});
+
+			column.exit().remove();
+			column.enter().append("rect")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", function(d){return d.width;})
+				.attr("height", function(d){return d.height;})
+				.style("fill", "red")
+				.style("stroke", "#222");
+
+			column.transition()
+				.duration(500)
+				.attr("x", function(d){return d.x;})
+				.attr("y", function(d){return d.y;})
+				.style("fill", function(d, i){
+					if(d.group == 0){
+						return "#fff";
+					}else{
+						return AOIcolorBrewer_12class_set3[(d.group)+1];
+					}
+				});
+		});
+
+	let grid = d3.select("#aoi_selector").append("svg")
+		.attr("width", "400px")
+		.attr("height", "400px");
 
 	let row = grid.selectAll(".row")
 		.data(stiGrid)
@@ -257,22 +379,41 @@ function selectAOIgrid(dataset, setRow, setCol){
 		.attr("height", function(d){return d.height;})
 		.style("fill", "#fff")
 		.style("stroke", "#222")
-		.on("click", function(d){
+		.on("click", function(d, i){
 			d.click++;
-			if((d.click)%4==0){ d3.select(this).style("fill", "#fff"); }
-			if((d.click)%4==1){ d3.select(this).style("fill", "#2c93e8"); }
-			if((d.click)%4==2){ d3.select(this).style("fill", "#f56c4e"); }
-			if((d.click)%4==3){ d3.select(this).style("fill", "#838690"); }
-		})
+			let gridArray = [Math.floor(d.y/d.height), i];
+			//console.log(gridArray);
+			if(d.group==0){
+				if((d.click)%2==0){ 
+					d3.select(this).style("fill", "#fff");
+					selectedAppendCell.splice(selectedAppendCell.indexOf(gridArray),1);
+				}
+				if((d.click)%2==1){ 
+					d3.select(this).style("fill", AOIcolorBrewer_12class_set3[0]);
+					selectedAppendCell.push(gridArray);
+				}
+			}else{
+				// d.group!=0
+				if(SELECTED_AOI < 0){
+					SELECTED_AOI = d.group;
+				}
 
-}
+				if(SELECTED_AOI == d.group){
+					if((d.click)%2==0){ 
+						d3.select(this).style("fill", "black");
+						selectedDeleteCell.push(gridArray);
+					}
+					if((d.click)%2==1){ 
+						d3.select(this).style("fill", AOIcolorBrewer_12class_set3[d.group+1]);
+						selectedDeleteCell.splice(selectedDeleteCell.indexOf(gridArray),1);
+					}
+				}	
+			}
+			//console.log(selectedAppendCell);
+		});
 
-function AOI_add_function(){
-	alert("add btn");
-}
+	
 
-function AOI_clear_function(){
-	alert("clear btn");
 }
 
 function getRandomValue(_type, _min, _max){
@@ -289,3 +430,4 @@ function getRandomValue(_type, _min, _max){
 
 	return _rVal;
 }
+
