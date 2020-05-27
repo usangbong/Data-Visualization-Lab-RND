@@ -5,6 +5,8 @@ Seoul, South Korea.
 vis.sejong.ac.kr
 
 # Members
+- Professor
+
 - Postdoc
   - Hanbyul Yeon
 - Ph.D 
@@ -16,8 +18,7 @@ vis.sejong.ac.kr
   - Yejin Kim
   - Changyoung Yonn
   - Subin Yim
-  - Hawon Lee
-
+  
 
 # Installation
 - Cross-platform: Python version 3.5x
