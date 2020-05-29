@@ -1,7 +1,8 @@
 let stiGrid = [];
 let AOIarray = [];
 let selectedAppendCell = [];
-let AOIcolorBrewer_12class_set3 = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"];
+//let AOIcolorBrewer_12class_set3 = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"];
+let AOIcolorBrewer_12class_set3 = ["#e31a1c", "#a6cee3", "#33a02c", "#ff7f00", "#b15928", "#ffff99", "#6a3d9a", "#fdbf6f", "#b2df8a", "#1f78b4", "#fb9a99", "#cab2d6"];
 let SELECTED_AOI = -999;
 let selectedDeleteCell = [];
 
@@ -43,22 +44,23 @@ temp.push(__t);
 
 // update data panel
 let iDataColumns = $('#data_columns');
-iDataColumns.append("<br>");
-let dlColumns = $(`
-	<selectgroup>
-        <option value="d_x">x</option>
-        <option value="d_y">y</option>
-    </selectgroup>
-`);
+//iDataColumns.append("<br>");
+//let dlColumns = $(`
+//	<selectgroup>
+//       <option value="d_x">x</option>
+//        <option value="d_y">y</option>
+//    </selectgroup>
+//`);
 
-iDataColumns.append(dlColumns);
+//iDataColumns.append(dlColumns);
 
 let iMeasurement = $('#data_measurement');
 iMeasurement.append("<br>");
 let dlMeasurement = $(`
 	<input type='radio' value='m_duration' checked/>
 	<label>duration</label>
-	<input type='radio' value='m_pupil_diameter'>pupil diameter</input>
+	<input type='radio' value='m_pupil_diameter' />
+	<label>pupil diameter</label>
 `);
 iMeasurement.append(dlMeasurement);
 
@@ -211,17 +213,13 @@ function selectAOIgrid(dataset, setRow, setCol){
 	// UI setting: "ADD" & "CLEAR" button
 	let AOIselector = $('#aoi_selector');
 	AOIselector.append("<br>");
-	//<button onclick="AOI_add_function()">ADD</button>
-	//let AOIGrid = $(`
-	//	<button id="clear_btn" onclick="AOI_clear_function()">CLEAR</button>
-	//`);
-	//AOIselector.append(AOIGrid);
 
 	let xpos = 5;
 	let ypos = 5;
 	let width = 30;
 	let height = 30;
 	let click = 0;
+	let opacityVal = 0.4;
 
 	for(let _r=0; _r<setRow; _r++){
 		let _row = [];
@@ -279,6 +277,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 			column.enter().append("rect")
 				.attr("x", 0)
 				.attr("y", 0)
+				.attr("opacity", opacityVal)
 				.attr("width", function(d){return d.width;})
 				.attr("height", function(d){return d.height;})
 				.style("fill", "red")
@@ -286,6 +285,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 
 			column.transition()
 				.duration(500)
+				.attr("opacity", opacityVal)
 				.attr("x", function(d){return d.x;})
 				.attr("y", function(d){return d.y;})
 				.style("fill", function(d, i){
@@ -318,7 +318,6 @@ function selectAOIgrid(dataset, setRow, setCol){
 					for(let j=0; j<AOIarray[SELECTED_AOI-1].length; j++){
 						if((AOIarray[SELECTED_AOI-1][j][0] == _dell[i][0]) && (AOIarray[SELECTED_AOI-1][j][1] == _dell[i][1])){
 							dellIdx = j;
-							console.log(dellIdx);
 							break;
 						}
 
@@ -342,6 +341,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 			column.enter().append("rect")
 				.attr("x", 0)
 				.attr("y", 0)
+				.attr("opacity", opacityVal)
 				.attr("width", function(d){return d.width;})
 				.attr("height", function(d){return d.height;})
 				.style("fill", "red")
@@ -349,6 +349,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 
 			column.transition()
 				.duration(500)
+				.attr("opacity", opacityVal)
 				.attr("x", function(d){return d.x;})
 				.attr("y", function(d){return d.y;})
 				.style("fill", function(d, i){
@@ -361,8 +362,14 @@ function selectAOIgrid(dataset, setRow, setCol){
 		});
 
 	let grid = d3.select("#aoi_selector").append("svg")
-		.attr("width", "400px")
-		.attr("height", "400px");
+		.attr("width", "310px")
+		.attr("height", "310px");
+
+	let stimulus = grid.append("image")
+		.attr("xlink:href", "http://127.0.0.1:8000/static/stimulus/U0121_1RTE.jpg")
+		.attr("width", "310px")
+		.attr("height", "310px");
+
 
 	let row = grid.selectAll(".row")
 		.data(stiGrid)
@@ -373,6 +380,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 		.data(function(d){return d;})
 		.enter().append("rect")
 		.attr("class", "square")
+		.attr("opacity", opacityVal)
 		.attr("x", function(d){return d.x;})
 		.attr("y", function(d){return d.y;})
 		.attr("width", function(d){return d.width;})
@@ -411,23 +419,6 @@ function selectAOIgrid(dataset, setRow, setCol){
 			}
 			//console.log(selectedAppendCell);
 		});
-
-	
-
 }
 
-function getRandomValue(_type, _min, _max){
-	let _rVal = 0;
-	if(_type==0){
-		// float
-		_rVal = Math.random()*(_max-_min)+_min;
-	}else if(_type==1){
-		// int
-		_rVal = Math.floor(Math.random()*(_max-_min))+_min;
-	}else{
-		console.log("Select type: float (0) or int (1).");
-	}
-
-	return _rVal;
-}
 
