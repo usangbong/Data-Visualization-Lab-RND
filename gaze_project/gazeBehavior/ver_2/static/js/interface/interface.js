@@ -1,11 +1,23 @@
 let stiGrid = [];
 let AOIarray = [];
+let AOIduration = [];
 let selectedAppendCell = [];
 //let AOIcolorBrewer_12class_set3 = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"];
 let AOIcolorBrewer_12class_set3 = ["#e31a1c", "#a6cee3", "#33a02c", "#ff7f00", "#b15928", "#ffff99", "#6a3d9a", "#fdbf6f", "#b2df8a", "#1f78b4", "#fb9a99", "#cab2d6"];
 let SELECTED_AOI = -999;
 let selectedDeleteCell = [];
 let featureCounting = 0;
+
+let DIV_WIDTH = 350;
+let DIV_HEIGHT = 400;
+let STIMULUS_WIDTH = 800;
+let STIMULUS_HEIGHT = 600;
+let STIMULUS_OPACITY = 0;
+
+// for interaction
+let FLAG_DRAW_GAZE_ON_STIMULUS = 0;
+
+
 
 let temp = [];
 let __t = [];
@@ -42,6 +54,153 @@ _t = {
 };
 __t.push(_t);
 temp.push(__t);
+
+let rawGazeData = [
+[410.9890109890109, 306.3829787234042],
+[410.9890109890109, 306.3829787234042],
+[413.18681318681325, 308.2066869300912],
+[413.18681318681325, 308.2066869300912],
+[413.18681318681325, 308.2066869300912],
+[413.18681318681325, 310.0303951367781],
+[413.18681318681325, 311.85410334346506],
+[413.18681318681325, 310.0303951367781],
+[413.18681318681325, 310.0303951367781],
+[413.18681318681325, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 308.2066869300912],
+[408.79120879120876, 310.0303951367781],
+[408.79120879120876, 310.0303951367781],
+[408.79120879120876, 308.2066869300912],
+[408.79120879120876, 308.2066869300912],
+[408.79120879120876, 308.2066869300912],
+[408.79120879120876, 310.0303951367781],
+[408.79120879120876, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[413.18681318681325, 311.85410334346506],
+[413.18681318681325, 311.85410334346506],
+[410.9890109890109, 311.85410334346506],
+[413.18681318681325, 311.85410334346506],
+[413.18681318681325, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 306.3829787234042],
+[410.9890109890109, 306.3829787234042],
+[413.18681318681325, 306.3829787234042],
+[410.9890109890109, 304.55927051671733],
+[410.9890109890109, 304.55927051671733],
+[410.9890109890109, 304.55927051671733],
+[413.18681318681325, 306.3829787234042],
+[413.18681318681325, 306.3829787234042],
+[413.18681318681325, 308.2066869300912],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 308.2066869300912],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 310.0303951367781],
+[410.9890109890109, 311.85410334346506],
+[410.9890109890109, 311.85410334346506],
+[410.9890109890109, 311.85410334346506],
+[410.9890109890109, 311.85410334346506],
+[410.9890109890109, 311.85410334346506],
+[408.79120879120876, 311.85410334346506],
+[413.18681318681325, 313.67781155015194],
+[424.1758241758242, 313.67781155015194],
+[441.7582417582418, 311.85410334346506],
+[470.32967032967036, 310.0303951367781],
+[503.2967032967033, 306.3829787234042],
+[536.2637362637362, 304.55927051671733],
+[571.4285714285714, 300.9118541033435],
+[606.5934065934066, 297.2644376899696],
+[639.5604395604396, 291.79331306990883],
+[661.5384615384615, 288.14589665653494],
+[679.1208791208791, 286.322188449848],
+[685.7142857142857, 284.4984802431611],
+[690.1098901098901, 284.4984802431611],
+[692.3076923076924, 284.4984802431611],
+[694.5054945054945, 284.4984802431611],
+[696.7032967032967, 284.4984802431611],
+[698.9010989010989, 286.322188449848],
+[698.9010989010989, 284.4984802431611],
+[698.9010989010989, 282.67477203647417],
+[698.9010989010989, 280.8510638297872],
+[698.9010989010989, 279.0273556231003],
+[698.9010989010989, 275.37993920972644],
+[698.9010989010989, 273.5562310030395],
+[696.7032967032967, 271.73252279635255],
+[696.7032967032967, 271.73252279635255],
+[694.5054945054945, 271.73252279635255],
+[696.7032967032967, 273.5562310030395],
+[696.7032967032967, 275.37993920972644],
+[696.7032967032967, 277.2036474164134],
+[696.7032967032967, 277.2036474164134],
+[696.7032967032967, 277.2036474164134],
+[694.5054945054945, 279.0273556231003],
+[696.7032967032967, 279.0273556231003],
+[696.7032967032967, 279.0273556231003],
+[696.7032967032967, 279.0273556231003],
+[696.7032967032967, 277.2036474164134],
+[696.7032967032967, 275.37993920972644],
+[696.7032967032967, 275.37993920972644],
+[696.7032967032967, 275.37993920972644],
+[701.0989010989011, 275.37993920972644],
+[709.8901098901099, 273.5562310030395],
+[716.4835164835165, 269.90881458966567],
+[723.0769230769231, 266.2613981762918],
+[725.2747252747253, 264.43768996960483],
+[729.6703296703297, 260.790273556231],
+[731.8681318681319, 258.96656534954406],
+[738.4615384615385, 255.31914893617022],
+[738.4615384615385, 253.49544072948328],
+[736.2637362637362, 253.49544072948328],
+[734.065934065934, 255.31914893617022],
+[734.065934065934, 255.31914893617022],
+[736.2637362637362, 257.1428571428571],
+[738.4615384615385, 257.1428571428571],
+[740.6593406593407, 258.96656534954406],
+[742.8571428571429, 257.1428571428571],
+[742.8571428571429, 258.96656534954406],
+[742.8571428571429, 258.96656534954406],
+[742.8571428571429, 258.96656534954406],
+[742.8571428571429, 260.790273556231],
+[742.8571428571429, 260.790273556231],
+[740.6593406593407, 258.96656534954406],
+[740.6593406593407, 258.96656534954406],
+[740.6593406593407, 260.790273556231],
+[740.6593406593407, 260.790273556231],
+[740.6593406593407, 260.790273556231],
+[742.8571428571429, 258.96656534954406],
+[747.2527472527472, 257.1428571428571],
+[753.8461538461538, 251.67173252279636],
+[756.043956043956, 244.37689969604864],
+[756.043956043956, 235.258358662614],
+[756.043956043956, 229.7872340425532],
+[756.043956043956, 224.31610942249242],
+[758.2417582417582, 218.8449848024316],
+[756.043956043956, 213.37386018237083],
+[756.043956043956, 211.5501519756839],
+[753.8461538461538, 211.5501519756839],
+[753.8461538461538, 211.5501519756839],
+[756.043956043956, 213.37386018237083],
+[758.2417582417582, 213.37386018237083],
+[760.4395604395604, 213.37386018237083],
+[760.4395604395604, 213.37386018237083],
+[762.6373626373627, 215.19756838905775],
+[762.6373626373627, 215.19756838905775],
+[760.4395604395604, 217.0212765957447],
+[760.4395604395604, 220.66869300911856],
+[762.6373626373627, 220.66869300911856],
+[762.6373626373627, 222.49240121580547],
+[762.6373626373627, 222.49240121580547],
+[762.6373626373627, 222.49240121580547],
+[760.4395604395604, 220.66869300911856],
+[760.4395604395604, 220.66869300911856],
+[760.4395604395604, 220.66869300911856],
+[758.2417582417582, 220.66869300911856]
+]
 
 let saliencyFeatures =[
 [0.16052112,0.043206494,0.1323152347029887],
@@ -228,13 +387,13 @@ let dlEvent = $(`
 `);
 iEvent.append(dlEvent);
 
+selectAOIgrid([0,0], 10, 10);
+
+drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_color.csv");
+drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_intensity.csv");
+drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_orientation.csv");
 
 
-//drawGridHeat_fixDur(temp);
-
-function initInterface(){
-
-}
 
 function drawGridHeat_fixDur(dataset){
 	console.log("drawGridHeat_fixDur");
@@ -355,19 +514,37 @@ function drawGridHeat_fixDur(dataset){
 	heatmapChart(inputdata);
 }
 
-selectAOIgrid([0,0], 10, 10);
 
 function selectAOIgrid(dataset, setRow, setCol){
 	// UI setting: "ADD" & "CLEAR" button
 	let AOIselector = $('#aoi_selector');
 	AOIselector.append("<br>");
 
-	let xpos = 5;
-	let ypos = 5;
-	let width = 30;
-	let height = 30;
+	let xpos = 0;
+	let ypos = 0;
+	let cellWidth = 30;
+	let cellHeight = 30;
 	let click = 0;
-	let opacityVal = 0.4;
+	let rowNum = 10;
+	let colNum = 10;
+
+  	let margin = {top: 10, right: 10, bottom: 10, left: 10};
+	let SVG_width = DIV_WIDTH;
+	let SVG_height = DIV_HEIGHT;
+
+  	if(STIMULUS_WIDTH>STIMULUS_HEIGHT){
+  		let _r = SVG_width/STIMULUS_WIDTH;
+  		SVG_width = STIMULUS_WIDTH*_r;
+  		SVG_height = STIMULUS_HEIGHT*_r;
+  	}else{
+  		let _r = SVG_height/STIMULUS_HEIGHT;
+  		SVG_width = STIMULUS_WIDTH*_r;
+  		SVG_height = STIMULUS_HEIGHT*_r;
+  	}
+
+	// set cell width & height 
+	cellWidth = SVG_width/rowNum;
+	cellHeight = SVG_height/colNum;	
 
 	for(let _r=0; _r<setRow; _r++){
 		let _row = [];
@@ -376,19 +553,19 @@ function selectAOIgrid(dataset, setRow, setCol){
 			let _col = {
 				x: xpos,
 				y: ypos,
-				width: width,
-				height: height,
+				width: cellWidth,
+				height: cellHeight,
 				click: click,
 				group: 0
 			};
 
 			_row.push(_col);
-			xpos += width;
+			xpos += cellWidth;
 		}
 		stiGrid.push(_row);
 
-		xpos = 5;
-		ypos += height;
+		xpos = 0;
+		ypos += cellHeight;
 	}
 
 	d3.select("#aoi_selector").append("button")
@@ -425,7 +602,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 			column.enter().append("rect")
 				.attr("x", 0)
 				.attr("y", 0)
-				.attr("opacity", opacityVal)
+				.attr("opacity", STIMULUS_OPACITY)
 				.attr("width", function(d){return d.width;})
 				.attr("height", function(d){return d.height;})
 				.style("fill", "red")
@@ -433,53 +610,24 @@ function selectAOIgrid(dataset, setRow, setCol){
 
 			column.transition()
 				.duration(500)
-				.attr("opacity", opacityVal)
+				.attr("opacity", STIMULUS_OPACITY)
 				.attr("x", function(d){return d.x;})
 				.attr("y", function(d){return d.y;})
 				.style("fill", function(d, i){
 					if(d.group == 0){
 						return "#fff";
 					}else{
-						return AOIcolorBrewer_12class_set3[(d.group)+1];
+						return AOIcolorBrewer_12class_set3[d.group];
 					}
 				});
 
-			let margin = {top: 20, right: 20, bottom: 30, left: 20},
-			    width = 350 - margin.left - margin.right,
-			    height = 150 - margin.top - margin.bottom;
+			// counting fixation duration on each AOIs
+			AOIduration = [];
+			AOIduration = countingDurationInAOI(rawGazeData);
 
-		    let AoIboxWidth = 40;
-		    let AoIboxHeight = 40;
-		    let gap = 10;
-		    let textHeight = 20;
-
-		    d3.select("#aoi_list").selectAll("*").remove();
-
-		    let svg = d3.select("#aoi_list").append("svg")
-		    	.attr("width", width)
-		    	.attr("height", height);
-
-	    	let aois = svg.selectAll("rect")
-	    		.data(AOIarray);
-    		aois.exit().remove();
-
-			aois.enter().append("rect")
-				.attr("x", function(d, i){return gap/2+(AoIboxWidth+gap)*i})
-				.attr("y", gap+textHeight)
-				.attr("width", AoIboxWidth)
-				.attr("height", AoIboxHeight)
-				//.attr("opacity", 0.5)
-				.attr("fill", function(d, i){return AOIcolorBrewer_12class_set3[i+1]})
-				.attr("stroke", "black");
-
-			aois.enter().append("text")
-				.text(function(d, i){
-					return "AOI_"+i.toString();
-				})
-				.attr("x", function(d, i){return gap+(AoIboxWidth+gap)*i})
-				.attr("y", (gap+textHeight)/2)
-				.attr("font-size", "10px")
-				.attr("fill", "black");
+			// AOI list view
+		    drawAOIlist(SVG_width, SVG_height);
+		    
 
 		});
 
@@ -527,7 +675,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 			column.enter().append("rect")
 				.attr("x", 0)
 				.attr("y", 0)
-				.attr("opacity", opacityVal)
+				.attr("opacity", STIMULUS_OPACITY)
 				.attr("width", function(d){return d.width;})
 				.attr("height", function(d){return d.height;})
 				.style("fill", "red")
@@ -535,27 +683,73 @@ function selectAOIgrid(dataset, setRow, setCol){
 
 			column.transition()
 				.duration(500)
-				.attr("opacity", opacityVal)
+				.attr("opacity", STIMULUS_OPACITY)
 				.attr("x", function(d){return d.x;})
 				.attr("y", function(d){return d.y;})
 				.style("fill", function(d, i){
 					if(d.group == 0){
 						return "#fff";
 					}else{
-						return AOIcolorBrewer_12class_set3[(d.group)+1];
+						return AOIcolorBrewer_12class_set3[d.group];
 					}
 				});
 		});
 
+	d3.select("#aoi_selector").append("button")
+		.text("GAZE DATA")
+		.on("click", function(){
+			FLAG_DRAW_GAZE_ON_STIMULUS++;
+			
+			let svg = d3.select("#aoi_selector").selectAll("svg");
+
+			let circles = svg.selectAll("circle")
+				.data(rawGazeData)
+				.transition()
+				.duration(500)
+				.attr("r", function(d){
+					if(FLAG_DRAW_GAZE_ON_STIMULUS%2 == 1){
+						return 0;
+					}else{
+						return 2;
+					}
+				});
+
+			
+		});
+
+	d3.select("#aoi_selector").append("button")
+		.text("CELL-OPACITY")
+		.on("click", function(){
+			STIMULUS_OPACITY += 0.25;
+
+			let grid = d3.select("#aoi_selector").selectAll("svg");
+			let row = grid.selectAll(".row")
+				.data(stiGrid);
+
+			let column = row.selectAll(".square")
+				.data(function(d){return d;});
+
+			column.transition()
+				.duration(500)
+				.attr("opacity", function(d){
+					if(STIMULUS_OPACITY > 1){
+						STIMULUS_OPACITY = 0;
+					}
+					return STIMULUS_OPACITY;
+				});
+
+			
+		});
+
+
 	let grid = d3.select("#aoi_selector").append("svg")
-		.attr("width", "310px")
-		.attr("height", "310px");
+		.attr("width", SVG_width)
+		.attr("height", SVG_height);
 
 	let stimulus = grid.append("image")
 		.attr("xlink:href", "http://127.0.0.1:8000/static/stimulus/U0121_1RTE.jpg")
-		.attr("width", "310px")
-		.attr("height", "310px");
-
+		.attr("width", SVG_width)
+		.attr("height", SVG_height);
 
 	let row = grid.selectAll(".row")
 		.data(stiGrid)
@@ -566,7 +760,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 		.data(function(d){return d;})
 		.enter().append("rect")
 		.attr("class", "square")
-		.attr("opacity", opacityVal)
+		.attr("opacity", STIMULUS_OPACITY)
 		.attr("x", function(d){return d.x;})
 		.attr("y", function(d){return d.y;})
 		.attr("width", function(d){return d.width;})
@@ -606,15 +800,87 @@ function selectAOIgrid(dataset, setRow, setCol){
 			//console.log(selectedAppendCell);
 		});
 
-	function drawAOIlist(){
-		let svg = d3.select(body).selectAll()
+	let gazePoint = grid.selectAll(".gp")
+		.data(rawGazeData)
+		.enter().append("circle")
+		.attr("cx", function(d){return convertGazeToSVG(d)[0];})
+		.attr("cy", function(d){return convertGazeToSVG(d)[1];})
+		.attr("r", 2)
+		//.attr("opacity", function(d, i){return (1/rawGazeData.length)*i;})
+		.style("fill","red")
+		.style("stroke", "black");
 
+	function drawAOIlist(SVG_w, SVG_h){
+		// AOI list view
+	    let AoIboxWidth = 40;
+	    let AoIboxHeight = 40;
+	    let gap = 10;
+	    let textHeight = 20;
+
+	    if(AOIarray.length > 7){
+	    	AoIboxWidth = (SVG_w/AOIarray.length)-gap;
+	    }
+
+	    d3.select("#aoi_list").selectAll("*").remove();
+
+	    let svg = d3.select("#aoi_list").append("svg")
+	    	.attr("width", SVG_w)
+	    	.attr("height", SVG_h);
+
+    	let aois = svg.selectAll("rect")
+    		.data(AOIarray);
+		aois.exit().remove();
+
+		aois.enter().append("rect")
+			.attr("x", function(d, i){return gap/2+(AoIboxWidth+gap)*i})
+			.attr("y", gap+textHeight)
+			.attr("width", AoIboxWidth)
+			.attr("height", AoIboxHeight)
+			//.attr("opacity", 0.5)
+			.attr("fill", function(d, i){return AOIcolorBrewer_12class_set3[i+1]})
+			.attr("stroke", "black");
+
+		aois.enter().append("text")
+			.text(function(d, i){
+				return "AOI_"+i.toString();
+			})
+			.attr("x", function(d, i){return gap+(AoIboxWidth+gap)*i})
+			.attr("y", (gap+textHeight)/2)
+			.attr("font-size", "10px")
+			.attr("fill", "black");
+
+		// set max duration
+		let maxDuration = 0;
+		for(let i=0; i<AOIduration.length; i++){
+			if(AOIduration[i] > maxDuration){
+				maxDuration = AOIduration[i];
+			}
+		}
+
+		let setMaxHeight = 100;
+		let heightRatio = 1;
+		if(maxDuration != 0 ){
+			if(maxDuration > setMaxHeight){
+				heightRatio = setMaxHeight/maxDuration;
+			}else{
+				heightRatio = 1
+			}
+		}else{
+			heightRatio = 0;
+		}
+
+		let durationBar = svg.selectAll("bar")
+			.data(AOIduration);
+		durationBar.exit().remove();
+		durationBar.enter().append("rect")
+			.attr("x", function(d, i){return AoIboxWidth/3+gap/2+(AoIboxWidth+gap)*i})
+			.attr("y", gap+textHeight+AoIboxHeight)
+			.attr("width", AoIboxWidth/3)
+			.attr("height", function(d){return d*heightRatio})
+			.attr("fill", "black");
 	}
-}
 
-drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_color.csv");
-drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_intensity.csv");
-drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_orientation.csv");
+}
 
 function drawStimulusFeature(_dataURL){
 	// set the dimensions and margins of the graph
@@ -693,4 +959,105 @@ function countingValueRange(_data, _minRange, _maxRange){
 
 
 	return counting;
+}
+
+function convertGazeToIdx(_g){
+	let _idx = [];
+
+	let SVG_width = DIV_WIDTH;
+	let SVG_height = DIV_HEIGHT;
+	let cellWidth = 30;
+	let cellHeight = 30;
+	let rowNum = 10;
+	let colNum = 10;
+
+	let _ratio = 1;
+  	if(STIMULUS_WIDTH>STIMULUS_HEIGHT){
+  		_ratio = DIV_WIDTH/STIMULUS_WIDTH;
+  		SVG_width = STIMULUS_WIDTH*_ratio;
+  		SVG_height = STIMULUS_HEIGHT*_ratio;
+  	}else{
+  		_ratio = DIV_HEIGHT/STIMULUS_HEIGHT;
+  		SVG_width = STIMULUS_WIDTH*_ratio;
+  		SVG_height = STIMULUS_HEIGHT*_ratio;
+  	}
+
+	// set cell width & height 
+	cellWidth = SVG_width/rowNum;
+	cellHeight = SVG_height/colNum;
+
+	let _x = +_g[0]*_ratio;
+	let _y = +_g[1]*_ratio;
+
+	//console.log("x: "+_g[0]+" -> "+_x);
+	//console.log("y: "+_g[1]+" -> "+_y);
+
+	_x /= cellWidth;
+	_y /= cellHeight;
+
+	_idx[0] = Math.trunc(Math.floor(_y));
+	_idx[1] = Math.trunc(Math.floor(_x));
+
+	//console.log(_idx[0]+", "+_idx[1]);
+
+	return _idx;
+}
+
+function convertGazeToSVG(_g){
+	let _cg = [];
+
+	let SVG_width = DIV_WIDTH;
+	let SVG_height = DIV_HEIGHT;
+	let cellWidth = 30;
+	let cellHeight = 30;
+	let rowNum = 10;
+	let colNum = 10;
+
+	let _ratio = 1;
+  	if(STIMULUS_WIDTH>STIMULUS_HEIGHT){
+  		_ratio = DIV_WIDTH/STIMULUS_WIDTH;
+  		SVG_width = STIMULUS_WIDTH*_ratio;
+  		SVG_height = STIMULUS_HEIGHT*_ratio;
+  	}else{
+  		_ratio = DIV_HEIGHT/STIMULUS_HEIGHT;
+  		SVG_width = STIMULUS_WIDTH*_ratio;
+  		SVG_height = STIMULUS_HEIGHT*_ratio;
+  	}
+
+	// set cell width & height 
+	cellWidth = SVG_width/rowNum;
+	cellHeight = SVG_height/colNum;
+
+	let _x = +_g[0]*_ratio;
+	let _y = +_g[1]*_ratio;
+
+	_cg[0] = Math.floor(_x);
+	_cg[1] = Math.floor(_y);
+
+	return _cg;
+}
+
+function countingDurationInAOI(_g){
+	let _count = [];
+
+	for(let i=0; i<AOIarray.length; i++){
+		_count.push(0);
+	}
+
+	for(let i=0; i<rawGazeData.length; i++){
+		let _idx = convertGazeToIdx(rawGazeData[i]);
+
+		for(let j=0; j<AOIarray.length; j++){
+			for(let k=0; k<AOIarray[j].length; k++){
+				let _aoiCell = AOIarray[j][k];
+				if((_idx[0] == _aoiCell[0]) && (_idx[1] == _aoiCell[1])){
+					_count[j]++;
+					break;
+				}
+			}
+		}
+	}
+	//console.log(_count);
+
+	return _count;
 }
