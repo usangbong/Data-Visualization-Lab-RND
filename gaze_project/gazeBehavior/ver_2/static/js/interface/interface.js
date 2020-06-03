@@ -12,7 +12,7 @@ let DIV_WIDTH = 350;
 let DIV_HEIGHT = 400;
 let STIMULUS_WIDTH = 800;
 let STIMULUS_HEIGHT = 600;
-let STIMULUS_OPACITY = 0;
+let STIMULUS_OPACITY = 0.5;
 
 // for interaction
 let FLAG_DRAW_GAZE_ON_STIMULUS = 0;
@@ -712,9 +712,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 					}else{
 						return 2;
 					}
-				});
-
-			
+				});			
 		});
 
 	d3.select("#aoi_selector").append("button")
@@ -736,9 +734,7 @@ function selectAOIgrid(dataset, setRow, setCol){
 						STIMULUS_OPACITY = 0;
 					}
 					return STIMULUS_OPACITY;
-				});
-
-			
+				});			
 		});
 
 
@@ -877,6 +873,13 @@ function selectAOIgrid(dataset, setRow, setCol){
 			.attr("y", gap+textHeight+AoIboxHeight)
 			.attr("width", AoIboxWidth/3)
 			.attr("height", function(d){return d*heightRatio})
+			.attr("fill", "black");
+
+		durationBar.enter().append("text")
+			.text(function(d){return d;})
+			.attr("x", function(d, i){return AoIboxWidth/3+gap/2+(AoIboxWidth+gap)*i})
+			.attr("y", function(d){return d*heightRatio+gap+textHeight+AoIboxHeight+10})
+			.attr("font-size", "10px")
 			.attr("fill", "black");
 	}
 
