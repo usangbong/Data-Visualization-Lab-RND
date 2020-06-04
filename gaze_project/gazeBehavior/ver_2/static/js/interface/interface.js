@@ -346,6 +346,162 @@ let saliencyFeatures =[
 [0.06234395,0.4487122,0.37994428617000947]
 ];
 
+let tempDataset = [
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.5, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 3, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.7, "Sepal_Width" : 3.2, "Petal_Length" : 1.3, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.6, "Sepal_Width" : 3.1, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.6, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3.9, "Petal_Length" : 1.7, "Petal_Width" : 0.4},
+{"Sepal_Length" : 4.6, "Sepal_Width" : 3.4, "Petal_Length" : 1.4, "Petal_Width" : 0.3},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.4, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.4, "Sepal_Width" : 2.9, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 3.1, "Petal_Length" : 1.5, "Petal_Width" : 0.1},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3.7, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.8, "Sepal_Width" : 3.4, "Petal_Length" : 1.6, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.8, "Sepal_Width" : 3, "Petal_Length" : 1.4, "Petal_Width" : 0.1},
+{"Sepal_Length" : 4.3, "Sepal_Width" : 3, "Petal_Length" : 1.1, "Petal_Width" : 0.1},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 4, "Petal_Length" : 1.2, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 4.4, "Petal_Length" : 1.5, "Petal_Width" : 0.4},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3.9, "Petal_Length" : 1.3, "Petal_Width" : 0.4},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.5, "Petal_Length" : 1.4, "Petal_Width" : 0.3},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 3.8, "Petal_Length" : 1.7, "Petal_Width" : 0.3},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.8, "Petal_Length" : 1.5, "Petal_Width" : 0.3},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3.4, "Petal_Length" : 1.7, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.7, "Petal_Length" : 1.5, "Petal_Width" : 0.4},
+{"Sepal_Length" : 4.6, "Sepal_Width" : 3.6, "Petal_Length" : 1, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.3, "Petal_Length" : 1.7, "Petal_Width" : 0.5},
+{"Sepal_Length" : 4.8, "Sepal_Width" : 3.4, "Petal_Length" : 1.9, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3, "Petal_Length" : 1.6, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.4, "Petal_Length" : 1.6, "Petal_Width" : 0.4},
+{"Sepal_Length" : 5.2, "Sepal_Width" : 3.5, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.2, "Sepal_Width" : 3.4, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.7, "Sepal_Width" : 3.2, "Petal_Length" : 1.6, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.8, "Sepal_Width" : 3.1, "Petal_Length" : 1.6, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3.4, "Petal_Length" : 1.5, "Petal_Width" : 0.4},
+{"Sepal_Length" : 5.2, "Sepal_Width" : 4.1, "Petal_Length" : 1.5, "Petal_Width" : 0.1},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 4.2, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 3.1, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.2, "Petal_Length" : 1.2, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 3.5, "Petal_Length" : 1.3, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 3.6, "Petal_Length" : 1.4, "Petal_Width" : 0.1},
+{"Sepal_Length" : 4.4, "Sepal_Width" : 3, "Petal_Length" : 1.3, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.4, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.5, "Petal_Length" : 1.3, "Petal_Width" : 0.3},
+{"Sepal_Length" : 4.5, "Sepal_Width" : 2.3, "Petal_Length" : 1.3, "Petal_Width" : 0.3},
+{"Sepal_Length" : 4.4, "Sepal_Width" : 3.2, "Petal_Length" : 1.3, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.5, "Petal_Length" : 1.6, "Petal_Width" : 0.6},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.8, "Petal_Length" : 1.9, "Petal_Width" : 0.4},
+{"Sepal_Length" : 4.8, "Sepal_Width" : 3, "Petal_Length" : 1.4, "Petal_Width" : 0.3},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 3.8, "Petal_Length" : 1.6, "Petal_Width" : 0.2},
+{"Sepal_Length" : 4.6, "Sepal_Width" : 3.2, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5.3, "Sepal_Width" : 3.7, "Petal_Length" : 1.5, "Petal_Width" : 0.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 3.3, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
+{"Sepal_Length" : 7, "Sepal_Width" : 3.2, "Petal_Length" : 4.7, "Petal_Width" : 1.4},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 3.2, "Petal_Length" : 4.5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6.9, "Sepal_Width" : 3.1, "Petal_Length" : 4.9, "Petal_Width" : 1.5},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 2.3, "Petal_Length" : 4, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.5, "Sepal_Width" : 2.8, "Petal_Length" : 4.6, "Petal_Width" : 1.5},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 2.8, "Petal_Length" : 4.5, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 3.3, "Petal_Length" : 4.7, "Petal_Width" : 1.6},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 2.4, "Petal_Length" : 3.3, "Petal_Width" : 1},
+{"Sepal_Length" : 6.6, "Sepal_Width" : 2.9, "Petal_Length" : 4.6, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.2, "Sepal_Width" : 2.7, "Petal_Length" : 3.9, "Petal_Width" : 1.4},
+{"Sepal_Length" : 5, "Sepal_Width" : 2, "Petal_Length" : 3.5, "Petal_Width" : 1},
+{"Sepal_Length" : 5.9, "Sepal_Width" : 3, "Petal_Length" : 4.2, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6, "Sepal_Width" : 2.2, "Petal_Length" : 4, "Petal_Width" : 1},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 2.9, "Petal_Length" : 4.7, "Petal_Width" : 1.4},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 2.9, "Petal_Length" : 3.6, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3.1, "Petal_Length" : 4.4, "Petal_Width" : 1.4},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 3, "Petal_Length" : 4.5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.7, "Petal_Length" : 4.1, "Petal_Width" : 1},
+{"Sepal_Length" : 6.2, "Sepal_Width" : 2.2, "Petal_Length" : 4.5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 2.5, "Petal_Length" : 3.9, "Petal_Width" : 1.1},
+{"Sepal_Length" : 5.9, "Sepal_Width" : 3.2, "Petal_Length" : 4.8, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 2.8, "Petal_Length" : 4, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.5, "Petal_Length" : 4.9, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 2.8, "Petal_Length" : 4.7, "Petal_Width" : 1.2},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 2.9, "Petal_Length" : 4.3, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.6, "Sepal_Width" : 3, "Petal_Length" : 4.4, "Petal_Width" : 1.4},
+{"Sepal_Length" : 6.8, "Sepal_Width" : 2.8, "Petal_Length" : 4.8, "Petal_Width" : 1.4},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3, "Petal_Length" : 5, "Petal_Width" : 1.7},
+{"Sepal_Length" : 6, "Sepal_Width" : 2.9, "Petal_Length" : 4.5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 2.6, "Petal_Length" : 3.5, "Petal_Width" : 1},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 2.4, "Petal_Length" : 3.8, "Petal_Width" : 1.1},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 2.4, "Petal_Length" : 3.7, "Petal_Width" : 1},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.7, "Petal_Length" : 3.9, "Petal_Width" : 1.2},
+{"Sepal_Length" : 6, "Sepal_Width" : 2.7, "Petal_Length" : 5.1, "Petal_Width" : 1.6},
+{"Sepal_Length" : 5.4, "Sepal_Width" : 3, "Petal_Length" : 4.5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6, "Sepal_Width" : 3.4, "Petal_Length" : 4.5, "Petal_Width" : 1.6},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3.1, "Petal_Length" : 4.7, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.3, "Petal_Length" : 4.4, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 3, "Petal_Length" : 4.1, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 2.5, "Petal_Length" : 4, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.5, "Sepal_Width" : 2.6, "Petal_Length" : 4.4, "Petal_Width" : 1.2},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 3, "Petal_Length" : 4.6, "Petal_Width" : 1.4},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.6, "Petal_Length" : 4, "Petal_Width" : 1.2},
+{"Sepal_Length" : 5, "Sepal_Width" : 2.3, "Petal_Length" : 3.3, "Petal_Width" : 1},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 2.7, "Petal_Length" : 4.2, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 3, "Petal_Length" : 4.2, "Petal_Width" : 1.2},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 2.9, "Petal_Length" : 4.2, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.2, "Sepal_Width" : 2.9, "Petal_Length" : 4.3, "Petal_Width" : 1.3},
+{"Sepal_Length" : 5.1, "Sepal_Width" : 2.5, "Petal_Length" : 3, "Petal_Width" : 1.1},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 2.8, "Petal_Length" : 4.1, "Petal_Width" : 1.3},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 3.3, "Petal_Length" : 6, "Petal_Width" : 2.5},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.7, "Petal_Length" : 5.1, "Petal_Width" : 1.9},
+{"Sepal_Length" : 7.1, "Sepal_Width" : 3, "Petal_Length" : 5.9, "Petal_Width" : 2.1},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.9, "Petal_Length" : 5.6, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.5, "Sepal_Width" : 3, "Petal_Length" : 5.8, "Petal_Width" : 2.2},
+{"Sepal_Length" : 7.6, "Sepal_Width" : 3, "Petal_Length" : 6.6, "Petal_Width" : 2.1},
+{"Sepal_Length" : 4.9, "Sepal_Width" : 2.5, "Petal_Length" : 4.5, "Petal_Width" : 1.7},
+{"Sepal_Length" : 7.3, "Sepal_Width" : 2.9, "Petal_Length" : 6.3, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 2.5, "Petal_Length" : 5.8, "Petal_Width" : 1.8},
+{"Sepal_Length" : 7.2, "Sepal_Width" : 3.6, "Petal_Length" : 6.1, "Petal_Width" : 2.5},
+{"Sepal_Length" : 6.5, "Sepal_Width" : 3.2, "Petal_Length" : 5.1, "Petal_Width" : 2},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 2.7, "Petal_Length" : 5.3, "Petal_Width" : 1.9},
+{"Sepal_Length" : 6.8, "Sepal_Width" : 3, "Petal_Length" : 5.5, "Petal_Width" : 2.1},
+{"Sepal_Length" : 5.7, "Sepal_Width" : 2.5, "Petal_Length" : 5, "Petal_Width" : 2},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.8, "Petal_Length" : 5.1, "Petal_Width" : 2.4},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 3.2, "Petal_Length" : 5.3, "Petal_Width" : 2.3},
+{"Sepal_Length" : 6.5, "Sepal_Width" : 3, "Petal_Length" : 5.5, "Petal_Width" : 1.8},
+{"Sepal_Length" : 7.7, "Sepal_Width" : 3.8, "Petal_Length" : 6.7, "Petal_Width" : 2.2},
+{"Sepal_Length" : 7.7, "Sepal_Width" : 2.6, "Petal_Length" : 6.9, "Petal_Width" : 2.3},
+{"Sepal_Length" : 6, "Sepal_Width" : 2.2, "Petal_Length" : 5, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6.9, "Sepal_Width" : 3.2, "Petal_Length" : 5.7, "Petal_Width" : 2.3},
+{"Sepal_Length" : 5.6, "Sepal_Width" : 2.8, "Petal_Length" : 4.9, "Petal_Width" : 2},
+{"Sepal_Length" : 7.7, "Sepal_Width" : 2.8, "Petal_Length" : 6.7, "Petal_Width" : 2},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.7, "Petal_Length" : 4.9, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3.3, "Petal_Length" : 5.7, "Petal_Width" : 2.1},
+{"Sepal_Length" : 7.2, "Sepal_Width" : 3.2, "Petal_Length" : 6, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.2, "Sepal_Width" : 2.8, "Petal_Length" : 4.8, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 3, "Petal_Length" : 4.9, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 2.8, "Petal_Length" : 5.6, "Petal_Width" : 2.1},
+{"Sepal_Length" : 7.2, "Sepal_Width" : 3, "Petal_Length" : 5.8, "Petal_Width" : 1.6},
+{"Sepal_Length" : 7.4, "Sepal_Width" : 2.8, "Petal_Length" : 6.1, "Petal_Width" : 1.9},
+{"Sepal_Length" : 7.9, "Sepal_Width" : 3.8, "Petal_Length" : 6.4, "Petal_Width" : 2},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 2.8, "Petal_Length" : 5.6, "Petal_Width" : 2.2},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.8, "Petal_Length" : 5.1, "Petal_Width" : 1.5},
+{"Sepal_Length" : 6.1, "Sepal_Width" : 2.6, "Petal_Length" : 5.6, "Petal_Width" : 1.4},
+{"Sepal_Length" : 7.7, "Sepal_Width" : 3, "Petal_Length" : 6.1, "Petal_Width" : 2.3},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 3.4, "Petal_Length" : 5.6, "Petal_Width" : 2.4},
+{"Sepal_Length" : 6.4, "Sepal_Width" : 3.1, "Petal_Length" : 5.5, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6, "Sepal_Width" : 3, "Petal_Length" : 4.8, "Petal_Width" : 1.8},
+{"Sepal_Length" : 6.9, "Sepal_Width" : 3.1, "Petal_Length" : 5.4, "Petal_Width" : 2.1},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3.1, "Petal_Length" : 5.6, "Petal_Width" : 2.4},
+{"Sepal_Length" : 6.9, "Sepal_Width" : 3.1, "Petal_Length" : 5.1, "Petal_Width" : 2.3},
+{"Sepal_Length" : 5.8, "Sepal_Width" : 2.7, "Petal_Length" : 5.1, "Petal_Width" : 1.9},
+{"Sepal_Length" : 6.8, "Sepal_Width" : 3.2, "Petal_Length" : 5.9, "Petal_Width" : 2.3},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3.3, "Petal_Length" : 5.7, "Petal_Width" : 2.5},
+{"Sepal_Length" : 6.7, "Sepal_Width" : 3, "Petal_Length" : 5.2, "Petal_Width" : 2.3},
+{"Sepal_Length" : 6.3, "Sepal_Width" : 2.5, "Petal_Length" : 5, "Petal_Width" : 1.9},
+{"Sepal_Length" : 6.5, "Sepal_Width" : 3, "Petal_Length" : 5.2, "Petal_Width" : 2},
+{"Sepal_Length" : 6.2, "Sepal_Width" : 3.4, "Petal_Length" : 5.4, "Petal_Width" : 2.3},
+{"Sepal_Length" : 5.9, "Sepal_Width" : 3, "Petal_Length" : 5.1, "Petal_Width" : 1.8}
+];
+
+
+
+
 // update data panel
 let iDataColumns = $('#data_columns');
 //iDataColumns.append("<br>");
@@ -1112,9 +1268,73 @@ function getAOITransition(){
 			_transition.splice(i,1);
 			i--;
 		}
-
 		prevAOI = curAOI;
 	}
 
 	return _transition;
+}
+
+
+drawParallelCoordinatesChart(tempDataset);
+
+function drawParallelCoordinatesChart(_dataset){
+	// set the dimensions and margins of the graph
+	let margin = {top: 30, right: 10, bottom: 10, left: 0};
+	let SVG_width = DIV_WIDTH;
+	let SVG_height = DIV_HEIGHT;
+
+	// append the svg object to the body of the page
+	let svg = d3.select("#attention_explorer").append("svg")
+		.attr("width", SVG_width + margin.left + margin.right)
+		.attr("height", SVG_height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+
+	let dimensions = Object.keys(_dataset[0]);
+
+	// For each dimension, I build a linear scale. I store all in a y object
+	let y = {};
+	for (i in dimensions) {
+		name = dimensions[i];
+		y[name] = d3.scaleLinear()
+			.domain(d3.extent(_dataset, function(d){return d[name];}))
+			.range([SVG_height, 0]);
+	}
+
+	// Build the X scale -> it find the best position for each Y axis
+	let x = d3.scalePoint()
+		.range([0, SVG_width])
+		.padding(1)
+		.domain(dimensions);
+
+	// The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+	function path(d) {
+		return d3.line()(dimensions.map(function(p){return [x(p), y[p](d[p])];}));
+	}
+
+	// Draw the lines
+	svg.selectAll("myPath")
+		.data(_dataset)
+		.enter().append("path")
+		.attr("d",  path)
+		.style("fill", "none")
+		.style("stroke", "#69b3a2")
+		.style("opacity", 0.5);
+
+	// Draw the axis:
+	svg.selectAll("myAxis")
+		// For each dimension of the dataset I add a 'g' element:
+		.data(dimensions).enter()
+		.append("g")
+		// I translate this element to its right position on the x axis
+		.attr("transform", function(d){return "translate(" + x(d) + ")";})
+		// And I build the axis with the call function
+		.each(function(d){d3.select(this).call(d3.axisLeft().scale(y[d]));})
+		// Add axis title
+		.append("text")
+		.style("text-anchor", "middle")
+		.attr("y", -9)
+		.text(function(d){return d;})
+		.style("fill", "black");
 }
