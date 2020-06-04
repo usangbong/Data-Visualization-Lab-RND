@@ -2,7 +2,6 @@ let stiGrid = [];
 let AOIarray = [];
 let AOIduration = [];
 let selectedAppendCell = [];
-//let AOIcolorBrewer_12class_set3 = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"];
 let AOIcolorBrewer_12class_set3 = ["#e31a1c", "#a6cee3", "#33a02c", "#ff7f00", "#b15928", "#ffff99", "#6a3d9a", "#fdbf6f", "#b2df8a", "#1f78b4", "#fb9a99", "#cab2d6"];
 let SELECTED_AOI = -999;
 let selectedDeleteCell = [];
@@ -16,8 +15,6 @@ let STIMULUS_OPACITY = 0.5;
 
 // for interaction
 let FLAG_DRAW_GAZE_ON_STIMULUS = 0;
-
-
 
 let temp = [];
 let __t = [];
@@ -380,6 +377,7 @@ let dlEvent = $(`
 	<label for="e_sac">saccade</label>
 	<input type='checkbox' id="e_pso" name='e_pso' />
 	<label for="e_pso">PSO</label>
+	<br>
 	<input type='checkbox' id="e_bli" name='e_bli' />
 	<label for="e_bli">blink</label>
 	<input type='checkbox' id="e_unk" name='e_unk' />
@@ -387,11 +385,13 @@ let dlEvent = $(`
 `);
 iEvent.append(dlEvent);
 
-selectAOIgrid([0,0], 10, 10);
+selectAOIgrid(10, 10);
 
 drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_color.csv");
 drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_intensity.csv");
 drawStimulusFeature("http://127.0.0.1:8000/data_processing/U0121_1RTE_saliency_orientation.csv");
+
+
 
 
 
@@ -515,7 +515,7 @@ function drawGridHeat_fixDur(dataset){
 }
 
 
-function selectAOIgrid(dataset, setRow, setCol){
+function selectAOIgrid(setRow, setCol){
 	// UI setting: "ADD" & "CLEAR" button
 	let AOIselector = $('#aoi_selector');
 	AOIselector.append("<br>");
@@ -737,7 +737,6 @@ function selectAOIgrid(dataset, setRow, setCol){
 				});			
 		});
 
-
 	let grid = d3.select("#aoi_selector").append("svg")
 		.attr("width", SVG_width)
 		.attr("height", SVG_height);
@@ -908,7 +907,6 @@ var svg = d3.select("#feature_overview").append("svg")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-
 // get the data
 d3.csv(_dataURL, function(error, data) {
 	if (error) throw error;
@@ -950,18 +948,6 @@ d3.csv(_dataURL, function(error, data) {
 	svg.append("g")
 	  .call(d3.axisLeft(y));
 	});
-}
-
-function drawFeatureRangeDuration(_dataURL){
-
-}
-
-function countingValueRange(_data, _minRange, _maxRange){
-	let counting =0;
-
-
-
-	return counting;
 }
 
 function convertGazeToIdx(_g){
@@ -1063,4 +1049,72 @@ function countingDurationInAOI(_g){
 	//console.log(_count);
 
 	return _count;
+}
+
+function getFullAOITransition(){
+	let _transition = [];
+
+	for(let i=0; i<rawGazeData.length; i++){
+		let gIdx = convertGazeToIdx(rawGazeData[i]);
+
+		let flag_break = 0;
+		for(let j=0; j<AOIarray.length; j++){
+			if(flag_break == 1){
+				break;
+			}
+
+			for(let k=0; k<AOIarray[j].length; k++){
+				let _cell = AOIarray[j][k];
+				if((_cell[0]==gIdx[0])&&(_cell[1]==gIdx[1])){
+					_transition.push(j);
+					flag_break = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	return _transition;
+}
+
+function getAOITransition(){
+	let _transition = [];
+
+	for(let i=0; i<rawGazeData.length; i++){
+		let gIdx = convertGazeToIdx(rawGazeData[i]);
+
+		let flag_break = 0;
+		for(let j=0; j<AOIarray.length; j++){
+			if(flag_break == 1){
+				break;
+			}
+
+			for(let k=0; k<AOIarray[j].length; k++){
+				let _cell = AOIarray[j][k];
+				if((_cell[0]==gIdx[0])&&(_cell[1]==gIdx[1])){
+					_transition.push(j);
+					flag_break = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	let prevAOI = 0;
+	for(let i=0; i<_transition.length; i++){
+		let curAOI = _transition[i];
+		if(i==0){
+			prevAOI = curAOI;
+			continue;
+		}
+
+		if(prevAOI == curAOI){
+			_transition.splice(i,1);
+			i--;
+		}
+
+		prevAOI = curAOI;
+	}
+
+	return _transition;
 }
