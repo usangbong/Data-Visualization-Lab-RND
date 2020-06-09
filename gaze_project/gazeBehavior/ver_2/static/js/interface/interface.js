@@ -2,7 +2,7 @@ let stiGrid = [];
 let AOIarray = [];
 let AOIduration = [];
 let selectedAppendCell = [];
-let AOIcolorBrewer_12class_set3 = ["#e31a1c", "#a6cee3", "#33a02c", "#ff7f00", "#b15928", "#ffff99", "#6a3d9a", "#fdbf6f", "#b2df8a", "#1f78b4", "#fb9a99", "#cab2d6"];
+let AOIcolorBrewer_12class_set3 = ["#e31a1c", "#a6cee3", "#33a02c", "#ff7f00", "#b15928", "#6a3d9a", "#fdbf6f", "#b2df8a", "#1f78b4", "#fb9a99", "#cab2d6", "#ffff99"];
 let SELECTED_AOI = -999;
 let selectedDeleteCell = [];
 let featureCounting = 0;
@@ -13,8 +13,11 @@ let STIMULUS_WIDTH = 800;
 let STIMULUS_HEIGHT = 600;
 let STIMULUS_OPACITY = 0.5;
 
+let NAME_FEATURES = ["Color", "Intensity", "Orientation"];
+
 // for interaction
 let FLAG_DRAW_GAZE_ON_STIMULUS = 0;
+
 
 let temp = [];
 let __t = [];
@@ -345,7 +348,7 @@ let saliencyFeatures =[
 [0.05672029,0.4458254,0.32873616205383155],
 [0.06234395,0.4487122,0.37994428617000947]
 ];
-
+/*
 let tempDataset = [
 {"Sepal_Length" : 5.1, "Sepal_Width" : 3.5, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
 {"Sepal_Length" : 4.9, "Sepal_Width" : 3, "Petal_Length" : 1.4, "Petal_Width" : 0.2},
@@ -498,8 +501,153 @@ let tempDataset = [
 {"Sepal_Length" : 6.2, "Sepal_Width" : 3.4, "Petal_Length" : 5.4, "Petal_Width" : 2.3},
 {"Sepal_Length" : 5.9, "Sepal_Width" : 3, "Petal_Length" : 5.1, "Petal_Width" : 1.8}
 ];
-
-
+*/
+let tempDataset = [
+{"Color" : 0.16052112,"Intensity" : 0.043206494,"Orientation" : 0.132315235},
+{"Color" : 0.16052112,"Intensity" : 0.043206494,"Orientation" : 0.132315235},
+{"Color" : 0.16282108,"Intensity" : 0.075270265,"Orientation" : 0.129309805},
+{"Color" : 0.16282108,"Intensity" : 0.075270265,"Orientation" : 0.129309805},
+{"Color" : 0.16282108,"Intensity" : 0.075270265,"Orientation" : 0.129309805},
+{"Color" : 0.16290806,"Intensity" : 0.07658491,"Orientation" : 0.126773377},
+{"Color" : 0.16180123,"Intensity" : 0.051869046,"Orientation" : 0.124476494},
+{"Color" : 0.16290806,"Intensity" : 0.07658491,"Orientation" : 0.126773377},
+{"Color" : 0.16290806,"Intensity" : 0.07658491,"Orientation" : 0.126773377},
+{"Color" : 0.16290806,"Intensity" : 0.07658491,"Orientation" : 0.126773377},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15129656,"Intensity" : 0.055002317,"Orientation" : 0.130483858},
+{"Color" : 0.15129656,"Intensity" : 0.055002317,"Orientation" : 0.130483858},
+{"Color" : 0.1522229,"Intensity" : 0.04385593,"Orientation" : 0.128830063},
+{"Color" : 0.1522229,"Intensity" : 0.04385593,"Orientation" : 0.128830063},
+{"Color" : 0.1522229,"Intensity" : 0.04385593,"Orientation" : 0.128830063},
+{"Color" : 0.15129656,"Intensity" : 0.055002317,"Orientation" : 0.130483858},
+{"Color" : 0.15129656,"Intensity" : 0.055002317,"Orientation" : 0.130483858},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.16180123,"Intensity" : 0.051869046,"Orientation" : 0.124476494},
+{"Color" : 0.16180123,"Intensity" : 0.051869046,"Orientation" : 0.124476494},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.16180123,"Intensity" : 0.051869046,"Orientation" : 0.124476494},
+{"Color" : 0.16290806,"Intensity" : 0.07658491,"Orientation" : 0.126773377},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.16052112,"Intensity" : 0.043206494,"Orientation" : 0.132315235},
+{"Color" : 0.16052112,"Intensity" : 0.043206494,"Orientation" : 0.132315235},
+{"Color" : 0.16553298,"Intensity" : 0.066077046,"Orientation" : 0.134898389},
+{"Color" : 0.16613753,"Intensity" : 0.039621525,"Orientation" : 0.135329796},
+{"Color" : 0.16613753,"Intensity" : 0.039621525,"Orientation" : 0.135329796},
+{"Color" : 0.16613753,"Intensity" : 0.039621525,"Orientation" : 0.135329796},
+{"Color" : 0.16553298,"Intensity" : 0.066077046,"Orientation" : 0.134898389},
+{"Color" : 0.16553298,"Intensity" : 0.066077046,"Orientation" : 0.134898389},
+{"Color" : 0.16282108,"Intensity" : 0.075270265,"Orientation" : 0.129309805},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15746929,"Intensity" : 0.05784232,"Orientation" : 0.129066753},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15678275,"Intensity" : 0.06431136,"Orientation" : 0.128535787},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.15571661,"Intensity" : 0.040180184,"Orientation" : 0.128067995},
+{"Color" : 0.15025252,"Intensity" : 0.03500809,"Orientation" : 0.131473541},
+{"Color" : 0.16065125,"Intensity" : 0.038762543,"Orientation" : 0.122675567},
+{"Color" : 0.1639236,"Intensity" : 0.08823463,"Orientation" : 0.122989109},
+{"Color" : 0.14563946,"Intensity" : 0.08131657,"Orientation" : 0.097026506},
+{"Color" : 0.13930583,"Intensity" : 0.027225655,"Orientation" : 0.10219948},
+{"Color" : 0.16939095,"Intensity" : 0.051507078,"Orientation" : 0.144967664},
+{"Color" : 0.15462878,"Intensity" : 0.18776779,"Orientation" : 0.267500681},
+{"Color" : 0.16546786,"Intensity" : 0.3357673,"Orientation" : 0.336437442},
+{"Color" : 0.2077326,"Intensity" : 0.51447546,"Orientation" : 0.528138737},
+{"Color" : 0.22464232,"Intensity" : 0.19187912,"Orientation" : 0.373964667},
+{"Color" : 0.24406457,"Intensity" : 0.07603589,"Orientation" : 0.174658213},
+{"Color" : 0.1909773,"Intensity" : 0.30653575,"Orientation" : 0.23763982},
+{"Color" : 0.22845909,"Intensity" : 0.17031114,"Orientation" : 0.139181993},
+{"Color" : 0.2325291,"Intensity" : 0.14128101,"Orientation" : 0.047506112},
+{"Color" : 0.2312893,"Intensity" : 0.07477626,"Orientation" : 0.055758168},
+{"Color" : 0.22751166,"Intensity" : 0.098526575,"Orientation" : 0.107528413},
+{"Color" : 0.22615628,"Intensity" : 0.18045746,"Orientation" : 0.160558379},
+{"Color" : 0.23543021,"Intensity" : 0.24858856,"Orientation" : 0.227702103},
+{"Color" : 0.22448786,"Intensity" : 0.21403486,"Orientation" : 0.208138121},
+{"Color" : 0.21832664,"Intensity" : 0.20797352,"Orientation" : 0.198353907},
+{"Color" : 0.20587884,"Intensity" : 0.20894553,"Orientation" : 0.180176275},
+{"Color" : 0.19256005,"Intensity" : 0.22474267,"Orientation" : 0.173134566},
+{"Color" : 0.17262988,"Intensity" : 0.26370603,"Orientation" : 0.183109296},
+{"Color" : 0.17065287,"Intensity" : 0.27603704,"Orientation" : 0.189090259},
+{"Color" : 0.16776314,"Intensity" : 0.286195,"Orientation" : 0.16711278},
+{"Color" : 0.16776314,"Intensity" : 0.286195,"Orientation" : 0.16711278},
+{"Color" : 0.16634843,"Intensity" : 0.22458224,"Orientation" : 0.122568466},
+{"Color" : 0.16913813,"Intensity" : 0.24329439,"Orientation" : 0.151026341},
+{"Color" : 0.1720732,"Intensity" : 0.23068713,"Orientation" : 0.14322031},
+{"Color" : 0.18122327,"Intensity" : 0.20919533,"Orientation" : 0.129128839},
+{"Color" : 0.18122327,"Intensity" : 0.20919533,"Orientation" : 0.129128839},
+{"Color" : 0.18122327,"Intensity" : 0.20919533,"Orientation" : 0.129128839},
+{"Color" : 0.1958371,"Intensity" : 0.114393935,"Orientation" : 0.079120496},
+{"Color" : 0.19394998,"Intensity" : 0.1919716,"Orientation" : 0.129296888},
+{"Color" : 0.19394998,"Intensity" : 0.1919716,"Orientation" : 0.129296888},
+{"Color" : 0.19394998,"Intensity" : 0.1919716,"Orientation" : 0.129296888},
+{"Color" : 0.18122327,"Intensity" : 0.20919533,"Orientation" : 0.129128839},
+{"Color" : 0.1720732,"Intensity" : 0.23068713,"Orientation" : 0.14322031},
+{"Color" : 0.1720732,"Intensity" : 0.23068713,"Orientation" : 0.14322031},
+{"Color" : 0.1720732,"Intensity" : 0.23068713,"Orientation" : 0.14322031},
+{"Color" : 0.1770246,"Intensity" : 0.26939642,"Orientation" : 0.215767907},
+{"Color" : 0.2092587,"Intensity" : 0.26758668,"Orientation" : 0.161264649},
+{"Color" : 0.23403767,"Intensity" : 0.1255887,"Orientation" : 0.107564213},
+{"Color" : 0.22926106,"Intensity" : 0.3084171,"Orientation" : 0.361817642},
+{"Color" : 0.20749572,"Intensity" : 0.3531313,"Orientation" : 0.44865196},
+{"Color" : 0.1456736,"Intensity" : 0.41368622,"Orientation" : 0.552998171},
+{"Color" : 0.10460751,"Intensity" : 0.387622,"Orientation" : 0.574935445},
+{"Color" : 0.073378965,"Intensity" : 0.20639738,"Orientation" : 0.624034114},
+{"Color" : 0.07097964,"Intensity" : 0.20841646,"Orientation" : 0.603215324},
+{"Color" : 0.07529202,"Intensity" : 0.18649895,"Orientation" : 0.580518044},
+{"Color" : 0.08252928,"Intensity" : 0.2405681,"Orientation" : 0.571865236},
+{"Color" : 0.08252928,"Intensity" : 0.2405681,"Orientation" : 0.571865236},
+{"Color" : 0.08073819,"Intensity" : 0.235622,"Orientation" : 0.612912389},
+{"Color" : 0.07657708,"Intensity" : 0.2042624,"Orientation" : 0.646469521},
+{"Color" : 0.068917364,"Intensity" : 0.41838616,"Orientation" : 0.725734488},
+{"Color" : 0.06557594,"Intensity" : 0.49422058,"Orientation" : 0.753324619},
+{"Color" : 0.06846899,"Intensity" : 0.5159404,"Orientation" : 0.768379879},
+{"Color" : 0.06846899,"Intensity" : 0.5159404,"Orientation" : 0.768379879},
+{"Color" : 0.06846899,"Intensity" : 0.5159404,"Orientation" : 0.768379879},
+{"Color" : 0.070435196,"Intensity" : 0.5392858,"Orientation" : 0.775782386},
+{"Color" : 0.070435196,"Intensity" : 0.5392858,"Orientation" : 0.775782386},
+{"Color" : 0.068917364,"Intensity" : 0.41838616,"Orientation" : 0.725734488},
+{"Color" : 0.068917364,"Intensity" : 0.41838616,"Orientation" : 0.725734488},
+{"Color" : 0.06961268,"Intensity" : 0.45472962,"Orientation" : 0.738328619},
+{"Color" : 0.06961268,"Intensity" : 0.45472962,"Orientation" : 0.738328619},
+{"Color" : 0.06961268,"Intensity" : 0.45472962,"Orientation" : 0.738328619},
+{"Color" : 0.06846899,"Intensity" : 0.5159404,"Orientation" : 0.768379879},
+{"Color" : 0.068104625,"Intensity" : 0.6261708,"Orientation" : 0.851223021},
+{"Color" : 0.053764362,"Intensity" : 0.71150005,"Orientation" : 0.888410035},
+{"Color" : 0.059789266,"Intensity" : 0.61112446,"Orientation" : 0.793232487},
+{"Color" : 0.054802362,"Intensity" : 0.56712645,"Orientation" : 0.680864158},
+{"Color" : 0.051411103,"Intensity" : 0.5682251,"Orientation" : 0.62724255},
+{"Color" : 0.063966796,"Intensity" : 0.5127094,"Orientation" : 0.503170018},
+{"Color" : 0.07624698,"Intensity" : 0.37759665,"Orientation" : 0.301359169},
+{"Color" : 0.07794705,"Intensity" : 0.12248223,"Orientation" : 0.114713208},
+{"Color" : 0.08041997,"Intensity" : 0.10379384,"Orientation" : 0.099973424},
+{"Color" : 0.09119491,"Intensity" : 0.12370708,"Orientation" : 0.103673958},
+{"Color" : 0.09119491,"Intensity" : 0.12370708,"Orientation" : 0.103673958},
+{"Color" : 0.07794705,"Intensity" : 0.12248223,"Orientation" : 0.114713208},
+{"Color" : 0.06992833,"Intensity" : 0.11539672,"Orientation" : 0.102478492},
+{"Color" : 0.06369382,"Intensity" : 0.09590633,"Orientation" : 0.080661466},
+{"Color" : 0.06369382,"Intensity" : 0.09590633,"Orientation" : 0.080661466},
+{"Color" : 0.06046052,"Intensity" : 0.1640697,"Orientation" : 0.098887149},
+{"Color" : 0.06046052,"Intensity" : 0.1640697,"Orientation" : 0.098887149},
+{"Color" : 0.08094026,"Intensity" : 0.28212368,"Orientation" : 0.185793168},
+{"Color" : 0.05672029,"Intensity" : 0.4458254,"Orientation" : 0.328736162},
+{"Color" : 0.053624976,"Intensity" : 0.39667973,"Orientation" : 0.232178739},
+{"Color" : 0.05037461,"Intensity" : 0.43628597,"Orientation" : 0.265323226},
+{"Color" : 0.05037461,"Intensity" : 0.43628597,"Orientation" : 0.265323226},
+{"Color" : 0.05037461,"Intensity" : 0.43628597,"Orientation" : 0.265323226},
+{"Color" : 0.05672029,"Intensity" : 0.4458254,"Orientation" : 0.328736162},
+{"Color" : 0.05672029,"Intensity" : 0.4458254,"Orientation" : 0.328736162},
+{"Color" : 0.05672029,"Intensity" : 0.4458254,"Orientation" : 0.328736162},
+{"Color" : 0.06234395,"Intensity" : 0.4487122,"Orientation" : 0.379944286}
+];
 
 
 // update data panel
@@ -784,6 +932,12 @@ function selectAOIgrid(setRow, setCol){
 			// AOI list view
 		    drawAOIlist(SVG_width, SVG_height);
 		    
+		    // make JSON array
+		    let JSON_feats = getFeaturesInAOI_grouop(AOIarray, rawGazeData, saliencyFeatures, NAME_FEATURES);
+		    //for(let i=0; i<JSON_feats.length; i++){
+		    //	drawParallelCoordinatesChart(JSON_feats[i]);
+		    //}
+		    drawParallelCoordinatesChart_group(JSON_feats);
 
 		});
 
@@ -1042,67 +1196,126 @@ function selectAOIgrid(setRow, setCol){
 
 function drawStimulusFeature(_dataURL){
 	// set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 350 - margin.left - margin.right,
-    height = 150 - margin.top - margin.bottom;
+	let margin = {top: 20, right: 20, bottom: 30, left: 50},
+	    width = 350 - margin.left - margin.right,
+	    height = 150 - margin.top - margin.bottom;
 
-// set the ranges
-var x = d3.scaleBand()
-          .range([0, width])
-          .padding(0.1);
-var y = d3.scaleLinear()
-          .range([height, 0]);
+	// set the ranges
+	let x = d3.scaleBand()
+	          .range([0, width])
+	          .padding(0.1);
+	let y = d3.scaleLinear()
+	          .range([height, 0]);
 
-// append the svg object to the body of the page
-// append a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-var svg = d3.select("#feature_overview").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+  	let brushedArea = [0, 0];
 
-// get the data
-d3.csv(_dataURL, function(error, data) {
-	if (error) throw error;
-	//console.log(data);
+	// append the svg object to the body of the page
+	// append a 'group' element to 'svg'
+	// moves the 'group' element to the top left margin
+	var svg = d3.select("#feature_overview").append("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform",
+	          "translate(" + margin.left + "," + margin.top + ")");
 
-	// format the data
-	data.forEach(function(d) {
-		d.value = +d.value;
-	});
+    // add brush
+    let brush = d3.brushX()
+    	.extent([[0,0], [width, height]])
+    	.on("end", brushed);
 
-	// Scale the range of the data in the domains
-	x.domain(data.map(function(d) { return d.level; }));
-	y.domain([0, d3.max(data, function(d) { return d.value; })]);
-
-	// append the rectangles for the bar chart
-	svg.selectAll(".bar")
-	  .data(data)
-	.enter().append("rect")
-	  .attr("class", "bar")
-	  .attr("x", function(d) { return x(d.level); })
-	  .attr("width", x.bandwidth())
-	  .attr("y", function(d) { return y(d.value); })
-	  .attr("height", function(d) { return height - y(d.value); });
-
-  	svg.append("text")
-  		.attr("x", 0-(margin.left/3))
-  		.attr("y", 0-(margin.top/3))
-  		.attr("text-anchor", "middle")
-  		.style("font-size", "14px")
-  		.text("feature_"+featureCounting);
-	featureCounting++;
-
-	// add the x Axis
 	svg.append("g")
-	  .attr("transform", "translate(0," + height + ")")
-	  .call(d3.axisBottom(x));
+		.attr("class","brush")
+		.call(brush);
+		
+	svg.append("text")
+		.attr("class", " v0")
+		.attr("x", 0)
+		.attr("y", 0);
 
-	// add the y Axis
-	svg.append("g")
-	  .call(d3.axisLeft(y));
+	svg.append("text")
+		.attr("class", " v1")
+		.attr("x", 0)
+		.attr("y", 0);
+
+
+	function cvtArea(_arr, _w){
+		let _cvt = [0, 0];
+		_cvt[0] = _arr[0]/_w;
+		_cvt[1] = _arr[1]/_w;
+		return _cvt;
+	}
+
+	function reverseCvt(_v, _w){
+		return _v*_w;
+	}
+
+    function brushed(){
+    	if(!d3.event.sourceEvent) return;
+    	if(!d3.event.selection) return;
+    	//console.log(d3.event.selection);
+    	let areaArray = d3.event.selection;
+    	let convertedArea = cvtArea(areaArray, width);
+    	console.log(convertedArea);
+    	brushedArea = convertedArea;
+
+    	let svg = d3.select("#feature_overview").selectAll("svg");
+
+    	svg.selectAll(".v0")
+    		.transition().delay(100)
+    		.attr("x", reverseCvt(brushedArea[0], width)-15)
+    		.attr("y", 0)
+    		.text(brushedArea[0].toFixed(3));
+
+		svg.selectAll(".v1")
+    		.transition().delay(100)
+    		.attr("x", reverseCvt(brushedArea[1], width)-15)
+    		.attr("y", 0)
+    		.text(brushedArea[1].toFixed(3));
+    }
+
+	// get the data
+	d3.csv(_dataURL, function(error, data) {
+		if (error) throw error;
+		//console.log(data);
+
+		// format the data
+		data.forEach(function(d) {
+			d.value = +d.value;
+		});
+
+		// Scale the range of the data in the domains
+		x.domain(data.map(function(d) { return d.level; }));
+		y.domain([0, d3.max(data, function(d) { return d.value; })]);
+
+		// append the rectangles for the bar chart
+		svg.selectAll(".bar")
+		  .data(data)
+		.enter().append("rect")
+		  .attr("class", "bar")
+		  .attr("x", function(d) { return x(d.level); })
+		  .attr("width", x.bandwidth())
+		  .attr("y", function(d) { return y(d.value); })
+		  .attr("height", function(d) { return height - y(d.value); });
+
+	  	svg.append("text")
+	  		.attr("x", 0-(margin.left/3))
+	  		.attr("y", 0-(margin.top/3))
+	  		.attr("text-anchor", "middle")
+	  		.style("font-size", "14px")
+	  		.text("feature_"+featureCounting);
+		featureCounting++;
+
+		// add the x Axis
+		svg.append("g")
+		  .attr("transform", "translate(0," + height + ")")
+		  .call(d3.axisBottom(x));
+
+		// add the y Axis
+		svg.append("g")
+		  .call(d3.axisLeft(y));
+
+
 	});
 }
 
@@ -1203,7 +1416,6 @@ function countingDurationInAOI(_g){
 		}
 	}
 	//console.log(_count);
-
 	return _count;
 }
 
@@ -1275,13 +1487,15 @@ function getAOITransition(){
 }
 
 
-drawParallelCoordinatesChart(tempDataset);
+//drawParallelCoordinatesChart(tempDataset);
 
 function drawParallelCoordinatesChart(_dataset){
 	// set the dimensions and margins of the graph
 	let margin = {top: 30, right: 10, bottom: 10, left: 0};
 	let SVG_width = DIV_WIDTH;
 	let SVG_height = DIV_HEIGHT;
+
+	d3.select("#attention_explorer").selectAll("svg").remove();
 
 	// append the svg object to the body of the page
 	let svg = d3.select("#attention_explorer").append("svg")
@@ -1290,15 +1504,24 @@ function drawParallelCoordinatesChart(_dataset){
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
-
 	let dimensions = Object.keys(_dataset[0]);
-
 	// For each dimension, I build a linear scale. I store all in a y object
 	let y = {};
-	for (i in dimensions) {
+	for (i in dimensions){
 		name = dimensions[i];
+		let _range = [0, 1];
+		if(name=="Color"){
+			_range = [0, 1];
+		}else if(name=="Intensity"){
+			_range = [0, 1];
+		}else if(name=="Orientation"){
+			_range = [0, 1];
+		}else{
+			_range = [0, 1];
+		}
+
 		y[name] = d3.scaleLinear()
-			.domain(d3.extent(_dataset, function(d){return d[name];}))
+			.domain(_range)
 			.range([SVG_height, 0]);
 	}
 
@@ -1337,4 +1560,269 @@ function drawParallelCoordinatesChart(_dataset){
 		.attr("y", -9)
 		.text(function(d){return d;})
 		.style("fill", "black");
+}
+
+function drawParallelCoordinatesChart_group(_dataset){
+	// set the dimensions and margins of the graph
+	let margin = {top: 30, right: 10, bottom: 10, left: 0};
+	let SVG_width = DIV_WIDTH;
+	let SVG_height = DIV_HEIGHT;
+
+	d3.select("#attention_explorer").selectAll("svg").remove();
+
+	// append the svg object to the body of the page
+	let svg = d3.select("#attention_explorer").append("svg")
+		.attr("width", SVG_width + margin.left + margin.right)
+		.attr("height", SVG_height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	let dimensions = Object.keys(_dataset[0]);
+
+	// For each dimension, I build a linear scale. I store all in a y object
+	let y = {};
+	for (i in dimensions){
+		name = dimensions[i];
+		let _range = [0, 1];
+		if(name=="Color"){
+			_range = [0, 1];
+		}else if(name=="Intensity"){
+			_range = [0, 1];
+		}else if(name=="Orientation"){
+			_range = [0, 1];
+		}else{
+			_range = [0, AOIarray.length];
+		}
+
+		y[name] = d3.scaleLinear()
+			.domain(_range)
+			.range([SVG_height, 0]);
+	}
+
+	// Build the X scale -> it find the best position for each Y axis
+	let x = d3.scalePoint()
+		.range([0, SVG_width])
+		.padding(1)
+		.domain(dimensions);
+
+	// The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+	function path(d) {
+		return d3.line()(dimensions.map(function(p){return [x(p), y[p](d[p])];}));
+	}
+
+	let highlight = function(d){
+
+		d3.selectAll(".line")
+			.transition().duration(200)
+			.style("stroke", "lightgrey")
+			.style("opacity", "0.2");
+
+
+		//d3.selectAll(".line"+d.group)
+		d3.selectAll("."+"g"+d.group)
+			.transition().duration(200)
+			.style("stroke", function(d){
+				return AOIcolorBrewer_12class_set3[d.group+1];
+			})
+			.style("opacity", "0.5");
+	}
+
+	let doNotHighlight = function(d){
+		d3.selectAll(".line")
+			.transition().duration(200).delay(1000)
+			.style("stroke", function(d){
+				return AOIcolorBrewer_12class_set3[d.group+1];
+			})
+			.style("opacity", "0.5");
+	}
+
+	// Draw the lines
+	svg.selectAll("myPath")
+		.data(_dataset)
+		.enter().append("path")
+		.attr("class", function (d) { return "line " + "g"+d.group } )
+		.attr("d",  path)
+		.style("fill", "none")
+		.style("stroke", function(d){
+			return AOIcolorBrewer_12class_set3[d.group+1];
+		})
+		.style("opacity", 0.5)
+		.on("mouseover", highlight)
+      	.on("mouseleave", doNotHighlight);
+
+	// Draw the axis:
+	svg.selectAll("myAxis")
+		// For each dimension of the dataset I add a 'g' element:
+		.data(dimensions).enter()
+		.append("g")
+		// I translate this element to its right position on the x axis
+		.attr("transform", function(d){return "translate(" + x(d) + ")";})
+		// And I build the axis with the call function
+		.each(function(d){d3.select(this).call(d3.axisLeft().scale(y[d]));})
+		// Add axis title
+		.append("text")
+		.style("text-anchor", "middle")
+		.attr("y", -9)
+		.text(function(d){return d;})
+		.style("fill", "black");
+
+
+	
+
+}
+
+function getFeaturesInAOI(_AOIarray, _rawGaze, _feats ,_featColName){
+	let _features = [];
+
+	//console.log(_AOIarray.length);
+	let AOI_pts = [];
+	let AOI_feats = [];
+	for(let i=0; i<_AOIarray.length; i++){
+		let _aoi = _AOIarray[i];
+		//console.log(_aoi);
+		
+		let _gPtsAoi = [];
+		let _fsAoi = [];
+		for(let j=0; j<_aoi.length; j++){
+			let _ir = _aoi[j][0];
+			let _ic = _aoi[j][1];
+	
+			//console.log("_ir: "+_ir+", _ic:"+_ic);
+			for(let k=0; k<_rawGaze.length; k++){
+				let _y_r = convertGazeToIdx(_rawGaze[k])[0];
+				let _x_c = convertGazeToIdx(_rawGaze[k])[1];
+				//console.log("+++_y_r: "+_y_r+", _x_c:"+_x_c);
+				if(_ir == _y_r && _ic == _x_c){
+					//console.log("find --- " + k);
+					_gPtsAoi.push([_rawGaze[k][0], _rawGaze[k][1]]);
+					_fsAoi.push(_feats[k]);
+				}
+			}
+		}
+		AOI_pts.push(_gPtsAoi);
+		AOI_feats.push(_fsAoi);
+	
+	}
+	//console.log("AOI_pts");
+	//console.log(AOI_pts);
+	//console.log("AOI_feats");
+	//console.log(AOI_feats);
+
+	// make JSON format
+	let _JSON_string_arr = [];
+	for(let i=0; i<AOI_feats.length; i++){
+		let _json = "[";
+		for(let j=0; j<AOI_feats[i].length; j++){
+			let _obj = "{";
+			for(let k=0; k<_featColName.length; k++){
+				_obj += '"';
+				_obj += _featColName[k];
+				_obj += '"';
+				_obj += ': ';
+				_obj += AOI_feats[i][j][k];
+				if(k != _featColName.length-1){
+					_obj += ', ';
+				}else{
+					_obj += '}';
+				}
+			}
+
+			_json += _obj;
+			if(j != AOI_feats[i].length-1){
+				_json += ", ";
+			}else{
+				_json += "]";
+			}
+		}
+		
+		_JSON_string_arr.push(_json);
+	}
+
+	let JSON_arr = [];
+	for(let i=0; i<_JSON_string_arr.length; i++){
+		let _obj_parse = JSON.parse(_JSON_string_arr[i]);
+		JSON_arr.push(_obj_parse);
+	}
+	
+
+	//console.log(JSON_arr);
+	return JSON_arr;
+}
+
+function getFeaturesInAOI_grouop(_AOIarray, _rawGaze, _feats ,_featColName){
+	let _features = [];
+
+	//console.log(_AOIarray.length);
+	let AOI_pts = [];
+	let AOI_feats = [];
+	for(let i=0; i<_AOIarray.length; i++){
+		let _aoi = _AOIarray[i];
+		//console.log(_aoi);
+		
+		let _gPtsAoi = [];
+		let _fsAoi = [];
+		for(let j=0; j<_aoi.length; j++){
+			let _ir = _aoi[j][0];
+			let _ic = _aoi[j][1];
+	
+			//console.log("_ir: "+_ir+", _ic:"+_ic);
+			for(let k=0; k<_rawGaze.length; k++){
+				let _y_r = convertGazeToIdx(_rawGaze[k])[0];
+				let _x_c = convertGazeToIdx(_rawGaze[k])[1];
+				//console.log("+++_y_r: "+_y_r+", _x_c:"+_x_c);
+				if(_ir == _y_r && _ic == _x_c){
+					//console.log("find --- " + k);
+					_gPtsAoi.push([_rawGaze[k][0], _rawGaze[k][1]]);
+					_fsAoi.push(_feats[k]);
+				}
+			}
+		}
+		AOI_pts.push(_gPtsAoi);
+		AOI_feats.push(_fsAoi);
+	
+	}
+	//console.log("AOI_pts");
+	//console.log(AOI_pts);
+	//console.log("AOI_feats");
+	//console.log(AOI_feats);
+
+	// make JSON format
+	let _json = "[";
+	for(let i=0; i<AOI_feats.length; i++){
+		for(let j=0; j<AOI_feats[i].length; j++){
+			let _obj = "{";
+			for(let k=0; k<_featColName.length; k++){
+				_obj += '"';
+				_obj += _featColName[k];
+				_obj += '"';
+				_obj += ': ';
+				_obj += AOI_feats[i][j][k];
+				if(k != _featColName.length-1){
+					_obj += ', ';
+				}else{
+					_obj += ', ';
+					_obj += '"group": ';
+					_obj += i;
+					_obj += '}';
+				}
+			}
+
+			_json += _obj;
+			if(j != AOI_feats[i].length-1){
+				_json += ", ";
+			}
+		}
+
+		if(i == AOI_feats.length-1){
+			_json += "]";
+		}else{
+			_json += ", ";
+		}
+		
+	}
+	//console.log(_json);
+	let _JSON = JSON.parse(_json);
+
+	//console.log(_JSON);
+	return _JSON;
 }
