@@ -1,0 +1,15 @@
+[submodule "TobiiTracker"]
+	path = TobiiTracker
+	url = https://github.com/Yejining/TobiiTracker
+[submodule "GazeTracker"]
+	path = GazeTracker
+	url = https://github.com/Yejining/GazeTracker
+[submodule "GazeTrackerGame"]
+	path = GazeTrackerGame
+	url = https://github.com/Yejining/GazeTrackerGame
+[submodule "Survey"]
+	path = Survey
+	url = https://github.com/Yejining/Survey
+[submodule "AutoCOVID19"]
+	path = AutoCOVID19
+	url = https://github.com/Yejining/AutoCOVID19
