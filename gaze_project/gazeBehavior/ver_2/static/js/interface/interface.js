@@ -8,7 +8,7 @@ let selectedDeleteCell = [];
 let featureCounting = 0;
 
 let DIV_WIDTH = 350;
-let DIV_HEIGHT = 400;
+let DIV_HEIGHT = 350;
 let STIMULUS_WIDTH = 800;
 let STIMULUS_HEIGHT = 600;
 let STIMULUS_OPACITY = 0.5;
@@ -541,6 +541,32 @@ feats_JSON.push(feature_color);
 feats_JSON.push(feature_intensity);
 feats_JSON.push(feature_orientation);
 
+let recds_feat_JSON = [];
+for(let i=0; i<NAME_FEATURES.length; i++){
+
+	let feat_JSON = [];
+	for(let j=0; j<10; j++){
+		let _min = j*0.1;
+		let _max = (j+1)*0.1;
+		let _recs = countingRecords_idx(i, [_min, _max]);
+
+		//console.log("f"+i+"_"+j+": "+_recs);
+		let feat_obj = {
+			"level": j,
+			"value": _recs
+		};
+
+		feat_JSON.push(feat_obj);
+	}
+	recds_feat_JSON.push(feat_JSON);
+}
+
+console.log(recds_feat_JSON);
+
+
+
+
+
 // update data panel
 let iDataColumns = $('#data_columns');
 //iDataColumns.append("<br>");
@@ -743,7 +769,7 @@ function selectAOIgrid(setRow, setCol){
 
 	// set cell width & height 
 	cellWidth = SVG_width/rowNum;
-	cellHeight = SVG_height/colNum;	
+	cellHeight = SVG_height/colNum;
 
 	for(let _r=0; _r<setRow; _r++){
 		let _row = [];
@@ -1114,6 +1140,23 @@ function drawStimulusFeature(_featsJSON, _idx){
 	  .append("g")
 	    .attr("transform",
 	          "translate(" + margin.left + "," + margin.top + ")");
+	    /*
+    // set the ranges
+	let gx = d3.scaleBand()
+	          .range([0, width])
+	          .padding(0.1);
+	let gy = d3.scaleLinear()
+	          .range([height, 0]);
+
+	let gsvg = d3.select("#feature_overview").append("svg")
+		.attr("class", "gaze f"+_idx)
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform",
+	          "translate(" + margin.left + "," + margin.top + ")");
+*/
+
 
     // add brush
     let brush = d3.brushX()
@@ -1136,6 +1179,11 @@ function drawStimulusFeature(_featsJSON, _idx){
 		.attr("x", 0)
 		.attr("y", 0);
 	
+	d3.select("#feature_overview").selectAll("."+"f"+_idx)		
+		.append("text")
+		.attr("class", "f"+_idx+"vc")
+		.attr("x", 0)
+		.attr("y", 0);
 
 	function cvtArea(_arr, _w){
 		let _cvt = [0, 0];
@@ -1168,7 +1216,90 @@ function drawStimulusFeature(_featsJSON, _idx){
 	    		.style("font-size", "13")
 	    		.text(brushedArea[i].toFixed(3));
     	}
+
+    	let _records = countingRecords(NAME_FEATURES[_idx], brushedArea);
+
+    	svg.selectAll(".f"+_idx+"vc")
+    		.transition().delay(50)
+    		.attr("x", reverseCvt(brushedArea[1], width)+30)
+    		.attr("y", 50)
+    		.style("font-size", "10")
+    		.text("records: "+_records);
     }
+
+    /*
+    // draw feature overview on stimulus
+	let xpos = 0;
+	let ypos = 0;
+	let cellWidth = 1;
+	let cellHeight = 1;
+	let rowNum = 1;
+	let colNum = 1;
+
+	let SVG_width = 100;
+	let SVG_height = 100;
+
+  	if(STIMULUS_WIDTH>STIMULUS_HEIGHT){
+  		let _r = SVG_width/STIMULUS_WIDTH;
+  		SVG_width = STIMULUS_WIDTH*_r;
+  		SVG_height = STIMULUS_HEIGHT*_r;
+  	}else{
+  		let _r = SVG_height/STIMULUS_HEIGHT;
+  		SVG_width = STIMULUS_WIDTH*_r;
+  		SVG_height = STIMULUS_HEIGHT*_r;
+  	}
+
+	// set cell width & height 
+	cellWidth = SVG_width/rowNum;
+	cellHeight = SVG_height/colNum;
+
+	for(let _r=0; _r<rowNum; _r++){
+		let _row = [];
+
+		for(let _c=0; _c<colNum; _c++){
+			let _col = {
+				x: xpos,
+				y: ypos,
+				width: cellWidth,
+				height: cellHeight,
+				group: 0
+			};
+
+			_row.push(_col);
+			xpos += cellWidth;
+		}
+		stiGrid.push(_row);
+
+		xpos = 0;
+		ypos += cellHeight;
+	}
+
+	let grid = d3.select("#feature_overview").append("svg")
+		.attr("width", SVG_width)
+		.attr("height", SVG_height);
+
+	let stimulus = grid.append("image")
+		.attr("xlink:href", "http://127.0.0.1:8000/static/stimulus/U0121_1RTE.jpg")
+		.attr("width", SVG_width)
+		.attr("height", SVG_height);
+
+	let row = grid.selectAll(".row")
+		.data(stiGrid)
+		.enter().append("g")
+		.attr("class", "row");
+
+	let column = row.selectAll(".square")
+		.data(function(d){return d;})
+		.enter().append("rect")
+		.attr("class", "square")
+		.attr("opacity", STIMULUS_OPACITY)
+		.attr("x", function(d){return d.x;})
+		.attr("y", function(d){return d.y;})
+		.attr("width", function(d){return d.width;})
+		.attr("height", function(d){return d.height;})
+		.style("fill", "#fff")
+		.style("stroke", "#222");
+	*/
 
 	// get the data
 	let data = _featsJSON;
@@ -1188,12 +1319,13 @@ function drawStimulusFeature(_featsJSON, _idx){
 	  .attr("height", function(d) { return height - y(d.value); });
 
   	svg.append("text")
-  		.attr("x", 0-(margin.left/3))
+  		.attr("x", 0-(margin.left/2))
   		.attr("y", 0-(margin.top/3))
   		.attr("text-anchor", "middle")
   		.style("font-size", "14px")
-  		.text("feature_"+featureCounting);
-	featureCounting++;
+  		.text("f_"+featureCounting);
+	//featureCounting++;
+	
 
 	// add the x Axis
 	svg.append("g")
@@ -1203,6 +1335,40 @@ function drawStimulusFeature(_featsJSON, _idx){
 	// add the y Axis
 	svg.append("g")
 	  .call(d3.axisLeft(y));
+
+	/*	
+	let gData = recds_feat_JSON;
+
+	gx.domain(gData.map(function(d){return d.level;}));
+	gy.domain([0, d3.max(gData, function(d){return d.value;})]);
+
+	gsvg.selectAll(".bar")
+	  .data(gData)
+	.enter().append("rect")
+	  .attr("class", "bar")
+	  .attr("x", function(d) {console.log(gx(d.level)); return gx(d.level); })
+	  .attr("width", x.bandwidth())
+	  .attr("y", function(d) { return gy(d.value); })
+	  .attr("height", function(d) { return height - gy(d.value); });
+
+  	gsvg.append("text")
+  		.attr("x", 0-(margin.left/2))
+  		.attr("y", 0-(margin.top/3))
+  		.attr("text-anchor", "middle")
+  		.style("font-size", "14px")
+  		.text("g_"+featureCounting);
+
+	// add the x Axis
+	gsvg.append("g")
+	  .attr("transform", "translate(0," + height + ")")
+	  .call(d3.axisBottom(gx));
+
+	// add the y Axis
+	gsvg.append("g")
+	  .call(d3.axisLeft(gy));
+*/
+
+  	featureCounting++;
 
 }
 
@@ -1305,10 +1471,10 @@ function drawStimulusFeature_URL(_dataURL){
 		  .data(data)
 		.enter().append("rect")
 		  .attr("class", "bar")
-		  .attr("x", function(d) { return x(d.level); })
+		  .attr("x", function(d) {return x(d.level);})
 		  .attr("width", x.bandwidth())
-		  .attr("y", function(d) { return y(d.value); })
-		  .attr("height", function(d) { return height - y(d.value); });
+		  .attr("y", function(d) {return y(d.value);})
+		  .attr("height", function(d) {return height - y(d.value);});
 
 	  	svg.append("text")
 	  		.attr("x", 0-(margin.left/3))
@@ -1326,7 +1492,6 @@ function drawStimulusFeature_URL(_dataURL){
 		// add the y Axis
 		svg.append("g")
 		  .call(d3.axisLeft(y));
-
 
 	});
 }
@@ -1833,4 +1998,39 @@ function getFeaturesInAOI_grouop(_AOIarray, _rawGaze, _feats ,_featColName){
 
 	//console.log(_JSON);
 	return _JSON;
+}
+
+function countingRecords(_featName, _featRange){
+	let _count = 0;
+
+	let feat_idx = 0;
+	for(let i=0; i<NAME_FEATURES.length; i++){
+		if(NAME_FEATURES[i] == _featName){
+			feat_idx = i;
+		}
+	}
+
+	let s_range = _featRange[0];
+	let e_range = _featRange[1];
+	for(let i=0; i<saliencyFeatures.length; i++){
+		if(saliencyFeatures[i][feat_idx] > s_range && saliencyFeatures[i][feat_idx] <= e_range){
+			_count++;
+		}
+	}
+
+	return _count;
+}
+
+function countingRecords_idx(_idx, _featRange){
+	let _count = 0;
+	
+	let s_range = _featRange[0];
+	let e_range = _featRange[1];
+	for(let i=0; i<saliencyFeatures.length; i++){
+		if(saliencyFeatures[i][_idx] > s_range && saliencyFeatures[i][_idx] <= e_range){
+			_count++;
+		}
+	}
+
+	return _count;
 }
