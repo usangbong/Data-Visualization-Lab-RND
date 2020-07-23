@@ -1,6 +1,6 @@
 Python-flask-react-app
 
-How to make Python-flask-react app (https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project)
+How to make Python-flask-react app: https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project (https://github.com/miguelgrinberg/react-flask-app)
 
 Sidebar from kepler.gl (https://kepler.gl/)
 
