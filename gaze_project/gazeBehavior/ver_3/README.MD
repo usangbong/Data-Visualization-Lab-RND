@@ -1,5 +1,7 @@
 Python-flask-react-app
 
+How to make Python-flask-react app (https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project)
+
 Sidebar from kepler.gl (https://kepler.gl/)
 
 Menu Tabe from https://github.com/patrik-piskay/react-tabs-redux
