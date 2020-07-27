@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import SidebarMenu from './SidebarMenu';
 
+import './Sidebar.css';
+
 const sideBar = {
   position: 'fixed',
   top: '20px',
@@ -92,8 +94,8 @@ export default class Sidebar extends Component {
         </div>
         <div className="button-container" style={buttonContainer}>
           {isOpened
-            ? <button className="close" onClick={this.close}>&lt;</button>
-            : <button className="open" onClick={this.open}>&gt;</button>
+            ? <button className="close" onClick={this.close}><i class="arrow left"></i></button>
+            : <button className="open" onClick={this.open}><i class="arrow right"></i></button>
           }
         </div>
       </div>

@@ -1,11 +1,26 @@
-.modal {
+.modal{
   position: fixed;
-  top: 50;
-  left: 100;
-  width: 50%;
+  top: 25%;
+  left: 25%;
+  width: 60%;
   height: 50%;
   background: rgba(255, 255, 255, 1);
   border: 2px solid black; 
+}
+
+.sti_con{
+  float: left;
+  margin-left: 2px;
+  width: 48%;
+  height: 75%;
+  border: 1px solid red;
+}
+.data_con{
+  float: right;
+  margin-right: 2px;
+  width: 48%;
+  height: 75%;
+  border: 1px solid green;
 }
 
 .modal-main {

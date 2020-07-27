@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 
 import Tabs from './Tabs';
 import TabLink from './TabLink';
 import TabContent from './TabContent';
 import Modal from './Modal';
-
-//import './Modal.css';
 
 const styles = {
   tabs: {
@@ -81,11 +79,7 @@ class SidebarMenu extends Component{
                 {" "}
                 show Modal{" "}
               </button>
-              <Modal onClose={this.showModal} show={this.state.show}>
-                Message in Modal
-              </Modal>
-
-
+              <Modal onClose={this.showModal} show={this.state.show}></Modal>
             </TabContent>
             <TabContent for="tab2">
               <h2>Tab2 content</h2>
