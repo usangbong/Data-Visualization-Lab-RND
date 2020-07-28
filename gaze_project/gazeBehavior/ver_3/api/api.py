@@ -52,8 +52,6 @@
 #     app.secret_key = os.urandom(24)
 #     app.run(debug=True, port=5000)
 
-
-
 import os
 from flask import Flask, flash, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
@@ -64,11 +62,10 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger('HELLO WORLD')
 
-UPLOAD_FOLDER = './build'
+UPLOAD_FOLDER = '../static/stimuli'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
-#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/upload', methods=['GET','POST'])
@@ -76,31 +73,12 @@ def upload_file():
     print('in the upload_file!')
     if request.method == 'POST':
         f = request.files['image']
-        f.save(secure_filename(f.filename))
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return 'file uploaded successfully!'
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
 
-
 CORS(app, resources={r'*': {'origins': '*'}})
-
-# from flask import Flask, flash, request, redirect, url_for, session
-# from werkzeug.utils import secure_filename
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def hello_world():
-#         return 'Hello, world!'
-# @app.route('/upload', methods=['GET','POST'])
-# def upload_file():
-#     print('in the upload_file!')
-#     if request.method == 'POST':
-#         f = request.files['image']
-#         f.save(secure_filename(f.filename))
-#         return 'file uploaded successfully!'
-
-# if __name__ == '__main__':
-#     app.run()
