@@ -9,4 +9,4 @@ Python-flask-react-app
 - Simple react modal from https://blog.bitsrc.io/build-a-simple-modal-component-with-react-16decdc111a6 (https://github.com/krissnawat/simple-react-modal)
 
 - Image DropZone from https://github.com/uzochukwueddie/react-dropzone
-- File upload (https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/)
+- File upload (https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/) & axios (https://github.com/axios/axios)
