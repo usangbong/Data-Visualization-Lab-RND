@@ -10,3 +10,8 @@ Python-flask-react-app
 
 - Image DropZone from https://github.com/uzochukwueddie/react-dropzone
 - File upload (https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/) & axios (https://github.com/axios/axios)
+
+
+
+Issue
+- CORS error
