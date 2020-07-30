@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.6798095,
+          37.9486074
+        ]
+      },
+      "properties": {
+        "osmid": 4780378996,
+        "name": "백령면",
+        "name:ko": "백령면",
+        "name:en": "Baengnyeong-myeon"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.7056326,
+          37.8081472
+        ]
+      },
+      "properties": {
+        "osmid": 4780378993,
+        "name": "대청면",
+        "name:ko": "대청면",
+        "name:en": "Daecheong-myeon"
+      }
+    }
+  ]
+}
