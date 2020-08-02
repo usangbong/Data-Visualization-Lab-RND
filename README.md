@@ -19,7 +19,7 @@ vis.sejong.ac.kr
   - Yejin Kim
   - Changyoung Yonn
   - Subin Yim
-  - 혜인 영문 이름 넣어두기
+  - Hyein Hong
 - Alumni
   - Seongmin Jeong
   - Hewon Baek
