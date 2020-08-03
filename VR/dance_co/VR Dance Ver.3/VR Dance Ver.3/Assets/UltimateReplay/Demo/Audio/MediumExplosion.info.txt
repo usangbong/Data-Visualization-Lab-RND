@@ -1,2 +1,0 @@
-Source = https://www.freesound.org/people/JohanDeecke/sounds/369529/
-Licence = CC, Creative Commons

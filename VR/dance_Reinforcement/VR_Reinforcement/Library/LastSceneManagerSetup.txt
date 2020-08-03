@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Test Scenes/Height Test Scene.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
