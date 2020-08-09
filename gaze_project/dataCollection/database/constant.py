@@ -1,0 +1,6 @@
+HOST = 'localhost'
+USER = 'root'
+PASSWORD = '1234'
+DB_NAME = 'tobii'
+CHARSET = 'utf8'
+TABLE = 'gaze'
