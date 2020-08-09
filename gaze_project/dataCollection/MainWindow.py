@@ -159,10 +159,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.image_size.width() > pyautogui.size().width or self.image_size.height() > pyautogui.size().height:
                 self.warning("Image size is too big")
                 return
-            self.tracking_window = Tracker(self.url, self.image_size, isPlotting, id, self.table, self.customConnected)
-            self.tracking_window.showFullScreen()
-            self.tracking_window.setFixedSize(self.tracking_window.size())
+            # self.tracking_window = Tracker(self.url, self.image_size, isPlotting, id, self.table, self.customConnected)
+            # self.tracking_window.showFullScreen()
+            # self.tracking_window.setFixedSize(self.tracking_window.size())
         if eq(sending_button.objectName(), "pushButton_ok"):
+            print("on_click: pushbutton_ok")
             self.stack.setCurrentWidget(self.page_main)
         if eq(sending_button.objectName(), "pushButton_cancel"):
             filled = self.checkFilled()
@@ -174,12 +175,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.table.clearContents()
                 self.stack.setCurrentWidget(self.page_main)
         if eq(sending_button.objectName(), "pushButton_apply"):
+            print("on_click: pushButton_apply")
             if self.checkFilled() is not True:
                 self.warning("Not Filled!")
                 return
             if self.checkConnect() is True:
                 self.stack.setCurrentWidget(self.page_main)
             else:
+                print("on_click: else")
                 self.warning("Not Valid Information!")
 
     def checkFilled(self):
