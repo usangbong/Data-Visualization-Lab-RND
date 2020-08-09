@@ -3,6 +3,9 @@ Data collection
 - python 3.6
 - local db
 
+usangbong@gmail.com
+[2020.08.10]
+
 kimyejin.kr@gmail.com
 
 [2020.01.20]
