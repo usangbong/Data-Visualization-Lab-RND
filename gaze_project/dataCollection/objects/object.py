@@ -1,12 +1,10 @@
 import pyautogui
 
-
 class Point:
     def __init__(self, x, y, validity):
         self.x = x
         self.y = y
         self.validity = validity
-
 
 class Size:
     def __init__(self, width, height):
@@ -16,7 +14,6 @@ class Size:
     def set(self, size):
         self.width = size.width
         self.height = size.height
-
 
 class Geometry:
     def __init__(self, point, size):

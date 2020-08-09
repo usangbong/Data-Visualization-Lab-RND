@@ -33,11 +33,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.edit_id.returnPressed.connect(self.on_enter)
         self.check_id.stateChanged.connect(self.on_check)
         # self.frame_board.installEventFilter(self)
-        # self.image = QImage()
-        # self.image_size = QSize()
+        self.image = QImage()
+        self.image_size = QSize()
         self.stack.setCurrentWidget(self.page_main)
         self.url = ""
         self.customConnected = False
+
+    def setInitImageSize(self, img_url):
+        self.image = QImage(self.url)
+        width = (100 * self.image.size().width()) / 100
+        if width <= 0:
+            self.setImageSize(self.image_size)
+            return
+        self.image_size.setWidth(width)
+        self.image_size.setHeight(self.getScaledHeight(width))
+        self.setImageSize(self.image_size)
+        # self.setBoardBackground()
+
 
     # def on_calibration_click(self, name):
     #     if eq(name, "close"):
@@ -131,8 +143,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.toggleName(sending_button)
         if eq(sending_button.objectName(), "pushButton_dbsetting"):
             self.stack.setCurrentWidget(self.page_database)
-        if eq(sending_button.objectName(), "pushButton_shortcuts"):
-            self.stack.setCurrentWidget(self.page_shortcuts)
+        # if eq(sending_button.objectName(), "pushButton_shortcuts"):
+        #     self.stack.setCurrentWidget(self.page_shortcuts)
         # if eq(sending_button.objectName(), "pushButton_calibrate"):
         #     if self.image_size.width() > pyautogui.size().width or self.image_size.height() > pyautogui.size().height:
         #         self.warning("Image size is too big")
@@ -140,7 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     self.calibration_window = Calibration(self, self.url, self.image_size)
         #     self.calibration_window.show()
         if eq(sending_button.objectName(), "pushButton_start"):
-            # isPlotting = True if eq(self.pushButton_calibrate.text(), "ok") else False
+            isPlotting = True
             # 2. db 체크
             if self.check_id.isChecked():
                 if eq(self.edit_id.text(), ""):
@@ -153,15 +165,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 id = ""
             # 3. 이미지 체크
+            self.url = "./resources/default.jpg"
+            self.setInitImageSize(self.url)
             if eq(self.url, ""):
                 self.warning("There is no image!")
                 return
             if self.image_size.width() > pyautogui.size().width or self.image_size.height() > pyautogui.size().height:
                 self.warning("Image size is too big")
                 return
-            # self.tracking_window = Tracker(self.url, self.image_size, isPlotting, id, self.table, self.customConnected)
-            # self.tracking_window.showFullScreen()
-            # self.tracking_window.setFixedSize(self.tracking_window.size())
+            self.tracking_window = Tracker(self.url, self.image_size, isPlotting, id, self.table, self.customConnected)
+            self.tracking_window.showFullScreen()
+            self.tracking_window.setFixedSize(self.tracking_window.size())
         if eq(sending_button.objectName(), "pushButton_ok"):
             print("on_click: pushbutton_ok")
             self.stack.setCurrentWidget(self.page_main)
@@ -231,13 +245,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def getScaledHeight(self, width):
         print("getScaledHeight")
-        # height = math.floor((width * self.image.size().height()) / self.image.size().width())
-        # return height
+        height = math.floor((width * self.image.size().height()) / self.image.size().width())
+        return height
 
     def setImageSize(self, size):
         print("setImageSize function")
-        # self.image_size = size
-        # self.ratio = (100 * self.image_size.width()) / self.image.size().width()
+        self.image_size = size
+        self.ratio = (100 * self.image_size.width()) / self.image.size().width()
         # self.label_widthValue.setText("%d" % self.image_size.width())
         # self.label_heightValue.setText("%d" % self.image_size.height())
         # self.edit_ratioValue.setText("%0.2f" % self.ratio)

@@ -67,8 +67,6 @@ class Tracker(QMainWindow, Ui_MainWindow):
     def endTracking(self):
         self.tobii.end()
         self.deleteLater()
-        # self.close()
-        # QCoreApplication.instance().quit()
 
     def plot(self, tuple):
         self.data.add_tuple(tuple)
@@ -104,7 +102,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Tracker("C:/Users/Yejin Kim/Desktop/19a475f1-9f74-4241-bf98-0869b9944432.jpg", QSize(1200, 628), True, "123", QtWidgets.QTableWidget())
+    ex = Tracker("../resources/default.jpg", QSize(1200, 628), True, "default_test", QtWidgets.QTableWidget())
     ex.showFullScreen()
     ex.setFixedSize(ex.size())
     # ex.startTracking()

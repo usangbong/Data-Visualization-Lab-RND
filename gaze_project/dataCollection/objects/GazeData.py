@@ -51,19 +51,19 @@ class GazeData:
 
             tuple = {
                 'id': tuple_id,
-                'width': self.paint_geometry.size.width,
-                'height': self.paint_geometry.size.height,
-                'left_x': self.data[i].left_point.x,
-                'left_y': self.data[i].left_point.y,
-                'average_x': self.data[i].average_point.x,
-                'average_y': self.data[i].average_point.y,
-                'right_x': self.data[i].right_point.x,
-                'right_y': self.data[i].right_point.x,
                 't': self.t_index[i],
                 't_order': self.t_order[i],
+                'img_w': self.paint_geometry.size.width,
+                'img_h': self.paint_geometry.size.height,
+                'left_x': self.data[i].left_point.x,
+                'left_y': self.data[i].left_point.y,
+                'right_x': self.data[i].right_point.x,
+                'right_y': self.data[i].right_point.x,
+                'avg_x': self.data[i].average_point.x,
+                'avg_y': self.data[i].average_point.y,
                 'left_validity': self.data[i].left_point.validity,
                 'right_validity': self.data[i].right_point.validity,
-                'average_validity': self.data[i].average_point.validity
+                'true_validity': self.data[i].average_point.validity
             }
 
             dbconn.insert(table=constant.TABLE, data=tuple)
