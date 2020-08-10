@@ -165,7 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 id = ""
             # 3. 이미지 체크
-            self.url = "./resources/default.jpg"
+            self.url = "./resources/stanby.jpg"
             self.setInitImageSize(self.url)
             if eq(self.url, ""):
                 self.warning("There is no image!")

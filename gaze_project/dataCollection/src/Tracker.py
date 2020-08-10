@@ -33,8 +33,13 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
+        self.stiPath = "./resources/sti"
+        self.stanbyImagePath = "./resources/stanby.jpg"
+        self.checkList = []
         self.dirList = []
         self.fileList = ["./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg", "./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg"]
+        self.oneSetNumber = 5
+        self.dirNumber = 5
         self.setFilelist()
         self.timerVal = QTimer()
         self.timerVal.setInterval(1000)
@@ -42,11 +47,29 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.db_conn = self.db_connect()
 
     def setFilelist(self):
-        self.dirList = os.listdir("./resources/sti")
-        print(self.dirList)
-        
-        # for fname in self.dirList:
-        #     self.fileList = os.path.join()
+        if self.oneSetNumber*self.dirNumber > 200:
+            self.oneSetNumber = 10
+            self.dirNumber = 20
+        self.dirList = os.listdir(self.stiPath)
+        self.fileList = []
+        self.checkList = []
+
+        dirCount = 0
+        for dirname in self.dirList:
+            if dirCount > self.dirNumber-1:
+                break
+            _fileInDir = []
+            _checkList = []
+            _n = 2
+            while _n < self.oneSetNumber:
+                _fileInDir.append(self.stiPath+"/"+dirname+"/"+str(_n).zfill(3)+".jpg")
+                _checkList.append(0)
+                _n += 2
+            self.fileList.append(_fileInDir)
+            self.checkList.append(_checkList)
+            dirCount += 1
+        #print(self.fileList)
+        print(len(self.fileList))
 
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
