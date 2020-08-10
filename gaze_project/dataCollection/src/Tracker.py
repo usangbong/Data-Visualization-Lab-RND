@@ -33,7 +33,10 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
-        self.fileList = ["./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg"]
+        self.fileList = ["./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg", "./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg"]
+        self.timerVal = QTimer()
+        self.timerVal.setInterval(1000)
+        self.timerVal.timeout.connect(self.do_timeout)
         
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
@@ -41,6 +44,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
             self.visualizePressed()
         elif event.key() == Qt.Key_2:
             self.tobiiPressed()
+            self.timerVal.start()
         elif event.key() == Qt.Key_3:
             self.imgCounting += 1
             print("imgCounting ++")
@@ -116,6 +120,19 @@ class Tracker(QMainWindow, Ui_MainWindow):
 
         self.data.save(dbconn, self.id)
         dbconn.close()
+
+    
+    def do_timeout(self):
+        self.imgCounting += 1
+        print(self.imgCounting)
+        if self.imgCounting < 5:
+            self.image_url = self.fileList[self.imgCounting-1]
+            self.setupImage()
+            #self.on_time()
+        else:
+            print("counting end")
+            self.timerVal.stop()
+            self.close()
 
 
 if __name__ == '__main__':
