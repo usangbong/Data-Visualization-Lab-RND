@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
     def setBackgroundColor(self):
-        self.label.setStyleSheet("background-color: black;")
+        self.label.setStyleSheet("background-color: red;")
         self.label_2.setStyleSheet("background-color: black;")
         self.label_3.setStyleSheet("background-color: black;")
         self.label_4.setStyleSheet("background-color: black;")
@@ -75,6 +75,18 @@ class Ui_MainWindow(object):
         self.label_7.setStyleSheet("background-color: black;")
         self.label_8.setStyleSheet("background-color: black;")
         self.label_9.setStyleSheet("background-color: black;")
+
+    def setBackgroundColor_red(self):
+        self.label.setStyleSheet("background-color: #fb9a99;")
+    
+    def setBackgroundColor_green(self):
+        self.label.setStyleSheet("background-color: #b2df8a;")
+    
+    def setBackgroundColor_gray(self):
+        self.label.setStyleSheet("background-color: #878787;")
+    
+    def setBackgroundColor_black(self):
+        self.label.setStyleSheet("background-color: black;")
 
 
 class Paint(QLabel):

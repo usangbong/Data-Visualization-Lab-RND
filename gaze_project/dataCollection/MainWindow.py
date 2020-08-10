@@ -244,12 +244,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.frame_board.setPixmap(pixmap)
 
     def getScaledHeight(self, width):
-        print("getScaledHeight")
+        #print("getScaledHeight")
         height = math.floor((width * self.image.size().height()) / self.image.size().width())
         return height
 
     def setImageSize(self, size):
-        print("setImageSize function")
+        #print("setImageSize")
         self.image_size = size
         self.ratio = (100 * self.image_size.width()) / self.image.size().width()
         # self.label_widthValue.setText("%d" % self.image_size.width())
