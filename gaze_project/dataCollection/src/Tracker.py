@@ -4,9 +4,10 @@ from time import sleep
 
 import pyautogui
 from PyQt5 import QtCore, QtWidgets, QtTest, QtGui
-from PyQt5.QtCore import QSize, QCoreApplication, QEventLoop, QTimer, Qt
+from PyQt5.QtCore import QSize, QCoreApplication, QEventLoop, QTimer, Qt, QTime
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent, QImage, QPalette, QBrush, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QSizePolicy
+
 
 from database import constant as dbconstant
 from database.lib import MYSQL
@@ -27,20 +28,37 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.id = id
         self.table = table
         self.isCustomed = isCustomed
+        self.imgCounting = 0
         self.setupImage()
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
+        self.fileList = ["./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg"]
+        
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_1:
             self.visualizePressed()
         elif event.key() == Qt.Key_2:
             self.tobiiPressed()
+        elif event.key() == Qt.Key_3:
+            self.imgCounting += 1
+            print("imgCounting ++")
+            if self.imgCounting < 4:
+                self.image_url = self.fileList[self.imgCounting-1]
+                self.setupImage()
+            else:
+                self.image_url = "./resources/default.jpg"
+                self.setupImage()
+                print("over index")
+        elif event.key() == Qt.Key_Escape:
+            self.close()
 
     def tobiiPressed(self):
-        if self.tobii.isRunning: self.endTracking()
-        else: self.startTracking()
+        if self.tobii.isRunning: 
+            self.endTracking()
+        else: 
+            self.startTracking()
 
     def visualizePressed(self):
         self.isPlotting = True if self.isPlotting is False else False
@@ -52,6 +70,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
         pixmap = QPixmap(self.image_url)
         pixmap = pixmap.scaled(self.image_size)
         self.paint.setPixmap(pixmap)
+        
 
     def setupGeometries(self):
         window = pyautogui.size()
@@ -61,7 +80,6 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.showFullScreen()
         self.setFixedSize(self.size())
         self.setupGeometries()
-
         self.tobii.run()
 
     def endTracking(self):
