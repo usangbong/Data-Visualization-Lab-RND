@@ -15,6 +15,11 @@ class GazeData:
         self.t_index = []
         self.t_order = []
 
+    def reset_data(self):
+        self.data = []
+        self.t_index = []
+        self.t_order = []
+
     def synchronize_geometries(self, window, display, paint):
         self.screen_size.set(window)
         self.display_geometry.set(display)

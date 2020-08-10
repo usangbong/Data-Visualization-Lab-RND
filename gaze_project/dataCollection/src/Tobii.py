@@ -19,8 +19,8 @@ class Tobii:
     def end(self):
         self.isRunning = False
         self.tobii.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, self.raw_data.gaze_data_callback)
-        self.tracker.data.order_in_time()
-        self.tracker.save()
+        #self.tracker.data.order_in_time()
+        #self.tracker.save()
         self.tracker.paint.points = []
 
     def to_dictionary(self):

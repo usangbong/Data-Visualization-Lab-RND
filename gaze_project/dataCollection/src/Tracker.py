@@ -1,6 +1,7 @@
 import sys
 from operator import eq
 from time import sleep
+import os
 
 import pyautogui
 from PyQt5 import QtCore, QtWidgets, QtTest, QtGui
@@ -18,7 +19,6 @@ from src.Tobii import Tobii
 
 
 class Tracker(QMainWindow, Ui_MainWindow):
-
     def __init__(self, url, size, isPlotting, id, table, isCustomed):
         super().__init__()
         self.setupUi(self)
@@ -33,11 +33,21 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
+        self.dirList = []
         self.fileList = ["./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg", "./resources/Action/002.jpg", "./resources/Action/004.jpg", "./resources/Action/006.jpg"]
+        self.setFilelist()
         self.timerVal = QTimer()
         self.timerVal.setInterval(1000)
         self.timerVal.timeout.connect(self.do_timeout)
+        self.db_conn = self.db_connect()
+
+    def setFilelist(self):
+        self.dirList = os.listdir("./resources/sti")
+        print(self.dirList)
         
+        # for fname in self.dirList:
+        #     self.fileList = os.path.join()
+
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_1:
@@ -100,6 +110,33 @@ class Tracker(QMainWindow, Ui_MainWindow):
             self.paint.average = self.data.data[-1].average_point
             self.paint.repaint()
 
+    def db_connect(self):
+        if self.isCustomed:
+            dbconn = MYSQL(
+                dbhost=self.table.item(0, 0).text(),
+                dbuser=self.table.item(1, 0).text(),
+                dbpwd=self.table.item(2, 0).text(),
+                dbname=self.table.item(3, 0).text(),
+                dbcharset=self.table.item(4, 0).text()
+            )
+        else:
+            dbconn = MYSQL(
+                dbhost=dbconstant.HOST,
+                dbuser=dbconstant.USER,
+                dbpwd=dbconstant.PASSWORD,
+                dbname=dbconstant.DB_NAME,
+                dbcharset=dbconstant.CHARSET
+            )
+        return dbconn
+
+    def db_disconnect(self):
+        self.db_conn.close()
+
+    def db_save(self):
+        self.data.order_in_time()
+        self.data.save(self.db_conn, self.id)
+        self.data.reset_data()
+        
     def save(self):
         if self.isCustomed:
             dbconn = MYSQL(
@@ -128,10 +165,12 @@ class Tracker(QMainWindow, Ui_MainWindow):
         if self.imgCounting < 5:
             self.image_url = self.fileList[self.imgCounting-1]
             self.setupImage()
-            #self.on_time()
+            self.db_save()
         else:
             print("counting end")
             self.timerVal.stop()
+            self.db_disconnect()
+            self.tobii.end()
             self.close()
 
 
