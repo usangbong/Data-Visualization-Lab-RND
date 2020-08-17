@@ -1,4 +1,4 @@
-*VR version data collection software
+*VR version data collection software*
 
 [20180818] Sangbong Yoo
 
