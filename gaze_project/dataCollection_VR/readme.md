@@ -2,6 +2,9 @@
 
 [20180818] Sangbong Yoo
 
+**Used device**
+- HTC VIVE pro eye
+
 
 **Unity 3d**
 - 2018.4.26f1 Personal
