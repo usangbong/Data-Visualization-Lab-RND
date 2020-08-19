@@ -50,16 +50,19 @@ class GazeData:
             self.t_index.append(t_index)
             self.t_order.append(t_order)
 
-    def save(self, dbconn, id):
+    def save(self, dbconn, id, sti, stiX, stiY):
         for i in range(len(self.data)):
             tuple_id = id if eq(id, "") is not True else self.data[i].id
 
             tuple = {
                 'id': tuple_id,
+                'sti': sti[:-4],
                 't': self.t_index[i],
                 't_order': self.t_order[i],
                 'img_w': self.paint_geometry.size.width,
                 'img_h': self.paint_geometry.size.height,
+                'sti_x': stiX,
+                'sti_y': stiY,
                 'left_x': self.data[i].left_point.x,
                 'left_y': self.data[i].left_point.y,
                 'right_x': self.data[i].right_point.x,

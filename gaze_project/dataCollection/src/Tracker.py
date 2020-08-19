@@ -52,6 +52,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.stanbyCounting = 0
         self.dirIdx = 0
         self.fileIdx = 0
+        self.stiFilePath = ""
 
     def setFilelist(self):
         if self.oneSetNumber*self.dirNumber > 200:
@@ -79,7 +80,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
             self.fileList.append(_fileInDir)
             self.checkList.append(_checkList)
             dirCount += 1
-        print(self.fileList[0])
+        #print(self.fileList[0])
         #print(len(self.fileList))
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
@@ -102,6 +103,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
             self.timerVal.stop()
             self.db_disconnect()
             self.tobii.end()
+            self.deleteLater()
             self.close()
 
     def tobiiPressed(self):
@@ -114,13 +116,24 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.isPlotting = True if self.isPlotting is False else False
 
     def setupImage(self):
-        self.paint.setFixedWidth(self.image_size.width())
-        self.paint.setFixedHeight(self.image_size.height())
+        #self.paint.setFixedWidth(self.image_size.width()+1000)
+        #self.paint.setFixedHeight(self.image_size.height()+500)
+        self.paint.setFixedWidth(1920+1000)
+        self.paint.setFixedHeight(1080+500)
 
         pixmap = QPixmap(self.image_url)
         pixmap = pixmap.scaled(self.image_size)
+        
         self.paint.setPixmap(pixmap)
 
+    def setupImagePainter(self):
+        self.paint.setFixedWidth(1920+1000)
+        self.paint.setFixedHeight(1080+500)
+        self.paint.setRandomPosition(self.imgCounting, self.totalStimulus)
+
+        self.paint.setStiImage(self.image_url)
+        self.paint.repaint()
+        
     def setupGeometries(self):
         window = pyautogui.size()
         self.data.synchronize_geometries(window, self.geometry(), self.paint)
@@ -169,7 +182,9 @@ class Tracker(QMainWindow, Ui_MainWindow):
 
     def db_save(self):
         self.data.order_in_time()
-        self.data.save(self.db_conn, self.id)
+        _sti_x = self.paint.getStiPosition(0)
+        _sti_y = self.paint.getStiPosition(1)
+        self.data.save(self.db_conn, self.id, self.stiFilePath, _sti_x, _sti_y)
         self.data.reset_data()
         
     def save(self):
@@ -205,34 +220,33 @@ class Tracker(QMainWindow, Ui_MainWindow):
         return self.stanbyFlag
     
     def do_timeout(self):
-        print(self.imgCounting)
+        #print(self.imgCounting)
         self.dirIdx = self.imgCounting%self.dirNumber
         self.fileIdx = int(self.imgCounting/self.dirNumber)
-        print("dirIdx: %d"%self.dirIdx)
-        print("fileIdx: %d"%self.fileIdx)
+        #print("dirIdx: %d"%self.dirIdx)
+        #print("fileIdx: %d"%self.fileIdx)
         if self.imgCounting < self.totalStimulus:
             if self.stanbyFlag == True:
                 if self.stanbyCounting == 0:
                     self.image_url = self.stanbyImagePath
-                    self.setupImage()
-                    self.setStanbyFlag(500)
-                    self.setBackgroundColor_red()
+                    #self.setupImage()
+                    self.setupImagePainter()
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 1:
-                    self.setStanbyFlag(500)
-                    self.setBackgroundColor_green()
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 2:
-                    self.setStanbyFlag(500)
-                    self.setBackgroundColor_gray()
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting = 0
             else:
                 # self.setStanbyFlag(1000)
-                self.setStanbyFlag(500)
-                self.setBackgroundColor_black()
+                self.setStanbyFlag(5000)
                 if self.imgCounting < self.dirNumber:
                     self.image_url = self.fileList[self.dirIdx][0]
                     self.checkList[self.dirIdx][0] += 1
+                    stiPathBackString = self.fileList[self.dirIdx][0][-7:-4]
+                    self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
                 elif self.imgCounting < self.totalStimulus/2:
                     self.setNoneDupStimulus()
                     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
@@ -242,7 +256,8 @@ class Tracker(QMainWindow, Ui_MainWindow):
                     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
                 self.db_save()
                 self.imgCounting += 1
-                self.setupImage()
+                #self.setupImage()
+                self.setupImagePainter()
         else:
             print("End data collecting")
             self.timerVal.stop()
@@ -260,6 +275,8 @@ class Tracker(QMainWindow, Ui_MainWindow):
             else:
                 rVal = -999
         self.image_url = self.fileList[self.dirIdx][rVal]
+        stiPathBackString = self.fileList[self.dirIdx][rVal][-7:-4]
+        self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
         
     def setDupStimulus(self):
         rVal = -999

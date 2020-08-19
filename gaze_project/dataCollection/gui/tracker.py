@@ -11,6 +11,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLabel
 
 from objects.object import Point, Size
+from random import *
+
 
 
 class Ui_MainWindow(object):
@@ -26,25 +28,21 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setObjectName("label_6")
-        self.gridLayout_2.addWidget(self.label_6, 1, 2, 1, 1)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setObjectName("label")
+        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setObjectName("label_2")
         self.gridLayout_2.addWidget(self.label_2, 0, 1, 1, 1)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setObjectName("label_3")
         self.gridLayout_2.addWidget(self.label_3, 0, 2, 1, 1)
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setObjectName("label")
-        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
-        self.paint = Paint(self.centralwidget)
-        self.paint.setStyleSheet("background-color: black")
-        self.paint.setObjectName("paint")
-        self.gridLayout_2.addWidget(self.paint, 1, 1, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setObjectName("label_4")
         self.gridLayout_2.addWidget(self.label_4, 1, 0, 1, 1)
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setObjectName("label_6")
+        self.gridLayout_2.addWidget(self.label_6, 1, 2, 1, 1)
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setObjectName("label_7")
         self.gridLayout_2.addWidget(self.label_7, 2, 0, 1, 1)
@@ -54,8 +52,14 @@ class Ui_MainWindow(object):
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setObjectName("label_9")
         self.gridLayout_2.addWidget(self.label_9, 2, 2, 1, 1)
+        self.paint = Paint(self.centralwidget)
+        self.paint.setStyleSheet("background-color: black")
+        self.paint.setObjectName("paint")
+        
+        self.gridLayout_2.addWidget(self.paint, 1, 1, 1, 1)
         self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
+        
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -67,7 +71,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
     def setBackgroundColor(self):
-        self.label.setStyleSheet("background-color: red;")
+        self.label.setStyleSheet("background-color: black;")
         self.label_2.setStyleSheet("background-color: black;")
         self.label_3.setStyleSheet("background-color: black;")
         self.label_4.setStyleSheet("background-color: black;")
@@ -75,7 +79,7 @@ class Ui_MainWindow(object):
         self.label_7.setStyleSheet("background-color: black;")
         self.label_8.setStyleSheet("background-color: black;")
         self.label_9.setStyleSheet("background-color: black;")
-
+        
     def setBackgroundColor_red(self):
         self.label.setStyleSheet("background-color: #fb9a99;")
     
@@ -97,23 +101,48 @@ class Paint(QLabel):
         self.right = Point(0, 0, 0)
         self.average = Point(0, 0, 0)
         self.my_size = Size(0, 0)
+        self.stiPath = "./resources/stanby.jpg"
+        self.stiPosX = 0
+        self.stiPosY = 0
+
 
     def paintEvent(self, e):
         super().paintEvent(e)
-        if self.average.validity is 0: return
+        #if self.average.validity is 0: return
         self.points.append(self.average)
 
         qp = QtGui.QPainter(self)
         qp.setRenderHint(QtGui.QPainter.Antialiasing)
-        pen = QtGui.QPen(QtCore.Qt.red, 5)
-        brush = QtGui.QBrush(QtCore.Qt.red)
+        pen = QtGui.QPen(QtCore.Qt.blue, 5)
+        brush = QtGui.QBrush(QtCore.Qt.blue)
         qp.setPen(pen)
         qp.setBrush(brush)
+        #_stiPath = self.getStiImage()
+        _sti = QtGui.QImage(self.stiPath)
+        qp.drawImage(self.stiPosX, self.stiPosY, _sti)
+        
+        for point in self.points:
+            qp.drawEllipse(point.x, point.y, 5, 5)
 
-        qp.drawEllipse(self.points[-1].x, self.points[-1].y, 5, 5)
+    def setStiImage(self, _stiPath):
+        self.stiPath = _stiPath
 
-        # for point in self.points:
-        #     qp.drawEllipse(point.x, point.y, 5, 5)
+    def getStiImage(self):
+        return self.stiPath
+
+    def setRandomPosition(self, count, totalStiNum):
+        if count<totalStiNum/2:
+            self.stiPosX = (1920+1000)/2 - (1920/2)
+            self.stiPosY = (1080+500)/2 - (1080/2)
+        else:
+            self.stiPosX = randint(0, 1000)
+            self.stiPosY = randint(0, 500)
+
+    def getStiPosition(self, _idx):
+        if _idx == 0 :
+            return self.stiPosX
+        else:
+            return self.stiPosY
 
 
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def setInitImageSize(self, img_url):
         self.image = QImage(self.url)
-        width = (100 * self.image.size().width()) / 100
+        width = self.image.size().width()
         if width <= 0:
             self.setImageSize(self.image_size)
             return
@@ -70,8 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.check_id.setChecked(False)
 
     def on_enter(self):
-        print("on_enter function")
-        # sending_edit = self.sender()
+        sending_edit = self.sender()
         # if eq(sending_edit.objectName(), "edit_ratioValue"):
         #     if self.isFloat(self.edit_ratioValue.displayText()) is not True: return
         #     if eq(self.url, "") is True:
@@ -84,13 +83,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     self.image_size.setWidth(width)
         #     self.image_size.setHeight(self.getScaledHeight(width))
         #     self.setImageSize(self.image_size)
-        # if eq(sending_edit.objectName(), "edit_id"):
-        #     if self.isExistingID():
-        #         self.warning("Duplicated ID!")
-        #     elif self.isValidID() is not True:
-        #         self.edit_id.setText("")
-        #     else:
-        #         self.check_id.setChecked(True)
+        if eq(sending_edit.objectName(), "edit_id"):
+            if self.isExistingID():
+                self.warning("Duplicated ID!")
+            elif self.isValidID() is not True:
+                self.edit_id.setText("")
+            else:
+                self.check_id.setChecked(True)
 
     def warning(self, warning):
         msg = QMessageBox()
@@ -249,7 +248,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return height
 
     def setImageSize(self, size):
-        #print("setImageSize")
+        #print("setImageSize function")
         self.image_size = size
         self.ratio = (100 * self.image_size.width()) / self.image.size().width()
         # self.label_widthValue.setText("%d" % self.image_size.width())
