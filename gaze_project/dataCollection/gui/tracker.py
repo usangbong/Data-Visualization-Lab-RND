@@ -72,13 +72,13 @@ class Ui_MainWindow(object):
 
     def setBackgroundColor(self):
         self.label.setStyleSheet("background-color: black;")
-        self.label_2.setStyleSheet("background-color: red;")
-        self.label_3.setStyleSheet("background-color: green;")
-        self.label_4.setStyleSheet("background-color: gray;")
-        self.label_6.setStyleSheet("background-color: blue;")
-        self.label_7.setStyleSheet("background-color: pink;")
-        self.label_8.setStyleSheet("background-color: purple;")
-        self.label_9.setStyleSheet("background-color: yellow;")
+        self.label_2.setStyleSheet("background-color: black;")
+        self.label_3.setStyleSheet("background-color: black;")
+        self.label_4.setStyleSheet("background-color: black;")
+        self.label_6.setStyleSheet("background-color: black;")
+        self.label_7.setStyleSheet("background-color: black;")
+        self.label_8.setStyleSheet("background-color: black;")
+        self.label_9.setStyleSheet("background-color: black;")
         
     def setBackgroundColor_red(self):
         self.label.setStyleSheet("background-color: #fb9a99;")
