@@ -231,17 +231,17 @@ class Tracker(QMainWindow, Ui_MainWindow):
                     self.image_url = self.stanbyImagePath
                     #self.setupImage()
                     self.setupImagePainter()
-                    self.setStanbyFlag(500)
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 1:
-                    self.setStanbyFlag(500)
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 2:
-                    self.setStanbyFlag(500)
+                    self.setStanbyFlag(3000)
                     self.stanbyCounting = 0
             else:
                 # self.setStanbyFlag(1000)
-                self.setStanbyFlag(500)
+                self.setStanbyFlag(5000)
                 if self.imgCounting < self.dirNumber:
                     self.image_url = self.fileList[self.dirIdx][0]
                     self.checkList[self.dirIdx][0] += 1
