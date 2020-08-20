@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.label_9.setObjectName("label_9")
         self.gridLayout_2.addWidget(self.label_9, 2, 2, 1, 1)
         self.paint = Paint(self.centralwidget)
-        self.paint.setStyleSheet("background-color: black")
+        self.paint.setStyleSheet("background-color: #7e7e7e")
         self.paint.setObjectName("paint")
         
         self.gridLayout_2.addWidget(self.paint, 1, 1, 1, 1)
@@ -71,26 +71,26 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
     def setBackgroundColor(self):
-        self.label.setStyleSheet("background-color: black;")
-        self.label_2.setStyleSheet("background-color: black;")
-        self.label_3.setStyleSheet("background-color: black;")
-        self.label_4.setStyleSheet("background-color: black;")
-        self.label_6.setStyleSheet("background-color: black;")
-        self.label_7.setStyleSheet("background-color: black;")
-        self.label_8.setStyleSheet("background-color: black;")
-        self.label_9.setStyleSheet("background-color: black;")
+        self.label.setStyleSheet("background-color: #7e7e7e;")
+        self.label_2.setStyleSheet("background-color: #7e7e7e;")
+        self.label_3.setStyleSheet("background-color: #7e7e7e;")
+        self.label_4.setStyleSheet("background-color: #7e7e7e;")
+        self.label_6.setStyleSheet("background-color: #7e7e7e;")
+        self.label_7.setStyleSheet("background-color: #7e7e7e;")
+        self.label_8.setStyleSheet("background-color: #7e7e7e;")
+        self.label_9.setStyleSheet("background-color: #7e7e7e;")
         
-    def setBackgroundColor_red(self):
-        self.label.setStyleSheet("background-color: #fb9a99;")
+    # def setBackgroundColor_red(self):
+    #     self.label.setStyleSheet("background-color: #fb9a99;")
     
-    def setBackgroundColor_green(self):
-        self.label.setStyleSheet("background-color: #b2df8a;")
+    # def setBackgroundColor_green(self):
+    #     self.label.setStyleSheet("background-color: #b2df8a;")
     
-    def setBackgroundColor_gray(self):
-        self.label.setStyleSheet("background-color: #878787;")
+    # def setBackgroundColor_gray(self):
+    #     self.label.setStyleSheet("background-color: #878787;")
     
-    def setBackgroundColor_black(self):
-        self.label.setStyleSheet("background-color: black;")
+    # def setBackgroundColor_black(self):
+    #     self.label.setStyleSheet("background-color: black;")
 
 
 class Paint(QLabel):

@@ -28,7 +28,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.table = table
         self.isCustomed = isCustomed
         self.imgCounting = 0
-        self.setupImage()
+        #self.setupImage()
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
@@ -37,12 +37,16 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.checkList = []
         self.dirList = []
         self.fileList = []
-        self.oneSetNumber = 4
+        self.oneSetNumber = 3
         self.dirNumber = 20
-        self.totalStimulus = 0
+        self.totalStimulus = self.oneSetNumber * self.dirNumber
         self.setFilelist()
+        #self.stanbyTime = 1000
+        #self.showTime = 5000
+        self.stanbyTime = 100
+        self.showTime = 100
         self.timerVal = QTimer()
-        self.timerVal.setInterval(1000)
+        self.timerVal.setInterval(self.stanbyTime)
         self.timerVal.timeout.connect(self.do_timeout)
         self.db_conn = self.db_connect()
 
@@ -55,8 +59,12 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.stiFilePath = ""
 
     def setFilelist(self):
-        if self.oneSetNumber*self.dirNumber > 200:
-            self.oneSetNumber = 10
+        if self.oneSetNumber*self.dirNumber > 2000:
+            self.oneSetNumber = 100
+            self.dirNumber = 20
+        if self.oneSetNumber > 100:
+            self.oneSetNumber = 100
+        if self.dirNumber > 20:
             self.dirNumber = 20
 
         self.totalStimulus = self.oneSetNumber * self.dirNumber
@@ -73,13 +81,14 @@ class Tracker(QMainWindow, Ui_MainWindow):
             _checkList = []
 
             _n = 1
-            while _n < self.oneSetNumber:
+            while _n <= self.oneSetNumber:
                 _fileInDir.append(self.stiPath+"/"+dirname+"/"+str(_n*2).zfill(3)+".jpg")
                 _checkList.append(0)
                 _n += 1
             self.fileList.append(_fileInDir)
             self.checkList.append(_checkList)
             dirCount += 1
+
         #print(self.fileList[0])
         #print(len(self.fileList))
 
@@ -231,32 +240,39 @@ class Tracker(QMainWindow, Ui_MainWindow):
                     self.image_url = self.stanbyImagePath
                     #self.setupImage()
                     self.setupImagePainter()
-                    self.setStanbyFlag(1000)
+                    self.setStanbyFlag(self.stanbyTime)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 1:
-                    self.setStanbyFlag(1000)
+                    self.setStanbyFlag(self.stanbyTime)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 2:
-                    self.setStanbyFlag(1000)
+                    self.setStanbyFlag(self.stanbyTime)
                     self.stanbyCounting = 0
             else:
                 # self.setStanbyFlag(1000)
-                self.setStanbyFlag(5000)
-                if self.imgCounting < self.dirNumber:
-                    self.image_url = self.fileList[self.dirIdx][0]
-                    self.checkList[self.dirIdx][0] += 1
-                    stiPathBackString = self.fileList[self.dirIdx][0][-7:-4]
-                    self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
-                elif self.imgCounting < self.totalStimulus/2:
-                    self.setNoneDupStimulus()
-                    #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
-                else:
-                    # test tmp
-                    #self.setDupStimulus()
-                    self.setNoneDupStimulus()
+                self.setStanbyFlag(self.showTime)
+                self.image_url = self.fileList[self.dirIdx][self.fileIdx]
+                self.checkList[self.dirIdx][self.fileIdx] += 1
+                stiPathBackString = self.fileList[self.dirIdx][self.fileIdx][-7:-4]
+                self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
+                print(self.stiFilePath[:-4])
+                print(self.dirIdx)
+                print(self.fileIdx)
+                # if self.imgCounting < self.dirNumber:
+                #     self.image_url = self.fileList[self.dirIdx][0]
+                #     self.checkList[self.dirIdx][0] += 1
+                #     stiPathBackString = self.fileList[self.dirIdx][0][-7:-4]
+                #     self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
+                # elif self.imgCounting < self.totalStimulus/2:
+                #     self.setNoneDupStimulus()
+                #     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
+                # else:
+                #     # test tmp
+                #     #self.setDupStimulus()
+                #     self.setNoneDupStimulus()
                     
-                    #self.image_url = self.fileList[self.dirIdx][0]
-                    #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
+                #     #self.image_url = self.fileList[self.dirIdx][0]
+                #     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
                 self.db_save()
                 self.imgCounting += 1
                 #self.setupImage()
