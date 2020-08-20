@@ -1,0 +1,159 @@
+fileFormatVersion: 2
+guid: d177445518ef6654a90b308d1cf7332f
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Camera
+    100004: Camera.001
+    100006: Camera.002
+    100008: Directional Light
+    100010: Directional Light.001
+    100012: Lamp
+    100014: Mesh
+    100016: Mesh.001
+    400000: //RootNode
+    400002: Camera
+    400004: Camera.001
+    400006: Camera.002
+    400008: Directional Light
+    400010: Directional Light.001
+    400012: Lamp
+    400014: Mesh
+    400016: Mesh.001
+    2000000: Camera
+    2000002: Camera.001
+    2000004: Camera.002
+    2100000: Default.001
+    2100002: Gris
+    2100004: Griss
+    2300000: Mesh
+    2300002: Mesh.001
+    3300000: Mesh
+    3300002: Mesh.001
+    4300000: Mesh.001
+    4300002: Mesh
+    7400000: Directional Light.001|Camera.001|Take 001|Layer 001
+    7400002: Directional Light.001|Camera.002|Take 001|Layer 001
+    7400004: Directional Light.001|Directional Light.001|Take 001|Layer 001
+    7400006: Directional Light.001|Directional Light|Take 001|Layer 001
+    7400008: Directional Light.001|Mesh.001|Take 001|Layer 001
+    7400010: Directional Light.001|Mesh|Take 001|Layer 001
+    7400012: Camera.002|Camera.001|Take 001|Layer 001
+    7400014: Camera.002|Camera.002|Take 001|Layer 001
+    7400016: Camera.002|Directional Light.001|Take 001|Layer 001
+    7400018: Camera.002|Directional Light|Take 001|Layer 001
+    7400020: Camera.002|Mesh.001|Take 001|Layer 001
+    7400022: Camera.002|Mesh|Take 001|Layer 001
+    7400024: Mesh.001|Camera.001|Take 001|Layer 001
+    7400026: Mesh.001|Camera.002|Take 001|Layer 001
+    7400028: Mesh.001|Directional Light.001|Take 001|Layer 001
+    7400030: Mesh.001|Directional Light|Take 001|Layer 001
+    7400032: Mesh.001|Mesh.001|Take 001|Layer 001
+    7400034: Mesh.001|Mesh|Take 001|Layer 001
+    7400036: Directional Light|Camera.001|Take 001|Layer 001
+    7400038: Directional Light|Camera.002|Take 001|Layer 001
+    7400040: Directional Light|Directional Light.001|Take 001|Layer 001
+    7400042: Directional Light|Directional Light|Take 001|Layer 001
+    7400044: Directional Light|Mesh.001|Take 001|Layer 001
+    7400046: Directional Light|Mesh|Take 001|Layer 001
+    7400048: Camera.001|Camera.001|Take 001|Layer 001
+    7400050: Camera.001|Camera.002|Take 001|Layer 001
+    7400052: Camera.001|Directional Light.001|Take 001|Layer 001
+    7400054: Camera.001|Directional Light|Take 001|Layer 001
+    7400056: Camera.001|Mesh.001|Take 001|Layer 001
+    7400058: Camera.001|Mesh|Take 001|Layer 001
+    7400060: Mesh|Camera.001|Take 001|Layer 001
+    7400062: Mesh|Camera.002|Take 001|Layer 001
+    7400064: Mesh|Directional Light.001|Take 001|Layer 001
+    7400066: Mesh|Directional Light|Take 001|Layer 001
+    7400068: Mesh|Mesh.001|Take 001|Layer 001
+    7400070: Mesh|Mesh|Take 001|Layer 001
+    7400072: Take 001
+    9500000: //RootNode
+    10800000: Directional Light
+    10800002: Directional Light.001
+    10800004: Lamp
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
