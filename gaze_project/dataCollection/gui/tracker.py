@@ -121,8 +121,8 @@ class Paint(QLabel):
         _sti = QtGui.QImage(self.stiPath)
         qp.drawImage(self.stiPosX, self.stiPosY, _sti)
         
-        for point in self.points:
-            qp.drawEllipse(point.x, point.y, 5, 5)
+        #for point in self.points:
+        #    qp.drawEllipse(point.x, point.y, 5, 5)
 
     def setStiImage(self, _stiPath):
         self.stiPath = _stiPath
