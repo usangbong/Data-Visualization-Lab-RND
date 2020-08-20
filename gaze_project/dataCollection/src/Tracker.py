@@ -37,8 +37,8 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.checkList = []
         self.dirList = []
         self.fileList = []
-        self.oneSetNumber = 5
-        self.dirNumber = 5
+        self.oneSetNumber = 4
+        self.dirNumber = 20
         self.totalStimulus = 0
         self.setFilelist()
         self.timerVal = QTimer()
@@ -184,7 +184,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data.order_in_time()
         _sti_x = self.paint.getStiPosition(0)
         _sti_y = self.paint.getStiPosition(1)
-        self.data.save(self.db_conn, self.id, self.stiFilePath, _sti_x, _sti_y)
+        self.data.save(self.db_conn, self.id, self.imgCounting, self.stiFilePath, _sti_x, _sti_y)
         self.data.reset_data()
         
     def save(self):
@@ -231,13 +231,13 @@ class Tracker(QMainWindow, Ui_MainWindow):
                     self.image_url = self.stanbyImagePath
                     #self.setupImage()
                     self.setupImagePainter()
-                    self.setStanbyFlag(3000)
+                    self.setStanbyFlag(1000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 1:
-                    self.setStanbyFlag(3000)
+                    self.setStanbyFlag(1000)
                     self.stanbyCounting += 1
                 elif self.stanbyCounting == 2:
-                    self.setStanbyFlag(3000)
+                    self.setStanbyFlag(1000)
                     self.stanbyCounting = 0
             else:
                 # self.setStanbyFlag(1000)
@@ -251,7 +251,10 @@ class Tracker(QMainWindow, Ui_MainWindow):
                     self.setNoneDupStimulus()
                     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
                 else:
-                    self.setDupStimulus()
+                    # test tmp
+                    #self.setDupStimulus()
+                    self.setNoneDupStimulus()
+                    
                     #self.image_url = self.fileList[self.dirIdx][0]
                     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
                 self.db_save()
