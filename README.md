@@ -3,7 +3,7 @@ Sejong University,
 Seoul, South Korea.
 
 vis.sejong.ac.kr
-
+ 
 # Members
 - Professor
   - Yun Jang
