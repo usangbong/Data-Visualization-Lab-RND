@@ -1,0 +1,23 @@
+{
+    "OfficeAgent": {
+        "checkpoints": [
+            {
+                "steps": 245872,
+                "file_path": "results\\ContinuousAgent\\OfficeAgent\\OfficeAgent-245872.nn",
+                "reward": null,
+                "creation_time": 1597989108.0765278
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 245872,
+            "file_path": "results\\ContinuousAgent\\OfficeAgent.nn",
+            "reward": null,
+            "creation_time": 1597989108.0765278
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.1.0",
+        "mlagents_version": "0.19.0",
+        "tensorflow_version": "2.3.0"
+    }
+}

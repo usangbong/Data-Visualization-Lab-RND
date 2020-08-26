@@ -1,0 +1,41 @@
+{
+    "OfficeAgent": {
+        "checkpoints": [
+            {
+                "steps": 332796,
+                "file_path": "results\\CollidingOtherObject\\OfficeAgent\\OfficeAgent-332796.nn",
+                "reward": -0.35480772302700925,
+                "creation_time": 1598204225.3504245
+            },
+            {
+                "steps": 360104,
+                "file_path": "results\\CollidingOtherObject\\OfficeAgent\\OfficeAgent-360104.nn",
+                "reward": -0.7680059720850771,
+                "creation_time": 1598229811.6004891
+            },
+            {
+                "steps": 499997,
+                "file_path": "results\\CollidingOtherObject\\OfficeAgent\\OfficeAgent-499997.nn",
+                "reward": -0.5332275417993072,
+                "creation_time": 1598246939.375755
+            },
+            {
+                "steps": 627639,
+                "file_path": "results\\CollidingOtherObject\\OfficeAgent\\OfficeAgent-627639.nn",
+                "reward": null,
+                "creation_time": 1598260870.1950579
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 627639,
+            "file_path": "results\\CollidingOtherObject\\OfficeAgent.nn",
+            "reward": null,
+            "creation_time": 1598260870.1950579
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.1.0",
+        "mlagents_version": "0.19.0",
+        "tensorflow_version": "2.3.0"
+    }
+}
