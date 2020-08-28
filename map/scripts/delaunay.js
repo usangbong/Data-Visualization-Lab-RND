@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const Delaunator = require('delaunator');
 
-module.exports = function() {
-  const geojson = fs.readFileSync(path.resolve(__dirname, '../data/kr_village_osm.json'));
+module.exports = function(place) {
+  const geojson = fs.readFileSync(path.resolve(__dirname, `../data/kr_${place}_osm.json`));
   const geodata = JSON.parse(geojson);
 
   const points = [];
@@ -40,6 +40,6 @@ module.exports = function() {
   }
 
   const output = JSON.stringify(lines);
-  fs.writeFileSync(path.resolve(__dirname, '../data/kr_village_delaunay.json'), output, 'utf8');
+  fs.writeFileSync(path.resolve(__dirname, `../data/kr_${place}_delaunay.json`), output, 'utf8');
   console.log('[delaunay] input:', geodata.features.length, ' delaunay:', lines.features.length);
 }
