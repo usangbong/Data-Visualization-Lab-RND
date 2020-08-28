@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const turf = require('@turf/turf');
 
-module.exports = function() {
-  const geojson = fs.readFileSync(path.resolve(__dirname, '../data/kr_village_osm.json'));
+module.exports = function(place) {
+  const geojson = fs.readFileSync(path.resolve(__dirname, `../data/kr_${place}_osm.json`));
   const geodata = JSON.parse(geojson);
   let voronoi = turf.voronoi(geodata, {});
 
@@ -53,6 +53,6 @@ module.exports = function() {
   }
 
   const output = JSON.stringify(result);
-  fs.writeFileSync(path.resolve(__dirname, '../data/kr_village_voronoi.json'), output, 'utf8');
+  fs.writeFileSync(path.resolve(__dirname, `../data/kr_${place}_voronoi.json`), output, 'utf8');
   console.log('[voronoi] input:', geodata.features.length, ' voronoi:', voronoi.features.length, ' output:', result.features.length);
 }
