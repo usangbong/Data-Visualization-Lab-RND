@@ -18,7 +18,7 @@ vis.sejong.ac.kr
 - Undergraduate
   - Yejin Kim
   - Changyoung Yonn
-  - Subin Yim
+  - Soobin Yim
   - Hyein Hong
 - Alumni
   - Seongmin Jeong
