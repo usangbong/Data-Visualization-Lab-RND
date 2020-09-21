@@ -4,9 +4,10 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: LPOP_TextureAtlas1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tables
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION _METALLICGLOSSMAP
   m_LightmapFlags: 1
@@ -35,15 +36,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: b10fa16559c0a7b4db8a76716cf165ce, type: 3}
+        m_Texture: {fileID: 2800000, guid: e0d657de36e80f847882ee5f069b53db, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ab9f9ceec5d21e24c9e03cadab93d5ca, type: 3}
+        m_Texture: {fileID: 2800000, guid: aa4c97306e95c32458be4fc92af4b008, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 3b174108ff7dff440bb6783b5736b76e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3260bca5b0337c748a2e3cfb018f6b39, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -60,7 +61,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 0.833
-    - _Glossiness: 0.14
+    - _Glossiness: 0.833
     - _GlossyReflections: 1
     - _Metallic: 0.06
     - _Mode: 0
