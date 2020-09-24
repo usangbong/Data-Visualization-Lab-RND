@@ -9,3 +9,4 @@ http://mindbigdata.com/opendb/index.html (emotive data 사용)
 
 3. Cognitive-Mental-workload-EEG-Data 
 https://github.com/BCI-HCI-IITKGP/Cognitive-Mental-workload-EEG-Data
++ EEG feature 추출 코드 참고 : https://github.com/N-kalaivaani-IT/EEG-Feature-Extraction
