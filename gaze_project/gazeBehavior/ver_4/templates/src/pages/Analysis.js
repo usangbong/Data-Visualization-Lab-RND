@@ -48,17 +48,18 @@ class Analysis extends React.Component {
           ]
         });
       });
-    axios.get(`http://${window.location.hostname}:5000/static/output/raw_gaze.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/fixation.json`)
       .then(response => {
-        var _data = response.data;
-        var processedData = [];
-        for(var i=0; i<_data.length; i++){
-          processedData.push([parseFloat(_data[i][1]), parseFloat(_data[i][2])]);
-        }
+        // var _data = response.data;
+        // var processedData = [];
+        // for(var i=0; i<_data.length; i++){
+        //   processedData.push([parseFloat(_data[i][1]), parseFloat(_data[i][2])]);
+        // }
         //console.log(processedData);
         this.setState({
           rawGazeData: 
-            processedData
+            //processedData
+            response.data
         });
       });
     axios.get(`http://${window.location.hostname}:5000/static/output/raw_random.json`)
@@ -72,7 +73,7 @@ class Analysis extends React.Component {
 
   render() {
     const { stimulusPath, powerSpectra, rawGazeData, rawRndData } = this.state;
-    //console.log(rawGazeData);
+    console.log(rawGazeData);
     return (
       <>
         <div className="page-header">
