@@ -14,7 +14,7 @@ class VisImage extends React.Component {
     const image = new Image();
     
     image.src = url;
-    //console.log(url)
+    
     image.onload = () => {
       const widthScale = width / image.width;
       const heightCalced = (height === 'auto') ? image.height * widthScale : height;
@@ -26,10 +26,8 @@ class VisImage extends React.Component {
 
       context.drawImage(image, 0, 0, width, heightCalced);
       if (typeof circles === 'object') {
-        //console.log(circles);
         for (let position of circles) {
           this.drawCircle(position[0] * widthScale, position[1] * heightScale, 50 * avgScale, 5 * avgScale);
-          //console.log(position)
         }
       }
     }
