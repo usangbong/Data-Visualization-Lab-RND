@@ -11,8 +11,6 @@ function SurfacePlot(props) {
 
     var yaw=0.5,pitch=0.5,drag=false;
 
-    /*var ul=d3.select('body')
-             .append('ul');*/
     var svg = d3.select(svgRef.current)
       .attr('height',height)
       .attr('width',width);
@@ -25,24 +23,8 @@ function SurfacePlot(props) {
           return d;
         }).surfaceColor(function(d){
           var c=d3.hsl((d+100), 0.6, 0.5).rgb();
-          return "rgb("+parseInt(c.r)+","+parseInt(c.g)+","+parseInt(c.b)+")";
+          return `rgb(${parseInt(c.r)},${parseInt(c.g)},${parseInt(c.b)})`;
         });
-  
-    /*ul.selectAll('li')
-      .data(surfaces)
-        .enter().append('li')
-          .html(function(d){
-            return d.name
-          }).on('mousedown',function(){
-            md.data([d3.select(this).datum().data]).surface3D()
-              .transition().duration(500)
-              .surfaceHeight(function(d){
-                return d;
-              }).surfaceColor(function(d){
-                var c=d3.hsl((d+100), 0.6, 0.5).rgb();
-                return "rgb("+parseInt(c.r)+","+parseInt(c.g)+","+parseInt(c.b)+")";
-              });
-          });*/
   
     svg.on("mousedown",function(){
       drag=[d3.mouse(this),yaw,pitch];
