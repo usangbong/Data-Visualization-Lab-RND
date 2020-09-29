@@ -8,6 +8,7 @@ function LineChart(props) {
   useEffect(() => {
     if (typeof data !== 'object' || data.length === 0)
       return;
+    
     var margin = {top: 10, right: 30, bottom: 20, left: 60},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
@@ -16,8 +17,7 @@ function LineChart(props) {
       .attr('width', width)
       .attr('height', height);
     
-    svg.append('g').attr("transform",
-      "translate(" + margin.left + "," + margin.top + ")");
+    svg.append('g').attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Add X axis --> it is a date format
     var xMin = d3.min(data, (d => parseInt(d.x)));
@@ -26,7 +26,7 @@ function LineChart(props) {
       .domain([xMin, xMax])
       .range([ 0, drawWidth ]);
     svg.append("g")
-      .attr("transform", "translate(0," + drawHeight + ")")
+      .attr("transform", `translate(0,${drawHeight})`)
       .call(d3.axisBottom(x));
 
     // Add Y axis
