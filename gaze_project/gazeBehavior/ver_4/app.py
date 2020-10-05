@@ -15,14 +15,12 @@ from random import *
 DATASET = ""
 FEATURE_TYPES = []
 FEATURE_SUB = ""
-STIMULUS_TYPE = ""
+STIMULUS_TYPE = []
 STIMULUS_NAMES = ["002", "004"]
+FEAT_PATHS = []
 
 #data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_TYPE)
-
 datasetName = "MIT300"
-featureList = "center-bias"
-stimulusType = "Action"
 
 featPath = ""
 gazePath = ""
@@ -166,11 +164,9 @@ def loadEyeMovementDataFile():
     sum_y = sum_y/len(_fix)
     fixation.append([sum_x, sum_y])
     
-
   wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
   wf.write(json.dumps(fixation))
   wf.close()
-
 
 def makeRandomPos():
   global randomData
@@ -307,7 +303,6 @@ def makePowerSpectra():
   wf.write(json.dumps(powerSpectraResGaze))
   wf.close()
 
-
 app = Flask(__name__)
 if __name__ == '__main__':  
   app.run(debug=True)
@@ -318,44 +313,57 @@ def gazeDataSubmit():
   global DATASET
   global STIMULUS_TYPE
   global FEATURE_TYPES
+  global FEAT_PATHS
+
   print(request.form)
   # print(request.form['data-origin'])
-
   response = {}
 
   try:
     # get dataset name, feature types, and stimulus type from submit function on data.js page
     DATASET = request.form['data-origin']
     _fl = request.form['feature-types']
-    for _f in _fl:
+    div_fl = _fl.split(",")
+    for _f in div_fl:
       FEATURE_TYPES.append(_f)
-    STIMULUS_TYPE = request.form['stimulus-type']
+
+    #_snl = request.form
+    # for _f in _fl:
+    #   FEATURE_TYPES.append(_f)
+    _snl = request.form['stimulus-classes']
+    div_snl = _snl.split(",")
+    for _sn in div_snl:
+      STIMULUS_TYPE.append(_sn)
+    print(STIMULUS_TYPE)
     
-    setFeaturePath(_fl, "002")
-    setGazePath("t_sb_1", "002")
-    setStimulusPath("002")
+    # # setFeaturePath(_fl[0], "002")
+    # setFeaturePath("center-bias", "002")
+    # setGazePath("t_sb_1", "002")
+    # setStimulusPath("002")
 
-    loadFeatureFile()
-    loadEyeMovementDataFile()
-    makeRandomPos()
+    # loadFeatureFile()
+    # loadEyeMovementDataFile()
+    # makeRandomPos()
 
-    calcSpatialVariation()
-    analysis_result = []
-    analysis_result.append(_fl)
-    analysis_result.append(STIMULUS_TYPE)
-    analysis_result.append("002")
-    analysis_result.append(str(spatial_variance))
-    wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(analysis_result))
-    wf.close()
+    # calcSpatialVariation()
+    # analysis_result = []
+    # # analysis_result.append(_fl)
+    # analysis_result.append("center-bias")
+    # #analysis_result.append(STIMULUS_TYPE[0])
+    # analysis_result.append("Action")
+    # analysis_result.append("002")
+    # analysis_result.append(str(spatial_variance))
+    # wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(analysis_result))
+    # wf.close()
 
-    selectPowerSpectraData()
-    makePowerSpectra()
+    # # selectPowerSpectraData()
+    # # makePowerSpectra()
 
     response['status'] = 'success'
-    response['data'] = {
-      'powerSpectra': powerSpectraResGaze
-    }
+    # response['data'] = {
+    #   'powerSpectra': powerSpectraResGaze
+    # }
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
