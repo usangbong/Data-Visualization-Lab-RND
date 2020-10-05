@@ -6,7 +6,7 @@ import csv
 import numpy as np
 import math
 import json
-
+import pandas as pd
 from random import *
 
 #from src.py import Krieger
@@ -41,6 +41,7 @@ powerSpectraResGaze = []
 powerSpectraResRnd = []
 gazeFoveaRegionMean = []
 rndFoveaRegionMean = []
+fixation = [[700, 300], [700, 500], [1000, 300], [1000, 700], [1200, 900], [730, 800]]
 
 spatial_variance = 0
 
@@ -114,6 +115,7 @@ def loadFeatureFile():
 def loadEyeMovementDataFile():
   global gazeData
   global gazeFeat
+  global fixation
   rf = open(gazePath, 'r', encoding='utf-8')
   rdr = csv.reader(rf)
 
@@ -137,11 +139,43 @@ def loadEyeMovementDataFile():
     _gf = float(featureArr[_gy][_gx])
     gazeFeat.append(_gf)
 
+  prev_t = -1
+  fixPts = []
+  pts = []
+  for _p in gazeData:
+    cur_t = int(_p[0])
+    if prev_t == -1:
+      prev_t = cur_t
+    if prev_t != cur_t:
+      fixPts.append(pts)
+      pts = []
+
+    pts.append([float(_p[1]), float(_p[2])])
+    prev_t = cur_t
+  fixPts.append(pts)
+  pts = []
+
+  fixation = []
+  for _fix in fixPts:
+    sum_x = 0
+    sum_y = 0
+    for _p in _fix:
+      sum_x += _p[0]
+      sum_y += _p[1]
+    sum_x = sum_x/len(_fix)
+    sum_y = sum_y/len(_fix)
+    fixation.append([sum_x, sum_y])
+    
+
+  wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
+  wf.write(json.dumps(fixation))
+  wf.close()
+
 
 def makeRandomPos():
   global randomData
   global randomFeat
-  while len(gazeData) != len(randomData):
+  while len(fixation) != len(randomData):
     _rx = randint(0, 1919)
     _ry = randint(0, 1079)
     randomData.append([_rx, _ry])
@@ -304,7 +338,16 @@ def gazeDataSubmit():
     loadFeatureFile()
     loadEyeMovementDataFile()
     makeRandomPos()
+
     calcSpatialVariation()
+    analysis_result = []
+    analysis_result.append(_fl)
+    analysis_result.append(STIMULUS_TYPE)
+    analysis_result.append("002")
+    analysis_result.append(str(spatial_variance))
+    wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(analysis_result))
+    wf.close()
 
     selectPowerSpectraData()
     makePowerSpectra()
