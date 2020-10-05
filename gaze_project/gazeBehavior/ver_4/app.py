@@ -12,22 +12,22 @@ from random import *
 #from src.py import Krieger
 
 # init dataset name, feature types, and stimulus type
-DATASET = ""
+DATASET = "MIT300"
 FEATURE_TYPES = []
 FEATURE_SUB = ""
 STIMULUS_CLASSES = []
 STIMULUS_NAMES = ["002", "004"]
 UIDS = ["t_sb_1"]
-FEAT_PATHS = []
-GAZE_PATHS = []
-STI_PATHS = []
+PATHS = []
 FEATURES = []
+GAZE_DATA_LIST = []
+FIXATIONS = []
+meanValue = []
 
 #data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
-datasetName = "MIT300"
 
-featureArr = []
-meanValue = []
+
+
 gazeData = []
 randomData = []
 gazeFeat = []
@@ -40,7 +40,7 @@ powerSpectraResGaze = []
 powerSpectraResRnd = []
 gazeFoveaRegionMean = []
 rndFoveaRegionMean = []
-fixation = [[700, 300], [700, 500], [1000, 300], [1000, 700], [1200, 900], [730, 800]]
+
 
 spatial_variance = 0
 
@@ -48,19 +48,19 @@ def setFeaturePath(_fType, _stiClass, _stiName):
   _featPath = ""
   _fString = featureNameToFileStyle(_fType)
   if FEATURE_SUB == "":
-    _featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+".csv"
+    _featPath = "./static/data/"+DATASET+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+".csv"
   else:
-    _featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+"_"+FEATURE_SUB+".csv"
+    _featPath = "./static/data/"+DATASET+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+"_"+FEATURE_SUB+".csv"
   return _featPath
 
 def setGazePath(_uid, _stiClass, _stiName):
   _gazePath = ""
-  _gazePath = "./static/data/"+datasetName+"/gaze/"+_uid+"/"+_stiClass+"_"+_stiName+".csv"
+  _gazePath = "./static/data/"+DATASET+"/gaze/"+_uid+"/"+_stiClass+"_"+_stiName+".csv"
   return _gazePath
 
 def setStimulusPath(_stiClass, _stiName):
   _stimulusPath = ""
-  _stimulusPath = "/static/data/"+datasetName+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
+  _stimulusPath = "/static/data/"+DATASET+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
   return _stimulusPath
 
 def featureNameToFileStyle(_fName):
@@ -100,51 +100,54 @@ def loadFeatureFile(_path):
   
   rf = open(_path, 'r', encoding='utf-8')
   rdr = csv.reader(rf)
-  
   _featArr = []
   for _row in rdr:
     _featArr.append(_row)
   rf.close()
-
+  
   sumVal = 0
   for i in range(0, 1080):
     for j in range(0, 1920):
-      sumVal += float(featureArr[i][j])
+      sumVal += float(_featArr[i][j])
   meanValue.append(sumVal/(1920*1080))
-
+  
   return _featArr
 
-def loadEyeMovementDataFile():
-  global gazeData
-  global gazeFeat
-  global fixation
-  rf = open(gazePath, 'r', encoding='utf-8')
-  rdr = csv.reader(rf)
+def loadEyeMovementDataFile(_path, _feat):
+  _gazeData = []
+  _gaze = []
 
+  rf = open(_path, 'r', encoding='utf-8')
+  rdr = csv.reader(rf)
+  
   for _row in rdr:
     # 0: t, 1: x, 2: y
     if _row[1] == "x":
       continue
     else:
-      gazeData.append(_row)
+      if float(_row[1]) >= 1920 or float(_row[2]) >= 1080:
+        continue
+      _gazeData.append(_row)
   rf.close()
-
-  wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
-  wf.write(json.dumps(gazeData))
-  wf.close()
-
-  for _g in gazeData:
-    if _g[1] == "x":
-      continue
+  
+  for _g in _gazeData:
     _gx = int(math.trunc(float(_g[1])))
     _gy = int(math.trunc(float(_g[2])))
-    _gf = float(featureArr[_gy][_gx])
-    gazeFeat.append(_gf)
+    # print("x: %d"%_gx)
+    # print("y: %d"%_gy)
+    _gf = float(_feat[_gy][_gx])
+    _gx = float(_g[1])
+    _gy = float(_g[2])
+    _gaze.append([_gx, _gy, _gf])
+  return _gaze
+  
+def fixationFilter(_gazeData):
+  _fixation = []
 
   prev_t = -1
   fixPts = []
   pts = []
-  for _p in gazeData:
+  for _p in _gazeData:
     cur_t = int(_p[0])
     if prev_t == -1:
       prev_t = cur_t
@@ -157,7 +160,6 @@ def loadEyeMovementDataFile():
   fixPts.append(pts)
   pts = []
 
-  fixation = []
   for _fix in fixPts:
     sum_x = 0
     sum_y = 0
@@ -166,11 +168,9 @@ def loadEyeMovementDataFile():
       sum_y += _p[1]
     sum_x = sum_x/len(_fix)
     sum_y = sum_y/len(_fix)
-    fixation.append([sum_x, sum_y])
-    
-  wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
-  wf.write(json.dumps(fixation))
-  wf.close()
+    _fixation.append([sum_x, sum_y])
+  return _fixation
+  
 
 def makeRandomPos():
   global randomData
@@ -317,9 +317,11 @@ def gazeDataSubmit():
   global DATASET
   global STIMULUS_CLASSES
   global FEATURE_TYPES
-  global FEAT_PATHS
-
-  print(request.form)
+  global PATHS
+  global FEATURES
+  global GAZE_DATA_LIST
+  
+  # print(request.form)
   # print(request.form['data-origin'])
   response = {}
 
@@ -330,37 +332,41 @@ def gazeDataSubmit():
     div_fl = _fl.split(",")
     for _f in div_fl:
       FEATURE_TYPES.append(_f)
-
+    
     _snl = request.form['stimulus-classes']
     div_snl = _snl.split(",")
     for _sn in div_snl:
       STIMULUS_CLASSES.append(_sn)
-
+    
     for _f in FEATURE_TYPES:
       for _sc in STIMULUS_CLASSES:
         for _sn in STIMULUS_NAMES:
-          FEAT_PATHS.append(setFeaturePath(_f, _sc, _sn))
-
-    for _uid in UIDS:
-      for _sc in STIMULUS_CLASSES:
-        for _sn in STIMULUS_NAMES:
-          GAZE_PATHS.append(setGazePath(_uid, _sc, _sn))
-
+          PATHS.append([setFeaturePath(_f, _sc, _sn), setGazePath(UIDS[0], _sc, _sn), setStimulusPath(_sc, _sn)])
+    
+    _sti_paths = []
     for _sc in STIMULUS_CLASSES:
       for _sn in STIMULUS_NAMES:
-        STI_PATHS.append(setStimulusPath(_sc, _sn))
-
+        _sti_paths.append(setStimulusPath(_sc, _sn))
     wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(STI_PATHS))
+    wf.write(json.dumps(_sti_paths))
+    wf.close()
+    
+    for _p in PATHS:
+      _f = loadFeatureFile(_p[0])
+      FEATURES.append(_f)
+      print(_p[0])
+      print(_p[1])
+      GAZE_DATA_LIST.append(loadEyeMovementDataFile(_p[1], _f))
+    wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(GAZE_DATA_LIST))
     wf.close()
 
-    # for _p in FEAT_PATHS:
-    #   FEATURES.append(loadFeatureFile(_p))
+    for _g in GAZE_DATA_LIST:
+      FIXATIONS.append(fixationFilter(_g))
 
-    # print(len(FEATURES))
-    
-
-
+    wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(FIXATIONS))
+    wf.close()
 
     # setFeaturePath("center-bias", "002")
     # setGazePath("t_sb_1", "002")
