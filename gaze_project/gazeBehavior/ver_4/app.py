@@ -15,18 +15,19 @@ from random import *
 DATASET = ""
 FEATURE_TYPES = []
 FEATURE_SUB = ""
-STIMULUS_TYPE = []
+STIMULUS_CLASSES = []
 STIMULUS_NAMES = ["002", "004"]
+UIDS = ["t_sb_1"]
 FEAT_PATHS = []
+GAZE_PATHS = []
+STI_PATHS = []
+FEATURES = []
 
-#data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_TYPE)
+#data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
 datasetName = "MIT300"
 
-featPath = ""
-gazePath = ""
-stimulusPath = ""
 featureArr = []
-meanValue = 0
+meanValue = []
 gazeData = []
 randomData = []
 gazeFeat = []
@@ -43,25 +44,24 @@ fixation = [[700, 300], [700, 500], [1000, 300], [1000, 700], [1200, 900], [730,
 
 spatial_variance = 0
 
-def setFeaturePath(_fType, _stiName):
-  global featPath
+def setFeaturePath(_fType, _stiClass, _stiName):
+  _featPath = ""
   _fString = featureNameToFileStyle(_fType)
   if FEATURE_SUB == "":
-    featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+STIMULUS_TYPE+"_"+_stiName+".csv"
+    _featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+".csv"
   else:
-    featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+STIMULUS_TYPE+"_"+_stiName+"_"+FEATURE_SUB+".csv"
+    _featPath = "./static/data/"+datasetName+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+"_"+FEATURE_SUB+".csv"
+  return _featPath
 
-def setGazePath(_uid, _stiName):
-  global gazePath
-  gazePath = "./static/data/"+datasetName+"/gaze/"+_uid+"/"+STIMULUS_TYPE+"_"+_stiName+".csv"
+def setGazePath(_uid, _stiClass, _stiName):
+  _gazePath = ""
+  _gazePath = "./static/data/"+datasetName+"/gaze/"+_uid+"/"+_stiClass+"_"+_stiName+".csv"
+  return _gazePath
 
-def setStimulusPath(_stiName):
-  global stimulusPath
-  stimulusPath = "./static/data/"+datasetName+"/stimulus/"+STIMULUS_TYPE+"/"+_stiName+".jpg"
-  
-  wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
-  wf.write(json.dumps(stimulusPath[1:]))
-  wf.close()
+def setStimulusPath(_stiClass, _stiName):
+  _stimulusPath = ""
+  _stimulusPath = "/static/data/"+datasetName+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
+  return _stimulusPath
 
 def featureNameToFileStyle(_fName):
   global FEATURE_SUB
@@ -95,20 +95,24 @@ def featureNameToFileStyle(_fName):
     print("*****----------------------------------*****")
     return "center_bias"
 
-def loadFeatureFile():
+def loadFeatureFile(_path):
   global meanValue
-  rf = open(featPath, 'r', encoding='utf-8')
+  
+  rf = open(_path, 'r', encoding='utf-8')
   rdr = csv.reader(rf)
   
+  _featArr = []
   for _row in rdr:
-    featureArr.append(_row)
+    _featArr.append(_row)
   rf.close()
 
   sumVal = 0
   for i in range(0, 1080):
     for j in range(0, 1920):
       sumVal += float(featureArr[i][j])
-  meanValue = sumVal/(1920*1080)
+  meanValue.append(sumVal/(1920*1080))
+
+  return _featArr
 
 def loadEyeMovementDataFile():
   global gazeData
@@ -311,7 +315,7 @@ CORS(app)
 @app.route('/api/gaze_data/submit', methods=['POST'])
 def gazeDataSubmit():
   global DATASET
-  global STIMULUS_TYPE
+  global STIMULUS_CLASSES
   global FEATURE_TYPES
   global FEAT_PATHS
 
@@ -327,16 +331,37 @@ def gazeDataSubmit():
     for _f in div_fl:
       FEATURE_TYPES.append(_f)
 
-    #_snl = request.form
-    # for _f in _fl:
-    #   FEATURE_TYPES.append(_f)
     _snl = request.form['stimulus-classes']
     div_snl = _snl.split(",")
     for _sn in div_snl:
-      STIMULUS_TYPE.append(_sn)
-    print(STIMULUS_TYPE)
+      STIMULUS_CLASSES.append(_sn)
+
+    for _f in FEATURE_TYPES:
+      for _sc in STIMULUS_CLASSES:
+        for _sn in STIMULUS_NAMES:
+          FEAT_PATHS.append(setFeaturePath(_f, _sc, _sn))
+
+    for _uid in UIDS:
+      for _sc in STIMULUS_CLASSES:
+        for _sn in STIMULUS_NAMES:
+          GAZE_PATHS.append(setGazePath(_uid, _sc, _sn))
+
+    for _sc in STIMULUS_CLASSES:
+      for _sn in STIMULUS_NAMES:
+        STI_PATHS.append(setStimulusPath(_sc, _sn))
+
+    wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(STI_PATHS))
+    wf.close()
+
+    # for _p in FEAT_PATHS:
+    #   FEATURES.append(loadFeatureFile(_p))
+
+    # print(len(FEATURES))
     
-    # # setFeaturePath(_fl[0], "002")
+
+
+
     # setFeaturePath("center-bias", "002")
     # setGazePath("t_sb_1", "002")
     # setStimulusPath("002")
