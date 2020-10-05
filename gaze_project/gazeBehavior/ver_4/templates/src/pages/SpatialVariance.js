@@ -23,8 +23,8 @@ class SpatialVariance extends React.Component {
   componentDidMount() {
     axios.get(`http://${window.location.hostname}:5000/static/output/spatial_variance.json`)
       .then(response => {
-        var _data = response.data;
-        console.log(_data)
+        var _data = response.data; 
+        console.log(_data);
         var _td = []
         var _getData = {
           featureType: response.data[0],

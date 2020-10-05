@@ -21,7 +21,7 @@ class Data extends React.Component {
         this.setState({
           featureTypes: featureTypes
         });
-      })
+      });
   }
 
   loadStimulusTypes = dataName => {
@@ -53,7 +53,14 @@ class Data extends React.Component {
       if (data.get(`feature-type-${i}`) !== null)
         featureTypes.push(data.get(`feature-type-${i}`));
     }
+    const stimulusClasses = [];
+    for (let i=0; i<this.state.stimulusTypes.length; i++){
+      if (data.get(`stimulus-type-${i}`) !== null)
+        stimulusClasses.push(data.get(`stimulus-type-${i}`));
+    }
+
     data.set('feature-types', featureTypes);
+    data.set('stimulus-classes', stimulusClasses);
 
     axios.post(`http://${window.location.hostname}:5000/api/gaze_data/submit`, data)
       .then(response => {
@@ -78,12 +85,12 @@ class Data extends React.Component {
 
         <form onSubmit={this.onSubmit}>
           <div className="page-section select-data">
-            <h2>Data</h2>
+            <h2>Dataset</h2>
             <ul>
               <li>
                 <input type="radio" id="data-mit300" name="data-origin" value="mit300" onClick={this.onDataChanged} />
                 <label htmlFor="data-mit300">
-                  <span>MIT300 dataset image</span>
+                  <span>MIT300 dataset</span>
                 </label>
               </li>
               <li>
@@ -97,7 +104,7 @@ class Data extends React.Component {
 
           {featureTypes.length > 0 &&
             <div className="page-section select-feature-type">
-              <h2>Feature type</h2>
+              <h2>Feature Type</h2>
               <ul>
                 {featureTypes.map((value, index) =>
                     <li key={index}>
@@ -119,11 +126,17 @@ class Data extends React.Component {
 
           {stimulusTypes.length > 0 &&
             <div className="page-section select-stimulus-type">
-              <h2>Dataset Image</h2>
+              <h2>Stimulus Class</h2>
               <ul>
                 {stimulusTypes.map((value, index) =>
                     <li key={index}>
-                      <input type="radio" id={`stimulus-type-${index}`} name="stimulus-type" value={value} />
+                      <input 
+                        type="checkbox" 
+                        id={`stimulus-type-${index}`}
+                        name={`stimulus-type-${index}`}
+                        className="stimulus-type-item"
+                        value={value} 
+                      />
                       <label htmlFor={`stimulus-type-${index}`}>
                         <span>{value}</span>
                       </label>
