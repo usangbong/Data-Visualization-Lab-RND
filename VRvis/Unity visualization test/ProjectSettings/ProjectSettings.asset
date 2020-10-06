@@ -704,7 +704,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   cloudProjectId: d8785713-5e61-4d5b-b5e0-34cb2bcb14c8
   framebufferDepthMemorylessMode: 0
-  projectName: IATK ver1
+  projectName: Unity visualization test
   organizationId: tn12qls
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
