@@ -14,6 +14,7 @@ from random import *
 # init dataset name, feature types, and stimulus type
 DATASET = "MIT300"
 FEATURE_TYPES = []
+FEATURE_SUB_TYPES = []
 FEATURE_SUB = ""
 STIMULUS_CLASSES = []
 STIMULUS_NAMES = ["002", "004"]
@@ -23,26 +24,24 @@ FEATURES = []
 GAZE_DATA_LIST = []
 FIXATIONS = []
 meanValue = []
+RANDOM_DATA_LIST = []
+SPATIAL_VARIANCES = []
 
 #data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
 
+# gazeData = []
+# randomData = []
+# gazeFeat = []
+# randomFeat = []
+# powerSpectraGazeLoc = []
+# powerSpectraRndLoc = []
+# powerSpectraGazeFeat = []
+# powerSpectraRndFeat = []
+# powerSpectraResGaze = []
+# powerSpectraResRnd = []
+# gazeFoveaRegionMean = []
+# rndFoveaRegionMean = []
 
-
-gazeData = []
-randomData = []
-gazeFeat = []
-randomFeat = []
-powerSpectraGazeLoc = []
-powerSpectraRndLoc = []
-powerSpectraGazeFeat = []
-powerSpectraRndFeat = []
-powerSpectraResGaze = []
-powerSpectraResRnd = []
-gazeFoveaRegionMean = []
-rndFoveaRegionMean = []
-
-
-spatial_variance = 0
 
 def setFeaturePath(_fType, _stiClass, _stiName):
   _featPath = ""
@@ -65,25 +64,32 @@ def setStimulusPath(_stiClass, _stiName):
 
 def featureNameToFileStyle(_fName):
   global FEATURE_SUB
+  global FEATURE_SUB_TYPES
   if _fName == "center-bias":
     FEATURE_SUB = ""
+    FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "center_bias"
   elif _fName == "contrast-intensity" or _fName == "contrast-color" or _fName == "contrast-orientation":
     FEATURE_SUB = _fName.split("-")[1]
+    FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "contrast"
   elif _fName == "HOG":
     FEATURE_SUB = ""
+    FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "HOG"
   elif _fName == "horizontal line":
     FEATURE_SUB = ""
+    FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "horizontal_line"
   elif _fName == "LOG spectrum":
     FEATURE_SUB = ""
+    FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "log"
   elif _fName == "saliency-intensity" or _fName == "saliency-color" or _fName == "saliency-orientation" or _fName == "computed-saliency":
     FEATURE_SUB = _fName.split("-")[1]
     if FEATURE_SUB == "saliency":
       FEATURE_SUB = "sm"
+      FEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "saliency"
   else:
     print("*****----------------------------------*****")
@@ -93,6 +99,8 @@ def featureNameToFileStyle(_fName):
     print("*****")
     print("*****")
     print("*****----------------------------------*****")
+    FEATURE_SUB = ""
+    KFEATURE_SUB_TYPES.append(FEATURE_SUB)
     return "center_bias"
 
 def loadFeatureFile(_path):
@@ -141,7 +149,7 @@ def loadEyeMovementDataFile(_path, _feat):
     _gaze.append([_gx, _gy, _gf])
   return _gaze
   
-def fixationFilter(_gazeData):
+def fixationFilter(_gazeData, _feat):
   _fixation = []
 
   prev_t = -1
@@ -166,146 +174,144 @@ def fixationFilter(_gazeData):
     for _p in _fix:
       sum_x += _p[0]
       sum_y += _p[1]
-    sum_x = sum_x/len(_fix)
-    sum_y = sum_y/len(_fix)
-    _fixation.append([sum_x, sum_y])
+    sum_x = int(sum_x/len(_fix))
+    sum_y = int(sum_y/len(_fix))
+    fx_feat = _feat[sum_y][sum_x]
+    _fixation.append([sum_x, sum_y, fx_feat])
   return _fixation
-  
 
-def makeRandomPos():
-  global randomData
-  global randomFeat
-  while len(fixation) != len(randomData):
+def makeRandomPos(_fixLen, _feat):
+  _random = []
+
+  while _fixLen != len(_random):
     _rx = randint(0, 1919)
     _ry = randint(0, 1079)
-    randomData.append([_rx, _ry])
-    _rf = float(featureArr[_ry][_rx])
-    randomFeat.append(_rf)
-
-  wf = open("./static/output/raw_random.json", "w", newline='', encoding='utf-8')
-  wf.write(json.dumps(randomData))
-  wf.close()
-
-def calcSpatialVariation():
-  global spatial_variance
-  _deviation_squared_sum = 0
-  for _v in gazeFeat:
-    _dev = _v-meanValue
-    _deviation_squared_sum += _dev*_dev
-  _variation_eye = _deviation_squared_sum/len(gazeFeat)
+    _rf = float(_feat[_ry][_rx])
+    _random.append([_rx, _ry, _rf])
+  return _random
+  
+def calcSpatialVariation(_fixationData, _randomData, _meanValue):
+  _spatial_variance = 0
 
   _deviation_squared_sum = 0
-  for _v in randomFeat:
-    _dev = _v-meanValue
+  for _v in _fixationData:
+    _dev = _v[2]-_meanValue
     _deviation_squared_sum += _dev*_dev
-  _variation_random = _deviation_squared_sum/len(randomFeat)
+  _variation_eye = _deviation_squared_sum/len(_fixationData)
+
+  _deviation_squared_sum = 0
+  for _v in _randomData:
+    _dev = _v[2]-_meanValue
+    _deviation_squared_sum += _dev*_dev
+  _variation_random = _deviation_squared_sum/len(_randomData)
 
   spatial_variation = -1
   if _variation_random != 0:
     spatial_variation = _variation_eye/_variation_random
 
-  spatial_variance = spatial_variation
+  _spatial_variance = spatial_variation
+  return _spatial_variance
 
-def selectPowerSpectraData():
-  global powerSpectraGazeLoc
-  global powerSpectraRndLoc
-  global powerSpectraGazeFeat
-  global powerSpectraRndFeat
-  global gazeFoveaRegionMean
-  global rndFoveaRegionMean
-  degreePixel = 40
-  foveaRange = 1
-  degreePixel = degreePixel*foveaRange
+# def selectPowerSpectraData():
+#   global powerSpectraGazeLoc
+#   global powerSpectraRndLoc
+#   global powerSpectraGazeFeat
+#   global powerSpectraRndFeat
+#   global gazeFoveaRegionMean
+#   global rndFoveaRegionMean
+#   degreePixel = 40
+#   foveaRange = 1
+#   degreePixel = degreePixel*foveaRange
 
-  # append gaze point list of fovea region
-  for _g in gazeData:
-    if _g[1] == "x":
-      continue
-    _gx = int(math.trunc(float(_g[1])))
-    _gy = int(math.trunc(float(_g[2])))
+#   # append gaze point list of fovea region
+#   for _g in gazeData:
+#     if _g[1] == "x":
+#       continue
+#     _gx = int(math.trunc(float(_g[1])))
+#     _gy = int(math.trunc(float(_g[2])))
 
-    if _gx - degreePixel > 0 and _gx + degreePixel < 1920 and _gy - degreePixel > 0 and _gy + degreePixel < 1080:
-      powerSpectraGazeLoc.append([_gx, _gy])
+#     if _gx - degreePixel > 0 and _gx + degreePixel < 1920 and _gy - degreePixel > 0 and _gy + degreePixel < 1080:
+#       powerSpectraGazeLoc.append([_gx, _gy])
   
-  # append random point list of fovea region
-  for _r in randomData:
-    if _g[1] == "x":
-      continue
-    _rx = _r[0]
-    _ry = _r[1]
+#   # append random point list of fovea region
+#   for _r in randomData:
+#     if _g[1] == "x":
+#       continue
+#     _rx = _r[0]
+#     _ry = _r[1]
 
-    if _rx - degreePixel > 0 and _rx + degreePixel < 1920 and _ry - degreePixel > 0 and _ry + degreePixel < 1080:
-      powerSpectraRndLoc.append([_rx, _ry])
+#     if _rx - degreePixel > 0 and _rx + degreePixel < 1920 and _ry - degreePixel > 0 and _ry + degreePixel < 1080:
+#       powerSpectraRndLoc.append([_rx, _ry])
   
-  gazeFoveaRegionMean = []
-  for _pgl in powerSpectraGazeLoc:
-    _gFoveaRegion = []
-    _gfrSum = 0
-    for i in range(0, 1080):
-      if i - _pgl[1] < degreePixel and i - _pgl[1] >= 0:
-        for j in range(0, 1980):
-          if j - _pgl[0] < degreePixel and j - _pgl[0] >= 0:
-            _gFoveaRegion.append(float(featureArr[i][j]))
-            _gfrSum += float(featureArr[i][j])
-    powerSpectraGazeFeat.append(_gFoveaRegion)
-    gazeFoveaRegionMean.append(_gfrSum/len(_gFoveaRegion))
+#   gazeFoveaRegionMean = []
+#   for _pgl in powerSpectraGazeLoc:
+#     _gFoveaRegion = []
+#     _gfrSum = 0
+#     for i in range(0, 1080):
+#       if i - _pgl[1] < degreePixel and i - _pgl[1] >= 0:
+#         for j in range(0, 1980):
+#           if j - _pgl[0] < degreePixel and j - _pgl[0] >= 0:
+#             _gFoveaRegion.append(float(featureArr[i][j]))
+#             _gfrSum += float(featureArr[i][j])
+#     powerSpectraGazeFeat.append(_gFoveaRegion)
+#     gazeFoveaRegionMean.append(_gfrSum/len(_gFoveaRegion))
 
-  rndFoveaRegionMean = []
-  for _prl in powerSpectraRndLoc:
-    _rFoveaRegion = []
-    _rfrSum = 0
-    for i in range(0, 1080):
-      if i - _prl[1] < degreePixel and i - _prl[1] >= 0:
-        for j in range(0, 1980):
-          if j - _prl[0] < degreePixel and j - _prl[0] >= 0:
-            _rFoveaRegion.append(float(featureArr[i][j]))
-            _rfrSum += float(featureArr[i][j])
-    powerSpectraRndFeat.append(_rFoveaRegion)
-    rndFoveaRegionMean.append(_rfrSum/len(_rFoveaRegion))
+#   rndFoveaRegionMean = []
+#   for _prl in powerSpectraRndLoc:
+#     _rFoveaRegion = []
+#     _rfrSum = 0
+#     for i in range(0, 1080):
+#       if i - _prl[1] < degreePixel and i - _prl[1] >= 0:
+#         for j in range(0, 1980):
+#           if j - _prl[0] < degreePixel and j - _prl[0] >= 0:
+#             _rFoveaRegion.append(float(featureArr[i][j]))
+#             _rfrSum += float(featureArr[i][j])
+#     powerSpectraRndFeat.append(_rFoveaRegion)
+#     rndFoveaRegionMean.append(_rfrSum/len(_rFoveaRegion))
 
-  # for i in range(0, 1080):
-  #   if i - powerSpectraGazeLoc[1] < degreePixel and i - powerSpectraGazeLoc[1] >= 0:
-  #     for j in range(0, 1980):
-  #       if j - powerSpectraGazeLoc[0] < degreePixel and j - powerSpectraGazeLoc[0] >= 0:
-  #         powerSpectraGazeFeat.append(float(featureArr[i][j])) 
+#   # for i in range(0, 1080):
+#   #   if i - powerSpectraGazeLoc[1] < degreePixel and i - powerSpectraGazeLoc[1] >= 0:
+#   #     for j in range(0, 1980):
+#   #       if j - powerSpectraGazeLoc[0] < degreePixel and j - powerSpectraGazeLoc[0] >= 0:
+#   #         powerSpectraGazeFeat.append(float(featureArr[i][j])) 
 
-  #   if i - powerSpectraRndLoc[1] < degreePixel and i - powerSpectraRndLoc[1] >= 0:
-  #     for j in range(0, 1980):
-  #       if j - powerSpectraRndLoc[0] < degreePixel and i - powerSpectraRndLoc[0] >= 0:
-  #         powerSpectraRndFeat.append(float(featureArr[i][j]))
+#   #   if i - powerSpectraRndLoc[1] < degreePixel and i - powerSpectraRndLoc[1] >= 0:
+#   #     for j in range(0, 1980):
+#   #       if j - powerSpectraRndLoc[0] < degreePixel and i - powerSpectraRndLoc[0] >= 0:
+#   #         powerSpectraRndFeat.append(float(featureArr[i][j]))
 
-def makePowerSpectra():
-  global powerSpectraResGaze
-  global powerSpectraResRnd
-  # print(len(powerSpectraGazeFeat[0]))
-  # print(len(powerSpectraRndFeat))
+# def makePowerSpectra():
+#   global powerSpectraResGaze
+#   global powerSpectraResRnd
+#   # print(len(powerSpectraGazeFeat[0]))
+#   # print(len(powerSpectraRndFeat))
 
-  powerSpectraResGaze = []
-  powerSpectraResRnd = []
+#   powerSpectraResGaze = []
+#   powerSpectraResRnd = []
 
-  _gfrCount = 0
-  for _gfr in powerSpectraGazeFeat:
-    _gCount = 0
-    for _f in _gfr:
-      if _gfrCount == 0:
-        powerSpectraResGaze.append(_f)
-      elif _gfrCount == 10:
-        powerSpectraResGaze[_gCount] = (powerSpectraResGaze[_gCount]-gazeFoveaRegionMean[0])*(_f-gazeFoveaRegionMean[10])
-      _gCount += 1
-    _gfrCount += 1
-    if _gfrCount == 11:
-      break
+#   _gfrCount = 0
+#   for _gfr in powerSpectraGazeFeat:
+#     _gCount = 0
+#     for _f in _gfr:
+#       if _gfrCount == 0:
+#         powerSpectraResGaze.append(_f)
+#       elif _gfrCount == 10:
+#         powerSpectraResGaze[_gCount] = (powerSpectraResGaze[_gCount]-gazeFoveaRegionMean[0])*(_f-gazeFoveaRegionMean[10])
+#       _gCount += 1
+#     _gfrCount += 1
+#     if _gfrCount == 11:
+#       break
 
-  for _pixel in powerSpectraResGaze:
-    if _pixel < 0:
-      _pixel = 0
-    _pixel = math.sqrt(_pixel)
+#   for _pixel in powerSpectraResGaze:
+#     if _pixel < 0:
+#       _pixel = 0
+#     _pixel = math.sqrt(_pixel)
     
-    _pixel = _pixel/2
+#     _pixel = _pixel/2
 
-  wf = open("./static/output/power_gaze.json", "w", newline='', encoding='utf-8')
-  wf.write(json.dumps(powerSpectraResGaze))
-  wf.close()
+#   wf = open("./static/output/power_gaze.json", "w", newline='', encoding='utf-8')
+#   wf.write(json.dumps(powerSpectraResGaze))
+#   wf.close()
 
 app = Flask(__name__)
 if __name__ == '__main__':  
@@ -315,11 +321,15 @@ CORS(app)
 @app.route('/api/gaze_data/submit', methods=['POST'])
 def gazeDataSubmit():
   global DATASET
-  global STIMULUS_CLASSES
   global FEATURE_TYPES
+  global STIMULUS_CLASSES
   global PATHS
   global FEATURES
   global GAZE_DATA_LIST
+  global FIXATIONS
+  global RANDOM_DATA_LIST
+  global SPATIAL_VARIANCES
+
   
   # print(request.form)
   # print(request.form['data-origin'])
@@ -332,17 +342,21 @@ def gazeDataSubmit():
     div_fl = _fl.split(",")
     for _f in div_fl:
       FEATURE_TYPES.append(_f)
-    
+    print("FEATURE_TYPES LEN:%d"%len(FEATURE_TYPES))
+
     _snl = request.form['stimulus-classes']
     div_snl = _snl.split(",")
     for _sn in div_snl:
       STIMULUS_CLASSES.append(_sn)
+    print("STIMULUS_CLASSES LEN:%d"%len(STIMULUS_CLASSES))
     
     for _f in FEATURE_TYPES:
       for _sc in STIMULUS_CLASSES:
         for _sn in STIMULUS_NAMES:
           PATHS.append([setFeaturePath(_f, _sc, _sn), setGazePath(UIDS[0], _sc, _sn), setStimulusPath(_sc, _sn)])
-    
+    print("PATHS LEN:%d"%len(PATHS))
+    print("FEATURE_SUB_TYPES LEN:%d"%len(FEATURE_SUB_TYPES))
+
     _sti_paths = []
     for _sc in STIMULUS_CLASSES:
       for _sn in STIMULUS_NAMES:
@@ -360,13 +374,43 @@ def gazeDataSubmit():
     wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
     wf.write(json.dumps(GAZE_DATA_LIST))
     wf.close()
+    print("GAZE_DATA_LIST LEN:%d"%len(GAZE_DATA_LIST))
 
+    _gIdx = 0
     for _g in GAZE_DATA_LIST:
-      FIXATIONS.append(fixationFilter(_g))
-
+      FIXATIONS.append(fixationFilter(_g, FEATURES[_gIdx]))
+      _gIdx += 1
+    print("FIXATIONS LEN:%d"%len(FIXATIONS))
     wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
     wf.write(json.dumps(FIXATIONS))
     wf.close()
+
+    _fxIdx = 0
+    for _fx in FIXATIONS:
+      RANDOM_DATA_LIST.append(makeRandomPos(len(_fx), FEATURES[_fxIdx]))
+      _fxIdx += 1
+    print("RANDOM_DATA_LIST LEN:%d"%len(RANDOM_DATA_LIST))
+    wf = open("./static/output/raw_random.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(RANDOM_DATA_LIST))
+    wf.close()
+
+    for i in range(0, len(GAZE_DATA_LIST)):
+      SPATIAL_VARIANCES.append(calcSpatialVariation(GAZE_DATA_LIST[i], RANDOM_DATA_LIST[i], meanValue[i]))
+    print("SPATIAL_VARIANCES LEN:%d"%len(RANDOM_DATA_LIST))
+
+    analysis_result = []
+    for i in range(len(SPATIAL_VARIANCES)):
+      _id = UIDS[0]
+      _feat = PATHS[i][0].split("/")[5] + "-" + FEATURE_SUB_TYPES[i]
+      _class = PATHS[i][1].split("/")[6].split("_")[0]
+      _name = PATHS[i][1].split("/")[6].split("_")[1].split(".")[0]+".jpg"
+      _sp = SPATIAL_VARIANCES[i]
+      analysis_result.append([_id, _feat, _class, _name, _sp])
+    print("analysis_result LEN:%d"%len(analysis_result))
+    wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
+    wf.write(json.dumps(analysis_result))
+    wf.close()
+    
 
     # setFeaturePath("center-bias", "002")
     # setGazePath("t_sb_1", "002")
