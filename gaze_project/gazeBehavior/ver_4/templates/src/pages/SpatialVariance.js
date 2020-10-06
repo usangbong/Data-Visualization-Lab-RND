@@ -11,6 +11,7 @@ class SpatialVariance extends React.Component {
     super(props);
     this.state = {
       tableData: [{
+        userID: '',
         featureType: '',
         stimulusClass: '',
         stimulusName: '',
@@ -25,31 +26,21 @@ class SpatialVariance extends React.Component {
       .then(response => {
         var _data = response.data; 
         console.log(_data);
-        var _td = []
-        var _getData = {
-          featureType: response.data[0],
-          stimulusClass: response.data[1],
-          stimulusName: response.data[2],
-          spValue: response.data[3]
-        };
-        _td.push(_getData);
-
+        var _getData = [];
+        for(var i=0; i<_data.length; i++){
+          var _row = {
+            userID: response.data[i][0],
+            featureType: response.data[i][1],
+            stimulusClass: response.data[i][2],
+            stimulusName: response.data[i][3],
+            spValue: response.data[i][4]
+          };
+          _getData.push(_row);
+        }
+        
         this.setState({
           tableData: 
-            _td
-        });
-        var _t = [];
-        var _vv = {make: "Toyota", model: "Celica", price: 35000};
-        _t.push(_vv);
-        _vv = {make: "Ford", model: "Mondeo", price: 32000};
-        _t.push(_vv);
-        _vv = {make: "Porsche", model: "Boxter", price: 72000};
-        _t.push(_vv);
-        _vv = {make: "Toyota", model: "Celica", price: 35000};
-        _t.push(_vv);
-        this.setState({
-          rowData:
-            _t
+          _getData
         });
       });
   }
@@ -91,19 +82,17 @@ class SpatialVariance extends React.Component {
             <button>E</button>
           </div>
 
-          <div className="ag-theme-alpine" style={ { height: 400, width: 800 } }>
+          <div className="ag-theme-alpine" style={ { height: 600, width: 900 } }>
             <AgGridReact
               rowData={tableData}>
+              <AgGridColumn field="userID"></AgGridColumn>
               <AgGridColumn field="featureType"></AgGridColumn>
               <AgGridColumn field="stimulusClass"></AgGridColumn>
               <AgGridColumn field="stimulusName"></AgGridColumn>
               <AgGridColumn field="spValue"></AgGridColumn>
             </AgGridReact>
           </div>
-
-          
         </div>
-
       </>
     );
   }
