@@ -368,8 +368,8 @@ def gazeDataSubmit():
     for _p in PATHS:
       _f = loadFeatureFile(_p[0])
       FEATURES.append(_f)
-      print(_p[0])
-      print(_p[1])
+      # print(_p[0])
+      # print(_p[1])
       GAZE_DATA_LIST.append(loadEyeMovementDataFile(_p[1], _f))
     wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
     wf.write(json.dumps(GAZE_DATA_LIST))
@@ -401,7 +401,9 @@ def gazeDataSubmit():
     analysis_result = []
     for i in range(len(SPATIAL_VARIANCES)):
       _id = UIDS[0]
-      _feat = PATHS[i][0].split("/")[5] + "-" + FEATURE_SUB_TYPES[i]
+      _feat = PATHS[i][0].split("/")[5]
+      if FEATURE_SUB_TYPES[i] != "":
+        _feat = _feat + "-" + FEATURE_SUB_TYPES[i]
       _class = PATHS[i][1].split("/")[6].split("_")[0]
       _name = PATHS[i][1].split("/")[6].split("_")[1].split(".")[0]+".jpg"
       _sp = SPATIAL_VARIANCES[i]
@@ -411,7 +413,6 @@ def gazeDataSubmit():
     wf.write(json.dumps(analysis_result))
     wf.close()
     
-
     # setFeaturePath("center-bias", "002")
     # setGazePath("t_sb_1", "002")
     # setStimulusPath("002")
