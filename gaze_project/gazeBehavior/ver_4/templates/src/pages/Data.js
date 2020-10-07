@@ -107,18 +107,18 @@ class Data extends React.Component {
               <h2>Feature Type</h2>
               <ul>
                 {featureTypes.map((value, index) =>
-                    <li key={index}>
-                      <input
-                        type="checkbox"
-                        id={`feature-type-${index}`}
-                        name={`feature-type-${index}`}
-                        className="feature-type-item"
-                        value={value}
-                      />
-                      <label htmlFor={`feature-type-${index}`}>
-                        <span>{value}</span>
-                      </label>
-                    </li>
+                  <li key={index}>
+                    <input
+                      type="checkbox"
+                      id={`feature-type-${index}`}
+                      name={`feature-type-${index}`}
+                      className="feature-type-item"
+                      value={value}
+                    />
+                    <label htmlFor={`feature-type-${index}`}>
+                      <span>{value}</span>
+                    </label>
+                  </li>
                 )}
               </ul>
             </div>
@@ -129,18 +129,18 @@ class Data extends React.Component {
               <h2>Stimulus Class</h2>
               <ul>
                 {stimulusTypes.map((value, index) =>
-                    <li key={index}>
-                      <input 
-                        type="checkbox" 
-                        id={`stimulus-type-${index}`}
-                        name={`stimulus-type-${index}`}
-                        className="stimulus-type-item"
-                        value={value} 
-                      />
-                      <label htmlFor={`stimulus-type-${index}`}>
-                        <span>{value}</span>
-                      </label>
-                    </li>
+                  <li key={index}>
+                    <input 
+                      type="checkbox" 
+                      id={`stimulus-type-${index}`}
+                      name={`stimulus-type-${index}`}
+                      className="stimulus-type-item"
+                      value={value} 
+                    />
+                    <label htmlFor={`stimulus-type-${index}`}>
+                      <span>{value}</span>
+                    </label>
+                  </li>
                 )}
               </ul>
             </div>
