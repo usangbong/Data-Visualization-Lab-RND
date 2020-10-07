@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -46,10 +46,9 @@ class SpatialVariance extends React.Component {
   }
 
   render() {
-    const {gridApi, setGridApi} = this.state;
-    const {gridColumnApi, setGridColumnApi} = this.state;
-    const {rowData, setRowData} = this.state; 
-      
+    // const {gridApi, setGridApi} = this.state;
+    // const {gridColumnApi, setGridColumnApi} = this.state;
+    // const {rowData, setRowData} = this.state; 
     const { tableData } = this.state;
 
     // function onGridReady(params) {
@@ -68,23 +67,37 @@ class SpatialVariance extends React.Component {
 
           <div style={{margin: '10px 0'}}>
             <button>A</button>
-          </div>
-          <div style={{margin: '10px 0'}}>
             <button>B</button>
-          </div>
-          <div style={{margin: '10px 0'}}>
             <button>C</button>
-          </div>
-          <div style={{margin: '10px 0'}}>
             <button>D</button>
-          </div>
-          <div style={{margin: '10px 0'}}>
             <button>E</button>
           </div>
-
+          
           <div className="ag-theme-alpine" style={ { height: 600, width: 900 } }>
             <AgGridReact
-              rowData={tableData}>
+              rowData={tableData}
+              onRowClicked={
+                function(event){
+                  console.log(event.data);
+                  const data = new FormData();
+                  data.set('userID', event.data['userID']);
+                  data.set('featureType', event.data['featureType']);
+                  data.set('stimulusClass', event.data['stimulusClass']);
+                  data.set('stimulusName', event.data['stimulusName']);
+                  data.set('spValue', event.data['spValue']);
+                  axios.post(`http://${window.location.hostname}:5000/api/sp_variance/select`, data)
+                    .then(response => {
+                      if (response.data.status === 'success') {
+                        alert('Sending selected data');
+                      } else if (response.data.status === 'failed') {
+                        alert(`Failed to send selected data - ${response.data.reason}`);
+                      }
+                    }).catch(error => {
+                      alert(`Error - ${error.message}`);
+                  });
+                }
+              }
+            >
               <AgGridColumn field="userID"></AgGridColumn>
               <AgGridColumn field="featureType"></AgGridColumn>
               <AgGridColumn field="stimulusClass"></AgGridColumn>
@@ -92,7 +105,7 @@ class SpatialVariance extends React.Component {
               <AgGridColumn field="spValue"></AgGridColumn>
             </AgGridReact>
           </div>
-        </div>
+        </div>        
       </>
     );
   }
