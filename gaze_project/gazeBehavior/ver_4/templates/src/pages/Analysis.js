@@ -11,6 +11,7 @@ class Analysis extends React.Component {
       stimulusPath: "",
       // powerSpectra: {},
       rawGazeData: [],
+      fixationData: [],
       rawRndData: [],
       lineChartData: []
     };
@@ -28,7 +29,7 @@ class Analysis extends React.Component {
   // }
 
   componentDidMount() {
-    axios.get(`http://${window.location.hostname}:5000/static/output/stimulus_path.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_stimulus_path.json`)
       .then(response => {
         this.setState({
           stimulusPath: 
@@ -50,7 +51,7 @@ class Analysis extends React.Component {
     //       ]
     //     });
     //   });
-    axios.get(`http://${window.location.hostname}:5000/static/output/fixation.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_fixation.json`)
       .then(response => {
         // var _data = response.data;
         // var processedData = [];
@@ -64,7 +65,7 @@ class Analysis extends React.Component {
             response.data
         });
       });
-    axios.get(`http://${window.location.hostname}:5000/static/output/raw_random.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_random.json`)
       .then(response => {
         this.setState({
           rawRndData:
@@ -72,7 +73,7 @@ class Analysis extends React.Component {
         });
       });
     // axios.get('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv')
-    axios.get(`http://${window.location.hostname}:5000/static/output/raw_gaze.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_gaze.json`)
       .then(response => {
         // CSV to object
         // const data = [];
