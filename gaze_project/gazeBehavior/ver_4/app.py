@@ -313,10 +313,88 @@ def calcSpatialVariation(_fixationData, _randomData, _meanValue):
 #   wf.write(json.dumps(powerSpectraResGaze))
 #   wf.close()
 
+def initGlobal():
+  global DATASET
+  global FEATURE_TYPES
+  global FEATURE_SUB_TYPES
+  global FEATURE_SUB
+  global STIMULUS_CLASSES
+  global STIMULUS_NAMES
+  global UIDS
+  global PATHS
+  global FEATURES
+  global GAZE_DATA_LIST
+  global FIXATIONS
+  global meanValue
+  global RANDOM_DATA_LIST
+  global SPATIAL_VARIANCES
+
+  DATASET = "MIT300"
+  FEATURE_TYPES = []
+  FEATURE_SUB_TYPES = []
+  FEATURE_SUB = ""
+  STIMULUS_CLASSES = []
+  STIMULUS_NAMES = ["002", "004"]
+  UIDS = ["t_sb_1"]
+  PATHS = []
+  FEATURES = []
+  GAZE_DATA_LIST = []
+  FIXATIONS = []
+  meanValue = []
+  RANDOM_DATA_LIST = []
+  SPATIAL_VARIANCES = []
+
+
+def makeJSON(_path, _data):
+  wf = open(_path, "w", newline='', encoding='utf-8')
+  wf.write(json.dumps(_data))
+  wf.close()
+
 app = Flask(__name__)
 if __name__ == '__main__':  
   app.run(debug=True)
 CORS(app)
+
+@app.route('/api/sp_variance/select', methods=['POST'])
+def selectedDataSubmit():
+  response = {}
+
+  try:
+    _id = request.form['userID']
+    _fType = request.form['featureType']
+    _sClass = request.form['stimulusClass']
+    _sName = request.form['stimulusName']
+    _val = request.form['spValue']
+    # print(request.form)
+    
+    # set selected user id & make JSON file
+    makeJSON("./static/output/selected_userid.json", _id)
+    # make selected stimulus path JSON file
+    selected_sPath = setStimulusPath(_sClass, _sName.split(".")[0])
+    print(selected_sPath)
+    # find selected data index
+    selectedIdx = 0
+    for _fp in PATHS:
+      if _fp[2] == selected_sPath:
+        break
+      selectedIdx += 1
+    makeJSON("./static/output/selected_stimulus_path.json", selected_sPath)
+    # make selected raw gaze data JSON file
+    makeJSON("./static/output/selected_raw_gaze.json", GAZE_DATA_LIST[selectedIdx])
+    # make selected fixation data JSON file
+    makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
+    # make random data JSON file
+    makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
+    # make bispectra image files
+
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
 
 @app.route('/api/gaze_data/submit', methods=['POST'])
 def gazeDataSubmit():
@@ -330,6 +408,7 @@ def gazeDataSubmit():
   global RANDOM_DATA_LIST
   global SPATIAL_VARIANCES
 
+  initGlobal()
   
   # print(request.form)
   # print(request.form['data-origin'])
@@ -361,9 +440,10 @@ def gazeDataSubmit():
     for _sc in STIMULUS_CLASSES:
       for _sn in STIMULUS_NAMES:
         _sti_paths.append(setStimulusPath(_sc, _sn))
-    wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(_sti_paths))
-    wf.close()
+    makeJSON("./static/output/stimulus_path.json", _sti_paths)
+    # wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(_sti_paths))
+    # wf.close()
     
     for _p in PATHS:
       _f = loadFeatureFile(_p[0])
@@ -371,9 +451,10 @@ def gazeDataSubmit():
       # print(_p[0])
       # print(_p[1])
       GAZE_DATA_LIST.append(loadEyeMovementDataFile(_p[1], _f))
-    wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(GAZE_DATA_LIST))
-    wf.close()
+    makeJSON("./static/output/raw_gaze.json", GAZE_DATA_LIST)
+    # wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(GAZE_DATA_LIST))
+    # wf.close()
     print("GAZE_DATA_LIST LEN:%d"%len(GAZE_DATA_LIST))
 
     _gIdx = 0
@@ -381,18 +462,20 @@ def gazeDataSubmit():
       FIXATIONS.append(fixationFilter(_g, FEATURES[_gIdx]))
       _gIdx += 1
     print("FIXATIONS LEN:%d"%len(FIXATIONS))
-    wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(FIXATIONS))
-    wf.close()
+    makeJSON("./static/output/fixation.json", FIXATIONS)
+    # wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(FIXATIONS))
+    # wf.close()
 
     _fxIdx = 0
     for _fx in FIXATIONS:
       RANDOM_DATA_LIST.append(makeRandomPos(len(_fx), FEATURES[_fxIdx]))
       _fxIdx += 1
     print("RANDOM_DATA_LIST LEN:%d"%len(RANDOM_DATA_LIST))
-    wf = open("./static/output/raw_random.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(RANDOM_DATA_LIST))
-    wf.close()
+    makeJSON("./static/output/raw_random.json", RANDOM_DATA_LIST)
+    # wf = open("./static/output/raw_random.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(RANDOM_DATA_LIST))
+    # wf.close()
 
     for i in range(0, len(GAZE_DATA_LIST)):
       SPATIAL_VARIANCES.append(calcSpatialVariation(GAZE_DATA_LIST[i], RANDOM_DATA_LIST[i], meanValue[i]))
@@ -409,10 +492,11 @@ def gazeDataSubmit():
       _sp = SPATIAL_VARIANCES[i]
       analysis_result.append([_id, _feat, _class, _name, _sp])
     print("analysis_result LEN:%d"%len(analysis_result))
-    wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
-    wf.write(json.dumps(analysis_result))
-    wf.close()
-    
+    makeJSON("./static/output/spatial_variance.json", analysis_result)
+    # wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
+    # wf.write(json.dumps(analysis_result))
+    # wf.close()
+
     # setFeaturePath("center-bias", "002")
     # setGazePath("t_sb_1", "002")
     # setStimulusPath("002")
