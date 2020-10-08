@@ -8,16 +8,15 @@ function LineChart(props) {
   useEffect(() => {
     if (typeof data !== 'object' || data.length === 0)
       return;
-    var margin = {top: 10, right: 50, bottom: 20, left: 60},
+    var margin = {top: 10, right: 50, bottom: 20, left: 30},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
   
     var svg = d3.select(svgRef.current)
       .attr('width', width)
-      .attr('height', height);
-    
-    svg.append('g').attr("transform",
-      "translate(" + margin.left + "," + margin.top + ")");
+      .attr('height', height)
+      .append('g').attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
     // Add X axis --> it is a date format
     var xMin = d3.min(data, (d => parseInt(d.x)));
@@ -69,13 +68,10 @@ function LineChart(props) {
         .style("opacity", 0)
 
     var focusLine = svg
-      .append('path')
-        .append("g")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr('stroke-width', 1.5)
+      .append('line')
+        .style("stroke", "gray")
+        .style('stroke-width', 2)
         .style("opacity", 0)
-
 
     
     // Create the text that travels along the curve of chart
@@ -136,9 +132,9 @@ function LineChart(props) {
     
     // What happens when the mouse move -> show the annotations at the right positions.
     function mouseover() {
-      focus.style("opacity", 1)
-      focusText.style("opacity",1)
+      // focus.style("opacity", 1)
       focusLine.style("opacity",1)
+      focusText.style("opacity",1)
     }
 
     function mousemove() {
@@ -148,27 +144,23 @@ function LineChart(props) {
       var my = d3.mouse(this)[1];
       
       var selectedData = data[i];
-      focus
-        .attr("cx", x(selectedData.x))
-        .attr("cy", v(selectedData.v));
+      // focus
+      //   .attr("cx", x(selectedData.x))
+      //   .attr("cy", v(selectedData.v));
+      focusLine
+        .attr("x1", 0)
+        .attr("y1", my)
+        .attr("x2", drawWidth)
+        .attr("y2", my);
+
       focusText
         // .html(`x:${selectedData.x}  -  y:${selectedData.y}`)
         .html(`v:${my}`)
         .attr("x", x(selectedData.x)+15)
         .attr("y", my);
-      
-      var _lineData = getHoriData(my, xMax);
-      console.log(_lineData);
-      svg.append("path")
-        .datum(_lineData)
-        .attr("d", d3.line()
-          .x(function(d) {return x(d.x); })
-          .y(function(d) {return 100; })
-        );
-
     }
     function mouseout() {
-      focus.style("opacity", 0)
+      // focus.style("opacity", 0)
       focusText.style("opacity", 0)
     }
   });
