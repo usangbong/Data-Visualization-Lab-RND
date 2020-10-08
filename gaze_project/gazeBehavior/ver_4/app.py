@@ -139,6 +139,7 @@ def loadEyeMovementDataFile(_path, _feat):
   rf.close()
   
   for _g in _gazeData:
+    _t = int(_g[0])
     _gx = int(math.trunc(float(_g[1])))
     _gy = int(math.trunc(float(_g[2])))
     # print("x: %d"%_gx)
@@ -146,7 +147,7 @@ def loadEyeMovementDataFile(_path, _feat):
     _gf = float(_feat[_gy][_gx])
     _gx = float(_g[1])
     _gy = float(_g[2])
-    _gaze.append([_gx, _gy, _gf])
+    _gaze.append([_t, _gx, _gy, _gf])
   return _gaze
   
 def fixationFilter(_gazeData, _feat):
@@ -155,6 +156,7 @@ def fixationFilter(_gazeData, _feat):
   prev_t = -1
   fixPts = []
   pts = []
+  print(_gazeData[0])
   for _p in _gazeData:
     cur_t = int(_p[0])
     if prev_t == -1:
@@ -176,7 +178,7 @@ def fixationFilter(_gazeData, _feat):
       sum_y += _p[1]
     sum_x = int(sum_x/len(_fix))
     sum_y = int(sum_y/len(_fix))
-    fx_feat = _feat[sum_y][sum_x]
+    fx_feat = float(_feat[sum_y][sum_x])
     _fixation.append([sum_x, sum_y, fx_feat])
   return _fixation
 
@@ -192,23 +194,23 @@ def makeRandomPos(_fixLen, _feat):
   
 def calcSpatialVariation(_fixationData, _randomData, _meanValue):
   _spatial_variance = 0
-
+  
   _deviation_squared_sum = 0
   for _v in _fixationData:
     _dev = _v[2]-_meanValue
     _deviation_squared_sum += _dev*_dev
   _variation_eye = _deviation_squared_sum/len(_fixationData)
-
+  
   _deviation_squared_sum = 0
   for _v in _randomData:
     _dev = _v[2]-_meanValue
     _deviation_squared_sum += _dev*_dev
   _variation_random = _deviation_squared_sum/len(_randomData)
-
+  
   spatial_variation = -1
   if _variation_random != 0:
     spatial_variation = _variation_eye/_variation_random
-
+  
   _spatial_variance = spatial_variation
   return _spatial_variance
 
@@ -478,7 +480,7 @@ def gazeDataSubmit():
     # wf.close()
 
     for i in range(0, len(GAZE_DATA_LIST)):
-      SPATIAL_VARIANCES.append(calcSpatialVariation(GAZE_DATA_LIST[i], RANDOM_DATA_LIST[i], meanValue[i]))
+      SPATIAL_VARIANCES.append(calcSpatialVariation(FIXATIONS[i], RANDOM_DATA_LIST[i], meanValue[i]))
     print("SPATIAL_VARIANCES LEN:%d"%len(RANDOM_DATA_LIST))
 
     analysis_result = []
