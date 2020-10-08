@@ -11,7 +11,8 @@ class Analysis extends React.Component {
       stimulusPath: "",
       // powerSpectra: {},
       rawGazeData: [],
-      fixationData: [],
+      fixations: [],
+      rndFixations: [],
       rawRndData: [],
       lineChartData: []
     };
@@ -31,6 +32,7 @@ class Analysis extends React.Component {
   componentDidMount() {
     axios.get(`http://${window.location.hostname}:5000/static/output/selected_stimulus_path.json`)
       .then(response => {
+        // console.log(response.data);
         this.setState({
           stimulusPath: 
             response.data
@@ -53,23 +55,32 @@ class Analysis extends React.Component {
     //   });
     axios.get(`http://${window.location.hostname}:5000/static/output/selected_fixation.json`)
       .then(response => {
-        // var _data = response.data;
-        // var processedData = [];
-        // for(var i=0; i<_data.length; i++){
-        //   processedData.push([parseFloat(_data[i][1]), parseFloat(_data[i][2])]);
-        // }
-        //console.log(processedData);
+        var _data = response.data;
+        var _fixs = [];
+        for(var i=0; i<_data.length; i++){
+          _fixs.push([_data[i][0], _data[i][1]]);
+        }
+        // console.log(response.data);
+        // console.log(_fixs);
         this.setState({
-          rawGazeData: 
-            //processedData
-            response.data
+          fixations: 
+            _fixs
+            // response.data
         });
       });
     axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_random.json`)
       .then(response => {
+        var _data = response.data;
+        var _rndFixs = [];
+        for(var i=0; i<_data.length; i++){
+          _rndFixs.push([_data[i][0], _data[i][1]]);
+        }
+        // console.log(response.data);
+        // console.log(_rndFixs);
         this.setState({
-          rawRndData:
-            response.data
+          rndFixations:
+            // response.data
+            _rndFixs
         });
       });
     // axios.get('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv')
@@ -86,7 +97,7 @@ class Analysis extends React.Component {
         //   });
         //   data.push(row);
         // }
-        console.log(response.data);
+        // console.log(response.data);
         const pData = [];
         const data = response.data;
         var tVal = [];
@@ -105,7 +116,7 @@ class Analysis extends React.Component {
           tCount++;
         }
         tVal.push(tCount);
-        console.log(tVal);
+        // console.log(tVal);
         var velocity = [];
         var tValIdx = 0;
         var tValCount = tVal[tValIdx];
@@ -129,7 +140,7 @@ class Analysis extends React.Component {
           }
           pData.push(row);
         }
-        console.log(pData);
+        // console.log(pData);
         this.setState({
           lineChartData:
             pData
@@ -138,9 +149,8 @@ class Analysis extends React.Component {
   }
 
   render() {
-    // const { stimulusPath, powerSpectra, rawGazeData, rawRndData } = this.state;
-    const { stimulusPath, rawGazeData, rawRndData, lineChartData } = this.state;
-    console.log(rawGazeData);
+    const { stimulusPath, fixations, rawRndData, rndFixations, lineChartData } = this.state;
+    // console.log(rawGazeData);
     return (
       <>
         <div className="page-header">
@@ -153,7 +163,7 @@ class Analysis extends React.Component {
             <VisImage
               width="960" height="auto"
               image={`http://${window.location.hostname}:5000${stimulusPath}`}
-              circles={rawGazeData}
+              circles={fixations}
             />
           </div>
           <br></br>
@@ -161,7 +171,7 @@ class Analysis extends React.Component {
             <VisImage
               width="960" height="auto"
               image={`http://${window.location.hostname}:5000${stimulusPath}`}
-              circles={rawRndData}
+              circles={rndFixations}
             />
           </div>
         </div>
