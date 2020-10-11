@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import axios from 'axios';
 
 function LineChart(props) {
   const { width, height, data } = props;
@@ -186,12 +187,29 @@ function LineChart(props) {
     function mouseup(){
       var mu_x = d3.mouse(this)[0];
       var mu_y = d3.mouse(this)[1];
+      var velocity = drawHeight - mu_y;
+      var parseVelocity = velocity * 2 * 10;
+
       console.log("mouseup: "+mu_x+", "+mu_y);
       focusLine
         .attr("x1", 0)
         .attr("y1", mu_y)
         .attr("x2", drawWidth)
         .attr("y2", mu_y);
+
+      const data = new FormData();
+      data.set('velocity', parseVelocity);
+
+      axios.post(`http://${window.location.hostname}:5000/api/analysis/velocity`, data)
+        .then(response => {
+          if (response.data.status === 'success') {
+            alert('change velocity');
+          } else if (response.data.status === 'failed') {
+            alert(`Failed change velocity - ${response.data.reason}`);
+          }
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+      });
     }
   });
 
