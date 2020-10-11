@@ -4,10 +4,12 @@ function LineChart(props) {
   const { width, height, data } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-
+  
   useEffect(() => {
     if (typeof data !== 'object' || data.length === 0)
       return;
+    var clickEvent = 0;
+
     var margin = {top: 10, right: 50, bottom: 20, left: 30},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
@@ -114,7 +116,9 @@ function LineChart(props) {
       .attr('height', drawHeight)
       .on('mouseover', mouseover)
       .on('mousemove', mousemove)
-      .on('mouseout', mouseout);
+      .on('mouseout', mouseout)
+      .on('mousedown', mousedown)
+      .on('mouseup', mouseup);
 
     function getHoriData(_y, _xMax){
       const _data = [];
@@ -128,7 +132,6 @@ function LineChart(props) {
       }
       return _data;
     }
-
     
     // What happens when the mouse move -> show the annotations at the right positions.
     function mouseover() {
@@ -142,26 +145,53 @@ function LineChart(props) {
       var x0 = x.invert(d3.mouse(this)[0]);
       var i = bisect(data, x0, 1);
       var my = d3.mouse(this)[1];
+      var velocity = drawHeight - my;
       
       var selectedData = data[i];
       // focus
       //   .attr("cx", x(selectedData.x))
       //   .attr("cy", v(selectedData.v));
-      focusLine
-        .attr("x1", 0)
-        .attr("y1", my)
-        .attr("x2", drawWidth)
-        .attr("y2", my);
+      if(clickEvent == 0){
+        focusLine
+          .attr("x1", 0)
+          .attr("y1", my)
+          .attr("x2", drawWidth)
+          .attr("y2", my);
 
-      focusText
-        // .html(`x:${selectedData.x}  -  y:${selectedData.y}`)
-        .html(`v:${my}`)
-        .attr("x", x(selectedData.x)+15)
-        .attr("y", my);
+        focusText
+          // .html(`x:${selectedData.x}  -  y:${selectedData.y}`)
+          .html(`velocity: ${velocity.toFixed(3)}`)
+          .attr("x", x(selectedData.x)+15)
+          .attr("y", my-7);
+      }
     }
     function mouseout() {
       // focus.style("opacity", 0)
-      focusText.style("opacity", 0)
+      if(clickEvent == 0){
+        focusLine.style("opacity", 0);
+        focusText.style("opacity", 0);
+      }else{
+        focusLine.style("opacity", 1);
+        focusText.style("opacity", 1);
+      }
+    }
+
+    function mousedown(){
+      var md_x = d3.mouse(this)[0];
+      var md_y = d3.mouse(this)[1];
+      clickEvent = 1;
+      // console.log("mousedown: "+md_x+", "+md_y);
+    }
+
+    function mouseup(){
+      var mu_x = d3.mouse(this)[0];
+      var mu_y = d3.mouse(this)[1];
+      console.log("mouseup: "+mu_x+", "+mu_y);
+      focusLine
+        .attr("x1", 0)
+        .attr("y1", mu_y)
+        .attr("x2", drawWidth)
+        .attr("y2", mu_y);
     }
   });
 
