@@ -29,6 +29,7 @@ FIXATIONS = []
 meanValue = []
 RANDOM_DATA_LIST = []
 SPATIAL_VARIANCES = []
+selectedIdx = 0
 
 #data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
 # gazeData = []
@@ -411,8 +412,34 @@ if __name__ == '__main__':
   app.run(debug=True)
 CORS(app)
 
+@app.route('/api/analysis/velocity', methods=['POST'])
+def changeVelocity():
+  response = {}
+  
+  try:
+    _velocity = float(request.form['velocity'])
+    changedFixation = fixationFilter(GAZE_DATA_LIST[selectedIdx], UIDS[0], FEATURES[selectedIdx], _velocity)
+    FIXATIONS.pop(selectedIdx)
+    FIXATIONS.insert(selectedIdx, changedFixation)
+    makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
+
+    rndFixations = makeRandomPos(len(FIXATIONS[selectedIdx]), FEATURES[selectedIdx])
+    RANDOM_DATA_LIST.pop(selectedIdx)
+    RANDOM_DATA_LIST.insert(selectedIdx, rndFixations)
+    makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
+    
+    
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
+
 @app.route('/api/sp_variance/select', methods=['POST'])
 def selectedDataSubmit():
+  global selectedIdx
   response = {}
 
   try:
@@ -442,7 +469,6 @@ def selectedDataSubmit():
     # make random data JSON file
     makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
     # make bispectra image files
-
 
     response['status'] = 'success'
   except Exception as e:
