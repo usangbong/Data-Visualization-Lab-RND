@@ -1,13 +1,16 @@
-from flask import *
-from flask_cors import CORS
 import sys
 import os
 import csv
-import numpy as np
 import math
 import json
-import pandas as pd
 from random import *
+
+import numpy as np
+import pandas as pd
+from flask import *
+from flask_cors import CORS
+
+import src.py.ivt as ivt
 
 #from src.py import Krieger
 
@@ -28,7 +31,6 @@ RANDOM_DATA_LIST = []
 SPATIAL_VARIANCES = []
 
 #data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
-
 # gazeData = []
 # randomData = []
 # gazeFeat = []
@@ -150,36 +152,88 @@ def loadEyeMovementDataFile(_path, _feat):
     _gaze.append([_t, _gx, _gy, _gf])
   return _gaze
   
-def fixationFilter(_gazeData, _feat):
+def fixationFilter(_gazeData, _uid, _feat, _vt):
   _fixation = []
+  v_threshold = _vt
 
-  prev_t = -1
-  fixPts = []
-  pts = []
-  print(_gazeData[0])
+  _tempData = []
+  _idCount = 0
+  _tStamp = 0
+  _tCount = 0.0
   for _p in _gazeData:
-    cur_t = int(_p[0])
-    if prev_t == -1:
-      prev_t = cur_t
-    if prev_t != cur_t:
-      fixPts.append(pts)
-      pts = []
+    _no = _idCount
+    _id = _uid
+    _timestamp = _tStamp
+    _timecount = _tCount
+    _x = float(_p[1])
+    _y = float(_p[2])
+    _tempData.append([_no, _id, _timestamp, _timecount, _x, _y])
+    _idCount += 1
+    _tCount += 0.1
+    if _idCount%9 == 0:
+      _tStamp += 1
+      _tCount += 0.0
+  df = pd.DataFrame(_tempData, columns = ['no', 'userid', 'timestamp', 'timecount', 'x','y'])
+  # print(df)
+  _data = np.array(df)
+  _data_xs = np.unique(_data[:,ivt.x])
+  _data_ys = np.unique(_data[:,ivt.y])
+  _user_ids = np.unique(_data[:,ivt.user_id])
 
-    pts.append([float(_p[1]), float(_p[2])])
-    prev_t = cur_t
-  fixPts.append(pts)
-  pts = []
+  for u in _user_ids:
+    for q in range(1,2):
+      sub_data = _data
+      sub2d = np.asarray(sub_data).reshape(len(sub_data),6)
+      centroidsX, centroidsY, time0, time1, fixList, fixations = ivt.ivt(sub2d, v_threshold)
 
-  for _fix in fixPts:
-    sum_x = 0
-    sum_y = 0
-    for _p in _fix:
-      sum_x += _p[0]
-      sum_y += _p[1]
-    sum_x = int(sum_x/len(_fix))
-    sum_y = int(sum_y/len(_fix))
-    fx_feat = float(_feat[sum_y][sum_x])
-    _fixation.append([sum_x, sum_y, fx_feat])
+  Tdata = {'X':centroidsX,'Y':centroidsY, 'Time':time0}
+  df_IVT = pd.DataFrame(Tdata)
+
+  n_clusters = len(fixations)
+  clusters = []
+
+  _fidxrclu = 0
+  for _fpi in range(0, n_clusters):
+    fpts = []
+    fpts.append(df_IVT['X'][_fpi])
+    fpts.append(df_IVT['Y'][_fpi])
+    fpts.append(df_IVT['Time'][_fpi])
+    clusters.append(fpts)
+
+  for _clu in clusters:
+    _x = int(_clu[0])
+    _y = int(_clu[1])
+    _f = float(_feat[_y][_x])
+    _fixation.append([_x, _y, _f])
+
+  # prev_t = -1
+  # fixPts = []
+  # pts = []
+  # # print(_gazeData[0])
+  # for _p in clusters:
+  #   cur_t = int(_p[0])
+  #   if prev_t == -1:
+  #     prev_t = cur_t
+  #   if prev_t != cur_t:
+  #     fixPts.append(pts)
+  #     pts = []
+
+  #   pts.append([float(_p[1]), float(_p[2])])
+  #   prev_t = cur_t
+  # fixPts.append(pts)
+  # pts = []
+
+  # for _fix in fixPts:
+  #   sum_x = 0
+  #   sum_y = 0
+  #   for _p in _fix:
+  #     sum_x += _p[0]
+  #     sum_y += _p[1]
+  #   sum_x = int(sum_x/len(_fix))
+  #   sum_y = int(sum_y/len(_fix))
+  #   fx_feat = float(_feat[sum_y][sum_x])
+  #   _fixation.append([sum_x, sum_y, fx_feat])
+
   return _fixation
 
 def makeRandomPos(_fixLen, _feat):
@@ -461,7 +515,7 @@ def gazeDataSubmit():
 
     _gIdx = 0
     for _g in GAZE_DATA_LIST:
-      FIXATIONS.append(fixationFilter(_g, FEATURES[_gIdx]))
+      FIXATIONS.append(fixationFilter(_g, UIDS[0], FEATURES[_gIdx], 800))
       _gIdx += 1
     print("FIXATIONS LEN:%d"%len(FIXATIONS))
     makeJSON("./static/output/fixation.json", FIXATIONS)
