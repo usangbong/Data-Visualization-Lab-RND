@@ -14,9 +14,8 @@ public class OfficeArea : MonoBehaviour
     //Delete
     public GameObject cellObj;
 
-    List<List<Cell>> cells = new List<List<Cell>>();
     //생성 Cell List
-    //Cell[,] cells = new Cell[5,8];
+    List<List<Cell>> cells = new List<List<Cell>>();
 
     //Area의 max, min 좌표
     public static float minX = -12f;
@@ -42,6 +41,7 @@ public class OfficeArea : MonoBehaviour
                 //Test Code
                 Transform obj = cellObj.transform.GetChild(i * x_Count + j);
                 Cell cell = new Cell(i * x_Count + j, obj.position.x, obj.position.z, cellObj.transform.GetChild(i * x_Count + j).gameObject);
+
                 cells[i].Add(cell);
             }
         }
@@ -69,45 +69,37 @@ public class OfficeArea : MonoBehaviour
 
         int idx = cell.getIdx();
 
-        int x_count = (int)(horizontalLength / x_Size);
-        int y_count = (int)(verticalLength / z_Size);
+        int x_cnt = (int)(horizontalLength / x_Size);
+        int z_cnt = (int)(verticalLength / z_Size);
 
         Cell tempCell;
-        for(int i=0;i<x_count;i++)
+        for(int i=0;i<x_cnt;i++)
         {
             if(!cell.isOverObject(obj, (int)OverState.OVER_RIGHT))
             {
                 tempCell = FindCellByIndex(idx + 1 * (i + 1));
                 tempCell.AddObject(obj);
-                //Delete
-                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.white;
             }
 
             if(!cell.isOverObject(obj, (int)OverState.OVER_LEFT))
             {
                 tempCell = FindCellByIndex(idx - 1 * (i + 1));
                 tempCell.AddObject(obj);
-                //Delete
-                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.black;
             }
         }
 
-        for(int j=0;j<y_count;j++)
+        for(int j=0;j<z_cnt;j++)
         {
             if(!cell.isOverObject(obj, (int)OverState.OVER_UP))
             {
                 tempCell = FindCellByIndex(idx - 8 * (j + 1));
                 tempCell.AddObject(obj);
-                //Delete
-                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.green;
             }
 
             if(!cell.isOverObject(obj, (int)OverState.OVER_DOWN))
             {
                 tempCell = FindCellByIndex(idx + 8 * (j + 1));
                 tempCell.AddObject(obj);
-                //Delete
-                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.gray;
             }
         }
     }

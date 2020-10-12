@@ -1505,7 +1505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a63512a092ae140aec5e61acb55df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 35
+  action: 7
   area: {fileID: 263094699}
   random: 0
 --- !u!1 &657259862

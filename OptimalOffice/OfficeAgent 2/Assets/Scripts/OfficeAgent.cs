@@ -26,6 +26,9 @@ public class OfficeAgent : MonoBehaviour //Agent로
         gameObject.transform.position = cell.getCenterPos();
 
         area.SearchOverTheCellObjectAndAddObjectToCell(cell, transform.GetChild(0).gameObject);
+
+        if (area.isHorizontalSnap(cell.getIdx())) Debug.Log("Horizontal");
+        if (area.isVerticalSnap(cell.getIdx())) Debug.Log("Vertical");
     }
 
     /*public OfficeArea area;
