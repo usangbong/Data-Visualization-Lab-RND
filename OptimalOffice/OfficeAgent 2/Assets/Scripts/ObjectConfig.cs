@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectConfig
+public class ObjectConfig : MonoBehaviour
 {
     //Object의 크기
     public float horizontalLength = 0;

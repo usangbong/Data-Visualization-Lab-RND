@@ -8,9 +8,19 @@ using UnityEngine.Serialization;
 using System;
 using System.IO;
 
-public class OfficeAgent : Agent
+public class OfficeAgent : MonoBehaviour //Agent로
 {
+    public int action;
     public OfficeArea area;
+
+    private void Start()
+    {
+        Cell cell = area.FindCellByIndex(action);
+        cell.AddObject(gameObject);
+        cell.cellObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
+    }
+
+    /*public OfficeArea area;
     public PlayerMove player;
     public Transform obj;
 
@@ -32,6 +42,7 @@ public class OfficeAgent : Agent
 
         Cell cell = area.FindCellByIndex(System.Convert.ToInt32(action));
         cell.AddObject(gameObject);
+        transform.position = cell.getCenterPos();
         if (cell.isOverObject(gameObject) == (int)OfficeArea.OverState.NOT_OVER) AddReward(-1f);
 
         area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
@@ -66,5 +77,5 @@ public class OfficeAgent : Agent
             }
             RequestDecision();
         }
-    }
+    }*/
 }

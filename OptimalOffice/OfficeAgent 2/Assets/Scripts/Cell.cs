@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell
+public class Cell : MonoBehaviour
 {
     //Cell의 index
     int idx;
@@ -13,9 +13,11 @@ public class Cell
 
     //Delete
     GameObject tempObj;
+    //Delete
+    public GameObject cellObj;
 
     //생성자
-    public Cell(int _idx, float c_x, float c_z, GameObject _temp) //_temp Delete
+    public Cell(int _idx, float c_x, float c_z, GameObject _temp, GameObject _cell) //_temp Delete, _cell
     {
         idx = _idx;
 
@@ -37,7 +39,13 @@ public class Cell
         //Delete
         tempObj = _temp;
         tempObj.transform.position = centerPos;
+
+        //Delete
+        cellObj = _cell;
+        cellObj.GetComponent<MeshRenderer>().material.color = Color.red;
     }
+
+    public Vector3 getCenterPos() { return centerPos; }
 
     //index 반환
     public int getIdx() { return idx; }
