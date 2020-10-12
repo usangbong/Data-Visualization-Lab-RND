@@ -13,11 +13,17 @@ public class OfficeAgent : MonoBehaviour //Agent로
     public int action;
     public OfficeArea area;
 
+    public bool random;
+
     private void Start()
     {
+        if (random) action = UnityEngine.Random.Range(0, 40);
+
         Cell cell = area.FindCellByIndex(action);
         cell.AddObject(gameObject);
         cell.cellObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
+
+        gameObject.transform.position = cell.getCenterPos();
     }
 
     /*public OfficeArea area;

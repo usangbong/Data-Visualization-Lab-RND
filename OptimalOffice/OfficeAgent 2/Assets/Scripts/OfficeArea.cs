@@ -12,8 +12,6 @@ public class OfficeArea : MonoBehaviour
     public static float x_Size, z_Size;
 
     //Delete
-    public GameObject tempObj;
-    //Delete
     public GameObject cellObj;
 
     List<List<Cell>> cells = new List<List<Cell>>();
@@ -40,7 +38,10 @@ public class OfficeArea : MonoBehaviour
             for(int j=0;j<8;j++)
             {
                 //index (0~39), x, z의 가운데 좌표
-                Cell cell = new Cell(i * x_Count + j, (minX + x_Size / 2) + (j * x_Size), (maxZ - z_Size / 2) - (i * z_Size), Instantiate(tempObj), cellObj.transform.GetChild(i * x_Count + j).gameObject); //tempObj delete
+                //Cell cell = new Cell(i * x_Count + j, (minX + x_Size / 2) + (j * x_Size), (maxZ - z_Size / 2) - (i * z_Size), Instantiate(tempObj), cellObj.transform.GetChild(i * x_Count + j).gameObject); //tempObj delete
+                //Test Code
+                Transform obj = cellObj.transform.GetChild(i * x_Count + j);
+                Cell cell = new Cell(i * x_Count + j, obj.position.x, obj.position.z, cellObj.transform.GetChild(i * x_Count + j).gameObject);
                 cells[i].Add(cell);
             }
         }

@@ -12,12 +12,10 @@ public class Cell : MonoBehaviour
     List<GameObject> objList;
 
     //Delete
-    GameObject tempObj;
-    //Delete
     public GameObject cellObj;
 
     //생성자
-    public Cell(int _idx, float c_x, float c_z, GameObject _temp, GameObject _cell) //_temp Delete, _cell
+    public Cell(int _idx, float c_x, float c_z, GameObject _cell) // Delete, _cell
     {
         idx = _idx;
 
@@ -35,10 +33,6 @@ public class Cell : MonoBehaviour
 
         //중심 좌표 생성
         centerPos = (minPos + maxPos) / 2.0f;
-
-        //Delete
-        tempObj = _temp;
-        tempObj.transform.position = centerPos;
 
         //Delete
         cellObj = _cell;
