@@ -32,7 +32,7 @@ public class OfficeAgent : Agent
 
         Cell cell = area.FindCell(System.Convert.ToInt32(action));
 
-        transform.position = cell.getObjectPos(gameObject);
+        cell.AddObject(gameObject);
     }
 
     private void FixedUpdate()
