@@ -122,4 +122,18 @@ public class OfficeArea : MonoBehaviour
             }
         }
     }
+
+    public bool isHorizontalSnap(int idx)
+    {
+        if (idx >= 0 && idx <= x_Count - 1) return true;
+        else if (idx >= (x_Count * z_Count) - x_Count && idx <= (x_Count * z_Count) - 1) return true;
+        else return false;
+    }
+
+    public bool isVerticalSnap(int idx)
+    {
+        if (idx % x_Count == 0) return true;
+        else if (idx % x_Count == x_Count - 1) return true;
+        else return false;
+    }
 }

@@ -35,6 +35,18 @@ public class OfficeAgent : Agent
         if (cell.isOverObject(gameObject) == (int)OfficeArea.OverState.NOT_OVER) AddReward(-1f);
 
         area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
+
+        if(gameObject.GetComponent<ObjectConfig>().isHorizontalSnap)
+        {
+            if (area.isHorizontalSnap(cell.getIdx())) AddReward(1f);
+            else AddReward(-1f);
+        }
+
+        if(gameObject.GetComponent<ObjectConfig>().isVerticalSnap)
+        {
+            if (area.isVerticalSnap(cell.getIdx())) AddReward(1f);
+            else AddReward(-1f);
+        }
     }
 
     private void FixedUpdate()
