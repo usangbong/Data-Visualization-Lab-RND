@@ -1,23 +1,25 @@
 import React, { useEffect, useRef } from 'react';
+import axios from 'axios';
 
 function LineChart(props) {
   const { width, height, data } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-
+  
   useEffect(() => {
     if (typeof data !== 'object' || data.length === 0)
       return;
-    var margin = {top: 10, right: 50, bottom: 20, left: 60},
+    var clickEvent = 0;
+
+    var margin = {top: 10, right: 50, bottom: 20, left: 30},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
   
     var svg = d3.select(svgRef.current)
       .attr('width', width)
-      .attr('height', height);
-    
-    svg.append('g').attr("transform",
-      "translate(" + margin.left + "," + margin.top + ")");
+      .attr('height', height)
+      .append('g').attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
     // Add X axis --> it is a date format
     var xMin = d3.min(data, (d => parseInt(d.x)));
@@ -69,13 +71,10 @@ function LineChart(props) {
         .style("opacity", 0)
 
     var focusLine = svg
-      .append('path')
-        .append("g")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr('stroke-width', 1.5)
+      .append('line')
+        .style("stroke", "gray")
+        .style('stroke-width', 2)
         .style("opacity", 0)
-
 
     
     // Create the text that travels along the curve of chart
@@ -118,7 +117,9 @@ function LineChart(props) {
       .attr('height', drawHeight)
       .on('mouseover', mouseover)
       .on('mousemove', mousemove)
-      .on('mouseout', mouseout);
+      .on('mouseout', mouseout)
+      .on('mousedown', mousedown)
+      .on('mouseup', mouseup);
 
     function getHoriData(_y, _xMax){
       const _data = [];
@@ -132,13 +133,12 @@ function LineChart(props) {
       }
       return _data;
     }
-
     
     // What happens when the mouse move -> show the annotations at the right positions.
     function mouseover() {
-      focus.style("opacity", 1)
-      focusText.style("opacity",1)
+      // focus.style("opacity", 1)
       focusLine.style("opacity",1)
+      focusText.style("opacity",1)
     }
 
     function mousemove() {
@@ -146,30 +146,70 @@ function LineChart(props) {
       var x0 = x.invert(d3.mouse(this)[0]);
       var i = bisect(data, x0, 1);
       var my = d3.mouse(this)[1];
+      var velocity = drawHeight - my;
       
       var selectedData = data[i];
-      focus
-        .attr("cx", x(selectedData.x))
-        .attr("cy", v(selectedData.v));
-      focusText
-        // .html(`x:${selectedData.x}  -  y:${selectedData.y}`)
-        .html(`v:${my}`)
-        .attr("x", x(selectedData.x)+15)
-        .attr("y", my);
-      
-      var _lineData = getHoriData(my, xMax);
-      console.log(_lineData);
-      svg.append("path")
-        .datum(_lineData)
-        .attr("d", d3.line()
-          .x(function(d) {return x(d.x); })
-          .y(function(d) {return 100; })
-        );
+      // focus
+      //   .attr("cx", x(selectedData.x))
+      //   .attr("cy", v(selectedData.v));
+      if(clickEvent == 0){
+        focusLine
+          .attr("x1", 0)
+          .attr("y1", my)
+          .attr("x2", drawWidth)
+          .attr("y2", my);
 
+        focusText
+          // .html(`x:${selectedData.x}  -  y:${selectedData.y}`)
+          .html(`velocity: ${velocity.toFixed(3)}`)
+          .attr("x", x(selectedData.x)+15)
+          .attr("y", my-7);
+      }
     }
     function mouseout() {
-      focus.style("opacity", 0)
-      focusText.style("opacity", 0)
+      // focus.style("opacity", 0)
+      if(clickEvent == 0){
+        focusLine.style("opacity", 0);
+        focusText.style("opacity", 0);
+      }else{
+        focusLine.style("opacity", 1);
+        focusText.style("opacity", 1);
+      }
+    }
+
+    function mousedown(){
+      var md_x = d3.mouse(this)[0];
+      var md_y = d3.mouse(this)[1];
+      clickEvent = 1;
+      // console.log("mousedown: "+md_x+", "+md_y);
+    }
+
+    function mouseup(){
+      var mu_x = d3.mouse(this)[0];
+      var mu_y = d3.mouse(this)[1];
+      var velocity = drawHeight - mu_y;
+      var parseVelocity = velocity * 2 * 10;
+
+      console.log("mouseup: "+mu_x+", "+mu_y);
+      focusLine
+        .attr("x1", 0)
+        .attr("y1", mu_y)
+        .attr("x2", drawWidth)
+        .attr("y2", mu_y);
+
+      const data = new FormData();
+      data.set('velocity', parseVelocity);
+
+      axios.post(`http://${window.location.hostname}:5000/api/analysis/velocity`, data)
+        .then(response => {
+          if (response.data.status === 'success') {
+            alert('change velocity');
+          } else if (response.data.status === 'failed') {
+            alert(`Failed change velocity - ${response.data.reason}`);
+          }
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+      });
     }
   });
 

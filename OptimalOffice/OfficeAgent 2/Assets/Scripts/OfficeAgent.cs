@@ -8,133 +8,76 @@ using UnityEngine.Serialization;
 using System;
 using System.IO;
 
-public class OfficeAgent : Agent
+public class OfficeAgent : MonoBehaviour //Agent로
 {
+    public int action;
     public OfficeArea area;
+
+    public bool random;
+
+    float time = 0;
+
+    private void Start()
+    {
+        if (random) action = UnityEngine.Random.Range(0, 40);
+
+        Cell cell = area.FindCellByIndex(action);
+        cell.AddObject(gameObject);
+        cell.cellObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
+
+        gameObject.transform.position = cell.getCenterPos();
+
+        area.SearchOverTheCellObjectAndAddObjectToCell(cell, transform.GetChild(0).gameObject);
+    }
+
+    private void Update()
+    {
+        time += Time.deltaTime;
+
+        if(time > 3f)
+        {
+            area.FindDuplicateCellAndDeductionToObject();
+        }
+    }
+
+    /*public OfficeArea area;
     public PlayerMove player;
-    public float timeBetweenDecisionsAtInference;
     public Transform obj;
-    float m_TimeSinceDecision;
-
-    int cnt = 0;
-
-    bool begin = false;
 
     public Camera renderCamera;
-    
-    public bool maskActions = true;
-
-    const int k_NoAction = 0;
-    const int k_Forward = 1;
-    const int k_Back = 2;
-    const int k_Left = 3;
-    const int k_Right = 4;
-    
-    List<Vector3> posList = new List<Vector3>();
-
+   
     public override void Initialize()
     {
-        Debug.Log(obj.name);
-        player.resetPos();
+
     }
 
     public override void OnEpisodeBegin()
     {
-        cnt = 0;
 
-        if (begin) area.AreaReset();
-
-        begin = true;
-    }
-
-    public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
-    {
-        if(maskActions)
-        {
-            var max_posX = 12;
-            var min_posX = -12;
-            var max_posZ = 7.5f;
-            var min_posZ = -7.5f;
-
-            var positionX = Mathf.Round(obj.position.x * 10) * 0.1f;
-            var positionZ = Mathf.Round(obj.position.z * 10) * 0.1f;
-
-            if (positionX == min_posX)
-            {
-                actionMasker.SetMask(0, new[] { k_Left });
-            }
-
-            if (positionX == max_posX)
-            {
-                actionMasker.SetMask(0, new[] { k_Right });
-            }
-
-            if (positionZ == min_posZ)
-            {
-                actionMasker.SetMask(0, new[] { k_Back });
-            }
-
-            if (positionZ == max_posZ)
-            {
-                actionMasker.SetMask(0, new[] { k_Forward });
-            }
-        }
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        AddReward(0.005f);
-
         float action = vectorAction[0];
 
-        var targetPos = obj.position;
-        switch (action)
+        Cell cell = area.FindCellByIndex(System.Convert.ToInt32(action));
+        cell.AddObject(gameObject);
+        transform.position = cell.getCenterPos();
+        if (cell.isOverObject(gameObject) == (int)OfficeArea.OverState.NOT_OVER) AddReward(-1f);
+
+        area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
+
+        if(gameObject.GetComponent<ObjectConfig>().isHorizontalSnap)
         {
-            case k_NoAction:
-                break;
-            case k_Right:
-                targetPos = obj.position + new Vector3(0.1f, 0, 0);
-                obj.position = targetPos;
-                break;
-            case k_Left:
-                targetPos = obj.position + new Vector3(-0.1f, 0, 0);
-                obj.position = targetPos;
-                break;
-            case k_Forward:
-                targetPos = obj.position + new Vector3(0, 0, 0.1f);
-                obj.position = targetPos;
-                break;
-            case k_Back:
-                targetPos = obj.position + new Vector3(0, 0, -0.1f);
-                obj.position = targetPos;
-                break;
-            default:
-                throw new ArgumentException("Invalid action value");
+            if (area.isHorizontalSnap(cell.getIdx())) AddReward(1f);
+            else AddReward(-1f);
         }
 
-        if(obj.position.x > 12 || obj.position.x < -12 || obj.position.z > 7.5 || obj.position.z < -7.5)
+        if(gameObject.GetComponent<ObjectConfig>().isVerticalSnap)
         {
-            SetReward(0f);
-            EndEpisode();
+            if (area.isVerticalSnap(cell.getIdx())) AddReward(1f);
+            else AddReward(-1f);
         }
-
-        if (player.collidingName() == obj.name)
-        {
-            AddReward(-0.3f);
-        }
-
-        if(cnt>5000)
-        {
-            SetReward(0f);
-            EndEpisode();
-        }
-
-        cnt++;
-    }
-
-    public void collidingOtherObject()
-    {
-        AddReward(-0.1f);
     }
 
     private void FixedUpdate()
@@ -154,5 +97,5 @@ public class OfficeAgent : Agent
             }
             RequestDecision();
         }
-    }
+    }*/
 }
