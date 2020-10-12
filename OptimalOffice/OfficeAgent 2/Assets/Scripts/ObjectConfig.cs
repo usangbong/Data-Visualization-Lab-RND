@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class ObjectConfig : MonoBehaviour
 {
+    public float x_Length;
+    public float y_Length;
+
     public bool snap = false;
 }
