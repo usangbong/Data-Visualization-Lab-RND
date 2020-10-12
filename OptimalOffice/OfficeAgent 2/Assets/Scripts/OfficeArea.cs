@@ -119,6 +119,7 @@ public class OfficeArea : MonoBehaviour
                     //List를 받아와서
                     objList = cells[i][j].getObjectList();
 
+                    Debug.Log(i + " " + j + " " + objList.Count);
                     //List에 존재하는 모든 Object의 Agent에 1점 감점
                     for (int k = 0; k < objList.Count; k++)
                     {

@@ -15,6 +15,8 @@ public class OfficeAgent : MonoBehaviour //Agent로
 
     public bool random;
 
+    float time = 0;
+
     private void Start()
     {
         if (random) action = UnityEngine.Random.Range(0, 40);
@@ -26,9 +28,16 @@ public class OfficeAgent : MonoBehaviour //Agent로
         gameObject.transform.position = cell.getCenterPos();
 
         area.SearchOverTheCellObjectAndAddObjectToCell(cell, transform.GetChild(0).gameObject);
+    }
 
-        if (area.isHorizontalSnap(cell.getIdx())) Debug.Log("Horizontal");
-        if (area.isVerticalSnap(cell.getIdx())) Debug.Log("Vertical");
+    private void Update()
+    {
+        time += Time.deltaTime;
+
+        if(time > 3f)
+        {
+            area.FindDuplicateCellAndDeductionToObject();
+        }
     }
 
     /*public OfficeArea area;
