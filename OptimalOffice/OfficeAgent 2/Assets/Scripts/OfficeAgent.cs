@@ -30,9 +30,11 @@ public class OfficeAgent : Agent
     {
         float action = vectorAction[0];
 
-        Cell cell = area.FindCell(System.Convert.ToInt32(action));
-
+        Cell cell = area.FindCellByIndex(System.Convert.ToInt32(action));
         cell.AddObject(gameObject);
+        if (cell.isOverObject(gameObject) == (int)OfficeArea.OverState.NOT_OVER) AddReward(-1f);
+
+        area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
     }
 
     private void FixedUpdate()

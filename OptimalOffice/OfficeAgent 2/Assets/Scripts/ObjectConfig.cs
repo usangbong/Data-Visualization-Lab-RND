@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectConfig : MonoBehaviour
+public class ObjectConfig
 {
-    public float x_Length;
-    public float y_Length;
+    //Object의 크기
+    public float horizontalLength = 0;
+    public float verticalLength = 0;
 
-    public bool snap = false;
+    //Snape 여부
+    public bool isHorizontalSnap = false;
+    public bool isVerticalSnap = false;
+
+    //Object는 중심점을 기준으로 존재하므로 원래 길이 / 2
+    public float getHorizontalLength() { return horizontalLength / 2f; }
+    public float getVerticalLength() { return verticalLength / 2f; }
 }

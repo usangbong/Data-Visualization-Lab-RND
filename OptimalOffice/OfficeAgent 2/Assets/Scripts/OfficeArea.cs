@@ -66,14 +66,35 @@ public class OfficeArea : MonoBehaviour
         int x_count = (int)(horizontalLength / x_Size);
         int y_count = (int)(verticalLength / z_Size);
 
+        Cell tempCell;
         for(int i=0;i<x_count;i++)
         {
+            if(cell.isOverObject(obj) != (int)OverState.OVER_RIGHT)
+            {
+                tempCell = FindCellByIndex(idx + 1 * (i + 1));
+                tempCell.AddObject(obj);
+            }
 
+            if(cell.isOverObject(obj) != (int)OverState.OVER_LEFT)
+            {
+                tempCell = FindCellByIndex(idx - 1 * (i + 1));
+                tempCell.AddObject(obj);
+            }
         }
 
         for(int j=0;j<y_count;j++)
         {
+            if(cell.isOverObject(obj) != (int)OverState.OVER_UP)
+            {
+                tempCell = FindCellByIndex(idx - 8 * (j + 1));
+                tempCell.AddObject(obj);
+            }
 
+            if(cell.isOverObject(obj) != (int)OverState.OVER_DOWN)
+            {
+                tempCell = FindCellByIndex(idx + 8 * (j + 1));
+                tempCell.AddObject(obj);
+            }
         }
     }
 
@@ -101,36 +122,4 @@ public class OfficeArea : MonoBehaviour
             }
         }
     }
-
-    /*
-    public void AddObject(Cell cell, GameObject agent)
-    {
-        cell.AddObject(agent);
-
-        ObjectConfig config = agent.GetComponent<ObjectConfig>();
-        int xLen = (int)(config.x_Length / x_diff);
-        int zLen = (int)(config.y_Length / z_diff);
-
-        int idx = cell.getIdx();
-
-        Cell tempCell;
-        for (int i = 0; i < xLen; i++)
-        {
-            tempCell = FindCell(idx + 1);
-            tempCell.AddObject(agent);
-
-            tempCell = FindCell(idx - 1);
-            tempCell.AddObject(agent);
-        }
-
-        for (int i = 0; i < zLen; i++)
-        {
-            tempCell = FindCell(idx + z_Count);
-            tempCell.AddObject(agent);
-
-            tempCell = FindCell(idx - z_Count);
-            tempCell.AddObject(agent);
-        }
-    }
-    */
 }
