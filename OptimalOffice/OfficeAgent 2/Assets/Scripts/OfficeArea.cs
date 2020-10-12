@@ -75,31 +75,39 @@ public class OfficeArea : MonoBehaviour
         Cell tempCell;
         for(int i=0;i<x_count;i++)
         {
-            if(cell.isOverObject(obj) != (int)OverState.OVER_RIGHT)
+            if(!cell.isOverObject(obj, (int)OverState.OVER_RIGHT))
             {
                 tempCell = FindCellByIndex(idx + 1 * (i + 1));
                 tempCell.AddObject(obj);
+                //Delete
+                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.white;
             }
 
-            if(cell.isOverObject(obj) != (int)OverState.OVER_LEFT)
+            if(!cell.isOverObject(obj, (int)OverState.OVER_LEFT))
             {
                 tempCell = FindCellByIndex(idx - 1 * (i + 1));
                 tempCell.AddObject(obj);
+                //Delete
+                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.black;
             }
         }
 
         for(int j=0;j<y_count;j++)
         {
-            if(cell.isOverObject(obj) != (int)OverState.OVER_UP)
+            if(!cell.isOverObject(obj, (int)OverState.OVER_UP))
             {
                 tempCell = FindCellByIndex(idx - 8 * (j + 1));
                 tempCell.AddObject(obj);
+                //Delete
+                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.green;
             }
 
-            if(cell.isOverObject(obj) != (int)OverState.OVER_DOWN)
+            if(!cell.isOverObject(obj, (int)OverState.OVER_DOWN))
             {
                 tempCell = FindCellByIndex(idx + 8 * (j + 1));
                 tempCell.AddObject(obj);
+                //Delete
+                tempCell.cellObj.GetComponent<MeshRenderer>().material.color = Color.gray;
             }
         }
     }

@@ -52,22 +52,30 @@ public class Cell : MonoBehaviour
     public void AddObject(GameObject obj) { objList.Add(obj); }
 
     //Object가 지정된 길이를 초과하는지 검사
-    public int isOverObject(GameObject obj)
+    public bool isOverObject(GameObject obj, int where)
     {
         //Object는 중심점을 기준으로 존재하므로 원래 길이 / 2
         ObjectConfig config = obj.GetComponent<ObjectConfig>();
         float horizontalLength = config.getHorizontalLength();
         float verticalLength = config.getVerticalLength();
 
-        //가운데 좌표 +- x길이가 넘어가면 Over
-        if (centerPos.x + horizontalLength > OfficeArea.maxX) return (int)OfficeArea.OverState.OVER_RIGHT;
-        else if (centerPos.x - horizontalLength < OfficeArea.minX) return (int)OfficeArea.OverState.OVER_LEFT;
+        switch(where)
+        {
+            case (int)OfficeArea.OverState.OVER_RIGHT:
+                if (centerPos.x + horizontalLength > OfficeArea.maxX) return true;
+                break;
+            case (int)OfficeArea.OverState.OVER_LEFT:
+                if (centerPos.x - horizontalLength < OfficeArea.minX) return true;
+                break;
+            case (int)OfficeArea.OverState.OVER_UP:
+                if (centerPos.z + verticalLength > OfficeArea.maxZ) return true;
+                break;
+            case (int)OfficeArea.OverState.OVER_DOWN:
+                if (centerPos.z - verticalLength < OfficeArea.minZ) return true;
+                break;
+        }
 
-        //가운데 좌표 +- z길이가 넘어가면 Over
-        if (centerPos.z + verticalLength > OfficeArea.maxZ) return (int)OfficeArea.OverState.OVER_UP;
-        else if (centerPos.z - verticalLength < OfficeArea.minZ) return (int)OfficeArea.OverState.OVER_DOWN;
-
-        //아닐경우 Over가 아님
-        return (int)OfficeArea.OverState.NOT_OVER;
+        if(where == (int)OfficeArea.OverState.NOT_OVER) return true;
+        else return false;
     }
 }

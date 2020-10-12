@@ -24,6 +24,8 @@ public class OfficeAgent : MonoBehaviour //Agent로
         cell.cellObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
 
         gameObject.transform.position = cell.getCenterPos();
+
+        area.SearchOverTheCellObjectAndAddObjectToCell(cell, transform.GetChild(0).gameObject);
     }
 
     /*public OfficeArea area;

@@ -1505,9 +1505,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a63512a092ae140aec5e61acb55df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 0
+  action: 35
   area: {fileID: 263094699}
-  random: 1
+  random: 0
 --- !u!1 &657259862
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,24 +2406,27 @@ Transform:
   m_GameObject: {fileID: 1127499385}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 567905841}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1127499387
-BoxCollider:
+--- !u!114 &1127499387
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127499385}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e38e90f5cf689f44b3412ee00ac6260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalLength: 6
+  verticalLength: 6
+  isHorizontalSnap: 0
+  isVerticalSnap: 0
 --- !u!23 &1127499388
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2650,7 +2653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1168911178
 Transform:
   m_ObjectHideFlags: 0
@@ -2678,9 +2681,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a63512a092ae140aec5e61acb55df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 0
+  action: 1
   area: {fileID: 263094699}
-  random: 1
+  random: 0
 --- !u!1 &1209802771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,24 +2805,27 @@ Transform:
   m_GameObject: {fileID: 1341436483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 1168911178}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1341436485
-BoxCollider:
+--- !u!114 &1341436485
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1341436483}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e38e90f5cf689f44b3412ee00ac6260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalLength: 6
+  verticalLength: 0
+  isHorizontalSnap: 0
+  isVerticalSnap: 0
 --- !u!23 &1341436486
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3533,7 +3539,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1613722896
 Transform:
   m_ObjectHideFlags: 0
@@ -3561,9 +3567,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a63512a092ae140aec5e61acb55df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 2
+  action: 17
   area: {fileID: 263094699}
-  random: 1
+  random: 0
 --- !u!1 &1679654144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3778,24 +3784,27 @@ Transform:
   m_GameObject: {fileID: 1785499021}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 1613722896}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1785499023
-BoxCollider:
+--- !u!114 &1785499023
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785499021}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e38e90f5cf689f44b3412ee00ac6260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalLength: 0
+  verticalLength: 0
+  isHorizontalSnap: 0
+  isVerticalSnap: 0
 --- !u!23 &1785499024
 MeshRenderer:
   m_ObjectHideFlags: 0
