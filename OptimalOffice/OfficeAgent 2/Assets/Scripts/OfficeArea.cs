@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class OfficeArea : MonoBehaviour
 {
-    public OfficeAgent agent;
+    public int x_Count, z_Count;
+    float x_diff, z_diff;
 
-    const float maxX = 12f;
-    const float minX = -12f;
-    const float maxZ = 7.5f;
-    const float minZ = -7.5f;
+    //Delete
+    public GameObject tempObj;
 
     Cell[,] cells = new Cell[5,8];
 
+    const float minX = -12f;
+    const float maxX = 12f;
+    const float minZ = -7.5f;
+    const float maxZ = 7.5f;
+
     private void Start()
     {
+        x_diff = (float)(maxX - minX) / x_Count;
+        z_diff = (float)(maxZ - minZ) / z_Count;
+
         for(int i=0;i<5;i++)
         {
             for(int j=0;j<8;j++)
             {
-                cells[i,j] = new Cell((i+1)*(j+1) - 1, -10.5f + j*3f, 6f - i*3f);
+                cells[i, j] = new Cell((i + 1) * (j + 1) - 1, (minX + x_diff / 2) + (j * x_diff), (maxZ - z_diff / 2) - (i * z_diff), Instantiate(tempObj)); //tempObj delete
             }
         }
     }
@@ -37,63 +44,67 @@ public class OfficeArea : MonoBehaviour
         return null;
     }
 
-    public void DeductionToAgent()
+    public int FIndCellIndex(Cell cell)
     {
-        List<GameObject> agentList;
-
         for(int i=0;i<5;i++)
         {
             for(int j=0;j<8;j++)
             {
-                if(cells[i,j].getAgentCount() > 1)
+                if (cells[i, j] == cell) return cells[i, j].getIdx();
+            }
+        }
+
+        return -1;
+    }
+
+    public void DeductionToAgent()
+    {
+        List<GameObject> agentList;
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (cells[i, j].getAgentCount() > 1)
                 {
                     agentList = cells[i, j].getAgentList();
 
-                    for(int k=0;k< agentList.Count;k++)
+                    for (int k = 0; k < agentList.Count; k++)
                     {
-                        agentList[k].GetComponent<OfficeAgent>().AddReward(-1f * cells[i,j].getAgentCount());
+                        agentList[k].GetComponent<OfficeAgent>().AddReward(-1f * cells[i, j].getAgentCount());
                     }
                 }
             }
         }
     }
-}
 
-public class Cell
-{
-    int idx;
-    Vector2 minPos, maxPos;
-    List<GameObject> agentList;
-
-    public int getIdx() { return idx; }
-    public int getAgentCount() { return agentList.Count; }
-    public List<GameObject> getAgentList() { return agentList; }
-    public Vector2 getMinPos() { return minPos; }
-    public Vector2 getMaxPos() { return maxPos; }
-
-    public Vector3 getObjectPos(GameObject agent)
+    public void AddObject(Cell cell, GameObject agent)
     {
-        Vector3 centerPos;
+        cell.AddObject(agent);
 
-        centerPos.x = (minPos.x + maxPos.x) / 2.0f;
-        centerPos.y = 0f;
-        centerPos.z = (minPos.y + maxPos.y) / 2.0f;
+        ObjectConfig config = agent.GetComponent<ObjectConfig>();
+        int xLen = (int)(config.x_Length / x_diff);
+        int zLen = (int)(config.y_Length / z_diff);
 
-        agentList.Add(agent);
+        int idx = FIndCellIndex(cell);
 
-        return centerPos;
-    }
+        Cell tempCell;
+        for (int i = 0; i < xLen; i++)
+        {
+            tempCell = FindCell(idx + 1);
+            tempCell.AddObject(agent);
 
-    public Cell(int _idx, float c_x, float c_y)
-    {
-        idx = _idx;
+            tempCell = FindCell(idx - 1);
+            tempCell.AddObject(agent);
+        }
 
-        agentList = new List<GameObject>();
+        for (int i = 0; i < zLen; i++)
+        {
+            tempCell = FindCell(idx + z_Count);
+            tempCell.AddObject(agent);
 
-        minPos.x = c_x - 1.5f;
-        minPos.y = c_y - 1.5f;
-
-        maxPos.x = c_x + 1.5f;
-        maxPos.y = c_y + 1.5f;
+            tempCell = FindCell(idx - z_Count);
+            tempCell.AddObject(agent);
+        }
     }
 }
