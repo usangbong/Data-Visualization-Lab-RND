@@ -8,15 +8,8 @@ using UnityEngine.Serialization;
 using System;
 using System.IO;
 
-public class OfficeAgent : MonoBehaviour //Agent로
+public class OfficeAgent :Agent
 {
-    public int action;
-    public OfficeArea area;
-
-    public bool random;
-
-    float time = 0;
-
     private void Start()
     {
         if (random) action = UnityEngine.Random.Range(0, 40);
