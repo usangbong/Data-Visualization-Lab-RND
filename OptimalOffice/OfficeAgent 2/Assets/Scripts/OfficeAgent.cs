@@ -10,85 +10,112 @@ using System.IO;
 
 public class OfficeAgent :Agent
 {
-    private void Start()
-    {
-        if (random) action = UnityEngine.Random.Range(0, 40);
-
-        Cell cell = area.FindCellByIndex(action);
-        cell.AddObject(gameObject);
-        cell.cellObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
-
-        gameObject.transform.position = cell.getCenterPos();
-
-        area.SearchOverTheCellObjectAndAddObjectToCell(cell, transform.GetChild(0).gameObject);
-    }
-
-    private void Update()
-    {
-        time += Time.deltaTime;
-
-        if(time > 3f)
-        {
-            area.FindDuplicateCellAndDeductionToObject();
-        }
-    }
-
-    /*public OfficeArea area;
+    public OfficeArea area;
     public PlayerMove player;
     public Transform obj;
 
-    public Camera renderCamera;
+    Cell cell;
+
+    float action;
+    float time;
    
     public override void Initialize()
     {
-
+        time = 0f;
+        area.CellReset();
     }
 
     public override void OnEpisodeBegin()
     {
+        time = 0f;
+        area.CellReset();
+    }
 
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        //sensor.AddObservation(gameObject.GetComponent<ObjectConfig>().isHorizontalSnap);
+        //sensor.AddObservation(gameObject.GetComponent<ObjectConfig>().isVerticalSnap);
+
+        //Cell Index Observation
+        sensor.AddObservation(action);
+
+        //Cell Object Count Observation
+        List<List<Cell>> cells = area.getAllCells();
+
+        for(int i=0;i<5;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                sensor.AddObservation(cells[i][j].getObjectCount());
+            }
+        }
+
+        /*
+        for(int i=0;i<5;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                int cnt = cells[i][j].getObjectCount();
+                List<GameObject> objList = cells[i][j].getObjectList();
+
+                for(int k=0;k<cnt;k++)
+                {
+                    if (objList[k] == gameObject) sensor.AddObservation(cells[i][j].getIdx());
+                }
+            }
+        }
+        */
+
+        //Object Over the Cell Observation
+        for (int state = (int)OfficeArea.OverState.OVER_RIGHT; state <= (int)OfficeArea.OverState.OVER_DOWN; state++)
+        {
+            sensor.AddObservation(cell.isOverObject(gameObject, state));
+        }
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        float action = vectorAction[0];
+        action = vectorAction[0];
 
-        Cell cell = area.FindCellByIndex(System.Convert.ToInt32(action));
+        //Cell을 받아와서 cell에 오브젝트 추가 후 해당 오브젝트를 Cell로 이동
+        cell = area.FindCellByIndex(System.Convert.ToInt32(action));
         cell.AddObject(gameObject);
         transform.position = cell.getCenterPos();
-        if (cell.isOverObject(gameObject) == (int)OfficeArea.OverState.NOT_OVER) AddReward(-1f);
 
+        //벗어난게 있으면 벗어난것 * 0.25점 감점
+        for(int state=(int)OfficeArea.OverState.OVER_RIGHT; state <= (int)OfficeArea.OverState.OVER_DOWN; state++)
+        {
+            if (cell.isOverObject(gameObject, state)) AddReward(-0.25f);
+        }
+
+        //Cell을 벗어난 부분에 Object 추가
         area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
 
+        /*
+        //수평 snap 비교
         if(gameObject.GetComponent<ObjectConfig>().isHorizontalSnap)
         {
             if (area.isHorizontalSnap(cell.getIdx())) AddReward(1f);
             else AddReward(-1f);
         }
 
+        //수직 snap 비교
         if(gameObject.GetComponent<ObjectConfig>().isVerticalSnap)
         {
             if (area.isVerticalSnap(cell.getIdx())) AddReward(1f);
             else AddReward(-1f);
         }
+        */
     }
 
+    //0.01초마다 한번씩 Duplicate된 Cell에 존재하는 Object의 Agent에 감점주고 Decision Request
     private void FixedUpdate()
     {
-        if (renderCamera != null)
+        time += Time.fixedDeltaTime;
+        if (time >= 0.01f)
         {
-            renderCamera.Render();
-        }
-
-        if(player.isMoveFinish)
-        {
-            player.finIdx++;
-            if (player.finIdx > 7)
-            {
-                player.isMoveFinish = false;
-                player.finIdx = 0;
-            }
+            area.FindDuplicateCellAndDeductionToObject();
             RequestDecision();
         }
-    }*/
+    }
 }

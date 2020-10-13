@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class OfficeArea : MonoBehaviour
 {
+    //OVER 열거형
     public enum OverState { NOT_OVER, OVER_RIGHT, OVER_LEFT, OVER_UP, OVER_DOWN };    
 
     //Cell의 개수 (가로, 세로)
     public int x_Count, z_Count;
     //Cell 크기 (가로, 세로)
     public static float x_Size, z_Size;
-
-    //Delete
-    public GameObject cellObj;
 
     //생성 Cell List
     List<List<Cell>> cells = new List<List<Cell>>();
@@ -37,12 +35,23 @@ public class OfficeArea : MonoBehaviour
             for(int j=0;j<8;j++)
             {
                 //index (0~39), x, z의 가운데 좌표
-                //Cell cell = new Cell(i * x_Count + j, (minX + x_Size / 2) + (j * x_Size), (maxZ - z_Size / 2) - (i * z_Size), Instantiate(tempObj), cellObj.transform.GetChild(i * x_Count + j).gameObject); //tempObj delete
-                //Test Code
-                Transform obj = cellObj.transform.GetChild(i * x_Count + j);
-                Cell cell = new Cell(i * x_Count + j, obj.position.x, obj.position.z, cellObj.transform.GetChild(i * x_Count + j).gameObject);
-
+                Cell cell = new Cell(i * x_Count + j, (minX + x_Size / 2) + (j * x_Size), (maxZ - z_Size / 2) - (i * z_Size));
                 cells[i].Add(cell);
+            }
+        }
+    }
+
+    public List<List<Cell>> getAllCells() { return cells; }
+
+    //Cell List Reset
+    public void CellReset()
+    {
+        for(int i=0;i<5;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                Cell cell = cells[i][j];
+                cell.Clear();
             }
         }
     }
@@ -61,26 +70,33 @@ public class OfficeArea : MonoBehaviour
         return null;
     }
     
+    //Over된 Cell을 찾아서 그 Cell에 Object 추가
     public void SearchOverTheCellObjectAndAddObjectToCell(Cell cell, GameObject obj)
     {
+        //길이 설정
         ObjectConfig config = obj.GetComponent<ObjectConfig>();
         float horizontalLength = config.getHorizontalLength();
         float verticalLength = config.getVerticalLength();
 
+        //인덱스
         int idx = cell.getIdx();
 
+        //x와 z방향으로 몇개의 Cell을 넘어갔는지 체크
         int x_cnt = (int)(horizontalLength / x_Size);
         int z_cnt = (int)(verticalLength / z_Size);
 
+        //x축 방향으로 Over된 cell 검색
         Cell tempCell;
         for(int i=0;i<x_cnt;i++)
         {
+            //오른쪽을 넘어가지 않았다면
             if(!cell.isOverObject(obj, (int)OverState.OVER_RIGHT))
             {
                 tempCell = FindCellByIndex(idx + 1 * (i + 1));
                 tempCell.AddObject(obj);
             }
 
+            //왼쪽을 넘어가지 않았다면
             if(!cell.isOverObject(obj, (int)OverState.OVER_LEFT))
             {
                 tempCell = FindCellByIndex(idx - 1 * (i + 1));
@@ -88,14 +104,17 @@ public class OfficeArea : MonoBehaviour
             }
         }
 
+        //z축 방향으로 Over된 cell 검색
         for(int j=0;j<z_cnt;j++)
         {
-            if(!cell.isOverObject(obj, (int)OverState.OVER_UP))
+            //위쪽을 넘어가지 않았다면
+            if (!cell.isOverObject(obj, (int)OverState.OVER_UP))
             {
                 tempCell = FindCellByIndex(idx - 8 * (j + 1));
                 tempCell.AddObject(obj);
             }
 
+            //아래쪽을 넘어가지 않았다면
             if(!cell.isOverObject(obj, (int)OverState.OVER_DOWN))
             {
                 tempCell = FindCellByIndex(idx + 8 * (j + 1));
@@ -129,6 +148,7 @@ public class OfficeArea : MonoBehaviour
         }
     }
 
+    //수평방향 Snap여부 검사
     public bool isHorizontalSnap(int idx)
     {
         if (idx >= 0 && idx <= x_Count - 1) return true;
@@ -136,6 +156,7 @@ public class OfficeArea : MonoBehaviour
         else return false;
     }
 
+    //수직방향 Snap여부 검사
     public bool isVerticalSnap(int idx)
     {
         if (idx % x_Count == 0) return true;
