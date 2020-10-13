@@ -331,7 +331,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 5000
   area: {fileID: 263094699}
   player: {fileID: 0}
   obj: {fileID: 2038150663417474832}
@@ -451,7 +451,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 5000
   area: {fileID: 263094699}
   player: {fileID: 0}
   obj: {fileID: 5020755300825590515}
@@ -822,7 +822,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 5000
   area: {fileID: 263094699}
   player: {fileID: 0}
   obj: {fileID: 2467329736531963903}
@@ -911,7 +911,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 5000
   area: {fileID: 263094699}
   player: {fileID: 0}
   obj: {fileID: 2693869147792768215}

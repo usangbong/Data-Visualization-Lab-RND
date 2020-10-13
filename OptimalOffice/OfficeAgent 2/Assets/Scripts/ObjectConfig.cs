@@ -5,8 +5,8 @@ using UnityEngine;
 public class ObjectConfig : MonoBehaviour
 {
     //Object의 크기
-    public float horizontalLength = 0;
-    public float verticalLength = 0;
+    public float horizontalLength;
+    public float verticalLength;
 
     //Snape 여부
     public bool isHorizontalSnap = false;

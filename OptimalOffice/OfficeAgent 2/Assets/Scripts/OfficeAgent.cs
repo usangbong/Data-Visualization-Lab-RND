@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 using System;
 using System.IO;
 
-public class OfficeAgent :Agent
+public class OfficeAgent : Agent
 {
     public OfficeArea area;
     public PlayerMove player;
@@ -16,9 +16,9 @@ public class OfficeAgent :Agent
 
     Cell cell;
 
-    float action;
+    float action = 0f;
     float time;
-   
+
     public override void Initialize()
     {
         time = 0f;
@@ -42,9 +42,9 @@ public class OfficeAgent :Agent
         //Cell Object Count Observation
         List<List<Cell>> cells = area.getAllCells();
 
-        for(int i=0;i<5;i++)
+        for (int i = 0; i < 5; i++)
         {
-            for(int j=0;j<8;j++)
+            for (int j = 0; j < 8; j++)
             {
                 sensor.AddObservation(cells[i][j].getObjectCount());
             }
@@ -66,10 +66,11 @@ public class OfficeAgent :Agent
         }
         */
 
+        cell = area.FindCellByIndex(System.Convert.ToInt32(action));
         //Object Over the Cell Observation
         for (int state = (int)OfficeArea.OverState.OVER_RIGHT; state <= (int)OfficeArea.OverState.OVER_DOWN; state++)
         {
-            sensor.AddObservation(cell.isOverObject(gameObject, state));
+            sensor.AddObservation(cell.isOverObject(obj.gameObject, state));
         }
     }
 
@@ -79,17 +80,17 @@ public class OfficeAgent :Agent
 
         //Cell을 받아와서 cell에 오브젝트 추가 후 해당 오브젝트를 Cell로 이동
         cell = area.FindCellByIndex(System.Convert.ToInt32(action));
-        cell.AddObject(gameObject);
-        transform.position = cell.getCenterPos();
+        cell.AddObject(obj.gameObject);
+        obj.transform.position = cell.getCenterPos();
 
         //벗어난게 있으면 벗어난것 * 0.25점 감점
-        for(int state=(int)OfficeArea.OverState.OVER_RIGHT; state <= (int)OfficeArea.OverState.OVER_DOWN; state++)
+        for (int state = (int)OfficeArea.OverState.OVER_RIGHT; state <= (int)OfficeArea.OverState.OVER_DOWN; state++)
         {
-            if (cell.isOverObject(gameObject, state)) AddReward(-0.25f);
+            if (cell.isOverObject(obj.gameObject, state)) AddReward(-0.25f);
         }
 
         //Cell을 벗어난 부분에 Object 추가
-        area.SearchOverTheCellObjectAndAddObjectToCell(cell, gameObject);
+        area.SearchOverTheCellObjectAndAddObjectToCell(cell, obj.gameObject);
 
         /*
         //수평 snap 비교

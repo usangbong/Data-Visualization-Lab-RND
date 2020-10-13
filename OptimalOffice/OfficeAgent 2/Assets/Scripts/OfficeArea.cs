@@ -141,7 +141,9 @@ public class OfficeArea : MonoBehaviour
                     //List에 존재하는 모든 Object의 Agent에 1점 감점
                     for (int k = 0; k < objList.Count; k++)
                     {
-                        objList[k].GetComponent<OfficeAgent>().AddReward(-1f);
+                        Transform parent = objList[k].transform.parent;
+                        Transform agent = parent.GetChild(1);
+                        agent.GetComponent<OfficeAgent>().AddReward(-1f);
                     }
                 }
             }
