@@ -9,7 +9,6 @@ class Analysis extends React.Component {
     super(props);
     this.state = {
       stimulusPath: "",
-      // powerSpectra: {},
       rawGazeData: [],
       fixations: [],
       rndFixations: [],
@@ -18,19 +17,8 @@ class Analysis extends React.Component {
     };
   }
   
-  // dataFromFormular = func => {
-  //   const output = [];
-  //   for (let x = -20; x < 20; x++) {
-  //     const f0 = [];
-  //     output.push(f0);
-  //     for (let y = -20; y < 20; y++)
-  //       f0.push(func(x, y));
-  //   }
-  //   return output;
-  // }
-
-  componentDidMount() {
-    axios.get(`http://${window.location.hostname}:5000/static/output/selected_stimulus_path.json`)
+  dataLoad = () => {
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_stimulus_path.json?`+Math.random())
       .then(response => {
         // console.log(response.data);
         this.setState({
@@ -38,22 +26,7 @@ class Analysis extends React.Component {
             response.data
         });
       });
-    // axios.get(`http://${window.location.hostname}:5000/static/output/power_gaze.json`)
-    //   .then(response => {
-    //     this.setState({
-    //       powerSpectra: [
-    //         /*this.dataFromFormular((x, y) =>
-    //           Math.sin(Math.sqrt(x * x + y * y) / 5 * Math.PI) * 50),*/
-    //         this.dataFromFormular((x, y) =>
-    //           response.data[(x + 20) * 40 + (y + 20)] * 1000),
-    //         this.dataFromFormular((x, y) =>
-    //           Math.cos(x / 15 * Math.PI) * Math.cos(y / 15 * Math.PI) * 60 + Math.cos(x / 8 * Math.PI) * Math.cos(y / 10 * Math.PI) * 40),
-    //         this.dataFromFormular((x, y) =>
-    //           -(Math.cos(Math.sqrt(x * x + y * y) / 6 * Math.PI) + 1) * 300 / (Math.pow(x * x + y * y + 1, 0.3) + 1) + 50)
-    //       ]
-    //     });
-    //   });
-    axios.get(`http://${window.location.hostname}:5000/static/output/selected_fixation.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_fixation.json?`+Math.random())
       .then(response => {
         var _data = response.data;
         var _fixs = [];
@@ -68,7 +41,7 @@ class Analysis extends React.Component {
             // response.data
         });
       });
-    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_random.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_random.json?`+Math.random())
       .then(response => {
         var _data = response.data;
         var _rndFixs = [];
@@ -83,21 +56,8 @@ class Analysis extends React.Component {
             _rndFixs
         });
       });
-    // axios.get('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv')
-    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_gaze.json`)
+    axios.get(`http://${window.location.hostname}:5000/static/output/selected_raw_gaze.json?`+Math.random())
       .then(response => {
-        // CSV to object
-        // const data = [];
-        // const rows = response.data.split('\n');
-        // rows[0] = rows[0].split(',');
-        // for (let i = 1; i < rows.length-1; i++) {
-        //   const row = {};
-        //   rows[i].split(',').forEach((value, index) => {
-        //     row[rows[0][index]] = value;
-        //   });
-        //   data.push(row);
-        // }
-        // console.log(response.data);
         const pData = [];
         const data = response.data;
         var tVal = [];
@@ -146,11 +106,17 @@ class Analysis extends React.Component {
             pData
         });
       });
+      this.forceUpdate();
   }
 
+  componentDidMount() {
+    this.dataLoad();
+  }
+
+
   render() {
-    const { stimulusPath, fixations, rawRndData, rndFixations, lineChartData } = this.state;
-    // console.log(rawGazeData);
+    const { stimulusPath, fixations, rndFixations, lineChartData } = this.state;
+    console.log(fixations);
     return (
       <>
         <div className="page-header">
@@ -181,31 +147,17 @@ class Analysis extends React.Component {
             <LineChart
               width="500" height="300"
               data={lineChartData}
+              onVelocityChanged={this.dataLoad}
             />
           </div>
         </div>
 
         {/* <div className="page-section feature-type">
-          <h2>Power specta</h2>
-          <div className="power-spectra-left">
-            <div className="power-spectra-wrapper">
-              <SurfacePlot width="300" height="200" data={powerSpectra[0]} />
-            </div>
-            <div className="power-spectra-wrapper">
-              <SurfacePlot width="300" height="200" data={powerSpectra[1]} />
-            </div>
-          </div>
-          <div className="power-spectra-right">
-            <SurfacePlot width="300" height="410" data={powerSpectra[2]} />
-          </div>
-        </div> */}
-
-        <div className="page-section feature-type">
           <h2>Bispectra</h2>
           <div className="bispectra-wrapper"></div>
           <div className="bispectra-wrapper"></div>
           <div className="bispectra-wrapper"></div>
-        </div>
+        </div> */}
         
       </>
     );
