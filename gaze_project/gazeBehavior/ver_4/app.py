@@ -12,8 +12,6 @@ from flask_cors import CORS
 
 import src.py.ivt as ivt
 
-#from src.py import Krieger
-
 # init dataset name, feature types, and stimulus type
 DATASET = "MIT300"
 FEATURE_TYPES = []
@@ -31,11 +29,6 @@ RANDOM_DATA_LIST = []
 SPATIAL_VARIANCES = []
 selectedIdx = 0
 
-#data_krieger = Krieger(DATASET, FEATURE_TYPES, STIMULUS_CLASSES)
-# gazeData = []
-# randomData = []
-# gazeFeat = []
-# randomFeat = []
 # powerSpectraGazeLoc = []
 # powerSpectraRndLoc = []
 # powerSpectraGazeFeat = []
@@ -207,33 +200,6 @@ def fixationFilter(_gazeData, _uid, _feat, _vt):
     _f = float(_feat[_y][_x])
     _fixation.append([_x, _y, _f])
 
-  # prev_t = -1
-  # fixPts = []
-  # pts = []
-  # # print(_gazeData[0])
-  # for _p in clusters:
-  #   cur_t = int(_p[0])
-  #   if prev_t == -1:
-  #     prev_t = cur_t
-  #   if prev_t != cur_t:
-  #     fixPts.append(pts)
-  #     pts = []
-
-  #   pts.append([float(_p[1]), float(_p[2])])
-  #   prev_t = cur_t
-  # fixPts.append(pts)
-  # pts = []
-
-  # for _fix in fixPts:
-  #   sum_x = 0
-  #   sum_y = 0
-  #   for _p in _fix:
-  #     sum_x += _p[0]
-  #     sum_y += _p[1]
-  #   sum_x = int(sum_x/len(_fix))
-  #   sum_y = int(sum_y/len(_fix))
-  #   fx_feat = float(_feat[sum_y][sum_x])
-  #   _fixation.append([sum_x, sum_y, fx_feat])
 
   return _fixation
 
@@ -408,7 +374,9 @@ def makeJSON(_path, _data):
   wf.close()
 
 app = Flask(__name__)
-if __name__ == '__main__':  
+if __name__ == '__main__':
+  app.jinja_env.auto_reload = True
+  app.config['TEMPLATES_AUTO_RELOAD'] = True
   app.run(debug=True)
 CORS(app)
 
