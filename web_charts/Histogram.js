@@ -10,21 +10,24 @@ function Histogram(props) {
       return;
     
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 40},
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
         drawWidth = width - margin.left - margin.right,
         drawHeight = height - margin.top - margin.bottom;
     
     // append the svg object to the body of the page
     var svg = d3.select(svgRef.current)
-        .attr("width", drawWidth + margin.left + margin.right)
-        .attr("height", drawHeight + margin.top + margin.bottom)
+        .html('')
+        .attr("width", width)
+        .attr("height", height)
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
     // X axis: scale and draw:
+    var xMin = d3.min(data, (d => parseInt(d.x)));
+    var xMax = d3.max(data, (d => parseInt(d.x)));
     var x = d3.scaleLinear()
-        .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+        .domain([xMin, xMax])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
         .range([0, drawWidth]);
     svg.append("g")
         .attr("transform", "translate(0," + drawHeight + ")")
@@ -32,7 +35,7 @@ function Histogram(props) {
 
     // set the parameters for the histogram
     var histogram = d3.histogram()
-        .value(function(d) { return d.price; })   // I need to give the vector of value
+        .value(function(d) { return d.x; })   // I need to give the vector of value
         .domain(x.domain())  // then the domain of the graphic
         .thresholds(x.ticks(70)); // then the numbers of bins
 
@@ -40,9 +43,11 @@ function Histogram(props) {
     var bins = histogram(data);
 
     // Y axis: scale and draw:
+    var yMax = d3.max(bins, function(d) { return d.length; });
+    yMax += yMax / 10;
     var y = d3.scaleLinear()
         .range([drawHeight, 0]);
-        y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+        y.domain([0, yMax]);   // d3.hist has to be called before the Y axis obviously
     svg.append("g")
         .call(d3.axisLeft(y));
 
