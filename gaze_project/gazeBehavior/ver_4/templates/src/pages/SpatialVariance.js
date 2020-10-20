@@ -21,8 +21,8 @@ class SpatialVariance extends React.Component {
     };
   }
 
-  componentDidMount() {
-    axios.get(`http://${window.location.hostname}:5000/static/output/spatial_variance.json`)
+  loadTableData = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/output/spatial_variance.json?`+Math.random())
       .then(response => {
         var _data = response.data; 
         console.log(_data);
@@ -43,6 +43,10 @@ class SpatialVariance extends React.Component {
           _getData
         });
       });
+  }
+
+  componentDidMount() {
+    this.loadTableData();
   }
 
   render() {
@@ -66,7 +70,7 @@ class SpatialVariance extends React.Component {
           <p>{this.state.spRes}</p>
 
           <div style={{margin: '10px 0'}}>
-            <button>A</button>
+            <button onClick={this.loadTableData}>A</button>
             <button>B</button>
             <button>C</button>
             <button>D</button>
@@ -78,7 +82,7 @@ class SpatialVariance extends React.Component {
               rowData={tableData}
               onRowClicked={
                 function(event){
-                  console.log(event.data);
+                  // console.log(event.data);
                   const data = new FormData();
                   data.set('userID', event.data['userID']);
                   data.set('featureType', event.data['featureType']);

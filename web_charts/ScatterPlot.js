@@ -16,23 +16,29 @@ function ScatterPlot(props) {
 
     // append the svg object to the body of the page
     var svg = d3.select(svgRef.current)
-    .attr("width", drawWidth + margin.left + margin.right)
-    .attr("height", drawHeight + margin.top + margin.bottom)
+    .html('')
+    .attr("width", width)
+    .attr("height", height)
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
     
     // Add X axis
+    var xMin = d3.min(data, (d => parseInt(d.x)));
+    var xMax = d3.max(data, (d => parseInt(d.x)));
     var x = d3.scaleLinear()
-    .domain([0, 4000])
+    .domain([xMin, xMax])
     .range([ 0, drawWidth ]);
     svg.append("g")
     .attr("transform", "translate(0," + drawHeight + ")")
     .call(d3.axisBottom(x));
 
     // Add Y axis
+    var yMin = d3.min(data, (d => parseInt(d.y)));
+    var yMax = d3.max(data, (d => parseInt(d.y)));
+    yMax += yMax / 10;
     var y = d3.scaleLinear()
-    .domain([0, 500000])
+    .domain([yMin, yMax])
     .range([ drawHeight, 0]);
     svg.append("g")
     .call(d3.axisLeft(y));
@@ -43,8 +49,8 @@ function ScatterPlot(props) {
     .data(data)
     .enter()
     .append("circle")
-      .attr("cx", function (d) { return x(d.GrLivArea); } )
-      .attr("cy", function (d) { return y(d.SalePrice); } )
+      .attr("cx", function (d) { return x(d.x); } )
+      .attr("cy", function (d) { return y(d.y); } )
       .attr("r", 1.5)
       .style("fill", "#69b3a2");
   });

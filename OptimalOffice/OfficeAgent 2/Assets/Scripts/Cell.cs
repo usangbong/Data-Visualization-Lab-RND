@@ -11,11 +11,8 @@ public class Cell : MonoBehaviour
     //Cell에 존재하는 Object들의 List 생성
     List<GameObject> objList;
 
-    //Delete
-    public GameObject cellObj;
-
     //생성자
-    public Cell(int _idx, float c_x, float c_z, GameObject _cell) // Delete, _cell
+    public Cell(int _idx, float c_x, float c_z) // Delete, _cell
     {
         idx = _idx;
 
@@ -29,16 +26,14 @@ public class Cell : MonoBehaviour
         maxPos.x = c_x + 1.5f;
         maxPos.z = c_z + 1.5f;
 
+        //y좌표 0으로
         minPos.y = maxPos.y = 0f;
 
         //중심 좌표 생성
         centerPos = (minPos + maxPos) / 2.0f;
-
-        //Delete
-        cellObj = _cell;
-        cellObj.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
+    //중심점 좌표 반환
     public Vector3 getCenterPos() { return centerPos; }
 
     //index 반환
@@ -51,7 +46,7 @@ public class Cell : MonoBehaviour
     //Cell에 Object 추가
     public void AddObject(GameObject obj) { objList.Add(obj); }
 
-    //Object가 지정된 길이를 초과하는지 검사
+    //Object가 지정된 길이를 초과하는지 검사, where에 오는 상수에 따라 어느 방향을 검사할것인지 결정
     public bool isOverObject(GameObject obj, int where)
     {
         //Object는 중심점을 기준으로 존재하므로 원래 길이 / 2
@@ -59,6 +54,7 @@ public class Cell : MonoBehaviour
         float horizontalLength = config.getHorizontalLength();
         float verticalLength = config.getVerticalLength();
 
+        //where는 한쪽 방향이 넘어갔는지 물어봄
         switch(where)
         {
             case (int)OfficeArea.OverState.OVER_RIGHT:
@@ -75,7 +71,13 @@ public class Cell : MonoBehaviour
                 break;
         }
 
+        //where가 NOT_OVER면 true 아니면 false
         if(where == (int)OfficeArea.OverState.NOT_OVER) return true;
         else return false;
+    }
+
+    public void Clear()
+    {
+        objList.Clear();
     }
 }

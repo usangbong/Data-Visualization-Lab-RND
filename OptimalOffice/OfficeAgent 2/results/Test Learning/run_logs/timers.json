@@ -1,0 +1,41 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1602555106",
+        "python_version": "3.7.7 (default, May  6 2020, 11:45:54) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\vfgtr554\\anaconda3\\envs\\ml-agents\\Scripts\\mlagents-learn --train config/3DBall.yaml --run-id=Test Learning --force",
+        "mlagents_version": "0.18.1",
+        "mlagents_envs_version": "0.18.1",
+        "communication_protocol_version": "1.0.0",
+        "tensorflow_version": "2.3.0",
+        "end_time_seconds": "1602555169"
+    },
+    "total": 62.486235,
+    "count": 1,
+    "self": 0.24528000000000105,
+    "children": {
+        "run_training.setup": {
+            "total": 0.007249499999999909,
+            "count": 1,
+            "self": 0.007249499999999909
+        },
+        "TrainerController.start_learning": {
+            "total": 62.2337055,
+            "count": 1,
+            "self": 0.00018310000001520166,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 62.23325009999999,
+                    "count": 1,
+                    "self": 62.23325009999999
+                },
+                "TrainerController._save_model": {
+                    "total": 0.00027229999999178744,
+                    "count": 1,
+                    "self": 0.00027229999999178744
+                }
+            }
+        }
+    }
+}
