@@ -1,18 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 
-public class distanceAgent : MonoBehaviour
+public class distanceAgent : Agent
 {
-    // Start is called before the first frame update
-    void Start()
+    public Transform Objects;
+
+
+    public override void OnEpisodeBegin()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void CollectObservations(VectorSensor sensor)
     {
-        
+        sensor.AddObservation();
+        sensor.AddObservation();
+        sensor.AddObservation();
+    }
+
+    public override void OnActionReceived(float[] vectorAction)
+    {
+        for(var i=0;i<Objects.childCount;i++)
+        {
+            float action = vectorAction[i];
+
+            GameObject obj = Objects.GetChild(i).gameObject;
+            
+        }
     }
 }
