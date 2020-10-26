@@ -14,10 +14,11 @@ function LineChart(props) {
       drawHeight = height - margin.top - margin.bottom;
   
     var svg = d3.select(svgRef.current)
+      .html('')
       .attr('width', width)
-      .attr('height', height);
-    
-    svg.append('g').attr("transform", `translate(${margin.left},${margin.top})`);
+      .attr('height', height)
+      .append('g').attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
     // Add X axis --> it is a date format
     var xMin = d3.min(data, (d => parseInt(d.x)));
@@ -26,7 +27,7 @@ function LineChart(props) {
       .domain([xMin, xMax])
       .range([ 0, drawWidth ]);
     svg.append("g")
-      .attr("transform", `translate(0,${drawHeight})`)
+      .attr("transform", "translate(0," + drawHeight + ")")
       .call(d3.axisBottom(x));
 
     // Add Y axis
@@ -40,7 +41,7 @@ function LineChart(props) {
       .call(d3.axisLeft(y));
 
     // This allows to find the closest X index of the mouse:
-    var bisect = d3.bisector(function(d) { return d.x; }).left;
+    /*var bisect = d3.bisector(function(d) { return d.x; }).left;
 
     // Create the circle that travels along the curve of chart
     var focus = svg
@@ -57,7 +58,7 @@ function LineChart(props) {
       .append('text')
         .style("opacity", 0)
         .attr("text-anchor", "left")
-        .attr("alignment-baseline", "middle")
+        .attr("alignment-baseline", "middle")*/
 
     // Add the line
     svg
@@ -77,14 +78,14 @@ function LineChart(props) {
       .style("fill", "none")
       .style("pointer-events", "all")
       .attr('width', drawWidth)
-      .attr('height', drawHeight)
-      .on('mouseover', mouseover)
-      .on('mousemove', mousemove)
-      .on('mouseout', mouseout);
+      .attr('height', drawHeight);
+      //.on('mouseover', mouseover)
+      //.on('mousemove', mousemove)
+      //.on('mouseout', mouseout);
 
 
     // What happens when the mouse move -> show the annotations at the right positions.
-    function mouseover() {
+    /*function mouseover() {
       focus.style("opacity", 1)
       focusText.style("opacity",1)
     }
@@ -105,7 +106,17 @@ function LineChart(props) {
     function mouseout() {
       focus.style("opacity", 0)
       focusText.style("opacity", 0)
-    }
+    }*/
+
+    /*const brush = d3.brush()
+      .on('brush', brushed);
+    
+    svg.call(brush);
+
+    function brushed() {
+      const [[x0, y0], [x1, y1]] = d3.event.selection;
+      console.log(x0, x.invert(x0))
+    }*/
   });
 
   return (

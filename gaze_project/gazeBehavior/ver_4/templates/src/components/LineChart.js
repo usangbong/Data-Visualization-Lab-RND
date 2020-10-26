@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 
 function LineChart(props) {
-  const { width, height, data } = props;
+  const { width, height, data, onVelocityChanged } = props;
   const svgRef = useRef();
   const d3 = window.d3;
   
@@ -204,6 +204,7 @@ function LineChart(props) {
         .then(response => {
           if (response.data.status === 'success') {
             alert('change velocity');
+            onVelocityChanged();
           } else if (response.data.status === 'failed') {
             alert(`Failed change velocity - ${response.data.reason}`);
           }

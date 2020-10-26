@@ -9,17 +9,20 @@ vis.sejong.ac.kr
   - Yun Jang
 - Postdoc
   - Hanbyul Yeon
-- Ph.D 
   - Seokyeon Kim
+- Ph.D 
   - Sangbong Yoo
   - Mingyu Pi
 - Master
   - Hyesook Son
+  - Hyeyeon Park
 - Undergraduate
   - Yejin Kim
   - Changyoung Yonn
   - Soobin Yim
   - Hyein Hong
+  - Seongbum Seo
+  - Giwoong Park
 - Alumni
   - Seongmin Jeong
   - Hewon Baek
