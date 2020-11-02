@@ -58,7 +58,7 @@ for index, node in enumerate(elements):
     },
     'properties': {
       'osmid': node.id(),
-      'emdlid': count,
+      'cellid': count,
       'name': name,
       'name:ko': name_ko,
       'name:en': name_en
