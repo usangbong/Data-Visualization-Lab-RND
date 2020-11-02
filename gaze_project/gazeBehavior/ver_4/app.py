@@ -10,7 +10,7 @@ import pandas as pd
 from flask import *
 from flask_cors import CORS
 
-import src.py.ivt as ivt
+import src.py.glodberg as gfilter
 
 # init dataset name, feature types, and stimulus type
 DATASET = "MIT300"
@@ -18,8 +18,8 @@ FEATURE_TYPES = []
 FEATURE_SUB_TYPES = []
 FEATURE_SUB = ""
 STIMULUS_CLASSES = []
-STIMULUS_NAMES = ["002", "004"]
-UIDS = ["t_sb_1"]
+STIMULUS_NAMES = ["002", "004", "006", "008", "010", "012", "014", "016", "018", "020"]
+UIDS = ["usb_02"]
 PATHS = []
 FEATURES = []
 GAZE_DATA_LIST = []
@@ -28,16 +28,6 @@ meanValue = []
 RANDOM_DATA_LIST = []
 SPATIAL_VARIANCES = []
 selectedIdx = 0
-
-# powerSpectraGazeLoc = []
-# powerSpectraRndLoc = []
-# powerSpectraGazeFeat = []
-# powerSpectraRndFeat = []
-# powerSpectraResGaze = []
-# powerSpectraResRnd = []
-# gazeFoveaRegionMean = []
-# rndFoveaRegionMean = []
-
 
 def setFeaturePath(_fType, _stiClass, _stiName):
   _featPath = ""
@@ -128,6 +118,9 @@ def loadEyeMovementDataFile(_path, _feat):
     # 0: t, 1: x, 2: y
     if _row[1] == "x":
       continue
+    elif _row[1] == "NaN":
+      _gazeData.append([0, 0, 0])
+      break
     else:
       if float(_row[1]) >= 1920 or float(_row[2]) >= 1080:
         continue
@@ -146,10 +139,14 @@ def loadEyeMovementDataFile(_path, _feat):
     _gaze.append([_t, _gx, _gy, _gf])
   return _gaze
   
-def fixationFilter(_gazeData, _uid, _feat, _vt):
+def ivtFilter(_gazeData, _uid, _feat, _vt):
   _fixation = []
-  v_threshold = _vt
+  if len(_gazeData) == 1:
+    _fixation.append([0, 0, -999])
+    return _fixation
 
+  v_threshold = _vt
+  
   _tempData = []
   _idCount = 0
   _tStamp = 0
@@ -170,15 +167,15 @@ def fixationFilter(_gazeData, _uid, _feat, _vt):
   df = pd.DataFrame(_tempData, columns = ['no', 'userid', 'timestamp', 'timecount', 'x','y'])
   # print(df)
   _data = np.array(df)
-  _data_xs = np.unique(_data[:,ivt.x])
-  _data_ys = np.unique(_data[:,ivt.y])
-  _user_ids = np.unique(_data[:,ivt.user_id])
+  _data_xs = np.unique(_data[:,gfilter.x])
+  _data_ys = np.unique(_data[:,gfilter.y])
+  _user_ids = np.unique(_data[:,gfilter.user_id])
 
   for u in _user_ids:
     for q in range(1,2):
       sub_data = _data
       sub2d = np.asarray(sub_data).reshape(len(sub_data),6)
-      centroidsX, centroidsY, time0, time1, fixList, fixations = ivt.ivt(sub2d, v_threshold)
+      centroidsX, centroidsY, time0, time1, fixList, fixations = gfilter.ivt(sub2d, v_threshold)
 
   Tdata = {'X':centroidsX,'Y':centroidsY, 'Time':time0}
   df_IVT = pd.DataFrame(Tdata)
@@ -193,15 +190,61 @@ def fixationFilter(_gazeData, _uid, _feat, _vt):
     fpts.append(df_IVT['Y'][_fpi])
     fpts.append(df_IVT['Time'][_fpi])
     clusters.append(fpts)
-
+  
   for _clu in clusters:
     _x = int(_clu[0])
     _y = int(_clu[1])
     _f = float(_feat[_y][_x])
     _fixation.append([_x, _y, _f])
 
+  return _fixation
+
+def idtFilter(_gazeData, _uid, _feat, _distributionThres, _durationThres):
+  _fixation = []
+  if len(_gazeData) == 1:
+    _fixation.append([0, 0, -999])
+    return _fixation
+  
+  dur_threshold = _durationThres
+  dis_threshold = _distributionThres
+
+  _tempData = []
+  _idCount = 0
+  _tStamp = 0
+  _tCount = 0.0
+  for _p in _gazeData:
+    _no = _idCount
+    _id = _uid
+    _timestamp = _tStamp
+    _timecount = _tCount
+    _x = float(_p[1])
+    _y = float(_p[2])
+    _tempData.append([_no, _id, _timestamp, _timecount, _x, _y])
+    _idCount += 1
+    _tCount += 0.1
+    if _idCount%9 == 0:
+      _tStamp += 1
+      _tCount += 0.0
+  df = pd.DataFrame(_tempData, columns = ['no', 'userid', 'timestamp', 'timecount', 'x','y'])
+  _data = np.array(df)
+  _data_xs = np.unique(_data[:,gfilter.x])
+  _data_ys = np.unique(_data[:,gfilter.y])
+  _user_ids = np.unique(_data[:,gfilter.user_id])
+
+  for u in user_ids:
+    for q in range(1,2):
+      sub_data = _data
+      sub2d = np.asarray(sub_data).reshape(len(sub_data),6) #this is a numpy array
+      centroidsX, centroidsY, time0, tDif, fixList, fixations = gfilter.idt(sub2d, dis_threshold, dur_threshold)
+  
+  for _clu in clusters:
+    _x = int(_clu[0])
+    _y = int(_clu[1])
+    _f = float(_feat[_y][_x])
+    _fixation.append([_x, _y, _f])
 
   return _fixation
+  
 
 def makeRandomPos(_fixLen, _feat):
   _random = []
@@ -214,6 +257,9 @@ def makeRandomPos(_fixLen, _feat):
   return _random
   
 def calcSpatialVariation(_fixationData, _randomData, _meanValue):
+  if _fixationData[0][2] == -999:
+    return -999
+
   _spatial_variance = 0
   
   _deviation_squared_sum = 0
@@ -221,19 +267,20 @@ def calcSpatialVariation(_fixationData, _randomData, _meanValue):
     _dev = _v[2]-_meanValue
     _deviation_squared_sum += _dev*_dev
   _variation_eye = _deviation_squared_sum/len(_fixationData)
-  
+
   _deviation_squared_sum = 0
   for _v in _randomData:
     _dev = _v[2]-_meanValue
     _deviation_squared_sum += _dev*_dev
   _variation_random = _deviation_squared_sum/len(_randomData)
-  
+
   spatial_variation = -1
   if _variation_random != 0:
     spatial_variation = _variation_eye/_variation_random
-  
+
   _spatial_variance = spatial_variation
   return _spatial_variance
+
 
 # def selectPowerSpectraData():
 #   global powerSpectraGazeLoc
@@ -357,8 +404,8 @@ def initGlobal():
   FEATURE_SUB_TYPES = []
   FEATURE_SUB = ""
   STIMULUS_CLASSES = []
-  STIMULUS_NAMES = ["002", "004"]
-  UIDS = ["t_sb_1"]
+  STIMULUS_NAMES = ["002", "004", "006", "008", "010", "012", "014", "016", "018", "020"]
+  UIDS = ["usb_02"]
   PATHS = []
   FEATURES = []
   GAZE_DATA_LIST = []
@@ -386,7 +433,7 @@ def changeVelocity():
   
   try:
     _velocity = float(request.form['velocity'])
-    changedFixation = fixationFilter(GAZE_DATA_LIST[selectedIdx], UIDS[0], FEATURES[selectedIdx], _velocity)
+    changedFixation = ivtFilter(GAZE_DATA_LIST[selectedIdx], UIDS[0], FEATURES[selectedIdx], _velocity)
     FIXATIONS.pop(selectedIdx)
     FIXATIONS.insert(selectedIdx, changedFixation)
     makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
@@ -483,6 +530,7 @@ def gazeDataSubmit():
       for _sc in STIMULUS_CLASSES:
         for _sn in STIMULUS_NAMES:
           PATHS.append([setFeaturePath(_f, _sc, _sn), setGazePath(UIDS[0], _sc, _sn), setStimulusPath(_sc, _sn)])
+          print(setFeaturePath(_f, _sc, _sn))
     print("PATHS LEN:%d"%len(PATHS))
     print("FEATURE_SUB_TYPES LEN:%d"%len(FEATURE_SUB_TYPES))
 
@@ -491,45 +539,38 @@ def gazeDataSubmit():
       for _sn in STIMULUS_NAMES:
         _sti_paths.append(setStimulusPath(_sc, _sn))
     makeJSON("./static/output/stimulus_path.json", _sti_paths)
-    # wf = open("./static/output/stimulus_path.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(_sti_paths))
-    # wf.close()
     
     for _p in PATHS:
       _f = loadFeatureFile(_p[0])
       FEATURES.append(_f)
-      # print(_p[0])
-      # print(_p[1])
       GAZE_DATA_LIST.append(loadEyeMovementDataFile(_p[1], _f))
     makeJSON("./static/output/raw_gaze.json", GAZE_DATA_LIST)
-    # wf = open("./static/output/raw_gaze.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(GAZE_DATA_LIST))
-    # wf.close()
     print("GAZE_DATA_LIST LEN:%d"%len(GAZE_DATA_LIST))
 
     _gIdx = 0
     for _g in GAZE_DATA_LIST:
-      FIXATIONS.append(fixationFilter(_g, UIDS[0], FEATURES[_gIdx], 800))
+      FIXATIONS.append(ivtFilter(_g, UIDS[0], FEATURES[_gIdx], 1000))
       _gIdx += 1
     print("FIXATIONS LEN:%d"%len(FIXATIONS))
     makeJSON("./static/output/fixation.json", FIXATIONS)
-    # wf = open("./static/output/fixation.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(FIXATIONS))
-    # wf.close()
-
+    
     _fxIdx = 0
     for _fx in FIXATIONS:
       RANDOM_DATA_LIST.append(makeRandomPos(len(_fx), FEATURES[_fxIdx]))
       _fxIdx += 1
     print("RANDOM_DATA_LIST LEN:%d"%len(RANDOM_DATA_LIST))
     makeJSON("./static/output/raw_random.json", RANDOM_DATA_LIST)
-    # wf = open("./static/output/raw_random.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(RANDOM_DATA_LIST))
-    # wf.close()
-
+    
     for i in range(0, len(GAZE_DATA_LIST)):
       SPATIAL_VARIANCES.append(calcSpatialVariation(FIXATIONS[i], RANDOM_DATA_LIST[i], meanValue[i]))
     print("SPATIAL_VARIANCES LEN:%d"%len(RANDOM_DATA_LIST))
+
+    # check the spatial variance where under 1.0
+    for i in range(0, len(SPATIAL_VARIANCES)):
+      if SPATIAL_VARIANCES[i] <= 1.0:
+        print(PATHS[i][1])
+        print("SPATIAL_VARIANCES[i]: %f"%SPATIAL_VARIANCES[i])
+
 
     analysis_result = []
     for i in range(len(SPATIAL_VARIANCES)):
@@ -543,32 +584,69 @@ def gazeDataSubmit():
       analysis_result.append([_id, _feat, _class, _name, _sp])
     print("analysis_result LEN:%d"%len(analysis_result))
     makeJSON("./static/output/spatial_variance.json", analysis_result)
-    # wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(analysis_result))
-    # wf.close()
 
-    # setFeaturePath("center-bias", "002")
-    # setGazePath("t_sb_1", "002")
-    # setStimulusPath("002")
 
-    # loadFeatureFile()
-    # loadEyeMovementDataFile()
-    # makeRandomPos()
+    # make csv file: feature-fixation
+    # _fixFeatures = []
+    # _fixsLen = 0
+    # for i in range(0, len(PATHS)):
+    #   _stiName = PATHS[i][0].split("/")[6].split("_")[1]
+    #   if _stiName == "004" or _stiName == "004.csv":
+    #     _fixsLen = len(FIXATIONS[i])
+    #     for _f in FIXATIONS[i]:
+    #       _fixFeatures.append(_f[2])
+      
+    # fixaionFeats = []
+    # for i in range(0, _fixsLen):
+    #   _fix_feats = []
+    #   for j in range(0, len(FEATURE_TYPES)):
+    #     _tidx = i*len(FEATURE_TYPES) + j
+    #     _fix_feats.append(_fixFeatures[_tidx])
+    #   fixaionFeats.append(_fix_feats)
 
-    # calcSpatialVariation()
-    # analysis_result = []
-    # # analysis_result.append(_fl)
-    # analysis_result.append("center-bias")
-    # #analysis_result.append(STIMULUS_TYPE[0])
-    # analysis_result.append("Action")
-    # analysis_result.append("002")
-    # analysis_result.append(str(spatial_variance))
-    # wf = open("./static/output/spatial_variance.json", "w", newline='', encoding='utf-8')
-    # wf.write(json.dumps(analysis_result))
-    # wf.close()
+    _fixsLen = []
+    _fixFeatures = []
+    _stiClassName = []
+    for i in range(0, len(PATHS)):
+      _stiClass = PATHS[i][0].split("/")[6].split("_")[0] 
+      # _stiName = PATHS[i][0].split("/")[6].split("_")[1]
+      _fixsLen.append(len(FIXATIONS[i]))
+      if i < len(STIMULUS_NAMES):
+        _stiClassName.append(_stiClass+"_"+STIMULUS_NAMES[i])
+      for _f in FIXATIONS[i]:
+        _fixFeatures.append(_f[2])
 
-    # # selectPowerSpectraData()
-    # # makePowerSpectra()
+    # print("_fixsLen: %d"%len(_fixsLen))
+    fixaionFeats = []
+    _tidx = 0
+    _fixOneSet = 0
+    for i in range(0, len(_fixsLen)):
+      if i< len(STIMULUS_NAMES):
+        _fixOneSet += _fixsLen[i]
+        # print("_fixOneSet___:%d"%_fixOneSet)
+        for j in range(0, _fixsLen[i]):
+          fixaionFeats.append([_stiClassName[i], _fixFeatures[_tidx]])
+          _tidx += 1
+      else:
+        for j in range(0, _fixsLen[i]):
+          _sIndex = _tidx % _fixOneSet
+          # print("_tidx: %d, _sIndex: %d"%(_tidx, _sIndex))
+          fixaionFeats[_sIndex].append(_fixFeatures[_tidx])
+          _tidx += 1
+      # print(fixaionFeats)
+
+    # for i in range(0, len(_fixsLen)):
+    #   for k in range(0, _fixsLen[i]):
+    #     _fix_feats = []
+    #     for j in range(0, len(FEATURE_TYPES)):
+    #       _tidx = k*len(FEATURE_TYPES) + j
+    #       fixaionFeats.append(_fix_feats)
+    
+    wf = open("fixation_feature.csv", "w", newline='', encoding='utf-8')
+    writer = csv.writer(wf)
+    for _r in fixaionFeats:
+      writer.writerow(_r)
+    wf.close()
 
     response['status'] = 'success'
     # response['data'] = {

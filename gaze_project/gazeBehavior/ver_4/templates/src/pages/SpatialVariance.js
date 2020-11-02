@@ -69,13 +69,13 @@ class SpatialVariance extends React.Component {
         <div className="page-section">
           <p>{this.state.spRes}</p>
 
-          <div style={{margin: '10px 0'}}>
+          {/* <div style={{margin: '10px 0'}}>
             <button onClick={this.loadTableData}>A</button>
             <button>B</button>
             <button>C</button>
             <button>D</button>
             <button>E</button>
-          </div>
+          </div> */}
           
           <div className="ag-theme-alpine" style={ { height: 600, width: 900 } }>
             <AgGridReact
