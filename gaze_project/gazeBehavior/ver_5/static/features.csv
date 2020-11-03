@@ -1,0 +1,11 @@
+center-bias
+contrast-intensity
+contrast-color
+contrast-orientation
+HOG
+horizontal-line
+LOG-spectrum
+saliency-intensity
+saliency-color
+saliency-orientation
+computed-saliency
