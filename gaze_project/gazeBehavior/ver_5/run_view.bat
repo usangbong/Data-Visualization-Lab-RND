@@ -1,0 +1,2 @@
+cd templates
+npm start
