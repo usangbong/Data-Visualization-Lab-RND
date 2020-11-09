@@ -520,6 +520,7 @@ def gazeDataSubmit():
     
     # check fixation cache
     fixationDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/fixation/"
+    psdFixDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
     randomDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/random/"
     spDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/sp_variance/"
     corrDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/correlation/"
@@ -528,6 +529,7 @@ def gazeDataSubmit():
     if FILTER == "ivt":
       filter_threshold.append(600)
       fixationDir += "ivt_"+str(filter_threshold[0])
+      psdFixDir += "ivt_"+str(filter_threshold[0])
       randomDir += "ivt_"+str(filter_threshold[0])
       spDir += "ivt_"+str(filter_threshold[0])
       corrDir += "ivt_"+str(filter_threshold[0])
@@ -535,6 +537,7 @@ def gazeDataSubmit():
       filter_threshold.append(100)
       filter_threshold.append(200)
       fixationDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
+      psdFixDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
       randomDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
       spDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
       corrDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
@@ -542,6 +545,7 @@ def gazeDataSubmit():
       # default set: ivt filter
       filter_threshold.append(1000)
       fixationDir += "ivt_"+str(filter_threshold[0])
+      psdFixDir += "ivt_"+str(filter_threshold[0])
       randomDir += "ivt_"+str(filter_threshold[0])
       spDir += "ivt_"+str(filter_threshold[0])
       corrDir += "ivt_"+str(filter_threshold[0])
@@ -614,6 +618,54 @@ def gazeDataSubmit():
             writer.writerow(_r)
           wf.close()
           print(writeRandomPath_csv)
+    
+    # if processed fixation cache file does not exist
+    print("PFIX: generate processed fixation cache files")
+    if not(os.path.exists(psdFixDir)):
+      os.makedirs(os.path.join(psdFixDir))
+      # get stimulusClass_stimulusName file list
+      fixFileList = os.listdir(fixationDir)
+
+      # make front and end column names
+      # | stimulusClass | stimulusName | featType 1(ex. center_bias) | ... | featureType n |
+      frontColNames = ["stimulusClass", "stimulusName"]
+      endColNames = []
+      fullColNames = []
+      fullColNames.extend(frontColNames)
+      fullColNames.extend(endColNames)
+
+      # make empty pandas DataFrame to save all fixations of stimulus classes and names
+      allFixDF = pd.DataFrame(index=range(0, 0), columns=fullColNames)
+      for _ft in FEATURE_TYPES:
+        endColNames.append(_ft)
+
+      for _fFileName in fixFileList:
+        _path = fixationDir+"/"+_fFileName
+        _class = _fFileName.split("_")[0]
+        _name = _fFileName.split(".")[0].split("_")[1]
+
+        _fixDf = pd.read_csv(_path)
+
+        # if any fixations in file, exception control works 'continue'
+        if len(_fixDf.index) == 0:
+          continue
+
+        _gCandNData = []
+        for i in range(0, len(_fixDf.index)):
+          _gCandNData.append([_class, _name])
+        _stiDf = pd.DataFrame(_gCandNData, columns=frontColNames)
+
+        # merge two DataFrame
+        _fDataFrame = pd.merge(_stiDf, _fixDf, left_index=True, right_index=True)
+
+        # concat fixation data into dataframe for all fixations
+        allFixDF = pd.concat([allFixDF, _fDataFrame], ignore_index=True)
+
+      # save processed fixations cache file
+      psdFixationPath_csv = psdFixDir+"/"+"all_fix.csv"
+      allFixDF.to_csv(psdFixationPath_csv, mode='w', index=False)
+      print("save processed fixation cache file")
+
 
     # if feature mean cache files does not exist
     print("generate feature mean cache files")
@@ -677,7 +729,7 @@ def gazeDataSubmit():
       _sLogs.append(_logClass)
       _fixClass = []
       _logClass = []
-      print("All fixation data files loaded")
+      print("SP: All fixation data files loaded")
 
       # load random files
       _rndFileList = os.listdir(randomDir)
@@ -704,7 +756,7 @@ def gazeDataSubmit():
         _prevClass = _stiClass
       _sRandoms.append(_rndClass)
       _rndClass = []
-      print("All random data files loaded")
+      print("SP: All random data files loaded")
 
       print(_sLogs)
 
@@ -775,7 +827,7 @@ def gazeDataSubmit():
 
       spAllPath = spDir+"/"+"sp_all.csv"
       spJoinData.to_csv(spAllPath, mode='w', index=False)
-      print("spatial variance all data saved")
+      print("SP: spatial variance all data saved")
 
       spMeanValsData = []
       spMClass = []
@@ -812,7 +864,7 @@ def gazeDataSubmit():
 
       spMeanPath = spDir+"/"+"sp_mean.csv"
       spMJoinData.to_csv(spMeanPath, mode='w', index=False)
-      print("spatial variance mean data saved")
+      print("SP: spatial variance mean data saved")
       
     # if fixation, random, and spatial variance cache file exist
     # Load spatial variance mean cache
