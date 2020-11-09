@@ -296,7 +296,6 @@ function Heatmap(props) {
          })
 
       function sendRemoveList(_stiClass, _stiFeat){
-         console.log("temp");
          const _data = new FormData();
          _data.set('removeClass', _stiClass);
          _data.set('removeFeature', _stiFeat);
