@@ -321,6 +321,7 @@ def calcSpatialVariation(_fixations, _randoms, _fType, _sClass, _sName):
     spatial_variation = _variation_eye/_variation_random
     return spatial_variation
 
+
 def makePath_Filter(_FILTER, _threshold, _path):
   _p = _path
 
@@ -336,72 +337,6 @@ def makePath_Filter(_FILTER, _threshold, _path):
 
   return _p
 
-
-# @app.route('/api/analysis/velocity', methods=['POST'])
-# def changeVelocity():
-#   response = {}
-  
-#   try:
-#     _velocity = float(request.form['velocity'])
-#     changedFixation = ivtFilter(GAZE_DATA_LIST[selectedIdx], UIDS[0], FEATURES[selectedIdx], _velocity)
-#     FIXATIONS.pop(selectedIdx)
-#     FIXATIONS.insert(selectedIdx, changedFixation)
-#     makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
-
-#     rndFixations = makeRandomPos(len(FIXATIONS[selectedIdx]), FEATURES[selectedIdx])
-#     RANDOM_DATA_LIST.pop(selectedIdx)
-#     RANDOM_DATA_LIST.insert(selectedIdx, rndFixations)
-#     makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
-    
-    
-#     response['status'] = 'success'
-#   except Exception as e:
-#     response['status'] = 'failed'
-#     response['reason'] = e
-#     print(e)
-  
-#   return json.dumps(response)
-
-# @app.route('/api/sp_variance/select', methods=['POST'])
-# def selectedDataSubmit():
-#   global selectedIdx
-#   response = {}
-
-#   try:
-#     _id = request.form['userID']
-#     _fType = request.form['featureType']
-#     _sClass = request.form['stimulusClass']
-#     _sName = request.form['stimulusName']
-#     _val = request.form['spValue']
-#     # print(request.form)
-    
-#     # set selected user id & make JSON file
-#     makeJSON("./static/output/selected_userid.json", _id)
-#     # make selected stimulus path JSON file
-#     selected_sPath = setStimulusPath(_sClass, _sName.split(".")[0])
-#     print(selected_sPath)
-#     # find selected data index
-#     selectedIdx = 0
-#     for _fp in PATHS:
-#       if _fp[2] == selected_sPath:
-#         break
-#       selectedIdx += 1
-#     makeJSON("./static/output/selected_stimulus_path.json", selected_sPath)
-#     # make selected raw gaze data JSON file
-#     makeJSON("./static/output/selected_raw_gaze.json", GAZE_DATA_LIST[selectedIdx])
-#     # make selected fixation data JSON file
-#     makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
-#     # make random data JSON file
-#     makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
-#     # make bispectra image files
-
-#     response['status'] = 'success'
-#   except Exception as e:
-#     response['status'] = 'failed'
-#     response['reason'] = e
-#     print(e)
-  
-#   return json.dumps(response)
 
 @app.route('/api/data/removefilter', methods=['POST'])
 def removefilter():
@@ -462,6 +397,18 @@ def removefilter():
 
     filteredDataPathFP = "./static/access/filtered_data_path.json"
     makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
+
+    calcCorrDF = afDF.drop("stimulusClass", axis=1)
+    selectedFeature = []
+    for _ft in FEATURE_TYPES:
+      for _uft in REMOVE_FEATURES:
+        if _ft != _uft:
+          selectedFeature.append(_ft)
+    afDFCorrMat = calcCorrDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr()
+    print("calculate correlation")
+    print(afDFCorrMat)
+
+
     
     response['status'] = 'success'
   except Exception as e:
@@ -895,16 +842,27 @@ def gazeDataSubmit():
     correlation_mat = fixData[cols].iloc[:,range(0,11)].corr()
     print(correlation_mat)
 
-    correlation_list = correlation_mat.values.tolist()
+    corrFeatTypeDF = pd.DataFrame(cols, columns=[""])
+    corrTransDF = pd.merge(corrFeatTypeDF, correlation_mat, left_index=True, right_index=True)
+    print("change the correlation matrix data form")
+    print(corrTransDF)
+
+    correlation_mat_csv = corrDir+"/"+"corr_matrix_all.csv"
+    correlation_mat.to_csv(correlation_mat_csv, mode='w', quoting=2)
+    correlation_mat_csv_access = "./static/access/corr_matrix_path.json"
+    makeJSON(correlation_mat_csv_access, correlation_mat_csv.split(".")[1]+".csv")
+    print("save correlation matrix data file")
+
+    # correlation_list = correlation_mat.values.tolist()
     
-    corrHeatData = []
-    for i in range(0, len(cols)):
-      for j in range(0, len(cols)):
-        corrHeatData.append([cols[i], cols[j], correlation_list[i][j]])
+    # corrHeatData = []
+    # for i in range(0, len(cols)):
+    #   for j in range(0, len(cols)):
+    #     corrHeatData.append([cols[i], cols[j], correlation_list[i][j]])
     
-    corrHeatDF = pd.DataFrame(corrHeatData, columns=spFormHeatmapColumnNames)
-    _corrResFilePath = corrDir+"/"+"A_cor.csv"
-    corrHeatDF.to_csv(_corrResFilePath, mode='w', index=False)
+    # corrHeatDF = pd.DataFrame(corrHeatData, columns=spFormHeatmapColumnNames)
+    # _corrResFilePath = corrDir+"/"+"A_cor.csv"
+    # corrHeatDF.to_csv(_corrResFilePath, mode='w', index=False)
 
     response['status'] = 'success'
     response['data'] = {
