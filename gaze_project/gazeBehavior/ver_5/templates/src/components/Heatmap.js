@@ -1,3 +1,4 @@
+// https://www.d3-graph-gallery.com/graph/heatmap_tooltip.html
 import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 
@@ -245,10 +246,8 @@ function Heatmap(props) {
          .domain([1,2])
 
       //Read the data
-      // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
       d3.csv(dataURL+"?"+Math.random(), function(data) {
          // create a tooltip
-         // var tooltip = d3.select(svgRef.current)
          var tooltip = d3.select("#my_dataviz")
             .append("div")
             .style("opacity", 0)
@@ -303,7 +302,8 @@ function Heatmap(props) {
          axios.post(`http://${window.location.hostname}:5000/api/data/removefilter`, _data)
          .then(response => {
             if (response.data.status === 'success') {
-               alert('data columns changed');
+               // alert('data columns changed');
+               console.log('data columns changed');
             } else if (response.data.status === 'failed') {
                alert(`Failed change data columns - ${response.data.reason}`);
             }
