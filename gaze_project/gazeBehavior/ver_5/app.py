@@ -20,6 +20,12 @@ STIMULUS_CLASSES = []
 FEATURE_TYPES = []
 REMOVE_CLASSES = []
 REMOVE_FEATURES = []
+
+# eye movement event filter threshold
+FILTER_THRESHOLD = []
+THRESHOLD_VELOCITY = 600
+THRESHOLD_DISTRIBUTION = 100
+THRESHOLD_DURATION = 200
 # FEATURE_SUB_TYPES = []
 # FEATURE_SUB = ""
 # STIMULUS_CLASSES = []
@@ -315,50 +321,21 @@ def calcSpatialVariation(_fixations, _randoms, _fType, _sClass, _sName):
     spatial_variation = _variation_eye/_variation_random
     return spatial_variation
 
+def makePath_Filter(_FILTER, _threshold, _path):
+  _p = _path
 
-# def initGlobal():
-#   global DATASET
-#   global FEATURE_TYPES
-#   global FEATURE_SUB_TYPES
-#   global FEATURE_SUB
-#   global STIMULUS_CLASSES
-#   global STIMULUS_NAMES
-#   global UIDS
-#   global PATHS
-#   global FEATURES
-#   global GAZE_DATA_LIST
-#   global FIXATIONS
-#   global meanValue
-#   global RANDOM_DATA_LIST
-#   global SPATIAL_VARIANCES
+  if _FILTER == "ivt":
+    # ivt filter needs velocity threshold
+    _p += _FILTER+"_"+str(_threshold[0])
+  elif _FILTER == "idt":
+    # idt filter needs distribution and duration threshold
+    _p += _FILTER+"_"+str(_threshold[0])+"_"+str(_threshold[1])
+  else:
+    # default set: ivt filter
+    _p += _FILTER+"_"+str(_threshold[0])
 
-#   DATASET = "MIT300"
-#   FEATURE_TYPES = []
-#   FEATURE_SUB_TYPES = []
-#   FEATURE_SUB = ""
-#   STIMULUS_CLASSES = []
-#   STIMULUS_NAMES = ["002", "004", "006", "008", "010", "012", "014", "016", "018", "020"]
-#   UIDS = ["usb_02"]
-#   PATHS = []
-#   FEATURES = []
-#   GAZE_DATA_LIST = []
-#   FIXATIONS = []
-#   meanValue = []
-#   RANDOM_DATA_LIST = []
-#   SPATIAL_VARIANCES = []
+  return _p
 
-
-# def makeJSON(_path, _data):
-#   wf = open(_path, "w", newline='', encoding='utf-8')
-#   wf.write(json.dumps(_data))
-#   wf.close()
-
-# app = Flask(__name__)
-# if __name__ == '__main__':
-#   app.jinja_env.auto_reload = True
-#   app.config['TEMPLATES_AUTO_RELOAD'] = True
-#   app.run(debug=True)
-# CORS(app)
 
 # @app.route('/api/analysis/velocity', methods=['POST'])
 # def changeVelocity():
@@ -452,14 +429,39 @@ def removefilter():
       for _t in getTypeList:
         REMOVE_FEATURES.append(_t)
       # print(getTypeList)
-
-    # for _rc in REMOVE_CLASSES:
-    #   print(_rc)
-
-    # for _rf in REMOVE_FEATURES:
-    #   print(_rf)
-
     
+    allFixationDataPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
+    allFixationDataPath = makePath_Filter(FILTER, FILTER_THRESHOLD, allFixationDataPath)
+    allFixationDataPath += "/all_fix.csv"
+
+    afDF = pd.read_csv(allFixationDataPath)
+    # print(afDF)
+    # drop stimulusName, x, and y coordinate columns
+    print("drop stimulusName, x, and y coordinate columns")
+    afDF = afDF.drop("stimulusName", axis=1)
+    afDF = afDF.drop("x", axis=1)
+    afDF = afDF.drop("y", axis=1)
+
+    # print(afDF)
+    # drop unselected stimulus classes
+    print("drop unselected stimulus classes")
+    for _dsc in REMOVE_CLASSES:
+      _dropIdx = afDF[afDF["stimulusClass"]==str(_dsc)].index
+      afDF = afDF.drop(_dropIdx)
+
+    # drop unselected feature types
+    print("drop unselected feature types")
+    for _dft in REMOVE_FEATURES:
+      afDF = afDF.drop(str(_dft), axis=1)
+    
+    print("filtered fixation data result")
+    print(afDF)
+
+    filteredDataPath = "./static/access/filtered_data.csv"
+    afDF.to_csv(filteredDataPath, mode='w', index=False)
+
+    filteredDataPathFP = "./static/access/filtered_data_path.json"
+    makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
     
     response['status'] = 'success'
   except Exception as e:
@@ -477,14 +479,7 @@ def gazeDataSubmit():
   global PARTICIPANT
   global FEATURE_TYPES
   global STIMULUS_CLASSES
-  # global PATHS
-  # global FEATURES
-  # global GAZE_DATA_LIST
-  # global FIXATIONS
-  # global RANDOM_DATA_LIST
-  # global SPATIAL_VARIANCES
-
-  # initGlobal()
+  global FILTER_THRESHOLD
   
   print(request.form)
   # print(request.form['data-origin'])
@@ -495,6 +490,17 @@ def gazeDataSubmit():
     DATASET = request.form['dataset']
     PARTICIPANT = request.form['participant']
     FILTER = request.form['filter']
+
+    # set filter threshold
+    FILTER_THRESHOLD = []
+    if FILTER == "ivt":
+      FILTER_THRESHOLD.append(THRESHOLD_VELOCITY)
+    elif FILTER == "idt":
+      FILTER_THRESHOLD.append(THRESHOLD_DISTRIBUTION)
+      FILTER_THRESHOLD.append(THRESHOLD_DURATION)
+    else:
+      # default set: ivt filter
+      FILTER_THRESHOLD.append(THRESHOLD_VELOCITY)
     
     # get feature types from server static directory
     FEATURE_TYPES = []
@@ -525,30 +531,13 @@ def gazeDataSubmit():
     spDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/sp_variance/"
     corrDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/correlation/"
 
-    filter_threshold = []
-    if FILTER == "ivt":
-      filter_threshold.append(600)
-      fixationDir += "ivt_"+str(filter_threshold[0])
-      psdFixDir += "ivt_"+str(filter_threshold[0])
-      randomDir += "ivt_"+str(filter_threshold[0])
-      spDir += "ivt_"+str(filter_threshold[0])
-      corrDir += "ivt_"+str(filter_threshold[0])
-    elif FILTER == "idt":
-      filter_threshold.append(100)
-      filter_threshold.append(200)
-      fixationDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      psdFixDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      randomDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      spDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      corrDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-    else:
-      # default set: ivt filter
-      filter_threshold.append(1000)
-      fixationDir += "ivt_"+str(filter_threshold[0])
-      psdFixDir += "ivt_"+str(filter_threshold[0])
-      randomDir += "ivt_"+str(filter_threshold[0])
-      spDir += "ivt_"+str(filter_threshold[0])
-      corrDir += "ivt_"+str(filter_threshold[0])
+
+    fixationDir = makePath_Filter(FILTER, FILTER_THRESHOLD, fixationDir)
+    psdFixDir = makePath_Filter(FILTER, FILTER_THRESHOLD, psdFixDir)
+    randomDir = makePath_Filter(FILTER, FILTER_THRESHOLD, randomDir)
+    spDir = makePath_Filter(FILTER, FILTER_THRESHOLD, spDir)
+    corrDir = makePath_Filter(FILTER, FILTER_THRESHOLD, corrDir)
+
     
     # if fixation and random cache files does not exist
     print("generate fixation and random cache files")
@@ -891,17 +880,14 @@ def gazeDataSubmit():
     spHeatmapDataFilePath_filePath = "./static/access/sp_heatmap_path.json"
     makeJSON(spHeatmapDataFilePath_filePath, spHeatmapDataPath.split(".")[1]+".csv")
     
-    # _corrRawFilePath = corrDir+"/"+"A_cor_raw.csv"
-    # fixData = pd.read_csv(_corrRawFilePath)
-    # cols = []
-    # for _fType in FEATURE_TYPES:
-    #   cols.append(_fType)
+    
     _psdFixationFilePath = psdFixDir+"/"+"all_fix.csv"
     fixData = pd.read_csv(_psdFixationFilePath)
-    fixData.drop("stimulusClass", axis=1)
-    fixData.drop("stimulusName", axis=1)
-    fixData.drop("x", axis=1)
-    fixData.drop("y", axis=1)
+    fixData = fixData.drop("stimulusClass", axis=1)
+    fixData = fixData.drop("stimulusName", axis=1)
+    fixData = fixData.drop("x", axis=1)
+    fixData = fixData.drop("y", axis=1)
+  
     cols = []
     for _fType in FEATURE_TYPES:
       cols.append(_fType)
