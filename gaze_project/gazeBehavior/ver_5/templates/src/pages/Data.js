@@ -7,18 +7,21 @@ class Data extends React.Component {
     super(props);
     this.state = {
       datasetList: [],
+      fixationFilters: [],
+      participants: [],
       featureTypes: [],
       stimulusTypes: [],
       selectedDataset: null,
+      selectedParticipant: null,
+      selectedFilter: null
     };
   }
-
 
   loadDatasetList = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/dataset.csv?`+Math.random())
       .then(response => {
-        console.log(response.data);
-        let options = [];
+        // console.log(response.data);
+        let dataset_options = [];
 
         var _val = 0;
         for (let value of response.data.split('\n')){
@@ -27,23 +30,63 @@ class Data extends React.Component {
               "value": value.replace('\r', ''),
               "label": value.replace('\r', '')
             };
-            options.push(_d);
+            dataset_options.push(_d);
             _val++;
           }
         }
 
-        // for(var i=0; i<response.data.length; i++){
-        //   var _d = {
-        //     "value": i,
-        //     "label": response.data[i]
-        //   };
-        //   options.push(_d);
-        // }
-        console.log(options);
+        console.log(dataset_options);
         this.setState({
-          datasetList: options
+          datasetList: dataset_options
         });
       });
+  }
+
+  loadParticipantsList = dataName => {
+    axios.get(`http://${window.location.hostname}:5000/static/data/${dataName}/participants.csv?`+Math.random())
+      .then(response => {
+        // console.log(response.data);
+        let participants_options = [];
+
+        for (let value of response.data.split('\n')){
+          if(value.length>0){
+            var _d = {
+              "value": value.replace('\r', ''),
+              "label": value.replace('\r', '')
+            };
+            participants_options.push(_d);
+          }
+        }
+
+        console.log(participants_options);
+        this.setState({
+          participants: participants_options
+        });
+      });
+  }
+
+  loadFixationFilters = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/fixation_filters.csv?`+Math.random())
+      .then(response => {
+        // console.log(response.data);
+        let filter_options = [];
+
+        for (let value of response.data.split('\n')){
+          if(value.length>0){
+            var _d = {
+              "value": value.replace('\r', ''),
+              "label": value.replace('\r', '')
+            };
+            filter_options.push(_d);
+          }
+        }
+
+        console.log(filter_options);
+        this.setState({
+          fixationFilters: filter_options
+        });
+      });
+
   }
 
   loadFeatureTypes = dataName => {
@@ -76,6 +119,7 @@ class Data extends React.Component {
 
   componentDidMount() {
     this.loadDatasetList();
+    this.loadFixationFilters();
   }
 
   onDataChanged = e => {
@@ -88,24 +132,15 @@ class Data extends React.Component {
     e.preventDefault();
     
     const data = new FormData(e.target);
-    const featureTypes = [];
-    for (let i = 0; i < this.state.featureTypes.length; i++) {
-      if (data.get(`feature-type-${i}`) !== null)
-        featureTypes.push(data.get(`feature-type-${i}`));
-    }
-    const stimulusClasses = [];
-    for (let i=0; i<this.state.stimulusTypes.length; i++){
-      if (data.get(`stimulus-type-${i}`) !== null)
-        stimulusClasses.push(data.get(`stimulus-type-${i}`));
-    }
-
-    data.set('feature-types', featureTypes);
-    data.set('stimulus-classes', stimulusClasses);
+    data.set('dataset', this.state.selectedDataset);
+    data.set('participant', this.state.selectedParticipant);
+    data.set('filter', this.state.selectedFilter);
 
     axios.post(`http://${window.location.hostname}:5000/api/gaze_data/submit`, data)
       .then(response => {
         if (response.data.status === 'success') {
           alert('Data loaded');
+          console.log(response.data);
         } else if (response.data.status === 'failed') {
           alert(`Failed to load data - ${response.data.reason}`);
         }
@@ -114,16 +149,29 @@ class Data extends React.Component {
       });
   }
 
-  datasetChange = selectedDataset => {
-    this.setState({selectedDataset});
-    this.loadFeatureTypes(selectedDataset.value);
-    this.loadStimulusTypes(selectedDataset.value);
+  datasetChange = d => {
+    const selected = d.value;
+    this.setState({selectedDataset: selected});
+    console.log(this.state.selectedDataset);
+    this.loadParticipantsList(selected);
+  };
+
+  participantChange = p => {
+    const selected = p.value;
+    this.setState({selectedParticipant: selected});
+    console.log(this.state.selectedParticipant);
+  }
+
+  filterChange = f => {
+    const selected = f.value;
+    this.setState({selectedFilter: selected});
+    console.log(this.state.selectedFilter);
+
   };
 
   render() {
-    const { datasetList, featureTypes, stimulusTypes, selectedDataset } = this.state;
+    const { datasetList, participants, fixationFilters, selectedDataset, selectedParticipant, selectedFilter } = this.state;
 
-    
     return (
       <>
         <div className="page-header">
@@ -135,68 +183,34 @@ class Data extends React.Component {
             <h2>Dataset</h2>
             <Select 
               value={selectedDataset}
-              onChange = {this.datasetChange}
+              onChange={this.datasetChange}
               options={datasetList}
+              placeholder="Select dataset"
             />
-            {/* <ul>
-              <li>
-                <input type="radio" id="data-mit300" name="data-origin" value="mit300" onClick={this.onDataChanged} />
-                <label htmlFor="data-mit300">
-                  <span>MIT300 dataset</span>
-                </label>
-              </li>
-              <li>
-                <input type="radio" id="data-database" name="data-origin" value="database" onClick={this.onDataChanged} />
-                <label htmlFor="data-database">
-                  <span>Database</span>
-                </label>
-              </li>
-            </ul> */}
+          </div>
+          
+          {participants.length > 0 &&
+            <div className="page-section select-participant">
+              <Select 
+                value={selectedParticipant}
+                onChange={this.participantChange}
+                options={participants}
+                placeholder="Select participant data"
+              />
+            </div>
+          }
+
+          <div className="page-section select-filter">
+            <Select 
+              value={selectedFilter}
+              onChange={this.filterChange}
+              options={fixationFilters}
+              placeholder="Select eye movement event filter"
+            />
+
           </div>
 
-          {featureTypes.length > 0 &&
-            <div className="page-section select-feature-type">
-              <h2>Feature Type</h2>
-              <ul>
-                {featureTypes.map((value, index) =>
-                  <li key={index}>
-                    <input
-                      type="checkbox"
-                      id={`feature-type-${index}`}
-                      name={`feature-type-${index}`}
-                      className="feature-type-item"
-                      value={value}
-                    />
-                    <label htmlFor={`feature-type-${index}`}>
-                      <span>{value}</span>
-                    </label>
-                  </li>
-                )}
-              </ul>
-            </div>
-          }
-
-          {stimulusTypes.length > 0 &&
-            <div className="page-section select-stimulus-type">
-              <h2>Stimulus Class</h2>
-              <ul>
-                {stimulusTypes.map((value, index) =>
-                  <li key={index}>
-                    <input 
-                      type="checkbox" 
-                      id={`stimulus-type-${index}`}
-                      name={`stimulus-type-${index}`}
-                      className="stimulus-type-item"
-                      value={value} 
-                    />
-                    <label htmlFor={`stimulus-type-${index}`}>
-                      <span>{value}</span>
-                    </label>
-                  </li>
-                )}
-              </ul>
-            </div>
-          }
+          
 
           <div className="page-section button-wrapper">
             <button className="submit-button">Load</button>
