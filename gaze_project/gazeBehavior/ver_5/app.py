@@ -891,8 +891,17 @@ def gazeDataSubmit():
     spHeatmapDataFilePath_filePath = "./static/access/sp_heatmap_path.json"
     makeJSON(spHeatmapDataFilePath_filePath, spHeatmapDataPath.split(".")[1]+".csv")
     
-    _corrRawFilePath = corrDir+"/"+"A_cor_raw.csv"
-    fixData = pd.read_csv(_corrRawFilePath)
+    # _corrRawFilePath = corrDir+"/"+"A_cor_raw.csv"
+    # fixData = pd.read_csv(_corrRawFilePath)
+    # cols = []
+    # for _fType in FEATURE_TYPES:
+    #   cols.append(_fType)
+    _psdFixationFilePath = psdFixDir+"/"+"all_fix.csv"
+    fixData = pd.read_csv(_psdFixationFilePath)
+    fixData.drop("stimulusClass", axis=1)
+    fixData.drop("stimulusName", axis=1)
+    fixData.drop("x", axis=1)
+    fixData.drop("y", axis=1)
     cols = []
     for _fType in FEATURE_TYPES:
       cols.append(_fType)
