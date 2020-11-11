@@ -383,6 +383,12 @@ def corrProcess():
     afDFCorrMat_short.to_csv(afDFCorrMat_short_access, mode='w', quoting=2)
     print("save short column version correlation data")
     print(afDFCorrMat_short)
+
+    corrMatrix_access_path = "./static/access/corr_matrix_path.json"
+    makeJSON(corrMatrix_access_path, afDFCorrMat_access.split(".")[1]+".csv")
+    corrMatrixShort_access_path = "./static/access/corr_matrix_short_path.json"
+    makeJSON(corrMatrixShort_access_path,afDFCorrMat_short_access.split(".")[1]+".csv")
+    print("save access paths")
     
     response['status'] = 'success'
   except Exception as e:
