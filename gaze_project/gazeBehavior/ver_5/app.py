@@ -18,10 +18,12 @@ DATASET = "MIT300"
 FILTER = "ivt"
 PARTICIPANT = "usb_02"
 DATAPROCESSING = "min_max"
+CORRELATION_METHOD = "pearson"
 STIMULUS_CLASSES = []
 FEATURE_TYPES = []
 REMOVE_CLASSES = []
 REMOVE_FEATURES = []
+
 
 # eye movement event filter threshold
 FILTER_THRESHOLD = []
@@ -313,10 +315,12 @@ def dataPreProcessing(_method, _data):
 @app.route('/api/corr/process', methods=['POST'])
 def corrProcess():
   global DATAPROCESSING
+  global CORRELATION_METHOD
   response = {}
   try:
     print(request.form)
     DATAPROCESSING = request.form['processing']
+    CORRELATION_METHOD = request.form['correlation']
 
     # load all fixation data
     allFixationDataPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
@@ -362,7 +366,7 @@ def corrProcess():
     filteredDataPathFP = "./static/access/filtered_data_path.json"
     makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
 
-    afDFCorrMat = processed_afDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr()
+    afDFCorrMat = processed_afDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr(method=CORRELATION_METHOD)
     afDFCorrMat_access = "./static/access/correlation_mat.csv"
     afDFCorrMat.to_csv(afDFCorrMat_access, mode='w', quoting=2)
     print("calculate and save correlation")
@@ -374,7 +378,7 @@ def corrProcess():
     for i in range(0, len(selectedFeature)):
       colNameShort.append("f_"+str(i).zfill(2))
     afDF_short = pd.DataFrame(afDF_list, columns=colNameShort)
-    afDFCorrMat_short = afDF_short[colNameShort].iloc[:,range(0,len(colNameShort))].corr()
+    afDFCorrMat_short = afDF_short[colNameShort].iloc[:,range(0,len(colNameShort))].corr(method=CORRELATION_METHOD)
     afDFCorrMat_short_access = "./static/access/correlation_mat_short.csv"
     afDFCorrMat_short.to_csv(afDFCorrMat_short_access, mode='w', quoting=2)
     print("save short column version correlation data")
@@ -852,7 +856,7 @@ def gazeDataSubmit():
     processedData_list = fixData.values.tolist()
     processedData_list = dataPreProcessing(DATAPROCESSING, processedData_list)
     porcessedFixData = pd.DataFrame(processedData_list, columns=cols)    
-    correlation_mat = porcessedFixData[cols].iloc[:,range(0,11)].corr()
+    correlation_mat = porcessedFixData[cols].iloc[:,range(0,11)].corr(method=CORRELATION_METHOD)
 
     # save correlation matrix data file
     correlation_mat_csv = corrDir+"/"+"corr_matrix_all.csv"
@@ -870,7 +874,7 @@ def gazeDataSubmit():
       cols_short.append("f_"+str(i).zfill(2))
     fixData_colName = pd.DataFrame(fixData_list, columns=cols_short)
     print(fixData_colName)
-    correlation_shortCol = fixData_colName[cols_short].iloc[:,range(0,11)].corr()
+    correlation_shortCol = fixData_colName[cols_short].iloc[:,range(0,11)].corr(method=CORRELATION_METHOD)
     correlation_mat_short_csv = corrDir+"/"+"corr_matrix_all_short.csv"
     correlation_shortCol.to_csv(correlation_mat_short_csv, mode='w', quoting=2)
     correlation_mat_short_csv_access = "./static/access/corr_matrix_short_path.json"
