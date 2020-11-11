@@ -7,6 +7,7 @@ from random import *
 
 import numpy as np
 import pandas as pd
+from sklearn import preprocessing as sklearn_preprocessing
 from flask import *
 from flask_cors import CORS
 
@@ -16,6 +17,7 @@ import src.py.glodberg as gfilter
 DATASET = "MIT300"
 FILTER = "ivt"
 PARTICIPANT = "usb_02"
+DATAPROCESSING = "min_max"
 STIMULUS_CLASSES = []
 FEATURE_TYPES = []
 REMOVE_CLASSES = []
@@ -68,55 +70,6 @@ def calcFeatureMean(_path):
   
   return _meanValue
 
-# def loadFeatureFile(_path):
-#   global meanValue
-  
-#   rf = open(_path, 'r', encoding='utf-8')
-#   rdr = csv.reader(rf)
-#   _featArr = []
-#   for _row in rdr:
-#     _featArr.append(_row)
-#   rf.close()
-  
-#   sumVal = 0
-#   for i in range(0, 1080):
-#     for j in range(0, 1920):
-#       sumVal += float(_featArr[i][j])
-#   meanValue.append(sumVal/(1920*1080))
-  
-#   return _featArr
-
-# def loadEyeMovementDataFile(_path, _feat):
-#   _gazeData = []
-#   _gaze = []
-
-#   rf = open(_path, 'r', encoding='utf-8')
-#   rdr = csv.reader(rf)
-  
-#   for _row in rdr:
-#     # 0: t, 1: x, 2: y
-#     if _row[1] == "x":
-#       continue
-#     elif _row[1] == "NaN":
-#       _gazeData.append([0, 0, 0])
-#       break
-#     else:
-#       if float(_row[1]) >= 1920 or float(_row[2]) >= 1080:
-#         continue
-#       _gazeData.append(_row)
-#   rf.close()
-  
-#   for _g in _gazeData:
-#     _t = int(_g[0])
-#     _gx = int(math.trunc(float(_g[1])))
-#     _gy = int(math.trunc(float(_g[2])))
-#     # print("x: %d"%_gx)
-#     # print("y: %d"%_gy)
-#     _gf = float(_feat[_gy][_gx])
-#     _gx = float(_g[1])
-#     _gy = float(_g[2])
-#     _gaze.append([_t, _gx, _gy, _gf])
-#   return _gaze
   
 def ivtFilter(_gazeData, _uid, _feats, _vt):
   _fixation = []
@@ -337,38 +290,38 @@ def makePath_Filter(_FILTER, _threshold, _path):
 
   return _p
 
+# function for data preprocessing such as min-max normalization and z-score standardization
+def dataPreProcessing(_method, _data):
+  processedData = []
+  _pd = []
+  if _method == "min_max":
+    print("Data processing: Min-Max Normalization")
+    _pd = sklearn_preprocessing.MinMaxScaler().fit_transform(_data)
+  elif _method == "z_score":
+    print("Data processing: z-score Standardization")
+    _pd = sklearn_preprocessing.StandardScaler().fit_transform(_data)
+  else:
+    print("Data processing: default (Min-Max Normalization)")
+    _pd = sklearn_preprocessing.MinMaxScaler().fit_transform(_data)
 
-@app.route('/api/data/removefilter', methods=['POST'])
-def removefilter():
-  global REMOVE_CLASSES
-  global REMOVE_FEATURES
+  return _pd
 
+# preProcessing_list = fixData.values.tolist()
+# dataPreProcessing(DATAPROCESSING, preProcessing_list)
+
+# from pages/Data.js
+@app.route('/api/corr/process', methods=['POST'])
+def corrProcess():
+  global DATAPROCESSING
   response = {}
   try:
     print(request.form)
+    DATAPROCESSING = request.form['processing']
 
-    REMOVE_CLASSES = []
-    getClassesList = []
-    getClasses = request.form['removeClass']
-    if len(getClasses) != 0:
-      getClassesList = getClasses.split(",")
-      for _c in getClassesList:
-        REMOVE_CLASSES.append(_c)
-      # print(getClassesList)
-      
-    REMOVE_FEATURES = []
-    getTypeList = []
-    getTypes = request.form['removeFeature']
-    if len(getTypes) != 0:
-      getTypeList = getTypes.split(",")
-      for _t in getTypeList:
-        REMOVE_FEATURES.append(_t)
-      # print(getTypeList)
-    
+    # load all fixation data
     allFixationDataPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
     allFixationDataPath = makePath_Filter(FILTER, FILTER_THRESHOLD, allFixationDataPath)
     allFixationDataPath += "/all_fix.csv"
-
     afDF = pd.read_csv(allFixationDataPath)
     # print(afDF)
     # drop stimulusName, x, and y coordinate columns
@@ -388,28 +341,83 @@ def removefilter():
     print("drop unselected feature types")
     for _dft in REMOVE_FEATURES:
       afDF = afDF.drop(str(_dft), axis=1)
-    
-    print("filtered fixation data result")
     print(afDF)
 
-    filteredDataPath = "./static/access/filtered_data.csv"
-    afDF.to_csv(filteredDataPath, mode='w', index=False)
-
-    filteredDataPathFP = "./static/access/filtered_data_path.json"
-    makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
-
-    calcCorrDF = afDF.drop("stimulusClass", axis=1)
+    afDF = afDF.drop("stimulusClass", axis=1)
     selectedFeature = []
     for _ft in FEATURE_TYPES:
       for _uft in REMOVE_FEATURES:
         if _ft != _uft:
           selectedFeature.append(_ft)
-    afDFCorrMat = calcCorrDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr()
-    print("calculate correlation")
+
+    # data pre-processing: min-max normalization or z-score standardization
+    _pProData_list = afDF.values.tolist()
+    _pProData_list = dataPreProcessing(DATAPROCESSING, _pProData_list)
+    processed_afDF = pd.DataFrame(_pProData_list, columns=selectedFeature)
+
+
+    filteredDataPath = "./static/access/filtered_data.csv"
+    processed_afDF.to_csv(filteredDataPath, mode='w', index=False)
+
+    filteredDataPathFP = "./static/access/filtered_data_path.json"
+    makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
+
+    afDFCorrMat = processed_afDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr()
+    afDFCorrMat_access = "./static/access/correlation_mat.csv"
+    afDFCorrMat.to_csv(afDFCorrMat_access, mode='w', quoting=2)
+    print("calculate and save correlation")
     print(afDFCorrMat)
 
-
+    # generate short column name version
+    afDF_list = _pProData_list
+    colNameShort = []
+    for i in range(0, len(selectedFeature)):
+      colNameShort.append("f_"+str(i).zfill(2))
+    afDF_short = pd.DataFrame(afDF_list, columns=colNameShort)
+    afDFCorrMat_short = afDF_short[colNameShort].iloc[:,range(0,len(colNameShort))].corr()
+    afDFCorrMat_short_access = "./static/access/correlation_mat_short.csv"
+    afDFCorrMat_short.to_csv(afDFCorrMat_short_access, mode='w', quoting=2)
+    print("save short column version correlation data")
+    print(afDFCorrMat_short)
     
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
+
+
+
+@app.route('/api/data/removefilter', methods=['POST'])
+def removefilter():
+  global REMOVE_CLASSES
+  global REMOVE_FEATURES
+
+  response = {}
+  try:
+    print(request.form)
+    getClasses = request.form['removeClass']
+    getTypes = request.form['removeFeature']
+
+    REMOVE_CLASSES = []
+    getClassesList = []
+    if len(getClasses) != 0:
+      getClassesList = getClasses.split(",")
+      for _c in getClassesList:
+        REMOVE_CLASSES.append(_c)
+      # print(getClassesList)
+      
+    REMOVE_FEATURES = []
+    getTypeList = []
+    if len(getTypes) != 0:
+      getTypeList = getTypes.split(",")
+      for _t in getTypeList:
+        REMOVE_FEATURES.append(_t)
+      # print(getTypeList)
+
+
     response['status'] = 'success'
   except Exception as e:
     response['status'] = 'failed'
@@ -425,7 +433,7 @@ def gazeDataSubmit():
   global FILTER
   global PARTICIPANT
   global FEATURE_TYPES
-  global STIMULUS_CLASSES
+  global STIMULUS_CLASSE
   global FILTER_THRESHOLD
   
   print(request.form)
@@ -435,7 +443,7 @@ def gazeDataSubmit():
   try:
     # get selected dataset, participant, and fixation filter from client
     DATASET = request.form['dataset']
-    PARTICIPANT = request.form['participant']
+    PARTICIPANT = request.form['participant']  
     FILTER = request.form['filter']
 
     # set filter threshold
@@ -804,7 +812,7 @@ def gazeDataSubmit():
       
     # if fixation, random, and spatial variance cache file exist
     # Load spatial variance mean cache
-    print("Load spatial variance mean cache")
+    print("SP: Load spatial variance mean cache")
     spMeanCachePath = spDir+"/"+"sp_mean.csv"
     spMeanCache = pd.read_csv(spMeanCachePath)
     print(spMeanCache)
@@ -826,6 +834,7 @@ def gazeDataSubmit():
     # save spatial variance mean data file path
     spHeatmapDataFilePath_filePath = "./static/access/sp_heatmap_path.json"
     makeJSON(spHeatmapDataFilePath_filePath, spHeatmapDataPath.split(".")[1]+".csv")
+    print("save spatial variance mean data file path")
     
     
     _psdFixationFilePath = psdFixDir+"/"+"all_fix.csv"
@@ -834,35 +843,40 @@ def gazeDataSubmit():
     fixData = fixData.drop("stimulusName", axis=1)
     fixData = fixData.drop("x", axis=1)
     fixData = fixData.drop("y", axis=1)
-  
+
     cols = []
     for _fType in FEATURE_TYPES:
       cols.append(_fType)
-    
-    correlation_mat = fixData[cols].iloc[:,range(0,11)].corr()
-    print(correlation_mat)
 
-    corrFeatTypeDF = pd.DataFrame(cols, columns=[""])
-    corrTransDF = pd.merge(corrFeatTypeDF, correlation_mat, left_index=True, right_index=True)
-    print("change the correlation matrix data form")
-    print(corrTransDF)
+    # data pre-processing: Min-max normalization | z-score standardization
+    processedData_list = fixData.values.tolist()
+    processedData_list = dataPreProcessing(DATAPROCESSING, processedData_list)
+    porcessedFixData = pd.DataFrame(processedData_list, columns=cols)    
+    correlation_mat = porcessedFixData[cols].iloc[:,range(0,11)].corr()
 
+    # save correlation matrix data file
     correlation_mat_csv = corrDir+"/"+"corr_matrix_all.csv"
     correlation_mat.to_csv(correlation_mat_csv, mode='w', quoting=2)
     correlation_mat_csv_access = "./static/access/corr_matrix_path.json"
     makeJSON(correlation_mat_csv_access, correlation_mat_csv.split(".")[1]+".csv")
     print("save correlation matrix data file")
 
-    # correlation_list = correlation_mat.values.tolist()
-    
-    # corrHeatData = []
-    # for i in range(0, len(cols)):
-    #   for j in range(0, len(cols)):
-    #     corrHeatData.append([cols[i], cols[j], correlation_list[i][j]])
-    
-    # corrHeatDF = pd.DataFrame(corrHeatData, columns=spFormHeatmapColumnNames)
-    # _corrResFilePath = corrDir+"/"+"A_cor.csv"
-    # corrHeatDF.to_csv(_corrResFilePath, mode='w', index=False)
+
+    # generate shortcut version dataframe
+    # fixData_list = fixData.values.tolist()
+    fixData_list = processedData_list
+    cols_short = []
+    for i in range(0, len(cols)):
+      cols_short.append("f_"+str(i).zfill(2))
+    fixData_colName = pd.DataFrame(fixData_list, columns=cols_short)
+    print(fixData_colName)
+    correlation_shortCol = fixData_colName[cols_short].iloc[:,range(0,11)].corr()
+    correlation_mat_short_csv = corrDir+"/"+"corr_matrix_all_short.csv"
+    correlation_shortCol.to_csv(correlation_mat_short_csv, mode='w', quoting=2)
+    correlation_mat_short_csv_access = "./static/access/corr_matrix_short_path.json"
+    makeJSON(correlation_mat_short_csv_access, correlation_mat_short_csv.split(".")[1]+".csv")
+    print("save correlation matrix short column version data file")
+
 
     response['status'] = 'success'
     response['data'] = {
