@@ -10,13 +10,14 @@ function CorrelationMatrix(props) {
   useEffect(() => {
     if (typeof dataURL !== 'string' || dataURL.length === 0)
       return;
+    d3.select(svgRef.current).selectAll("*").remove();
 
     d3.csv(dataURL, function(error, rows) {
       // console.log(rows)
       var data = [];
 
       rows.forEach(function(d) {
-        console.log(d);
+        // console.log(d);
         var x = d[""];
         delete d[""];
         
@@ -39,8 +40,6 @@ function CorrelationMatrix(props) {
           return d.x;
         })).values();
       var num = Math.sqrt(data.length);
-      console.log(data.length);
-      console.log(num);
       var color = d3.scaleLinear()
         .domain([-1, 0, 1])
         .range(["#B22222", "#fff", "#000080"]);
@@ -56,7 +55,8 @@ function CorrelationMatrix(props) {
       var xSpace = x.range()[1] - x.range()[0],
       ySpace = y.range()[1] - y.range()[0];
       ySpace = y.range()[1] - y.range()[0];
-
+      
+      
       var svg = d3.select(svgRef.current)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -159,7 +159,7 @@ function CorrelationMatrix(props) {
     });
 
     
-  }, []);
+  }, [dataURL]);
 
   return (
     <>
