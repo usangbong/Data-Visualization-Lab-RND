@@ -53,7 +53,7 @@ class Data extends React.Component {
           }
         }
 
-        console.log(dataset_options);
+        // console.log(dataset_options);
         this.setState({
           datasetList: dataset_options
         });
@@ -76,7 +76,7 @@ class Data extends React.Component {
           }
         }
 
-        console.log(participants_options);
+        // console.log(participants_options);
         this.setState({
           participants: participants_options
         });
@@ -88,7 +88,7 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response);
         let _path = "http://"+window.location.hostname+":5000"+response.data;
-        console.log("sp heatmap data access path: "+_path);
+        // console.log("sp heatmap data access path: "+_path);
         this.setState({
           spHeatmapDataURL: _path
         });
@@ -100,7 +100,7 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response);
         let _path = "http://"+window.location.hostname+":5000"+response.data;
-        console.log("correlation data access path: "+_path);
+        // console.log("correlation data access path: "+_path);
         this.setState({
           corrMatDataURL: _path
         });
@@ -123,7 +123,7 @@ class Data extends React.Component {
           }
         }
 
-        console.log(filter_options);
+        // console.log(filter_options);
         this.setState({
           fixationFilters: filter_options
         });
@@ -164,13 +164,12 @@ class Data extends React.Component {
     this.loadFixationFilters();
   }
 
+
   onDataChanged = e => {
     const dataName = e.currentTarget.value;
     this.loadFeatureTypes(dataName);
     this.loadStimulusTypes(dataName);
   }
-
-  
 
   onSubmit = e => {
     e.preventDefault();
@@ -185,7 +184,7 @@ class Data extends React.Component {
         if (response.data.status === 'success') {
           this.loadSPMeanPath();
           alert('Data loaded');
-          console.log(response.data);
+          // console.log(response.data);
           this.loadCorrMatrixPath();
         } else if (response.data.status === 'failed') {
           alert(`Failed to load data - ${response.data.reason}`);
@@ -232,6 +231,16 @@ class Data extends React.Component {
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
+
+    // this.loadCorrMatrixPath();
+    // const d3CorrMatVis = document.getElementById("corr");
+    // while(d3CorrMatVis.hasChildNodes()){
+    //   d3CorrMatVis.removeChild(d3CorrMatVis.lastChild);
+    // }
+    // if(d3CorrMatVis){
+    //   new CorrelationMatrix(d3CorrMatVis, this.state.dataURL);
+    // }
+    // this.forceUpdate();
   }
 
   render() {
@@ -308,7 +317,6 @@ class Data extends React.Component {
             />
           </div>
         }
-
 
         {corrMatDataURL.length > 0 &&
           <div id="corr">
