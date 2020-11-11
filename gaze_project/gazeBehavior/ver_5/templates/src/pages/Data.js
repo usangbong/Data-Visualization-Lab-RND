@@ -10,6 +10,12 @@ const dataProcessingMethods = [
   { value: 'z_score', label: 'z-score'}
 ];
 
+const correlationMethods = [
+  { value:'pearson', label: 'Pearson linear' },
+  { value:'spearman', label: 'Spearman rank-order' },
+  { value:'pearson', label: 'Kendall rank-order' }
+];
+
 class Data extends React.Component {
   constructor(props) {
     super(props);
@@ -25,6 +31,7 @@ class Data extends React.Component {
       selectedParticipant: null,
       selectedFilter: null,
       selectedProcessMethod: null,
+      selectedCorrelationMethod: null,
     };
   }
 
@@ -206,16 +213,21 @@ class Data extends React.Component {
 
   pMethodChange = selectedProcessMethod => {
     this.setState({selectedProcessMethod});
+  }
+
+  cMethodChange = selectedCorrelationMethod => {
+    this.setState({selectedCorrelationMethod});
     
     const data = new FormData();
-    data.set('processing', selectedProcessMethod.value);
+    data.set('processing', this.state.selectedProcessMethod.value);
+    data.set('correlation', selectedCorrelationMethod.value);
     axios.post(`http://${window.location.hostname}:5000/api/corr/process`, data)
     .then(response => {
       if (response.data.status === 'success') {
-        alert('Data pre-processing aplied');
+        alert('Data pre-processing and correlation methods aplied');
         this.loadCorrMatrixPath();
       } else if (response.data.status === 'failed') {
-        alert(`Failed data pre-processing - ${response.data.reason}`);
+        alert(`Failed apply data pre-processing and correlation methods - ${response.data.reason}`);
       }
     }).catch(error => {
       alert(`Error - ${error.message}`);
@@ -223,7 +235,7 @@ class Data extends React.Component {
   }
 
   render() {
-    const { datasetList, participants, fixationFilters, selectedDataset, spHeatmapDataURL, corrMatDataURL, selectedParticipant, selectedFilter, selectedProcessMethod } = this.state;
+    const { datasetList, participants, fixationFilters, selectedDataset, spHeatmapDataURL, corrMatDataURL, selectedParticipant, selectedFilter, selectedProcessMethod, selectedCorrelationMethod } = this.state;
 
     return (
       <>
@@ -258,7 +270,7 @@ class Data extends React.Component {
               value={selectedFilter}
               onChange={this.filterChange}
               options={fixationFilters}
-              placeholder="Select eye movement event filter"
+              placeholder="Select an eye movement event filter"
             />
           </div>
 
@@ -275,14 +287,27 @@ class Data extends React.Component {
           </div>
         }
 
-        <div className="page-section select-process">
-          <Select
-            value={selectedProcessMethod}
-            onChange={this.pMethodChange}
-            options={dataProcessingMethods}
-            placeholder="Select data pre-processing method"
-          />
-        </div>
+        {spHeatmapDataURL.length > 0 &&
+          <div className="page-section select-process">
+            <Select
+              value={selectedProcessMethod}
+              onChange={this.pMethodChange}
+              options={dataProcessingMethods}
+              placeholder="Select a data pre-processing method"
+            />
+          </div>
+        }
+
+        {spHeatmapDataURL.length > 0 &&
+          <div className="page-section a select-correlation">
+            <Select
+              value={selectedCorrelationMethod}
+              onChange={this.cMethodChange}
+              options={correlationMethods}
+              placeholder="Select a correlation method"
+            />
+          </div>
+        }
 
 
         {corrMatDataURL.length > 0 &&
