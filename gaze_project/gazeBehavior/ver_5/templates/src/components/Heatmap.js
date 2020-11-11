@@ -90,8 +90,8 @@ function Heatmap(props) {
                }
             }
 
-            console.log(selectedCols);
-            console.log(myGroups);
+            // console.log(selectedCols);
+            // console.log(myGroups);
             d3.selectAll(".xaxis .tick").transition()
                .attr("stroke", function(d){
                   var _selected = false;
@@ -190,8 +190,8 @@ function Heatmap(props) {
                }
             }
 
-            console.log(selectedRows);
-            console.log(myVars);
+            // console.log(selectedRows);
+            // console.log(myVars);
             d3.selectAll(".yaxis .tick").transition()
             .attr("stroke", function(d){
                var _selected = false;
