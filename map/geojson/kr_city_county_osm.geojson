@@ -1,0 +1,3047 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6018,
+          35.8713
+        ]
+      },
+      "properties": {
+        "osmid": 257363453,
+        "cellid": 0,
+        "name": "대구",
+        "name:ko": "대구",
+        "name:en": "Daegu",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.3848,
+          36.3496
+        ]
+      },
+      "properties": {
+        "osmid": 257363455,
+        "cellid": 1,
+        "name": "대전",
+        "name:ko": "대전",
+        "name:en": "Daejeon",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1262092,
+          37.4201556
+        ]
+      },
+      "properties": {
+        "osmid": 257363469,
+        "cellid": 2,
+        "name": "성남시",
+        "name:ko": "성남시",
+        "name:en": "Seongnam-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.7260798,
+          36.5634886
+        ]
+      },
+      "properties": {
+        "osmid": 257370655,
+        "cellid": 3,
+        "name": "안동시",
+        "name:ko": "안동시",
+        "name:en": "Andong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.2248811,
+          35.8556705
+        ]
+      },
+      "properties": {
+        "osmid": 257370656,
+        "cellid": 4,
+        "name": "경주시",
+        "name:ko": "경주시",
+        "name:en": "Gyeongju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.3847547,
+          34.7903335
+        ]
+      },
+      "properties": {
+        "osmid": 257370657,
+        "cellid": 5,
+        "name": "목포시",
+        "name:ko": "목포시",
+        "name:en": "Mokpo-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6818586,
+          35.227956
+        ]
+      },
+      "properties": {
+        "osmid": 257370659,
+        "cellid": 6,
+        "name": "창원시",
+        "name:ko": "창원시",
+        "name:en": "Changwon",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8308604,
+          37.3217152
+        ]
+      },
+      "properties": {
+        "osmid": 257372341,
+        "cellid": 7,
+        "name": "안산시",
+        "name:ko": "안산시",
+        "name:en": "Ansan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0287472,
+          37.2633325
+        ]
+      },
+      "properties": {
+        "osmid": 257764593,
+        "cellid": 8,
+        "name": "수원시",
+        "name:ko": "수원시",
+        "name:en": "Suwon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4891742,
+          36.6421169
+        ]
+      },
+      "properties": {
+        "osmid": 309947253,
+        "cellid": 9,
+        "name": "청주시",
+        "name:ko": "청주시",
+        "name:en": "Cheongju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0774625,
+          37.1499376
+        ]
+      },
+      "properties": {
+        "osmid": 311886695,
+        "cellid": 10,
+        "name": "오산시",
+        "name:ko": "오산시",
+        "name:en": "Osan",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.0752365,
+          35.1799528
+        ]
+      },
+      "properties": {
+        "osmid": 358015143,
+        "cellid": 11,
+        "name": "부산",
+        "name:ko": "부산",
+        "name:en": "Busan",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8515089,
+          35.1595775
+        ]
+      },
+      "properties": {
+        "osmid": 358015168,
+        "cellid": 12,
+        "name": "광주",
+        "name:ko": "광주",
+        "name:en": "Gwangju",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8319452,
+          37.6581862
+        ]
+      },
+      "properties": {
+        "osmid": 358015198,
+        "cellid": 13,
+        "name": "고양시",
+        "name:ko": "고양시",
+        "name:en": "Goyang",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1480657,
+          35.8242715
+        ]
+      },
+      "properties": {
+        "osmid": 358015235,
+        "cellid": 14,
+        "name": "전주시",
+        "name:ko": "전주시",
+        "name:en": "Jeonju",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3429384,
+          36.0189315
+        ]
+      },
+      "properties": {
+        "osmid": 358015241,
+        "cellid": 15,
+        "name": "포항시",
+        "name:ko": "포항시",
+        "name:en": "Pohang-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.8908228,
+          35.2310947
+        ]
+      },
+      "properties": {
+        "osmid": 358015263,
+        "cellid": 16,
+        "name": "김해시",
+        "name:ko": null,
+        "name:en": "Gimhae",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.033929,
+          37.7381078
+        ]
+      },
+      "properties": {
+        "osmid": 358015268,
+        "cellid": 17,
+        "name": "의정부시",
+        "name:ko": "의정부시",
+        "name:en": "Uijeongbu-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1079953,
+          35.1803459
+        ]
+      },
+      "properties": {
+        "osmid": 358015281,
+        "cellid": 18,
+        "name": "진주시",
+        "name:ko": "진주시",
+        "name:en": "Jinju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.3444692,
+          36.1195513
+        ]
+      },
+      "properties": {
+        "osmid": 358015287,
+        "cellid": 19,
+        "name": "구미시",
+        "name:ko": "구미시",
+        "name:en": "Gumi-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9578025,
+          35.9479291
+        ]
+      },
+      "properties": {
+        "osmid": 358015292,
+        "cellid": 20,
+        "name": "익산시",
+        "name:ko": "익산시",
+        "name:en": "Iksan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.5130589,
+          33.4930566
+        ]
+      },
+      "properties": {
+        "osmid": 358015303,
+        "cellid": 21,
+        "name": "제주시",
+        "name:ko": "제주시",
+        "name:en": "Jeju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.659859,
+          34.7546257
+        ]
+      },
+      "properties": {
+        "osmid": 358015308,
+        "cellid": 22,
+        "name": "여수시",
+        "name:ko": "여수시",
+        "name:en": "Yeosu",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4872992,
+          34.9505457
+        ]
+      },
+      "properties": {
+        "osmid": 358015319,
+        "cellid": 23,
+        "name": "순천시",
+        "name:ko": "순천시",
+        "name:en": "Suncheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7369036,
+          35.9679984
+        ]
+      },
+      "properties": {
+        "osmid": 358015322,
+        "cellid": 24,
+        "name": "군산시",
+        "name:ko": "군산시",
+        "name:en": "Gunsan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9349025,
+          37.3615229
+        ]
+      },
+      "properties": {
+        "osmid": 358015330,
+        "cellid": 25,
+        "name": "군포시",
+        "name:ko": "군포시",
+        "name:en": "Gunpo-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.7297641,
+          37.8810569
+        ]
+      },
+      "properties": {
+        "osmid": 358015347,
+        "cellid": 26,
+        "name": "춘천시",
+        "name:ko": "춘천시",
+        "name:en": "Chuncheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.741329,
+          35.825122
+        ]
+      },
+      "properties": {
+        "osmid": 358015360,
+        "cellid": 27,
+        "name": "경산시",
+        "name:ko": "경산시",
+        "name:en": "Gyeongsan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.0370582,
+          35.3349979
+        ]
+      },
+      "properties": {
+        "osmid": 358015368,
+        "cellid": 28,
+        "name": "양산시",
+        "name:ko": "양산시",
+        "name:en": "Yangsan",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.621207,
+          34.8804677
+        ]
+      },
+      "properties": {
+        "osmid": 358015380,
+        "cellid": 29,
+        "name": "거제시",
+        "name:ko": "거제시",
+        "name:en": "Geoje-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.279971,
+          37.007773
+        ]
+      },
+      "properties": {
+        "osmid": 358015396,
+        "cellid": 30,
+        "name": "안성시",
+        "name:ko": "안성시",
+        "name:en": "Anseong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4429132,
+          37.2808823
+        ]
+      },
+      "properties": {
+        "osmid": 358015415,
+        "cellid": 31,
+        "name": "이천시",
+        "name:ko": "이천시",
+        "name:en": "Icheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9689861,
+          37.3449082
+        ]
+      },
+      "properties": {
+        "osmid": 358015422,
+        "cellid": 32,
+        "name": "의왕시",
+        "name:ko": "의왕시",
+        "name:en": "Uiwang",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.450317,
+          36.784499
+        ]
+      },
+      "properties": {
+        "osmid": 358015429,
+        "cellid": 33,
+        "name": "서산시",
+        "name:ko": "서산시",
+        "name:en": "Seosan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0987857,
+          36.1868623
+        ]
+      },
+      "properties": {
+        "osmid": 358015455,
+        "cellid": 34,
+        "name": "논산시",
+        "name:ko": "논산시",
+        "name:en": "Nonsan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.6959512,
+          34.9406452
+        ]
+      },
+      "properties": {
+        "osmid": 358015462,
+        "cellid": 35,
+        "name": "광양시",
+        "name:ko": "광양시",
+        "name:en": "Gwangyang-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8559787,
+          35.5697678
+        ]
+      },
+      "properties": {
+        "osmid": 358015496,
+        "cellid": 36,
+        "name": "정읍시",
+        "name:ko": "정읍시",
+        "name:en": "Jeongeup-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.433205,
+          34.854254
+        ]
+      },
+      "properties": {
+        "osmid": 358015505,
+        "cellid": 37,
+        "name": "통영시",
+        "name:ko": "통영시",
+        "name:en": "Tongyeong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1590614,
+          36.4104478
+        ]
+      },
+      "properties": {
+        "osmid": 358015507,
+        "cellid": 38,
+        "name": "상주시",
+        "name:ko": "상주시",
+        "name:en": "Sangju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.613165,
+          36.33401
+        ]
+      },
+      "properties": {
+        "osmid": 358015515,
+        "cellid": 39,
+        "name": "보령시",
+        "name:ko": "보령시",
+        "name:en": "Boryeong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.880557,
+          35.803815
+        ]
+      },
+      "properties": {
+        "osmid": 358015517,
+        "cellid": 40,
+        "name": "김제시",
+        "name:ko": "김제시",
+        "name:en": "Gimje",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.624054,
+          36.805685
+        ]
+      },
+      "properties": {
+        "osmid": 358015526,
+        "cellid": 41,
+        "name": "영주시",
+        "name:ko": "영주시",
+        "name:en": "Yeongju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.7466992,
+          35.503839
+        ]
+      },
+      "properties": {
+        "osmid": 358015529,
+        "cellid": 42,
+        "name": "밀양시",
+        "name:ko": "밀양시",
+        "name:en": "Miryang",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.064562,
+          35.003468
+        ]
+      },
+      "properties": {
+        "osmid": 358015533,
+        "cellid": 43,
+        "name": "사천시",
+        "name:ko": "사천시",
+        "name:en": "Sacheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.186793,
+          36.58629
+        ]
+      },
+      "properties": {
+        "osmid": 358015543,
+        "cellid": 44,
+        "name": "문경시",
+        "name:ko": "문경시",
+        "name:en": "Mungyeong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7108313,
+          35.0158859
+        ]
+      },
+      "properties": {
+        "osmid": 358015553,
+        "cellid": 45,
+        "name": "나주시",
+        "name:ko": "나주시",
+        "name:en": "Naju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.3903713,
+          35.4163118
+        ]
+      },
+      "properties": {
+        "osmid": 358015558,
+        "cellid": 46,
+        "name": "남원시",
+        "name:ko": "남원시",
+        "name:en": "Namwon",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.289,
+          36.4799999
+        ]
+      },
+      "properties": {
+        "osmid": 358896776,
+        "cellid": 47,
+        "name": "세종",
+        "name:ko": "세종",
+        "name:en": "Sejong",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.942,
+          35.98842
+        ]
+      },
+      "properties": {
+        "osmid": 415148619,
+        "cellid": 48,
+        "name": "영천시",
+        "name:ko": "영천시",
+        "name:en": "Yeongcheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.5913424,
+          38.2069574
+        ]
+      },
+      "properties": {
+        "osmid": 415151931,
+        "cellid": 49,
+        "name": "속초시",
+        "name:ko": "속초시",
+        "name:en": "Sokcho-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0457771,
+          37.7849312
+        ]
+      },
+      "properties": {
+        "osmid": 415152872,
+        "cellid": 50,
+        "name": "양주시",
+        "name:ko": "양주시",
+        "name:en": "Yangju",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0605175,
+          37.9030856
+        ]
+      },
+      "properties": {
+        "osmid": 415152911,
+        "cellid": 51,
+        "name": "동두천시",
+        "name:ko": "동두천시",
+        "name:en": "Dongducheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2007295,
+          37.8948267
+        ]
+      },
+      "properties": {
+        "osmid": 415152942,
+        "cellid": 52,
+        "name": "포천시",
+        "name:ko": "포천시",
+        "name:en": "Pocheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.1146302,
+          37.5245142
+        ]
+      },
+      "properties": {
+        "osmid": 415152982,
+        "cellid": 53,
+        "name": "동해시",
+        "name:ko": "동해시",
+        "name:en": "Donghae-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.8759523,
+          37.7525313
+        ]
+      },
+      "properties": {
+        "osmid": 415153024,
+        "cellid": 54,
+        "name": "강릉시",
+        "name:ko": "강릉시",
+        "name:en": "Gangneung-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1297917,
+          37.5941315
+        ]
+      },
+      "properties": {
+        "osmid": 415154093,
+        "cellid": 55,
+        "name": "구리시",
+        "name:ko": "구리시",
+        "name:en": "Guri-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2165051,
+          37.6359398
+        ]
+      },
+      "properties": {
+        "osmid": 415154165,
+        "cellid": 56,
+        "name": "남양주시",
+        "name:ko": "남양주시",
+        "name:en": "Namyangju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2149292,
+          37.5392174
+        ]
+      },
+      "properties": {
+        "osmid": 415154181,
+        "cellid": 57,
+        "name": "하남시",
+        "name:ko": "하남시",
+        "name:en": "Hanam-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.1652969,
+          37.4498745
+        ]
+      },
+      "properties": {
+        "osmid": 415154216,
+        "cellid": 58,
+        "name": "삼척시",
+        "name:ko": "삼척시",
+        "name:en": "Samcheok-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.9197603,
+          37.3420996
+        ]
+      },
+      "properties": {
+        "osmid": 415154551,
+        "cellid": 59,
+        "name": "원주시",
+        "name:ko": "원주시",
+        "name:en": "Wonju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.637033,
+          37.2982901
+        ]
+      },
+      "properties": {
+        "osmid": 415154705,
+        "cellid": 60,
+        "name": "여주시",
+        "name:ko": "여주시",
+        "name:en": "Yeoju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.255189,
+          37.4290844
+        ]
+      },
+      "properties": {
+        "osmid": 415155086,
+        "cellid": 61,
+        "name": "광주시",
+        "name:ko": "광주시",
+        "name:en": "Gwangju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1913508,
+          37.1326042
+        ]
+      },
+      "properties": {
+        "osmid": 415155618,
+        "cellid": 62,
+        "name": "제천시",
+        "name:ko": "제천시",
+        "name:en": "Jecheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.9259891,
+          36.9907334
+        ]
+      },
+      "properties": {
+        "osmid": 415155721,
+        "cellid": 63,
+        "name": "충주시",
+        "name:ko": "충주시",
+        "name:en": "Chungju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8312632,
+          37.1994653
+        ]
+      },
+      "properties": {
+        "osmid": 415156263,
+        "cellid": 64,
+        "name": "화성시",
+        "name:ko": "화성시",
+        "name:en": "Hwaseong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1127168,
+          36.9924966
+        ]
+      },
+      "properties": {
+        "osmid": 415156335,
+        "cellid": 65,
+        "name": "평택시",
+        "name:ko": "평택시",
+        "name:en": "Pyeongtaek",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1785572,
+          37.2405741
+        ]
+      },
+      "properties": {
+        "osmid": 415156460,
+        "cellid": 66,
+        "name": "용인시",
+        "name:ko": "용인시",
+        "name:en": "Yongin-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0026769,
+          36.7899498
+        ]
+      },
+      "properties": {
+        "osmid": 415157893,
+        "cellid": 67,
+        "name": "아산시",
+        "name:ko": "아산시",
+        "name:en": "Asan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1140654,
+          36.8150283
+        ]
+      },
+      "properties": {
+        "osmid": 415158162,
+        "cellid": 68,
+        "name": "천안시",
+        "name:ko": "천안시",
+        "name:en": "Cheonan-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.09124,
+          36.47257
+        ]
+      },
+      "properties": {
+        "osmid": 415161922,
+        "cellid": 69,
+        "name": "공주시",
+        "name:ko": "공주시",
+        "name:en": "Gongju-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2472702,
+          36.275523
+        ]
+      },
+      "properties": {
+        "osmid": 415161986,
+        "cellid": 70,
+        "name": "계룡시",
+        "name:ko": "계룡시",
+        "name:en": "Gyeryong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.09022,
+          36.07783
+        ]
+      },
+      "properties": {
+        "osmid": 415162581,
+        "cellid": 71,
+        "name": "김천시",
+        "name:ko": "김천시",
+        "name:en": "Gimcheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7052,
+          37.456
+        ]
+      },
+      "properties": {
+        "osmid": 1831812850,
+        "cellid": 72,
+        "name": "인천",
+        "name:ko": "인천",
+        "name:en": "Incheon",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9881655,
+          37.4289037
+        ]
+      },
+      "properties": {
+        "osmid": 1910974426,
+        "cellid": 73,
+        "name": "과천시",
+        "name:ko": "과천시",
+        "name:en": "Gwacheon-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9782914,
+          37.5666791
+        ]
+      },
+      "properties": {
+        "osmid": 1912365631,
+        "cellid": 74,
+        "name": "서울",
+        "name:ko": "서울",
+        "name:en": "Seoul",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9570605,
+          37.3938528
+        ]
+      },
+      "properties": {
+        "osmid": 1912558035,
+        "cellid": 75,
+        "name": "안양시",
+        "name:ko": "안양시",
+        "name:en": "Anyang-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7660139,
+          37.5014422
+        ]
+      },
+      "properties": {
+        "osmid": 1912558038,
+        "cellid": 76,
+        "name": "부천시",
+        "name:ko": "부천시",
+        "name:en": "Bucheon",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8631275,
+          37.4810539
+        ]
+      },
+      "properties": {
+        "osmid": 1912558055,
+        "cellid": 77,
+        "name": "광명시",
+        "name:ko": "광명시",
+        "name:en": "Gwangmyeong-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8032255,
+          37.3798891
+        ]
+      },
+      "properties": {
+        "osmid": 1912558057,
+        "cellid": 78,
+        "name": "시흥시",
+        "name:ko": "시흥시",
+        "name:en": "Siheung-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.6461833,
+          36.8904083
+        ]
+      },
+      "properties": {
+        "osmid": 3428290497,
+        "cellid": 79,
+        "name": "당진시",
+        "name:ko": "당진시",
+        "name:en": "Dangjin-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7157891,
+          37.615461
+        ]
+      },
+      "properties": {
+        "osmid": 4909017636,
+        "cellid": 80,
+        "name": "김포시",
+        "name:ko": "김포시",
+        "name:en": "Gimpo-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7669591,
+          34.641917
+        ]
+      },
+      "properties": {
+        "osmid": 5424418655,
+        "cellid": 81,
+        "name": "강진군",
+        "name:ko": "강진군",
+        "name:en": "Gangjin-gun",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.515299,
+          33.2572971
+        ]
+      },
+      "properties": {
+        "osmid": 5424418659,
+        "cellid": 82,
+        "name": "서귀포시",
+        "name:ko": "서귀포시",
+        "name:en": "Seogwipo-si",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3119136,
+          35.5391697
+        ]
+      },
+      "properties": {
+        "osmid": 6612437350,
+        "cellid": 83,
+        "name": "울산",
+        "name:ko": "울산",
+        "name:en": "Ulsan",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7801502,
+          37.7598955
+        ]
+      },
+      "properties": {
+        "osmid": 6780463693,
+        "cellid": 84,
+        "name": "파주시",
+        "name:ko": "파주시",
+        "name:en": "Paju",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.9857176,
+          37.1637943
+        ]
+      },
+      "properties": {
+        "osmid": 6919770645,
+        "cellid": 85,
+        "name": "태백시",
+        "name:ko": "태백시",
+        "name:en": "Taebaek",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7182206,
+          34.0521215
+        ]
+      },
+      "properties": {
+        "osmid": 8077953453,
+        "cellid": 86,
+        "name": "완도군",
+        "name:ko": null,
+        "name:en": "Wando",
+        "place": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.910107,
+          36.2753678
+        ]
+      },
+      "properties": {
+        "osmid": 358896798,
+        "cellid": 87,
+        "name": "부여군",
+        "name:ko": "부여군",
+        "name:en": "Buyeo-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2914673,
+          35.2818969
+        ]
+      },
+      "properties": {
+        "osmid": 358896884,
+        "cellid": 88,
+        "name": "곡성군",
+        "name:ko": "곡성군",
+        "name:en": "Gokseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.463225,
+          35.2024172
+        ]
+      },
+      "properties": {
+        "osmid": 358896907,
+        "cellid": 89,
+        "name": "구례군",
+        "name:ko": "구례군",
+        "name:en": "Gurye-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9864311,
+          35.0643095
+        ]
+      },
+      "properties": {
+        "osmid": 358896922,
+        "cellid": 90,
+        "name": "화순군",
+        "name:ko": "화순군",
+        "name:en": "Hwasun-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.5166414,
+          35.0656537
+        ]
+      },
+      "properties": {
+        "osmid": 358896926,
+        "cellid": 91,
+        "name": "함평군",
+        "name:ko": "함평군",
+        "name:en": "Hampyeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.5115158,
+          35.2781217
+        ]
+      },
+      "properties": {
+        "osmid": 358896928,
+        "cellid": 92,
+        "name": "영광군",
+        "name:ko": "영광군",
+        "name:en": "Yeonggwang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.4812377,
+          34.9905794
+        ]
+      },
+      "properties": {
+        "osmid": 358896933,
+        "cellid": 93,
+        "name": "무안군",
+        "name:ko": "무안군",
+        "name:en": "Muan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.2629264,
+          34.4867515
+        ]
+      },
+      "properties": {
+        "osmid": 358896935,
+        "cellid": 94,
+        "name": "진도군",
+        "name:ko": "진도군",
+        "name:en": "Jindo-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.3522531,
+          34.8331095
+        ]
+      },
+      "properties": {
+        "osmid": 358896937,
+        "cellid": 95,
+        "name": "신안군",
+        "name:ko": "신안군",
+        "name:en": "Sinan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7844061,
+          35.3017065
+        ]
+      },
+      "properties": {
+        "osmid": 358896939,
+        "cellid": 96,
+        "name": "장성군",
+        "name:ko": "장성군",
+        "name:en": "Jangseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7553933,
+          34.3110373
+        ]
+      },
+      "properties": {
+        "osmid": 358896942,
+        "cellid": 97,
+        "name": "완도군",
+        "name:ko": "완도군",
+        "name:en": "Wando-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.9054976,
+          37.4843883
+        ]
+      },
+      "properties": {
+        "osmid": 358896971,
+        "cellid": 98,
+        "name": "울릉군청",
+        "name:ko": "울릉군청",
+        "name:en": "Ulleung-gun Office",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.751741,
+          35.067279
+        ]
+      },
+      "properties": {
+        "osmid": 358897005,
+        "cellid": 99,
+        "name": "하동군",
+        "name:ko": "하동군",
+        "name:en": "Hadong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6608785,
+          37.3806081
+        ]
+      },
+      "properties": {
+        "osmid": 358897037,
+        "cellid": 100,
+        "name": "정선군",
+        "name:ko": "정선군",
+        "name:en": "Jeongseon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2893,
+          35.6174
+        ]
+      },
+      "properties": {
+        "osmid": 414979427,
+        "cellid": 101,
+        "name": "임실군",
+        "name:ko": "임실군",
+        "name:en": "Imsil-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7021,
+          35.4355
+        ]
+      },
+      "properties": {
+        "osmid": 415144089,
+        "cellid": 102,
+        "name": "고창군",
+        "name:ko": "고창군",
+        "name:en": "Gochang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9883238,
+          35.320878
+        ]
+      },
+      "properties": {
+        "osmid": 415144694,
+        "cellid": 103,
+        "name": "담양군",
+        "name:ko": "담양군",
+        "name:en": "Damyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1374,
+          35.3741
+        ]
+      },
+      "properties": {
+        "osmid": 415144800,
+        "cellid": 104,
+        "name": "순창군",
+        "name:ko": "순창군",
+        "name:en": "Sunchang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.6970381,
+          34.800052
+        ]
+      },
+      "properties": {
+        "osmid": 415146014,
+        "cellid": 105,
+        "name": "영암군",
+        "name:ko": "영암군",
+        "name:en": "Yeongam-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.8927114,
+          34.8374087
+        ]
+      },
+      "properties": {
+        "osmid": 415147559,
+        "cellid": 106,
+        "name": "남해군",
+        "name:ko": "남해군",
+        "name:en": "Namhae-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.2835,
+          35.9189999
+        ]
+      },
+      "properties": {
+        "osmid": 415148915,
+        "cellid": 107,
+        "name": "성주군",
+        "name:ko": "성주군",
+        "name:en": "Seongju-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.6609,
+          36.007
+        ]
+      },
+      "properties": {
+        "osmid": 415149741,
+        "cellid": 108,
+        "name": "무주군",
+        "name:ko": "무주군",
+        "name:en": "Muju-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4252,
+          35.7915
+        ]
+      },
+      "properties": {
+        "osmid": 415149863,
+        "cellid": 109,
+        "name": "진안군",
+        "name:ko": "진안군",
+        "name:en": "Jinan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.1622,
+          35.9039
+        ]
+      },
+      "properties": {
+        "osmid": 415150318,
+        "cellid": 110,
+        "name": "완주군",
+        "name:ko": "완주군",
+        "name:en": "Wanju-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.2632,
+          35.7258
+        ]
+      },
+      "properties": {
+        "osmid": 415150849,
+        "cellid": 111,
+        "name": "고령군",
+        "name:ko": "고령군",
+        "name:en": "Goryeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5212,
+          35.647
+        ]
+      },
+      "properties": {
+        "osmid": 415151273,
+        "cellid": 112,
+        "name": "장수군",
+        "name:ko": "장수군",
+        "name:en": "Jangsu-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.7330195,
+          35.7316783
+        ]
+      },
+      "properties": {
+        "osmid": 415151436,
+        "cellid": 113,
+        "name": "부안군",
+        "name:ko": "부안군",
+        "name:en": "Buan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4678,
+          38.3808
+        ]
+      },
+      "properties": {
+        "osmid": 415151825,
+        "cellid": 114,
+        "name": "고성군",
+        "name:ko": "고성군",
+        "name:en": "Goseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6191,
+          38.0751
+        ]
+      },
+      "properties": {
+        "osmid": 415151865,
+        "cellid": 115,
+        "name": "양양군",
+        "name:ko": "양양군",
+        "name:en": "Yangyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1706,
+          38.0694
+        ]
+      },
+      "properties": {
+        "osmid": 415152009,
+        "cellid": 116,
+        "name": "인제군",
+        "name:ko": "인제군",
+        "name:en": "Inje-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.51102,
+          38.07299
+        ]
+      },
+      "properties": {
+        "osmid": 415152054,
+        "cellid": 117,
+        "name": "사내면",
+        "name:ko": "사내면",
+        "name:en": "Sanaemyeon",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0746,
+          38.0964
+        ]
+      },
+      "properties": {
+        "osmid": 415152166,
+        "cellid": 118,
+        "name": "연천군",
+        "name:ko": "연천군",
+        "name:en": "Yeoncheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.985,
+          37.4916
+        ]
+      },
+      "properties": {
+        "osmid": 415153121,
+        "cellid": 119,
+        "name": "횡성군",
+        "name:ko": "횡성군",
+        "name:en": "Hoengseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.8888,
+          37.6967
+        ]
+      },
+      "properties": {
+        "osmid": 415153206,
+        "cellid": 120,
+        "name": "홍천군",
+        "name:ko": "홍천군",
+        "name:en": "Hongcheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.488,
+          37.746
+        ]
+      },
+      "properties": {
+        "osmid": 415153247,
+        "cellid": 121,
+        "name": "강화군",
+        "name:ko": "강화군",
+        "name:en": "Ganghwa-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.3903,
+          37.3705
+        ]
+      },
+      "properties": {
+        "osmid": 415154466,
+        "cellid": 122,
+        "name": "평창군",
+        "name:ko": "평창군",
+        "name:en": "Pyeongchang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4619814,
+          37.1834983
+        ]
+      },
+      "properties": {
+        "osmid": 415155581,
+        "cellid": 123,
+        "name": "영월군",
+        "name:ko": "영월군",
+        "name:en": "Yeongwol-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.7324,
+          36.8925
+        ]
+      },
+      "properties": {
+        "osmid": 415156624,
+        "cellid": 124,
+        "name": "봉화군",
+        "name:ko": "봉화군",
+        "name:en": "Bonghwa-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.3659,
+          36.9848
+        ]
+      },
+      "properties": {
+        "osmid": 415156829,
+        "cellid": 125,
+        "name": "단양군",
+        "name:ko": "단양군",
+        "name:en": "Danyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.7866,
+          36.815
+        ]
+      },
+      "properties": {
+        "osmid": 415157062,
+        "cellid": 126,
+        "name": "괴산군",
+        "name:ko": "괴산군",
+        "name:en": "Goesan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5819,
+          36.7854
+        ]
+      },
+      "properties": {
+        "osmid": 415157309,
+        "cellid": 127,
+        "name": "증평군",
+        "name:ko": "증평군",
+        "name:en": "Jeungpyeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.6906,
+          36.94
+        ]
+      },
+      "properties": {
+        "osmid": 415157368,
+        "cellid": 128,
+        "name": "음성군",
+        "name:ko": "음성군",
+        "name:en": "Eumseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4355,
+          36.8548
+        ]
+      },
+      "properties": {
+        "osmid": 415157745,
+        "cellid": 129,
+        "name": "진천군",
+        "name:ko": "진천군",
+        "name:en": "Jincheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.1127,
+          36.6664
+        ]
+      },
+      "properties": {
+        "osmid": 415158277,
+        "cellid": 130,
+        "name": "영양군",
+        "name:ko": "영양군",
+        "name:en": "Yeongyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.6605,
+          36.6009
+        ]
+      },
+      "properties": {
+        "osmid": 415159345,
+        "cellid": 131,
+        "name": "홍성군",
+        "name:ko": "홍성군",
+        "name:en": "Hongseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3659,
+          36.4149
+        ]
+      },
+      "properties": {
+        "osmid": 415160198,
+        "cellid": 132,
+        "name": "영덕군",
+        "name:ko": "영덕군",
+        "name:en": "Yeongdeok-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.0571,
+          36.4358
+        ]
+      },
+      "properties": {
+        "osmid": 415160288,
+        "cellid": 133,
+        "name": "청송군",
+        "name:ko": "청송군",
+        "name:en": "Cheongsong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.697,
+          36.3524
+        ]
+      },
+      "properties": {
+        "osmid": 415160422,
+        "cellid": 134,
+        "name": "의성군",
+        "name:ko": "의성군",
+        "name:en": "Uiseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5716,
+          36.3061
+        ]
+      },
+      "properties": {
+        "osmid": 415160984,
+        "cellid": 135,
+        "name": "옥천군",
+        "name:ko": "옥천군",
+        "name:en": "Okcheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.729242,
+          36.4890118
+        ]
+      },
+      "properties": {
+        "osmid": 415161112,
+        "cellid": 136,
+        "name": "보은군",
+        "name:ko": "보은군",
+        "name:en": "Boeun-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4148,
+          36.29812
+        ]
+      },
+      "properties": {
+        "osmid": 415161397,
+        "cellid": 137,
+        "name": "중구",
+        "name:ko": "중구",
+        "name:en": "Junggu",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.3544493,
+          36.2973919
+        ]
+      },
+      "properties": {
+        "osmid": 415161413,
+        "cellid": 138,
+        "name": "서구",
+        "name:ko": "서구",
+        "name:en": "Seogu",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8022,
+          36.4585999
+        ]
+      },
+      "properties": {
+        "osmid": 415161680,
+        "cellid": 139,
+        "name": "청양군",
+        "name:ko": "청양군",
+        "name:en": "Cheongyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.5731,
+          36.2424
+        ]
+      },
+      "properties": {
+        "osmid": 415162336,
+        "cellid": 140,
+        "name": "군위군",
+        "name:ko": "군위군",
+        "name:en": "Gunwi-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4017,
+          35.995
+        ]
+      },
+      "properties": {
+        "osmid": 415162548,
+        "cellid": 141,
+        "name": "칠곡군",
+        "name:ko": "칠곡군",
+        "name:en": "Chilgok-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.7834432,
+          36.1747588
+        ]
+      },
+      "properties": {
+        "osmid": 415162717,
+        "cellid": 142,
+        "name": "영동군",
+        "name:ko": "영동군",
+        "name:en": "Yeongdong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.48815,
+          36.1087249
+        ]
+      },
+      "properties": {
+        "osmid": 415163015,
+        "cellid": 143,
+        "name": "금산군",
+        "name:ko": "금산군",
+        "name:en": "Geumsan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.276384,
+          34.6044123
+        ]
+      },
+      "properties": {
+        "osmid": 415165410,
+        "cellid": 144,
+        "name": "고흥군",
+        "name:ko": "고흥군",
+        "name:en": "Goheung-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.906996,
+          34.6811762
+        ]
+      },
+      "properties": {
+        "osmid": 415165607,
+        "cellid": 145,
+        "name": "장흥군",
+        "name:ko": "장흥군",
+        "name:en": "Jangheung-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5098,
+          37.8314
+        ]
+      },
+      "properties": {
+        "osmid": 1912558046,
+        "cellid": 146,
+        "name": "가평군",
+        "name:ko": "가평군",
+        "name:en": "Gapyeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.429,
+          37.533
+        ]
+      },
+      "properties": {
+        "osmid": 1969457985,
+        "cellid": 147,
+        "name": "옹진군",
+        "name:ko": "옹진군",
+        "name:en": "Ongjin-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4376,
+          36.6462999
+        ]
+      },
+      "properties": {
+        "osmid": 2457800474,
+        "cellid": 148,
+        "name": "예천군",
+        "name:ko": "예천군",
+        "name:en": "Yecheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.3133,
+          38.1468
+        ]
+      },
+      "properties": {
+        "osmid": 2800319514,
+        "cellid": 149,
+        "name": "철원군",
+        "name:ko": "철원군",
+        "name:en": "Cheorwon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4875,
+          37.4916
+        ]
+      },
+      "properties": {
+        "osmid": 3733753664,
+        "cellid": 150,
+        "name": "양평군",
+        "name:ko": "양평군",
+        "name:en": "Yangpyeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.223,
+          35.2446
+        ]
+      },
+      "properties": {
+        "osmid": 4473495835,
+        "cellid": 151,
+        "name": "기장군",
+        "name:ko": "기장군",
+        "name:en": "Gijang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4312,
+          35.7753
+        ]
+      },
+      "properties": {
+        "osmid": 4502273482,
+        "cellid": 152,
+        "name": "달성군",
+        "name:ko": "달성군",
+        "name:en": "Dalseong County",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.4006,
+          36.993
+        ]
+      },
+      "properties": {
+        "osmid": 4663746606,
+        "cellid": 153,
+        "name": "울진군",
+        "name:ko": "울진군",
+        "name:en": "Uljin-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.8488761,
+          36.6825466
+        ]
+      },
+      "properties": {
+        "osmid": 4691930349,
+        "cellid": 154,
+        "name": "예산군",
+        "name:ko": "예산군",
+        "name:en": "Yesan-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0798978,
+          34.7711356
+        ]
+      },
+      "properties": {
+        "osmid": 4731921962,
+        "cellid": 155,
+        "name": "보성군",
+        "name:ko": "보성군",
+        "name:en": "Boseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.708,
+          38.1063
+        ]
+      },
+      "properties": {
+        "osmid": 4920826531,
+        "cellid": 156,
+        "name": "화천군",
+        "name:ko": "화천군",
+        "name:en": "Hwacheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.9901,
+          38.1098
+        ]
+      },
+      "properties": {
+        "osmid": 4920826535,
+        "cellid": 157,
+        "name": "양구군",
+        "name:ko": "양구군",
+        "name:en": "Yanggu-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.6917006,
+          36.0804482
+        ]
+      },
+      "properties": {
+        "osmid": 5141384217,
+        "cellid": 158,
+        "name": "서천군",
+        "name:ko": "서천군",
+        "name:en": "Seocheon-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.9138505,
+          35.6872871
+        ]
+      },
+      "properties": {
+        "osmid": 5197756930,
+        "cellid": 159,
+        "name": "거창군",
+        "name:ko": "거창군",
+        "name:en": "Geochang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.2426,
+          35.5219
+        ]
+      },
+      "properties": {
+        "osmid": 5203460235,
+        "cellid": 160,
+        "name": "울주군",
+        "name:ko": "울주군",
+        "name:en": "Ulju-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.7348468,
+          35.6473012
+        ]
+      },
+      "properties": {
+        "osmid": 5285480022,
+        "cellid": 161,
+        "name": "청도군",
+        "name:ko": "청도군",
+        "name:en": "Cheongdo-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.2616485,
+          35.3225404
+        ]
+      },
+      "properties": {
+        "osmid": 5299757859,
+        "cellid": 162,
+        "name": "의령군",
+        "name:ko": "의령군",
+        "name:en": "Uiryeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4065038,
+          35.2726875
+        ]
+      },
+      "properties": {
+        "osmid": 5299796499,
+        "cellid": 163,
+        "name": "함안군",
+        "name:ko": "함안군",
+        "name:en": "Haman-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.4921938,
+          35.5443876
+        ]
+      },
+      "properties": {
+        "osmid": 5299811821,
+        "cellid": 164,
+        "name": "창녕군",
+        "name:ko": "창녕군",
+        "name:en": "Changnyeong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.322233,
+          34.9732784
+        ]
+      },
+      "properties": {
+        "osmid": 5299815013,
+        "cellid": 165,
+        "name": "고성군",
+        "name:ko": "고성군",
+        "name:en": "Goseong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.873663,
+          35.4154624
+        ]
+      },
+      "properties": {
+        "osmid": 5299850160,
+        "cellid": 166,
+        "name": "산청군",
+        "name:ko": "산청군",
+        "name:en": "Sancheong-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.7252966,
+          35.5204145
+        ]
+      },
+      "properties": {
+        "osmid": 5299947051,
+        "cellid": 167,
+        "name": "함양군",
+        "name:ko": "함양군",
+        "name:en": "Hamyang-gun",
+        "place": "county"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.1658334,
+          35.5664445
+        ]
+      },
+      "properties": {
+        "osmid": 5299958624,
+        "cellid": 168,
+        "name": "합천군",
+        "name:ko": "합천군",
+        "name:en": "Hapcheon-gun",
+        "place": "county"
+      }
+    }
+  ]
+}

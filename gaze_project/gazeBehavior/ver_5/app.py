@@ -7,6 +7,7 @@ from random import *
 
 import numpy as np
 import pandas as pd
+from sklearn import preprocessing as sklearn_preprocessing
 from flask import *
 from flask_cors import CORS
 
@@ -16,8 +17,19 @@ import src.py.glodberg as gfilter
 DATASET = "MIT300"
 FILTER = "ivt"
 PARTICIPANT = "usb_02"
+DATAPROCESSING = "min_max"
+CORRELATION_METHOD = "pearson"
 STIMULUS_CLASSES = []
 FEATURE_TYPES = []
+REMOVE_CLASSES = []
+REMOVE_FEATURES = []
+
+
+# eye movement event filter threshold
+FILTER_THRESHOLD = []
+THRESHOLD_VELOCITY = 600
+THRESHOLD_DISTRIBUTION = 100
+THRESHOLD_DURATION = 200
 # FEATURE_SUB_TYPES = []
 # FEATURE_SUB = ""
 # STIMULUS_CLASSES = []
@@ -39,65 +51,10 @@ if __name__ == '__main__':
   app.run(debug=True)
 CORS(app)
 
-# def setFeaturePath(_fType, _stiClass, _stiName):
-#   _featPath = ""
-#   _fString = featureNameToFileStyle(_fType)
-#   if FEATURE_SUB == "":
-#     _featPath = "./static/data/"+DATASET+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+".csv"
-#   else:
-#     _featPath = "./static/data/"+DATASET+"/feature/"+_fString+"/"+_stiClass+"_"+_stiName+"_"+FEATURE_SUB+".csv"
-#   return _featPath
-
-# def setGazePath(_uid, _stiClass, _stiName):
-#   _gazePath = ""
-#   _gazePath = "./static/data/"+DATASET+"/gaze/"+_uid+"/"+_stiClass+"_"+_stiName+".csv"
-#   return _gazePath
-
-# def setStimulusPath(_stiClass, _stiName):
-#   _stimulusPath = ""
-#   _stimulusPath = "/static/data/"+DATASET+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
-#   return _stimulusPath
-
-# def featureNameToFileStyle(_fName):
-#   global FEATURE_SUB
-#   global FEATURE_SUB_TYPES
-#   if _fName == "center-bias":
-#     FEATURE_SUB = ""
-#     FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "center_bias"
-#   elif _fName == "contrast-intensity" or _fName == "contrast-color" or _fName == "contrast-orientation":
-#     FEATURE_SUB = _fName.split("-")[1]
-#     FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "contrast"
-#   elif _fName == "HOG":
-#     FEATURE_SUB = ""
-#     FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "HOG"
-#   elif _fName == "horizontal line":
-#     FEATURE_SUB = ""
-#     FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "horizontal_line"
-#   elif _fName == "LOG spectrum":
-#     FEATURE_SUB = ""
-#     FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "log"
-#   elif _fName == "saliency-intensity" or _fName == "saliency-color" or _fName == "saliency-orientation" or _fName == "computed-saliency":
-#     FEATURE_SUB = _fName.split("-")[1]
-#     if FEATURE_SUB == "saliency":
-#       FEATURE_SUB = "sm"
-#       FEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "saliency"
-#   else:
-#     print("*****----------------------------------*****")
-#     print("*****")
-#     print("*****")
-#     print("***** No feature information")
-#     print("*****")
-#     print("*****")
-#     print("*****----------------------------------*****")
-#     FEATURE_SUB = ""
-#     KFEATURE_SUB_TYPES.append(FEATURE_SUB)
-#     return "center_bias"
+def makeJSON(_path, _data):
+  wf = open(_path, "w", newline='', encoding='utf-8')
+  wf.write(json.dumps(_data))
+  wf.close()
 
 def calcFeatureMean(_path):
   rf = open(_path, 'r', encoding='utf-8')
@@ -115,55 +72,6 @@ def calcFeatureMean(_path):
   
   return _meanValue
 
-# def loadFeatureFile(_path):
-#   global meanValue
-  
-#   rf = open(_path, 'r', encoding='utf-8')
-#   rdr = csv.reader(rf)
-#   _featArr = []
-#   for _row in rdr:
-#     _featArr.append(_row)
-#   rf.close()
-  
-#   sumVal = 0
-#   for i in range(0, 1080):
-#     for j in range(0, 1920):
-#       sumVal += float(_featArr[i][j])
-#   meanValue.append(sumVal/(1920*1080))
-  
-#   return _featArr
-
-# def loadEyeMovementDataFile(_path, _feat):
-#   _gazeData = []
-#   _gaze = []
-
-#   rf = open(_path, 'r', encoding='utf-8')
-#   rdr = csv.reader(rf)
-  
-#   for _row in rdr:
-#     # 0: t, 1: x, 2: y
-#     if _row[1] == "x":
-#       continue
-#     elif _row[1] == "NaN":
-#       _gazeData.append([0, 0, 0])
-#       break
-#     else:
-#       if float(_row[1]) >= 1920 or float(_row[2]) >= 1080:
-#         continue
-#       _gazeData.append(_row)
-#   rf.close()
-  
-#   for _g in _gazeData:
-#     _t = int(_g[0])
-#     _gx = int(math.trunc(float(_g[1])))
-#     _gy = int(math.trunc(float(_g[2])))
-#     # print("x: %d"%_gx)
-#     # print("y: %d"%_gy)
-#     _gf = float(_feat[_gy][_gx])
-#     _gx = float(_g[1])
-#     _gy = float(_g[2])
-#     _gaze.append([_t, _gx, _gy, _gf])
-#   return _gaze
   
 def ivtFilter(_gazeData, _uid, _feats, _vt):
   _fixation = []
@@ -369,115 +277,165 @@ def calcSpatialVariation(_fixations, _randoms, _fType, _sClass, _sName):
     return spatial_variation
 
 
-# def initGlobal():
-#   global DATASET
-#   global FEATURE_TYPES
-#   global FEATURE_SUB_TYPES
-#   global FEATURE_SUB
-#   global STIMULUS_CLASSES
-#   global STIMULUS_NAMES
-#   global UIDS
-#   global PATHS
-#   global FEATURES
-#   global GAZE_DATA_LIST
-#   global FIXATIONS
-#   global meanValue
-#   global RANDOM_DATA_LIST
-#   global SPATIAL_VARIANCES
+def makePath_Filter(_FILTER, _threshold, _path):
+  _p = _path
 
-#   DATASET = "MIT300"
-#   FEATURE_TYPES = []
-#   FEATURE_SUB_TYPES = []
-#   FEATURE_SUB = ""
-#   STIMULUS_CLASSES = []
-#   STIMULUS_NAMES = ["002", "004", "006", "008", "010", "012", "014", "016", "018", "020"]
-#   UIDS = ["usb_02"]
-#   PATHS = []
-#   FEATURES = []
-#   GAZE_DATA_LIST = []
-#   FIXATIONS = []
-#   meanValue = []
-#   RANDOM_DATA_LIST = []
-#   SPATIAL_VARIANCES = []
+  if _FILTER == "ivt":
+    # ivt filter needs velocity threshold
+    _p += _FILTER+"_"+str(_threshold[0])
+  elif _FILTER == "idt":
+    # idt filter needs distribution and duration threshold
+    _p += _FILTER+"_"+str(_threshold[0])+"_"+str(_threshold[1])
+  else:
+    # default set: ivt filter
+    _p += _FILTER+"_"+str(_threshold[0])
+
+  return _p
+
+# function for data preprocessing such as min-max normalization and z-score standardization
+def dataPreProcessing(_method, _data):
+  processedData = []
+  _pd = []
+  if _method == "min_max":
+    print("Data processing: Min-Max Normalization")
+    _pd = sklearn_preprocessing.MinMaxScaler().fit_transform(_data)
+  elif _method == "z_score":
+    print("Data processing: z-score Standardization")
+    _pd = sklearn_preprocessing.StandardScaler().fit_transform(_data)
+  else:
+    print("Data processing: default (Min-Max Normalization)")
+    _pd = sklearn_preprocessing.MinMaxScaler().fit_transform(_data)
+
+  return _pd
+
+# preProcessing_list = fixData.values.tolist()
+# dataPreProcessing(DATAPROCESSING, preProcessing_list)
+
+# from pages/Data.js
+@app.route('/api/corr/process', methods=['POST'])
+def corrProcess():
+  global DATAPROCESSING
+  global CORRELATION_METHOD
+  response = {}
+  try:
+    print(request.form)
+    DATAPROCESSING = request.form['processing']
+    CORRELATION_METHOD = request.form['correlation']
+
+    # load all fixation data
+    allFixationDataPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
+    allFixationDataPath = makePath_Filter(FILTER, FILTER_THRESHOLD, allFixationDataPath)
+    allFixationDataPath += "/all_fix.csv"
+    afDF = pd.read_csv(allFixationDataPath)
+    # print(afDF)
+    # drop stimulusName, x, and y coordinate columns
+    print("drop stimulusName, x, and y coordinate columns")
+    afDF = afDF.drop("stimulusName", axis=1)
+    afDF = afDF.drop("x", axis=1)
+    afDF = afDF.drop("y", axis=1)
+
+    # print(afDF)
+    # drop unselected stimulus classes
+    print("drop unselected stimulus classes")
+    for _dsc in REMOVE_CLASSES:
+      _dropIdx = afDF[afDF["stimulusClass"]==str(_dsc)].index
+      afDF = afDF.drop(_dropIdx)
+
+    # drop unselected feature types
+    print("drop unselected feature types")
+    for _dft in REMOVE_FEATURES:
+      afDF = afDF.drop(str(_dft), axis=1)
+    print(afDF)
+
+    afDF = afDF.drop("stimulusClass", axis=1)
+    selectedFeature = []
+    for _ft in FEATURE_TYPES:
+      for _uft in REMOVE_FEATURES:
+        if _ft != _uft:
+          selectedFeature.append(_ft)
+
+    # data pre-processing: min-max normalization or z-score standardization
+    _pProData_list = afDF.values.tolist()
+    _pProData_list = dataPreProcessing(DATAPROCESSING, _pProData_list)
+    processed_afDF = pd.DataFrame(_pProData_list, columns=selectedFeature)
 
 
-# def makeJSON(_path, _data):
-#   wf = open(_path, "w", newline='', encoding='utf-8')
-#   wf.write(json.dumps(_data))
-#   wf.close()
+    filteredDataPath = "./static/access/filtered_data.csv"
+    processed_afDF.to_csv(filteredDataPath, mode='w', index=False)
 
-# app = Flask(__name__)
-# if __name__ == '__main__':
-#   app.jinja_env.auto_reload = True
-#   app.config['TEMPLATES_AUTO_RELOAD'] = True
-#   app.run(debug=True)
-# CORS(app)
+    filteredDataPathFP = "./static/access/filtered_data_path.json"
+    makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
 
-# @app.route('/api/analysis/velocity', methods=['POST'])
-# def changeVelocity():
-#   response = {}
-  
-#   try:
-#     _velocity = float(request.form['velocity'])
-#     changedFixation = ivtFilter(GAZE_DATA_LIST[selectedIdx], UIDS[0], FEATURES[selectedIdx], _velocity)
-#     FIXATIONS.pop(selectedIdx)
-#     FIXATIONS.insert(selectedIdx, changedFixation)
-#     makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
+    afDFCorrMat = processed_afDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr(method=CORRELATION_METHOD)
+    afDFCorrMat_access = "./static/access/correlation_mat.csv"
+    afDFCorrMat.to_csv(afDFCorrMat_access, mode='w', quoting=2)
+    print("calculate and save correlation")
+    print(afDFCorrMat)
 
-#     rndFixations = makeRandomPos(len(FIXATIONS[selectedIdx]), FEATURES[selectedIdx])
-#     RANDOM_DATA_LIST.pop(selectedIdx)
-#     RANDOM_DATA_LIST.insert(selectedIdx, rndFixations)
-#     makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
+    # generate short column name version
+    afDF_list = _pProData_list
+    colNameShort = []
+    for i in range(0, len(selectedFeature)):
+      colNameShort.append("f_"+str(i).zfill(2))
+    afDF_short = pd.DataFrame(afDF_list, columns=colNameShort)
+    afDFCorrMat_short = afDF_short[colNameShort].iloc[:,range(0,len(colNameShort))].corr(method=CORRELATION_METHOD)
+    afDFCorrMat_short_access = "./static/access/correlation_mat_short.csv"
+    afDFCorrMat_short.to_csv(afDFCorrMat_short_access, mode='w', quoting=2)
+    print("save short column version correlation data")
+    print(afDFCorrMat_short)
+
+    corrMatrix_access_path = "./static/access/corr_matrix_path.json"
+    makeJSON(corrMatrix_access_path, afDFCorrMat_access.split(".")[1]+".csv")
+    corrMatrixShort_access_path = "./static/access/corr_matrix_short_path.json"
+    makeJSON(corrMatrixShort_access_path,afDFCorrMat_short_access.split(".")[1]+".csv")
+    print("save access paths")
     
-    
-#     response['status'] = 'success'
-#   except Exception as e:
-#     response['status'] = 'failed'
-#     response['reason'] = e
-#     print(e)
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
   
-#   return json.dumps(response)
+  return json.dumps(response)
 
-# @app.route('/api/sp_variance/select', methods=['POST'])
-# def selectedDataSubmit():
-#   global selectedIdx
-#   response = {}
 
-#   try:
-#     _id = request.form['userID']
-#     _fType = request.form['featureType']
-#     _sClass = request.form['stimulusClass']
-#     _sName = request.form['stimulusName']
-#     _val = request.form['spValue']
-#     # print(request.form)
-    
-#     # set selected user id & make JSON file
-#     makeJSON("./static/output/selected_userid.json", _id)
-#     # make selected stimulus path JSON file
-#     selected_sPath = setStimulusPath(_sClass, _sName.split(".")[0])
-#     print(selected_sPath)
-#     # find selected data index
-#     selectedIdx = 0
-#     for _fp in PATHS:
-#       if _fp[2] == selected_sPath:
-#         break
-#       selectedIdx += 1
-#     makeJSON("./static/output/selected_stimulus_path.json", selected_sPath)
-#     # make selected raw gaze data JSON file
-#     makeJSON("./static/output/selected_raw_gaze.json", GAZE_DATA_LIST[selectedIdx])
-#     # make selected fixation data JSON file
-#     makeJSON("./static/output/selected_fixation.json", FIXATIONS[selectedIdx])
-#     # make random data JSON file
-#     makeJSON("./static/output/selected_raw_random.json", RANDOM_DATA_LIST[selectedIdx])
-#     # make bispectra image files
 
-#     response['status'] = 'success'
-#   except Exception as e:
-#     response['status'] = 'failed'
-#     response['reason'] = e
-#     print(e)
+@app.route('/api/data/removefilter', methods=['POST'])
+def removefilter():
+  global REMOVE_CLASSES
+  global REMOVE_FEATURES
+
+  response = {}
+  try:
+    print(request.form)
+    getClasses = request.form['removeClass']
+    getTypes = request.form['removeFeature']
+
+    REMOVE_CLASSES = []
+    getClassesList = []
+    if len(getClasses) != 0:
+      getClassesList = getClasses.split(",")
+      for _c in getClassesList:
+        REMOVE_CLASSES.append(_c)
+      # print(getClassesList)
+      
+    REMOVE_FEATURES = []
+    getTypeList = []
+    if len(getTypes) != 0:
+      getTypeList = getTypes.split(",")
+      for _t in getTypeList:
+        REMOVE_FEATURES.append(_t)
+      # print(getTypeList)
+
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
   
-#   return json.dumps(response)
+  return json.dumps(response)
+
 
 @app.route('/api/gaze_data/submit', methods=['POST'])
 def gazeDataSubmit():
@@ -485,15 +443,8 @@ def gazeDataSubmit():
   global FILTER
   global PARTICIPANT
   global FEATURE_TYPES
-  global STIMULUS_CLASSES
-  # global PATHS
-  # global FEATURES
-  # global GAZE_DATA_LIST
-  # global FIXATIONS
-  # global RANDOM_DATA_LIST
-  # global SPATIAL_VARIANCES
-
-  # initGlobal()
+  global STIMULUS_CLASSE
+  global FILTER_THRESHOLD
   
   print(request.form)
   # print(request.form['data-origin'])
@@ -502,8 +453,19 @@ def gazeDataSubmit():
   try:
     # get selected dataset, participant, and fixation filter from client
     DATASET = request.form['dataset']
-    PARTICIPANT = request.form['participant']
+    PARTICIPANT = request.form['participant']  
     FILTER = request.form['filter']
+
+    # set filter threshold
+    FILTER_THRESHOLD = []
+    if FILTER == "ivt":
+      FILTER_THRESHOLD.append(THRESHOLD_VELOCITY)
+    elif FILTER == "idt":
+      FILTER_THRESHOLD.append(THRESHOLD_DISTRIBUTION)
+      FILTER_THRESHOLD.append(THRESHOLD_DURATION)
+    else:
+      # default set: ivt filter
+      FILTER_THRESHOLD.append(THRESHOLD_VELOCITY)
     
     # get feature types from server static directory
     FEATURE_TYPES = []
@@ -517,38 +479,30 @@ def gazeDataSubmit():
 
     # get stimulus classes from server static directory
     STIMULUS_CLASSES = []
-    # stimulusClassFilePath = "./static/data/"+DATASET+"/stimulus_class.csv"
-    # rf = open(stimulusClassFilePath, 'r', encoding='utf-8')
-    # rdr = csv.reader(rf)
-    # for _stiClass in rdr:
-    #   STIMULUS_CLASSES.append(_stiClass[0])
-    # rf.close()
     stimulusDir = "./static/data"+"/"+DATASET+"/stimulus"
     STIMULUS_CLASSES = os.listdir(stimulusDir)
+    # write current stimulus class list
+    stimulusClassFilePath = "./static/data/"+DATASET+"/stimulus_class.csv"
+    wf = open(stimulusClassFilePath, "w", newline='', encoding='utf-8')
+    writer = csv.writer(wf)
+    for _r in STIMULUS_CLASSES:
+      writer.writerow(_r)
+    wf.close()
     
     # check fixation cache
     fixationDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/fixation/"
+    psdFixDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
     randomDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/random/"
     spDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/sp_variance/"
+    corrDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/correlation/"
 
-    filter_threshold = []
-    if FILTER == "ivt":
-      filter_threshold.append(600)
-      fixationDir += "ivt_"+str(filter_threshold[0])
-      randomDir += "ivt_"+str(filter_threshold[0])
-      spDir += "ivt_"+str(filter_threshold[0])
-    elif FILTER == "idt":
-      filter_threshold.append(100)
-      filter_threshold.append(200)
-      fixationDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      randomDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-      spDir += "idt_"+str(filter_threshold[0])+"_"+str(filter_threshold[1])
-    else:
-      # default set: ivt filter
-      filter_threshold.append(1000)
-      fixationDir += "ivt_"+str(filter_threshold[0])
-      randomDir += "ivt_"+str(filter_threshold[0])
-      spDir += "ivt_"+str(filter_threshold[0])
+
+    fixationDir = makePath_Filter(FILTER, FILTER_THRESHOLD, fixationDir)
+    psdFixDir = makePath_Filter(FILTER, FILTER_THRESHOLD, psdFixDir)
+    randomDir = makePath_Filter(FILTER, FILTER_THRESHOLD, randomDir)
+    spDir = makePath_Filter(FILTER, FILTER_THRESHOLD, spDir)
+    corrDir = makePath_Filter(FILTER, FILTER_THRESHOLD, corrDir)
+
     
     # if fixation and random cache files does not exist
     print("generate fixation and random cache files")
@@ -618,6 +572,54 @@ def gazeDataSubmit():
             writer.writerow(_r)
           wf.close()
           print(writeRandomPath_csv)
+    
+    # if processed fixation cache file does not exist
+    print("PFIX: generate processed fixation cache files")
+    if not(os.path.exists(psdFixDir)):
+      os.makedirs(os.path.join(psdFixDir))
+      # get stimulusClass_stimulusName file list
+      fixFileList = os.listdir(fixationDir)
+
+      # make front and end column names
+      # | stimulusClass | stimulusName | featType 1(ex. center_bias) | ... | featureType n |
+      frontColNames = ["stimulusClass", "stimulusName"]
+      endColNames = []
+      fullColNames = []
+      fullColNames.extend(frontColNames)
+      fullColNames.extend(endColNames)
+
+      # make empty pandas DataFrame to save all fixations of stimulus classes and names
+      allFixDF = pd.DataFrame(index=range(0, 0), columns=fullColNames)
+      for _ft in FEATURE_TYPES:
+        endColNames.append(_ft)
+
+      for _fFileName in fixFileList:
+        _path = fixationDir+"/"+_fFileName
+        _class = _fFileName.split("_")[0]
+        _name = _fFileName.split(".")[0].split("_")[1]
+
+        _fixDf = pd.read_csv(_path)
+
+        # if any fixations in file, exception control works 'continue'
+        if len(_fixDf.index) == 0:
+          continue
+
+        _gCandNData = []
+        for i in range(0, len(_fixDf.index)):
+          _gCandNData.append([_class, _name])
+        _stiDf = pd.DataFrame(_gCandNData, columns=frontColNames)
+
+        # merge two DataFrame
+        _fDataFrame = pd.merge(_stiDf, _fixDf, left_index=True, right_index=True)
+
+        # concat fixation data into dataframe for all fixations
+        allFixDF = pd.concat([allFixDF, _fDataFrame], ignore_index=True)
+
+      # save processed fixations cache file
+      psdFixationPath_csv = psdFixDir+"/"+"all_fix.csv"
+      allFixDF.to_csv(psdFixationPath_csv, mode='w', index=False)
+      print("save processed fixation cache file")
+
 
     # if feature mean cache files does not exist
     print("generate feature mean cache files")
@@ -681,7 +683,7 @@ def gazeDataSubmit():
       _sLogs.append(_logClass)
       _fixClass = []
       _logClass = []
-      print("All fixation data files loaded")
+      print("SP: All fixation data files loaded")
 
       # load random files
       _rndFileList = os.listdir(randomDir)
@@ -708,7 +710,7 @@ def gazeDataSubmit():
         _prevClass = _stiClass
       _sRandoms.append(_rndClass)
       _rndClass = []
-      print("All random data files loaded")
+      print("SP: All random data files loaded")
 
       print(_sLogs)
 
@@ -779,7 +781,7 @@ def gazeDataSubmit():
 
       spAllPath = spDir+"/"+"sp_all.csv"
       spJoinData.to_csv(spAllPath, mode='w', index=False)
-      print("spatial variance all data saved")
+      print("SP: spatial variance all data saved")
 
       spMeanValsData = []
       spMClass = []
@@ -816,20 +818,75 @@ def gazeDataSubmit():
 
       spMeanPath = spDir+"/"+"sp_mean.csv"
       spMJoinData.to_csv(spMeanPath, mode='w', index=False)
-      print("spatial variance mean data saved")
+      print("SP: spatial variance mean data saved")
       
     # if fixation, random, and spatial variance cache file exist
     # Load spatial variance mean cache
-    print("Load spatial variance mean cache")
+    print("SP: Load spatial variance mean cache")
     spMeanCachePath = spDir+"/"+"sp_mean.csv"
     spMeanCache = pd.read_csv(spMeanCachePath)
     print(spMeanCache)
 
+    spMeanCacheList = spMeanCache.values.tolist()
+    spFormHeatmapData = []
+    for i in range(0, len(spMeanCacheList)):
+      _group = spMeanCacheList[i][0]
+      for j in range(0, len(FEATURE_TYPES)):
+        _variable = FEATURE_TYPES[j]
+        _value = spMeanCacheList[i][j+1]
+        spFormHeatmapData.append([_group, _variable, _value])
+
+    spFormHeatmapColumnNames = ["group", "variable", "value"]
+    spFHDF = pd.DataFrame(spFormHeatmapData, columns=spFormHeatmapColumnNames)
+    print(spFHDF)
+    spHeatmapDataPath = spDir+"/"+"sp_heatmap.csv"
+    spFHDF.to_csv(spHeatmapDataPath, index=False)
+    # save spatial variance mean data file path
+    spHeatmapDataFilePath_filePath = "./static/access/sp_heatmap_path.json"
+    makeJSON(spHeatmapDataFilePath_filePath, spHeatmapDataPath.split(".")[1]+".csv")
+    print("save spatial variance mean data file path")
+    
+    
+    _psdFixationFilePath = psdFixDir+"/"+"all_fix.csv"
+    fixData = pd.read_csv(_psdFixationFilePath)
+    fixData = fixData.drop("stimulusClass", axis=1)
+    fixData = fixData.drop("stimulusName", axis=1)
+    fixData = fixData.drop("x", axis=1)
+    fixData = fixData.drop("y", axis=1)
+
+    cols = []
+    for _fType in FEATURE_TYPES:
+      cols.append(_fType)
+
+    # data pre-processing: Min-max normalization | z-score standardization
+    processedData_list = fixData.values.tolist()
+    processedData_list = dataPreProcessing(DATAPROCESSING, processedData_list)
+    porcessedFixData = pd.DataFrame(processedData_list, columns=cols)    
+    correlation_mat = porcessedFixData[cols].iloc[:,range(0,11)].corr(method=CORRELATION_METHOD)
+
+    # save correlation matrix data file
+    correlation_mat_csv = corrDir+"/"+"corr_matrix_all.csv"
+    correlation_mat.to_csv(correlation_mat_csv, mode='w', quoting=2)
+    correlation_mat_csv_access = "./static/access/corr_matrix_path.json"
+    makeJSON(correlation_mat_csv_access, correlation_mat_csv.split(".")[1]+".csv")
+    print("save correlation matrix data file")
 
 
+    # generate shortcut version dataframe
+    # fixData_list = fixData.values.tolist()
+    fixData_list = processedData_list
+    cols_short = []
+    for i in range(0, len(cols)):
+      cols_short.append("f_"+str(i).zfill(2))
+    fixData_colName = pd.DataFrame(fixData_list, columns=cols_short)
+    print(fixData_colName)
+    correlation_shortCol = fixData_colName[cols_short].iloc[:,range(0,11)].corr(method=CORRELATION_METHOD)
+    correlation_mat_short_csv = corrDir+"/"+"corr_matrix_all_short.csv"
+    correlation_shortCol.to_csv(correlation_mat_short_csv, mode='w', quoting=2)
+    correlation_mat_short_csv_access = "./static/access/corr_matrix_short_path.json"
+    makeJSON(correlation_mat_short_csv_access, correlation_mat_short_csv.split(".")[1]+".csv")
+    print("save correlation matrix short column version data file")
 
-
-      
 
     response['status'] = 'success'
     response['data'] = {

@@ -1,0 +1,167 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0095,
+          37.2752
+        ]
+      },
+      "properties": {
+        "osmid": 1850580646,
+        "cellid": 0,
+        "name": "경기도",
+        "name:ko": "경기도",
+        "name:en": "Gyeonggi-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.7297,
+          37.885
+        ]
+      },
+      "properties": {
+        "osmid": 1853958141,
+        "cellid": 1,
+        "name": "강원도",
+        "name:ko": "강원도",
+        "name:en": "Gangwon-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.6729,
+          36.6593
+        ]
+      },
+      "properties": {
+        "osmid": 1869881765,
+        "cellid": 2,
+        "name": "충청남도",
+        "name:ko": "충청남도",
+        "name:en": "Chungcheongnam-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.4915,
+          36.6357
+        ]
+      },
+      "properties": {
+        "osmid": 1895837469,
+        "cellid": 3,
+        "name": "충청북도",
+        "name:ko": "충청북도",
+        "name:en": "Chungcheongbuk-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.5058,
+          36.5754
+        ]
+      },
+      "properties": {
+        "osmid": 1897951352,
+        "cellid": 4,
+        "name": "경상북도",
+        "name:ko": "경상북도",
+        "name:en": "Gyeonsangbuk-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.6925,
+          35.2382
+        ]
+      },
+      "properties": {
+        "osmid": 1900114892,
+        "cellid": 5,
+        "name": "경상남도",
+        "name:ko": "경상남도",
+        "name:en": "Gyeongsangnam-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.109,
+          35.8198999
+        ]
+      },
+      "properties": {
+        "osmid": 1900814181,
+        "cellid": 6,
+        "name": "전라북도",
+        "name:ko": "전라북도",
+        "name:en": "Jeollabuk-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.4629,
+          34.8159
+        ]
+      },
+      "properties": {
+        "osmid": 1900823975,
+        "cellid": 7,
+        "name": "전라남도",
+        "name:ko": "전라남도",
+        "name:en": "Jeollanam-do",
+        "place": "province"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.4987083,
+          33.4887737
+        ]
+      },
+      "properties": {
+        "osmid": 6612391850,
+        "cellid": 8,
+        "name": "제주특별자치도",
+        "name:ko": "제주특별자치도",
+        "name:en": "Jeju-do",
+        "place": "province"
+      }
+    }
+  ]
+}

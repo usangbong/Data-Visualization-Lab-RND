@@ -32,7 +32,7 @@ public class DotMoveObject : MonoBehaviour
     List<Vector3> rotList = new List<Vector3>();
     List<Vector3> scaleList = new List<Vector3>();
     List<string> moveDataList = new List<string>();
-
+    
     FileStream file;
     StreamWriter writer;
 

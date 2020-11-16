@@ -8,7 +8,6 @@ vis.sejong.ac.kr
 - Professor
   - Yun Jang
 - Postdoc
-  - Hanbyul Yeon
   - Seokyeon Kim
 - Ph.D 
   - Sangbong Yoo
@@ -24,7 +23,9 @@ vis.sejong.ac.kr
   - Seongbum Seo
   - Giwoong Park
 - Alumni
-  - Seongmin Jeong
+  - (Ph.D) Hanbyul Yeon
+  - (Master) Seongmin Jeong
+  - (Master) Daekyo Jeong
   - Hewon Baek
   - Hyunjin Kang
-  - Daekyo Jeong
+  

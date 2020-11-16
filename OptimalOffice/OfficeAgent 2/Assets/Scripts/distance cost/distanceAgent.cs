@@ -16,9 +16,6 @@ public class distanceAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation();
-        sensor.AddObservation();
-        sensor.AddObservation();
     }
 
     public override void OnActionReceived(float[] vectorAction)
