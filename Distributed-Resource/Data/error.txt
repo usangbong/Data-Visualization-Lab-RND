@@ -1,0 +1,25 @@
+-------------------------------------------
+	  > FILE DATE ERROR
+missing : 2019-09-12	,existing file : 2019-09-13	,interval : 1 day, 0:00:00
+missing : 2019-11-22	,existing file : 2019-11-23	,interval : 1 day, 0:00:00
+missing : 2019-11-30	,existing file : 2019-12-01	,interval : 1 day, 0:00:00
+missing : 2019-12-17	,existing file : 2019-12-18	,interval : 1 day, 0:00:00
+missing : 2020-05-01	,existing file : 2020-05-03	,interval : 2 days, 0:00:00
+-------------------------------------------
+	  > FILE SIZE ERROR
+C:/solar/pow_24/UR00000126\20191028.json/602	22
+C:/solar/pow_24/UR00000126\20191107.json/0
+C:/solar/pow_24/UR00000126\20191108.json/0
+C:/solar/pow_24/UR00000126\20191109.json/0
+C:/solar/pow_24/UR00000126\20191110.json/0
+C:/solar/pow_24/UR00000126\20191111.json/0
+C:/solar/pow_24/UR00000126\20191112.json/0
+C:/solar/pow_24/UR00000126\20200214.json/524	19
+C:/solar/pow_24/UR00000126\20200307.json/0
+C:/solar/pow_24/UR00000126\20200308.json/0
+C:/solar/pow_24/UR00000126\20200309.json/0
+C:/solar/pow_24/UR00000126\20200310.json/0
+C:/solar/pow_24/UR00000126\20200328.json/393	14
+C:/solar/pow_24/UR00000126\20200329.json/405	14
+C:/solar/pow_24/UR00000126\20200625.json/607	22
+C:/solar/pow_24/UR00000126\20200809.json/611	22
