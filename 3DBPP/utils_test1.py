@@ -22,7 +22,7 @@ def generation_2dbox(N_epi=1,c_l=20,c_b=20):
     epi_gt_upleft=[]
     
     for i in range(N_epi):
-        N_mdd=np.random.choice(list(range(50,60)), 1)
+        N_mdd=np.random.choice(list(range(20,25)), 1)
         
         #X_input=[[c_l,c_b]]
         #gt_upleft=[[0,0]]
