@@ -23,18 +23,24 @@ def generation_2dbox(N_epi=1,c_l=20,c_b=20):
     
     for i in range(N_epi):
         N_mdd=np.random.choice(list(range(50,60)), 1)
-        X_input=[[c_l,c_b]]
-        gt_upleft=[[0,0]]
+        
+        #X_input=[[c_l,c_b]]
+        #gt_upleft=[[0,0]]
+        X_input=[[int(c_l/2),int(c_b/2)]]*4
+        gt_upleft=[[0,0],[int(c_l/2),0],[0,int(c_b/2)],[int(c_l/2),int(c_b/2)]]
+        N_mdd-=4
+        
         while(len(X_input)<N_mdd):
             idx=np.random.choice(list(range(len(X_input))), 1)[0]#pop an item randomly from X_input
             pop_item=X_input.pop(idx)#[l, b]
             pop_gt_upleft=gt_upleft.pop(idx)
             idx=np.random.choice([0,1],1)[0]#choose an axis randomly
-            if pop_item[idx]==1:
+            
+            if pop_item[idx]<=3:
                 X_input.append(pop_item)
                 gt_upleft.append(pop_gt_upleft)
             else:#item split
-                pos=np.random.choice(list(range(1,pop_item[idx])),1)[0]#choose a position randomly - distance
+                pos=np.random.choice(list(range(1+1,pop_item[idx]-1)),1)[0]#choose a position randomly - distance
                 #item L,B
                 item1=pop_item.copy()
                 item2=pop_item.copy()
@@ -46,9 +52,9 @@ def generation_2dbox(N_epi=1,c_l=20,c_b=20):
                 itme2_upleft[idx] += pos
                 gt_upleft+=[pop_gt_upleft,itme2_upleft]
         #order -> random
-        z = list(zip(X_input, gt_upleft))
-        shuffle(z)
-        X_input, gt_upleft = zip(*z)
+        #z = list(zip(X_input, gt_upleft))
+        #shuffle(z)
+        #X_input, gt_upleft = zip(*z)
         epi_input.append(X_input)
         epi_gt_upleft.append(gt_upleft)
     return epi_input,epi_gt_upleft#np.array(X_input)#_input
@@ -95,4 +101,3 @@ def generation_3dbox(N_epi=1,c_l=20,c_b=20,c_h=20):
         epi_input.append(X_input)
         epi_gt_upleft.append(gt_upleft)
     return epi_input,epi_gt_upleft#np.array(X_input)#_input
-
