@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from random import shuffle
 
 def generation_input_v0(N_epi=1):
     np.random.seed(seed=100)
@@ -21,19 +22,25 @@ def generation_2dbox(N_epi=1,c_l=20,c_b=20):
     epi_gt_upleft=[]
     
     for i in range(N_epi):
-        N_mdd=np.random.choice(list(range(20,30)), 1)
-        X_input=[[c_l,c_b]]
-        gt_upleft=[[0,0]]
+        N_mdd=np.random.choice(list(range(20,25)), 1)
+        
+        #X_input=[[c_l,c_b]]
+        #gt_upleft=[[0,0]]
+        X_input=[[int(c_l/2),int(c_b/2)]]*4
+        gt_upleft=[[0,0],[int(c_l/2),0],[0,int(c_b/2)],[int(c_l/2),int(c_b/2)]]
+        N_mdd-=4
+        
         while(len(X_input)<N_mdd):
             idx=np.random.choice(list(range(len(X_input))), 1)[0]#pop an item randomly from X_input
             pop_item=X_input.pop(idx)#[l, b]
             pop_gt_upleft=gt_upleft.pop(idx)
             idx=np.random.choice([0,1],1)[0]#choose an axis randomly
-            if pop_item[idx]==1:
+            
+            if pop_item[idx]<=3:
                 X_input.append(pop_item)
                 gt_upleft.append(pop_gt_upleft)
             else:#item split
-                pos=np.random.choice(list(range(1,pop_item[idx])),1)[0]#choose a position randomly - distance
+                pos=np.random.choice(list(range(1+1,pop_item[idx]-1)),1)[0]#choose a position randomly - distance
                 #item L,B
                 item1=pop_item.copy()
                 item2=pop_item.copy()
@@ -44,6 +51,16 @@ def generation_2dbox(N_epi=1,c_l=20,c_b=20):
                 itme2_upleft=pop_gt_upleft.copy()
                 itme2_upleft[idx] += pos
                 gt_upleft+=[pop_gt_upleft,itme2_upleft]
+        #order -> random
+        #z = list(zip(X_input, gt_upleft))
+        #shuffle(z)
+        #X_input, gt_upleft = zip(*z)
+        
+        #크기순 정렬
+        s=[i*j for i,j in X_input]
+        s_idx=sorted(range(len(s)), key=lambda k: s[k])
+        X_input=np.array(X_input)[list(reversed(s_idx))]
+        gt_upleft=np.array(gt_upleft)[list(reversed(s_idx))]
                 
         epi_input.append(X_input)
         epi_gt_upleft.append(gt_upleft)
@@ -82,7 +99,13 @@ def generation_3dbox(N_epi=1,c_l=20,c_b=20,c_h=20):
                 gt_upleft+=[pop_gt_upleft,itme2_upleft]
                 
         mdd_w=np.random.uniform(low=5.0, high=18.0, size=N_mdd)
-        epi_input.append([list(a[0] + [a[1]]) for a in zip(X_input,mdd_w)])
+        
+        X_input=[list(a[0] + [a[1]]) for a in zip(X_input,mdd_w)]
+        z = list(zip(X_input, gt_upleft))
+        shuffle(z)
+        X_input, gt_upleft = zip(*z)
+        
+        epi_input.append(X_input)
         epi_gt_upleft.append(gt_upleft)
     return epi_input,epi_gt_upleft#np.array(X_input)#_input
 
@@ -110,17 +133,17 @@ def whole_upleft(tl,tr,bl, br,bxl,bxb):
     return upleft_list
 
 def next_state(state,upleft,bxl,bxb):
-    # state: current continaer, upleft: upleft of new box, bxl: length of box(row), bxb: breadth of box(column)
-    nx_state=state.copy()
-    nx_state[upleft[0]:upleft[0]+bxl,upleft[1]:upleft[1]+bxb]=1
-    return nx_state
-
-def feasible_location(state,whole_upleft_list):
+        # state: current continaer, upleft: upleft of new box, bxl: length of box(row), bxb: breadth of box(column)
+        nx_state=state.copy()
+        nx_state[upleft[0]:upleft[0]+bxl,upleft[1]:upleft[1]+bxb]=1
+        return nx_state
+    
+def feasible_location(state,whole_upleft_list,bxl,bxb):
     # state: current container, w_upleft: whole upleft list, 
     f_upleft=whole_upleft_list.copy()
     #remove - outside the container
     f_upleft = np.array(f_upleft)
-    f_upleft=f_upleft[((f_upleft[:,0]>=0) & (f_upleft[:,1]>=0) & (f_upleft[:,0]<state.shape[0]) & (f_upleft[:,1]<state.shape[1]))]
+    f_upleft=f_upleft[((f_upleft[:,0]>=0) & (f_upleft[:,1]>=0) & (f_upleft[:,0]+bxl<=state.shape[0]) & (f_upleft[:,1]+bxb<=state.shape[1]))]
     #remove - duplicated
     new_array = [tuple(row) for row in f_upleft]
     f_upleft = np.unique(new_array, axis=0)
@@ -128,15 +151,15 @@ def feasible_location(state,whole_upleft_list):
     idx=[]
     for i,j in  enumerate(f_upleft):
         # print(np.sum(state[i:i+1,j:j+2]))
-        if np.sum(state[j[0]:j[0]+1,j[1]:j[1]+2]) >=1: idx.append(i)#f_upleft.remove([i,j])#del f_upleft[i]
+        if np.sum(state[j[0]:j[0]+bxl,j[1]:j[1]+bxb]) >=1: idx.append(i)#f_upleft.remove([i,j])#del f_upleft[i]
     f_upleft=np.delete(f_upleft,idx,axis=0)
     #remove - 상이한 높이(보류)
     return f_upleft
 
-def action_options_list(f_upleft_list):
+def action_options_list(f_upleft_list):#action -> encoding (400,)
     action_options=[]
     for i,j in f_upleft_list:
         action_option=np.zeros((20,20))
         action_option[i,j]=1
-        action_options.append(action_option.flatten())
+        action_options.append(action_option)
     return action_options
