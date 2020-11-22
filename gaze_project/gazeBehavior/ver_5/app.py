@@ -27,22 +27,9 @@ REMOVE_FEATURES = []
 
 # eye movement event filter threshold
 FILTER_THRESHOLD = []
-THRESHOLD_VELOCITY = 600
+THRESHOLD_VELOCITY = 1000
 THRESHOLD_DISTRIBUTION = 100
 THRESHOLD_DURATION = 200
-# FEATURE_SUB_TYPES = []
-# FEATURE_SUB = ""
-# STIMULUS_CLASSES = []
-# STIMULUS_NAMES = ["002", "004", "006", "008", "010", "012", "014", "016", "018", "020"]
-# UIDS = ["usb_02"]
-# PATHS = []
-# FEATURES = []
-# GAZE_DATA_LIST = []
-# FIXATIONS = []
-# meanValue = []
-# RANDOM_DATA_LIST = []
-# SPATIAL_VARIANCES = []
-# selectedIdx = 0
 
 app = Flask(__name__)
 if __name__ == '__main__':
@@ -89,12 +76,10 @@ def ivtFilter(_gazeData, _uid, _feats, _vt):
     _f.append(0)
     for i in range(0, len(FEATURE_TYPES)):
       _f.append(-999)
-
     _fixation.append(_f)
     return _fixation
 
   v_threshold = _vt
-  
   _tempData = []
   _idCount = 0
   _tStamp = 0
@@ -163,52 +148,87 @@ def ivtFilter(_gazeData, _uid, _feats, _vt):
 
   return _fixation
 
-# def idtFilter(_gazeData, _uid, _feat, _distributionThres, _durationThres):
-#   _fixation = []
-#   if len(_gazeData) == 1:
-#     _fixation.append([0, 0, -999])
-#     return _fixation
-  
-#   dur_threshold = _durationThres
-#   dis_threshold = _distributionThres
+def idtFilter(_gazeData, _uid, _feats, _distributionThres, _durationThres):
+  _fixation = []
+  if len(_gazeData) == 1:
+    _sRow = []
+    _sRow.append("x")
+    _sRow.append("y")
+    for _fType in FEATURE_TYPES:
+      _sRow.append(_fType)
+    _fixation.append(_sRow)
 
-#   _tempData = []
-#   _idCount = 0
-#   _tStamp = 0
-#   _tCount = 0.0
-#   for _p in _gazeData:
-#     _no = _idCount
-#     _id = _uid
-#     _timestamp = _tStamp
-#     _timecount = _tCount
-#     _x = float(_p[1])
-#     _y = float(_p[2])
-#     _tempData.append([_no, _id, _timestamp, _timecount, _x, _y])
-#     _idCount += 1
-#     _tCount += 0.1
-#     if _idCount%9 == 0:
-#       _tStamp += 1
-#       _tCount += 0.0
-#   df = pd.DataFrame(_tempData, columns = ['no', 'userid', 'timestamp', 'timecount', 'x','y'])
-#   _data = np.array(df)
-#   _data_xs = np.unique(_data[:,gfilter.x])
-#   _data_ys = np.unique(_data[:,gfilter.y])
-#   _user_ids = np.unique(_data[:,gfilter.user_id])
-
-#   for u in user_ids:
-#     for q in range(1,2):
-#       sub_data = _data
-#       sub2d = np.asarray(sub_data).reshape(len(sub_data),6) #this is a numpy array
-#       centroidsX, centroidsY, time0, tDif, fixList, fixations = gfilter.idt(sub2d, dis_threshold, dur_threshold)
+    _f = []
+    _f.append(0)
+    _f.append(0)
+    for i in range(0, len(FEATURE_TYPES)):
+      _f.append(-999)
+    _fixation.append(_f)
+    return _fixation
   
-#   for _clu in clusters:
-#     _x = int(_clu[0])
-#     _y = int(_clu[1])
-#     _f = float(_feat[_y][_x])
-#     _fixation.append([_x, _y, _f])
+  dis_threshold = _distributionThres
+  dur_threshold = _durationThres
+  _tempData = []
+  _idCount = 0
+  _tStamp = 0
+  _tCount = 0.0
+  for _p in _gazeData:
+    _no = _idCount
+    _id = _uid
+    _timestamp = _tStamp
+    _timecount = _tCount
+    _x = float(_p[1])
+    _y = float(_p[2])
+    _tempData.append([_no, _id, _timestamp, _timecount, _x, _y])
+    _idCount += 1
+    _tCount += 0.1
+    if _idCount%9 == 0:
+      _tStamp += 1
+      _tCount += 0.0
+  df = pd.DataFrame(_tempData, columns = ['no', 'userid', 'timestamp', 'timecount', 'x','y'])
+  _data = np.array(df)
+  _data_xs = np.unique(_data[:,gfilter.x])
+  _data_ys = np.unique(_data[:,gfilter.y])
+  _user_ids = np.unique(_data[:,gfilter.user_id])
 
-#   return _fixation
+  for u in user_ids:
+    for q in range(1,2):
+      sub_data = _data
+      sub2d = np.asarray(sub_data).reshape(len(sub_data),6) #this is a numpy array
+      centroidsX, centroidsY, time0, tDif, fixList, fixations = gfilter.idt(sub2d, dis_threshold, dur_threshold)
+
+  n_clusters = len(fixations)
+  clusters = []
+  _fidxrclu = 0
+  for _fpi in range(0, n_clusters):
+    fpts = []
+    fpts.append(df_IVT['X'][_fpi])
+    fpts.append(df_IVT['Y'][_fpi])
+    fpts.append(df_IVT['Time'][_fpi])
+    clusters.append(fpts)
   
+  _firstRowFlag = True
+  for _clu in clusters:
+    _x = int(_clu[0])
+    _y = int(_clu[1])
+    _fs = []
+    _fs.append(_x)
+    _fs.append(_y)
+    for _feat in _feats:
+      _f = float(_feat[_y][_x])
+      _fs.append(_f)
+    if _firstRowFlag:
+      _sRow = []
+      _sRow.append("x")
+      _sRow.append("y")
+      for _fType in FEATURE_TYPES:
+        _sRow.append(_fType)
+      _fixation.append(_sRow)
+      _firstRowFlag = False
+    
+    _fixation.append(_fs)
+
+  return _fixation
 
 def makeRandomPos(_fixLen, _feats):
   _random = []
@@ -347,12 +367,15 @@ def corrProcess():
       afDF = afDF.drop(str(_dft), axis=1)
     print(afDF)
 
+    print(REMOVE_FEATURES)
     afDF = afDF.drop("stimulusClass", axis=1)
-    selectedFeature = []
+    selectedFeature = FEATURE_TYPES
     for _ft in FEATURE_TYPES:
       for _uft in REMOVE_FEATURES:
-        if _ft != _uft:
-          selectedFeature.append(_ft)
+        if _ft == _uft:
+          selectedFeature.remove(_ft)
+    selectedFeature = list(set(selectedFeature))
+    print(selectedFeature)
 
     # data pre-processing: min-max normalization or z-score standardization
     _pProData_list = afDF.values.tolist()
@@ -546,13 +569,13 @@ def gazeDataSubmit():
         _fixation = []
         _random = []
         if FILTER == "ivt":
-          _fixation = ivtFilter(_rawGaze, PARTICIPANT, _features, filter_threshold[0])
+          _fixation = ivtFilter(_rawGaze, PARTICIPANT, _features, FILTER_THRESHOLD[0])
           _random = makeRandomPos(len(_fixation), _features)
         elif FILTER == "idt":
           print("idt filter")
         else:
           print("default: ivt filter")
-          _fixation = ivtFilter(_rawGaze, PARTICIPANT, _features, filter_threshold[0])
+          _fixation = ivtFilter(_rawGaze, PARTICIPANT, _features, FILTER_THRESHOLD[0])
           _random = makeRandomPos(len(_fixation), _features)
         
         if not(_fixExistFlag):
@@ -819,7 +842,12 @@ def gazeDataSubmit():
       spMeanPath = spDir+"/"+"sp_mean.csv"
       spMJoinData.to_csv(spMeanPath, mode='w', index=False)
       print("SP: spatial variance mean data saved")
-      
+    
+    # if correlation/filter directory does not exist
+    if not(os.path.exists(corrDir)):
+      print("generate correlation/filter directory")
+      os.makedirs(os.path.join(corrDir))
+
     # if fixation, random, and spatial variance cache file exist
     # Load spatial variance mean cache
     print("SP: Load spatial variance mean cache")
