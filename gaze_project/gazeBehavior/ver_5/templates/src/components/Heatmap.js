@@ -4,48 +4,53 @@ import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 
 function Heatmap(props) {
-   const { width, height, dataURL} = props;
+   const { width, height, dataURL, FEATURE_DEFINE, STI_CLASS_DEFINE} = props;
    const svgRef = useRef();
    const d3 = window.d3;
-   var colOrigin = ["Action", "Affective", "Art", "BlackWhite", "Cartoon", "Fractal", "Indoor", "Inverted", "Jumbled", "LineDrawing", "LowResolution", "Noisy", "Object", "OutdoorManMade", "OutdoorNatural", "Pattern", "Random", "Satelite", "Sketch", "Social"];
    var selectedCols = [];
    var selectedRows = [];
 
    useEffect(() => {
       if (typeof dataURL !== 'string' && dataURL.length === 0)
          return;
-      
+      d3.select(svgRef.current).selectAll("*").remove();
       // console.log(svgRef.current)
       
       // set the dimensions and margins of the graph
-      var margin = {top: 30, right: 30, bottom: 30, left: 100},
-      width = 1800 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+      var margin = {top: 30, right: 30, bottom: 30, left: 30},
+      drawWidth = width - margin.left - margin.right,
+      drawHeight = height - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
       // var svg = d3.select(svgRef.current)
       var svg = d3.select(svgRef.current)
-         .attr("width", width + margin.left + margin.right)
-         .attr("height", height + margin.top + margin.bottom)
+         .attr("width", drawWidth + margin.left + margin.right)
+         .attr("height", drawHeight + margin.top + margin.bottom)
          .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", drawWidth + margin.left + margin.right)
+            .attr("height", drawHeight + margin.top + margin.bottom)
          .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
       // Labels of row and columns
-      var myGroups = ["Action", "Affective", "Art", "BlackWhite", "Cartoon", "Fractal", "Indoor", "Inverted", "Jumbled", "LineDrawing", "LowResolution", "Noisy", "Object", "OutdoorManMade", "OutdoorNatural", "Pattern", "Random", "Satelite", "Sketch", "Social"]
-      var myVars = ["center_bias", "contrast_intensity", "contrast_color", "contrast_orientation", "HOG", "horizontal_line", "LOG_spectrum", "saliency_intensity", "saliency_color", "saliency_orientation", "saliency_computed"]
+      var myGroups = [];
+      var myVars = [];
+      for(let i=0; i<FEATURE_DEFINE.length; i++){
+         myVars.push(FEATURE_DEFINE[i][2]);
+      }
+      for(let i=0; i<STI_CLASS_DEFINE.length; i++){
+         myGroups.push(STI_CLASS_DEFINE[i][2]);
+      }
 
       // Build X scales and axis:
       var x = d3.scaleBand()
-         .range([ 0, width ])
+         .range([ 0, drawWidth ])
          .domain(myGroups)
          .padding(0.01);
       svg.append("g")
          .attr("class", "xaxis")
-         .attr("transform", "translate(0," + height + ")")
+         .attr("transform", "translate(0," + drawHeight + ")")
          .attr("stroke", function(d){
             var _selected = false;
             for(var i=0; i<selectedCols.length; i++){
@@ -60,6 +65,7 @@ function Heatmap(props) {
                return "black";
             }
          })
+         .style("font", "7px sans-serif")
          .call(d3.axisBottom(x))
 
       d3.selectAll(".xaxis .tick")
@@ -141,7 +147,7 @@ function Heatmap(props) {
       
       // Build X scales and axis:
       var y = d3.scaleBand()
-         .range([ height, 0 ])
+         .range([ drawHeight, 0 ])
          .domain(myVars)
          .padding(0.01);
       svg.append("g")
@@ -160,6 +166,7 @@ function Heatmap(props) {
                return "black";
             }
          })
+         .style("font", "7px sans-serif")
          .call(d3.axisLeft(y));
 
       d3.selectAll(".yaxis .tick")
@@ -258,7 +265,7 @@ function Heatmap(props) {
             .style("border-width", "2px")
             .style("border-radius", "5px")
             .style("padding", "5px")
-
+         
          // Three function that change the tooltip when user hover / move / leave a cell
          var mouseover = function(d) {
             tooltip.style("opacity", 1)
@@ -313,18 +320,18 @@ function Heatmap(props) {
          });
       }
       
-   }, [props.dataURL, ]);
+   }, [props.dataURL, props.FEATURE_DEFINE, props.STI_CLASS_DEFINE]);
 
-  return (
-    <>
-      {typeof dataURL === 'string' && dataURL.length > 0 &&
-         <div id="my_dataviz">
-            <svg ref={svgRef}>
-            </svg>
-         </div>
-      }
-    </>
-  );
+   return (
+      <>
+         {typeof dataURL === 'string' && dataURL.length > 0 &&
+            <div id="my_dataviz">
+               <svg ref={svgRef}>
+               </svg>
+            </div>
+         }
+      </>
+   );
 }
 
 export default Heatmap;
