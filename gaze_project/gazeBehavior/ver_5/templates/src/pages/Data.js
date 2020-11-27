@@ -4,16 +4,18 @@ import axios from 'axios';
 
 import Heatmap from 'components/Heatmap';
 import CorrelationMatrix from 'components/CorrelationMatrix';
+import ScatterPlot from 'components/ScatterPlot';
+import PatchTable from 'components/PatchTable';
 
 const dataProcessingMethods = [
-  { value:'min_max', label: 'min-max' },
+  { value: 'min_max', label: 'min-max' },
   { value: 'z_score', label: 'z-score'}
 ];
 
 const correlationMethods = [
   { value:'pearson', label: 'Pearson linear' },
   { value:'spearman', label: 'Spearman rank-order' },
-  { value:'pearson', label: 'Kendall rank-order' }
+  { value:'kendall', label: 'Kendall rank-order' }
 ];
 
 class Data extends React.Component {
@@ -32,6 +34,10 @@ class Data extends React.Component {
       selectedFilter: null,
       selectedProcessMethod: null,
       selectedCorrelationMethod: null,
+      feature_define: [],
+      corr_feature_define: [],
+      sti_class_define: [],
+      scatter_axis: []
     };
   }
 
@@ -83,28 +89,77 @@ class Data extends React.Component {
       });
   }
 
+  loadFeatureDefine = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/access/feature_define.json?`+Math.random())
+      .then(response => {
+        let features = [];
+        for(let i=0; i<response.data.length; i++){
+          features.push(response.data[i]);
+        }
+        this.setState({
+          feature_define: features
+        });
+    });
+  }
+
+  loadSelectedFeatureDefine = () =>{
+    // console.log(this.state.corr_feature_define);
+    if(this.state.corr_feature_define.length === 0){
+      this.setState({
+        corr_feature_define: this.state.feature_define
+      });
+
+    }else{
+      axios.get(`http://${window.location.hostname}:5000/static/access/selected_feature_define.json?`+Math.random())
+        .then(response => {
+          // console.log(response);
+          let selected_feature_define = response.data;
+          
+          this.setState({
+            corr_feature_define: selected_feature_define
+          });
+      });
+    }
+    
+  }
+
+
   loadSPMeanPath = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/sp_heatmap_path.json?`+Math.random())
       .then(response => {
         // console.log(response);
-        let _path = "http://"+window.location.hostname+":5000"+response.data;
+        let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
         // console.log("sp heatmap data access path: "+_path);
         this.setState({
           spHeatmapDataURL: _path
         });
       });
+
+    this.loadFeatureDefine();
+    this.loadSelectedFeatureDefine();
+
+    axios.get(`http://${window.location.hostname}:5000/static/access/sti_class_define.json?`+Math.random())
+      .then(response => {
+        let sti_class = [];
+        for(let i=0; i<response.data.length; i++){
+          sti_class.push(response.data[i]);
+        }
+        this.setState({
+          sti_class_define: sti_class
+        });
+    });
   }
   
   loadCorrMatrixPath = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/corr_matrix_short_path.json?`+Math.random())
       .then(response => {
         // console.log(response);
-        let _path = "http://"+window.location.hostname+":5000"+response.data;
+        let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
         // console.log("correlation data access path: "+_path);
         this.setState({
           corrMatDataURL: _path
         });
-      });
+    });
   }
 
   loadFixationFilters = () =>{
@@ -128,7 +183,6 @@ class Data extends React.Component {
           fixationFilters: filter_options
         });
       });
-
   }
 
   loadFeatureTypes = dataName => {
@@ -158,6 +212,34 @@ class Data extends React.Component {
         });
       });
   }
+
+  loadScatterAxis = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/access/scatter_axis.json?`+Math.random())
+      .then(response => {
+        // console.log(response);
+        let _axis = response.data;
+        
+        this.setState({
+          scatter_axis: _axis
+        });
+    });
+  }
+
+  // generateScatterData = () =>{
+  //   axios.post(`http://${window.location.hostname}:5000/api/scatter/generatedata`, _data)
+  //     .then(response => {
+  //       if (response.data.status === 'success') {
+  //           // alert('data columns changed');
+  //           console.log('data columns changed');
+  //       } else if (response.data.status === 'failed') {
+  //           alert(`Failed change data columns - ${response.data.reason}`);
+  //       }
+  //     }).catch(error => {
+  //       alert(`Error - ${error.message}`);
+  //   });
+  // }
+
+  
 
   componentDidMount() {
     this.loadDatasetList();
@@ -192,6 +274,9 @@ class Data extends React.Component {
       }).catch(error => {
         alert(`Error - ${error.message}`);
       });
+
+    this.loadFeatureDefine();
+
   }
 
   datasetChange = selectedDataset => {
@@ -232,34 +317,26 @@ class Data extends React.Component {
       alert(`Error - ${error.message}`);
     });
 
-    // this.loadCorrMatrixPath();
-    // const d3CorrMatVis = document.getElementById("corr");
-    // while(d3CorrMatVis.hasChildNodes()){
-    //   d3CorrMatVis.removeChild(d3CorrMatVis.lastChild);
-    // }
-    // if(d3CorrMatVis){
-    //   new CorrelationMatrix(d3CorrMatVis, this.state.dataURL);
-    // }
-    // this.forceUpdate();
+    // load selected features define
+    this.loadSelectedFeatureDefine();
   }
 
   render() {
-    const { datasetList, participants, fixationFilters, selectedDataset, spHeatmapDataURL, corrMatDataURL, selectedParticipant, selectedFilter, selectedProcessMethod, selectedCorrelationMethod } = this.state;
+    const { datasetList, participants, fixationFilters, selectedDataset, spHeatmapDataURL, corrMatDataURL, selectedParticipant, selectedFilter, selectedProcessMethod, selectedCorrelationMethod, feature_define, sti_class_define, scatter_axis, corr_feature_define } = this.state;
 
     return (
       <>
         <div className="page-header">
-          <h1>Select Data</h1>
+          <h2>Temp Title</h2>
         </div>
 
         <form onSubmit={this.onSubmit}>
           <div className="page-section select-data">
-            <h2>Dataset</h2>
             <Select 
               value={selectedDataset}
               onChange={this.datasetChange}
               options={datasetList}
-              placeholder="Select dataset"
+              placeholder="Stimulus Dataset"
             />
           </div>
           
@@ -269,7 +346,7 @@ class Data extends React.Component {
                 value={selectedParticipant}
                 onChange={this.participantChange}
                 options={participants}
-                placeholder="Select participant data"
+                placeholder="Participant data"
               />
             </div>
           }
@@ -279,7 +356,7 @@ class Data extends React.Component {
               value={selectedFilter}
               onChange={this.filterChange}
               options={fixationFilters}
-              placeholder="Select an eye movement event filter"
+              placeholder="Eye movement event filter"
             />
           </div>
 
@@ -289,9 +366,13 @@ class Data extends React.Component {
         </form>
 
         {spHeatmapDataURL.length > 0 &&
-          <div id="heat">
+          <div id="heat" className="page-section heatmap">
             <Heatmap 
+              width={400}
+              height={400}
               dataURL={spHeatmapDataURL}
+              FEATURE_DEFINE={feature_define}
+              STI_CLASS_DEFINE={sti_class_define}
             />
           </div>
         }
@@ -302,29 +383,49 @@ class Data extends React.Component {
               value={selectedProcessMethod}
               onChange={this.pMethodChange}
               options={dataProcessingMethods}
-              placeholder="Select a data pre-processing method"
+              placeholder="Data processing"
             />
           </div>
         }
 
         {spHeatmapDataURL.length > 0 &&
-          <div className="page-section a select-correlation">
+          <div className="page-section select-correlation">
             <Select
               value={selectedCorrelationMethod}
               onChange={this.cMethodChange}
               options={correlationMethods}
-              placeholder="Select a correlation method"
+              placeholder="Correlation method"
             />
           </div>
         }
 
         {corrMatDataURL.length > 0 &&
-          <div id="corr">
+          <div id="corr" className="page-section correlation">
             <CorrelationMatrix 
+              width={400}
+              height={400}
               dataURL={corrMatDataURL}
+              features={corr_feature_define}
+              onAxisChanged={this.loadScatterAxis}
             />
           </div>  
         }
+
+        
+        <div className="page-section">
+          <ScatterPlot
+            width={450}
+            height={400}
+            axis={scatter_axis}
+            dataURL={`http://${window.location.hostname}:5000/static/access/scatter_data.csv?`+Math.random()}
+          />
+        </div>
+        
+
+        <div className="page-section">
+          <PatchTable />
+        </div>
+        
       </>
     );
   }
