@@ -7,6 +7,7 @@ from random import *
 
 import numpy as np
 import pandas as pd
+import cv2
 from sklearn import preprocessing as sklearn_preprocessing
 from flask import *
 from flask_cors import CORS
@@ -20,14 +21,20 @@ PARTICIPANT = "usb_02"
 DATAPROCESSING = "min_max"
 CORRELATION_METHOD = "pearson"
 STIMULUS_CLASSES = []
+STI_CLASS_DEFINE = []
 FEATURE_TYPES = []
+FEATURE_DEFINE = []
+SELECTED_FEATURE_DEFINE = []
 REMOVE_CLASSES = []
 REMOVE_FEATURES = []
+SCATTER_FEATURES = []
+PATCH_SIZE = 50
 
 
 # eye movement event filter threshold
+FILTER_NAME = ""
 FILTER_THRESHOLD = []
-THRESHOLD_VELOCITY = 1000
+THRESHOLD_VELOCITY = 600
 THRESHOLD_DISTRIBUTION = 100
 THRESHOLD_DURATION = 200
 
@@ -115,7 +122,6 @@ def ivtFilter(_gazeData, _uid, _feats, _vt):
 
   n_clusters = len(fixations)
   clusters = []
-
   _fidxrclu = 0
   for _fpi in range(0, n_clusters):
     fpts = []
@@ -154,8 +160,8 @@ def idtFilter(_gazeData, _uid, _feats, _distributionThres, _durationThres):
     _sRow = []
     _sRow.append("x")
     _sRow.append("y")
-    for _fType in FEATURE_TYPES:
-      _sRow.append(_fType)
+    for i in range(0, len(FEATURE_TYPES)):
+      _sRow.append(FEATURE_DEFINE[i][2])
     _fixation.append(_sRow)
 
     _f = []
@@ -191,20 +197,23 @@ def idtFilter(_gazeData, _uid, _feats, _distributionThres, _durationThres):
   _data_ys = np.unique(_data[:,gfilter.y])
   _user_ids = np.unique(_data[:,gfilter.user_id])
 
-  for u in user_ids:
+  for u in _user_ids:
     for q in range(1,2):
       sub_data = _data
       sub2d = np.asarray(sub_data).reshape(len(sub_data),6) #this is a numpy array
       centroidsX, centroidsY, time0, tDif, fixList, fixations = gfilter.idt(sub2d, dis_threshold, dur_threshold)
+
+  Tdata = {'X':centroidsX,'Y':centroidsY, 'Time':time0}
+  df_IDT = pd.DataFrame(Tdata)
 
   n_clusters = len(fixations)
   clusters = []
   _fidxrclu = 0
   for _fpi in range(0, n_clusters):
     fpts = []
-    fpts.append(df_IVT['X'][_fpi])
-    fpts.append(df_IVT['Y'][_fpi])
-    fpts.append(df_IVT['Time'][_fpi])
+    fpts.append(df_IDT['X'][_fpi])
+    fpts.append(df_IDT['Y'][_fpi])
+    fpts.append(df_IDT['Time'][_fpi])
     clusters.append(fpts)
   
   _firstRowFlag = True
@@ -221,8 +230,8 @@ def idtFilter(_gazeData, _uid, _feats, _distributionThres, _durationThres):
       _sRow = []
       _sRow.append("x")
       _sRow.append("y")
-      for _fType in FEATURE_TYPES:
-        _sRow.append(_fType)
+      for i in range(0, len(FEATURE_TYPES)):
+        _sRow.append(FEATURE_DEFINE[i][2])
       _fixation.append(_sRow)
       _firstRowFlag = False
     
@@ -248,8 +257,8 @@ def makeRandomPos(_fixLen, _feats):
       _frr = []
       _frr.append("x")
       _frr.append("y")
-      for _fType in FEATURE_TYPES:
-        _frr.append(_fType)
+      for i in range(0, len(FEATURE_TYPES)):
+        _frr.append(FEATURE_DEFINE[i][2])
       _random.append(_frr)
       _firstRowFlag = False
 
@@ -298,23 +307,24 @@ def calcSpatialVariation(_fixations, _randoms, _fType, _sClass, _sName):
 
 
 def makePath_Filter(_FILTER, _threshold, _path):
+  global FILTER_NAME
   _p = _path
-
   if _FILTER == "ivt":
     # ivt filter needs velocity threshold
+    FILTER_NAME = _FILTER+"_"+str(_threshold[0])
     _p += _FILTER+"_"+str(_threshold[0])
   elif _FILTER == "idt":
     # idt filter needs distribution and duration threshold
+    FILTER_NAME = _FILTER+"_"+str(_threshold[0])+"_"+str(_threshold[1])
     _p += _FILTER+"_"+str(_threshold[0])+"_"+str(_threshold[1])
   else:
     # default set: ivt filter
+    FILTER_NAME = _FILTER+"_"+str(_threshold[0])
     _p += _FILTER+"_"+str(_threshold[0])
-
   return _p
 
 # function for data preprocessing such as min-max normalization and z-score standardization
 def dataPreProcessing(_method, _data):
-  processedData = []
   _pd = []
   if _method == "min_max":
     print("Data processing: Min-Max Normalization")
@@ -328,14 +338,69 @@ def dataPreProcessing(_method, _data):
 
   return _pd
 
-# preProcessing_list = fixData.values.tolist()
-# dataPreProcessing(DATAPROCESSING, preProcessing_list)
+def generatePatch(_fix, _patchSizse, _stiClass, _stiName, _idx):
+  print("generatePatch")
+  _stiPath = "./static/data/"+DATASET+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
+  print(_stiPath)
+  image = cv2.imread(_stiPath, cv2.IMREAD_COLOR)
+  iWidth, iHeight = image.shape[:2]
+  # print(image.size)
+
+  _lenPatch = [_patchSizse, _patchSizse]
+  _x = _fix[0]
+  _y = _fix[1]
+  _point = [_x-(_lenPatch[0]/2), _y-(_lenPatch[1]/2)]
+  # top bottom left right
+  _padding = [0, 0, 0, 0]
+  if _point[0] < 0:
+    _padding[2] = abs(_point[0])
+    _point[0] = 0
+    _lenPatch[0] = _lenPatch[0]-_padding[2]
+
+  if _point[0]+_lenPatch[0] > iWidth:
+    _padding[3] = (_point[0]+_lenPatch[0]) - iWidth
+    _lenPatch[0] = _lenPatch[0] - _padding[3]
+
+  if _point[1] <0:
+    _padding[0] = abs(_point[1])
+    _point[1] = 0
+    _lenPatch[1] = _lenPatch[1]-_padding[0]
+
+  if _point[1]+_lenPatch[1] > iHeight:
+    _padding[4] = (_point[1]+_lenPatch[1]) - iHeight
+    _lenPatch[1] = _lenPatch[1]-_padding[1]
+
+  # print(_lenPatch)
+  # print(_point)
+  # print(_padding)
+
+  _left = int(_point[0])
+  _top = int(_point[1])
+  _right = int(_point[0]+_lenPatch[0])
+  _bottom = int(_point[1]+_lenPatch[1])
+  cropImg = image[_top:_bottom, _left:_right]
+  color = [255, 255, 255]
+  cropImg = cv2.copyMakeBorder(cropImg, int(_padding[0]), int(_padding[1]), int(_padding[2]), int(_padding[3]), cv2.BORDER_CONSTANT, value=color)
+
+  _outPath = "./static/access/"+DATASET
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+_stiClass
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+_stiName
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+str(_idx).zfill(3)+".png"
+  cv2.imwrite(_outPath, cropImg)
+
 
 # from pages/Data.js
 @app.route('/api/corr/process', methods=['POST'])
 def corrProcess():
   global DATAPROCESSING
   global CORRELATION_METHOD
+
   response = {}
   try:
     print(request.form)
@@ -357,31 +422,55 @@ def corrProcess():
     # print(afDF)
     # drop unselected stimulus classes
     print("drop unselected stimulus classes")
-    for _dsc in REMOVE_CLASSES:
+    for i in range(0, len(REMOVE_CLASSES)):
+      _dsc = REMOVE_CLASSES[i]
+      for j in range(0, len(STI_CLASS_DEFINE)):
+        if _dsc == STI_CLASS_DEFINE[j][2]:
+          _dsc = STI_CLASS_DEFINE[j][1]
+          break
       _dropIdx = afDF[afDF["stimulusClass"]==str(_dsc)].index
       afDF = afDF.drop(_dropIdx)
 
     # drop unselected feature types
     print("drop unselected feature types")
     for _dft in REMOVE_FEATURES:
-      afDF = afDF.drop(str(_dft), axis=1)
+      _del = ""
+      for i in range(0, len(FEATURE_DEFINE)):
+        if _dft == FEATURE_DEFINE[i][2]:
+          _del = FEATURE_DEFINE[i][1]
+      afDF = afDF.drop(str(_del), axis=1)
     print(afDF)
 
     print(REMOVE_FEATURES)
     afDF = afDF.drop("stimulusClass", axis=1)
-    selectedFeature = FEATURE_TYPES
-    for _ft in FEATURE_TYPES:
+    # selectedFeature = FEATURE_TYPES
+    selectedFeature = []
+    for i in range(0, len(FEATURE_TYPES)):
+      selectedFeature.append(FEATURE_DEFINE[i][2])
+    
+    for i in range(0, len(FEATURE_TYPES)):
+      _ft = FEATURE_DEFINE[i][2]
       for _uft in REMOVE_FEATURES:
         if _ft == _uft:
           selectedFeature.remove(_ft)
-    selectedFeature = list(set(selectedFeature))
     print(selectedFeature)
+    # selectedFeature = list(set(selectedFeature))
+    # print(selectedFeature)
+    
+    SELECTED_FEATURE_DEFINE = []
+    for i in range(0, len(selectedFeature)):
+      for j in range(0, len(FEATURE_DEFINE)):
+        if selectedFeature[i] == FEATURE_DEFINE[j][2]:
+          SELECTED_FEATURE_DEFINE.append(FEATURE_DEFINE[j])
+          break
+    print(SELECTED_FEATURE_DEFINE)
+    _selectedFeatureDefineAccessPath = "./static/access/selected_feature_define.json"
+    makeJSON(_selectedFeatureDefineAccessPath, SELECTED_FEATURE_DEFINE)
 
     # data pre-processing: min-max normalization or z-score standardization
     _pProData_list = afDF.values.tolist()
     _pProData_list = dataPreProcessing(DATAPROCESSING, _pProData_list)
     processed_afDF = pd.DataFrame(_pProData_list, columns=selectedFeature)
-
 
     filteredDataPath = "./static/access/filtered_data.csv"
     processed_afDF.to_csv(filteredDataPath, mode='w', index=False)
@@ -399,7 +488,7 @@ def corrProcess():
     afDF_list = _pProData_list
     colNameShort = []
     for i in range(0, len(selectedFeature)):
-      colNameShort.append("f_"+str(i).zfill(2))
+      colNameShort.append(SELECTED_FEATURE_DEFINE[i][2])
     afDF_short = pd.DataFrame(afDF_list, columns=colNameShort)
     afDFCorrMat_short = afDF_short[colNameShort].iloc[:,range(0,len(colNameShort))].corr(method=CORRELATION_METHOD)
     afDFCorrMat_short_access = "./static/access/correlation_mat_short.csv"
@@ -421,6 +510,46 @@ def corrProcess():
   
   return json.dumps(response)
 
+@app.route('/api/data/selectedAxis', methods=['POST'])
+def selectedAxis():
+  global SCATTER_FEATURES
+
+  response = {}
+  try:
+    print(request.form)
+    x_axis = request.form['feature_1']
+    y_axis = request.form['feature_2']
+    SCATTER_FEATURES = []
+    SCATTER_FEATURES = [x_axis, y_axis]
+    
+    # generate access file for sharing selected axis
+    _path = "./static/access/scatter_axis.json"
+    makeJSON(_path, SCATTER_FEATURES)
+    print("generate access file for sharing selected axis")
+
+    # generate 2d data for scatter plot
+    # 1. all feature data load
+    # _featurePath = "./static/data/"+PARTICIPANT+"/processedFixation/"+FILTER_NAME+"/all_fix.csv"
+    _featurePath = "./static/access/filtered_data.csv"
+    featDF = pd.read_csv(_featurePath)
+    print(featDF)
+    print("all feature data loaded")
+    # 2. select x-axis (feature_1) and y-axis (feature_2) data
+    scatterDF = featDF[[SCATTER_FEATURES[0], SCATTER_FEATURES[1]]]
+    print(scatterDF)
+    print("select x-axis (feature_1) and y-axis (feature_2) data")
+    # 3. generate json file for saving 2d data
+    _accessPathScatterData = "./static/access/scatter_data.csv"
+    scatterDF.to_csv(_accessPathScatterData, mode='w', index=False)
+    print("generate json file for saving 2d data")
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
 
 
 @app.route('/api/data/removefilter', methods=['POST'])
@@ -450,7 +579,6 @@ def removefilter():
         REMOVE_FEATURES.append(_t)
       # print(getTypeList)
 
-
     response['status'] = 'success'
   except Exception as e:
     response['status'] = 'failed'
@@ -466,7 +594,9 @@ def gazeDataSubmit():
   global FILTER
   global PARTICIPANT
   global FEATURE_TYPES
-  global STIMULUS_CLASSE
+  global FEATURE_DEFINE
+  global STIMULUS_CLASSES
+  global STI_CLASS_DEFINE
   global FILTER_THRESHOLD
   
   print(request.form)
@@ -499,6 +629,12 @@ def gazeDataSubmit():
       # print(_featType[0])
       FEATURE_TYPES.append(_featType[0])
     rf.close()
+    # generate access file
+    FEATURE_DEFINE = []
+    for i in range(0, len(FEATURE_TYPES)):
+      FEATURE_DEFINE.append([i, FEATURE_TYPES[i], "f_"+str(i).zfill(2)])
+    _accessFeatureDefine = "./static/access/feature_define.json"
+    makeJSON(_accessFeatureDefine, FEATURE_DEFINE)
 
     # get stimulus classes from server static directory
     STIMULUS_CLASSES = []
@@ -509,8 +645,15 @@ def gazeDataSubmit():
     wf = open(stimulusClassFilePath, "w", newline='', encoding='utf-8')
     writer = csv.writer(wf)
     for _r in STIMULUS_CLASSES:
+      print(_r)
       writer.writerow(_r)
     wf.close()
+    # generate access file
+    STI_CLASS_DEFINE = []
+    for i in range(0, len(STIMULUS_CLASSES)):
+      STI_CLASS_DEFINE.append([i, STIMULUS_CLASSES, "s_"+str(i).zfill(2)])
+    _accessStiClassDataPath = "./static/access/sti_class_define.json"
+    makeJSON(_accessStiClassDataPath, STI_CLASS_DEFINE)
     
     # check fixation cache
     fixationDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/fixation/"
@@ -613,8 +756,8 @@ def gazeDataSubmit():
 
       # make empty pandas DataFrame to save all fixations of stimulus classes and names
       allFixDF = pd.DataFrame(index=range(0, 0), columns=fullColNames)
-      for _ft in FEATURE_TYPES:
-        endColNames.append(_ft)
+      for i in range(0, len(FEATURE_TYPES)):
+        endColNames.append(FEATURE_DEFINE[i][2])
 
       for _fFileName in fixFileList:
         _path = fixationDir+"/"+_fFileName
@@ -622,6 +765,8 @@ def gazeDataSubmit():
         _name = _fFileName.split(".")[0].split("_")[1]
 
         _fixDf = pd.read_csv(_path)
+        # _fixDfList = _fixDf.values.tolist()
+        # _fixDf = pd.DataFrame(_fixDfList, columns=endColNames)
 
         # if any fixations in file, exception control works 'continue'
         if len(_fixDf.index) == 0:
@@ -634,14 +779,34 @@ def gazeDataSubmit():
 
         # merge two DataFrame
         _fDataFrame = pd.merge(_stiDf, _fixDf, left_index=True, right_index=True)
-
         # concat fixation data into dataframe for all fixations
         allFixDF = pd.concat([allFixDF, _fDataFrame], ignore_index=True)
 
+      # remove rows include -999 value
+      allFixDF = allFixDF.replace(-999, np.nan)
+      allFixDF.dropna(inplace=True)
       # save processed fixations cache file
       psdFixationPath_csv = psdFixDir+"/"+"all_fix.csv"
       allFixDF.to_csv(psdFixationPath_csv, mode='w', index=False)
       print("save processed fixation cache file")
+
+      # generate patch images
+      print(allFixDF)
+      _fixAllDf = allFixDF[['stimulusClass','stimulusName','x','y']]
+      _fixList = _fixAllDf.values.tolist()
+      _prev = ""
+      _patchIdx = 0
+      for _fix in _fixList:
+        _sc = _fix[0]
+        _sn = str(_fix[1]).zfill(3)
+        _f = [int(_fix[2]), int(_fix[3])]
+        _cur = _sc+"_"+_sn
+        if _prev != _cur:
+          _patchIdx = 0
+        generatePatch(_f, PATCH_SIZE, _sc, _sn, _patchIdx)
+        _patchIdx+=1
+        _prev = _cur
+      print("all patches are generated")
 
 
     # if feature mean cache files does not exist
@@ -747,8 +912,8 @@ def gazeDataSubmit():
         logDf = pd.DataFrame(_sLogs[i], columns=logColName)
         
         featColName = []
-        for _fType in FEATURE_TYPES:
-          featColName.append(_fType)
+        for i in range(0, len(FEATURE_TYPES)):
+          featColName.append(FEATURE_DEFINE[i][2])
         fixDf = pd.DataFrame(_sFixations[i], columns=featColName)
         rndDf = pd.DataFrame(_sRandoms[i], columns=featColName)
         
@@ -781,7 +946,7 @@ def gazeDataSubmit():
       spClassColNames = ["stimulusClass", "stimulusName"]
       spClassNameData = []
       for i in range(0, len(STIMULUS_CLASSES)):
-        _sClass = STIMULUS_CLASSES[i]
+        _sClass = STI_CLASS_DEFINE[i][2]
         _cInNames = fileNameInClass[i]
         for _n in _cInNames:
           spClassNameData.append([_sClass, _n])
@@ -789,8 +954,8 @@ def gazeDataSubmit():
       spCNDF = pd.DataFrame(spClassNameData, columns=spClassColNames)
       
       spFeatColNames = []
-      for _fType in FEATURE_TYPES:
-        spFeatColNames.append(_fType)
+      for i in range(0, len(FEATURE_TYPES)):
+        spFeatColNames.append(FEATURE_DEFINE[i][2])
       
       spData = []
       for _classData in spatialVariance:
@@ -808,8 +973,9 @@ def gazeDataSubmit():
 
       spMeanValsData = []
       spMClass = []
-      for _className in STIMULUS_CLASSES:
+      for sci in range(0, len(STIMULUS_CLASSES)):
         _sp = []
+        _className = STI_CLASS_DEFINE[sci][2]
         spMClass.append(_className)
         for i in range(0, len(FEATURE_TYPES)):
           _dataSample = spJoinData[spJoinData['stimulusClass'].isin([_className])].iloc[:,i+2]
@@ -860,7 +1026,7 @@ def gazeDataSubmit():
     for i in range(0, len(spMeanCacheList)):
       _group = spMeanCacheList[i][0]
       for j in range(0, len(FEATURE_TYPES)):
-        _variable = FEATURE_TYPES[j]
+        _variable = FEATURE_DEFINE[j][2]
         _value = spMeanCacheList[i][j+1]
         spFormHeatmapData.append([_group, _variable, _value])
 
@@ -882,9 +1048,19 @@ def gazeDataSubmit():
     fixData = fixData.drop("x", axis=1)
     fixData = fixData.drop("y", axis=1)
 
+    # save initial filtered data for scatter plot
+    initToList = fixData.values.tolist()
+    ifdColumns = []
+    for i in range(0, len(FEATURE_DEFINE)):
+      ifdColumns.append(FEATURE_DEFINE[i][2])
+    initFdfChanged = pd.DataFrame(initToList, columns=ifdColumns)
+    _accessInitDataPath = "./static/access/filtered_data.csv"
+    initFdfChanged.to_csv(_accessInitDataPath, mode='w', index=False)
+    print("save initial filtered data for scatter plot")
+
     cols = []
-    for _fType in FEATURE_TYPES:
-      cols.append(_fType)
+    for i in range(0, len(FEATURE_TYPES)):
+      cols.append(FEATURE_DEFINE[i][2])
 
     # data pre-processing: Min-max normalization | z-score standardization
     processedData_list = fixData.values.tolist()
