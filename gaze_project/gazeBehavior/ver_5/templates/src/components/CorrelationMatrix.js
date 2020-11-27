@@ -1,11 +1,13 @@
 // reference code: 
 // http://plnkr.co/edit/RJk5vmROVAJGPHIPutVR?p=preview&preview
 import React, { useEffect, useRef } from 'react';
+import axios from 'axios';
 
 function CorrelationMatrix(props) {
-  const { width, height, dataURL } = props;
+  const { width, height, dataURL, features, onAxisChanged } = props;
   const svgRef = useRef();
   const d3 = window.d3;
+  let selectedAxis = [];
 
   useEffect(() => {
     if (typeof dataURL !== 'string' || dataURL.length === 0)
@@ -31,10 +33,10 @@ function CorrelationMatrix(props) {
           });
         }
       });
-          
-      var margin = {top: 50, right: 100, bottom: 50, left: 50};
-      var width = 800 - margin.left - margin.right;
-      var height = 800 - margin.top - margin.bottom;
+      
+      var margin = {top: 20, right: 70, bottom: 20, left: 20};
+      var drawWidth = width - margin.left - margin.right;
+      var drawHeight = height - margin.top - margin.bottom;
       var domain = d3.set(data.map(function(d) {
           // console.log(d);
           return d.x;
@@ -45,25 +47,26 @@ function CorrelationMatrix(props) {
         .range(["#B22222", "#fff", "#000080"]);
 
       var x = d3.scalePoint()
-        .range([0, width])
+        .range([0, drawWidth])
         .domain(domain);
 
       var y = d3.scalePoint()
-        .range([0, height])
+        .range([0, drawHeight])
         .domain(domain)
     
       var xSpace = x.range()[1] - x.range()[0],
       ySpace = y.range()[1] - y.range()[0];
       ySpace = y.range()[1] - y.range()[0];
-      
-      
+
+            
       var svg = d3.select(svgRef.current)
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", drawWidth + margin.left + margin.right)
+        .attr("height", drawHeight + margin.top + margin.bottom)
         .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .style("font", "12px sans-serif")
+          .attr("width", drawWidth + margin.left + margin.right)
+          .attr("height", drawHeight + margin.top + margin.bottom)
+          .style("font", "9px sans-serif")
+          .style("font-weight", "bold")
           .style("text-anchor", "middle")
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -89,6 +92,7 @@ function CorrelationMatrix(props) {
       cor.filter(function(d){
         var ypos = domain.indexOf(d.y);
         var xpos = domain.indexOf(d.x);
+        
         for (var i = (ypos + 1); i < num; i++){
           if (i === xpos) return false;
         }
@@ -111,55 +115,121 @@ function CorrelationMatrix(props) {
           }
         });
 
-        cor.filter(function(d){
-          var ypos = domain.indexOf(d.y);
-          var xpos = domain.indexOf(d.x);
-          for (var i = (ypos + 1); i < num; i++){
-              if (i === xpos) return true;
-          }
-          return false;
-        })
-        .append("circle")
-        .attr("r", function(d){
-          return (width / (num * 2)) * (Math.abs(d.value) + 0.1);
-        })
-        .style("fill", function(d){
-          if (d.value === 1) {
-            return "#000";
-          } else {
-              return color(d.value);
-          }
-        });
-            
-        var aS = d3.scaleLinear()
-          .range([-margin.top + 5, height + margin.bottom - 5])
-          .domain([1, -1]);
-                
-        var yA = d3.axisRight()
-          .scale(aS)
-          .tickPadding(7);
+      cor.filter(function(d){
+        var ypos = domain.indexOf(d.y);
+        var xpos = domain.indexOf(d.x);
+        for (var i = (ypos + 1); i < num; i++){
+            if (i === xpos) return true;
+        }
+        return false;
+      })
+      .append("circle")
+      .attr("r", function(d){
+        return (drawWidth / (num * 2)) * (Math.abs(d.value) + 0.1);
+      })
+      .style("fill", function(d){
+        if (d.value === 1) {
+          return "#000";
+        } else {
+            return color(d.value);
+        }
+      });
 
-        var aG = svg.append("g")
-          .attr("class", "y axis")
-          .call(yA)
-          .attr("transform", "translate(" + (width + margin.right / 2) + " ,0)")
+      d3.selectAll(".cor text")
+        .on('click', function(d){
+          if(selectedAxis.length === 0){
+            selectedAxis = [];
+            if(d.x !== d.y){
+              selectedAxis = [d.x, d.y];
+            }
+          }else if(selectedAxis.length === 2){
+            if(selectedAxis[0] === d.x && selectedAxis[1] === d.y){
+              selectedAxis = [];
+            }else{
+              if(d.x === d.y){
+                selectedAxis = [];
+              }else{
+                selectedAxis = [];
+                selectedAxis = [d.x, d.y];
+              }
+            }
+          }
 
-        var iR = d3.range(-1, 1.01, 0.01);
-        var h = height / iR.length + 3;
-        iR.forEach(function(d){
-          aG.append('rect')
-          .style('fill',color(d))
-          .style('stroke-width', 0)
-          .style('stoke', 'none')
-          .attr('height', h)
-          .attr('width', 10)
-          .attr('x', 0)
-          .attr('y', aS(d))
+          svg.selectAll(".cor rect").transition()
+            .attr("stroke", function(d){
+              if(selectedAxis.length === 2){
+                if(selectedAxis[0] === d.x && selectedAxis[1] === d.y){
+                  return "black";
+                }else{
+                  return "lightgray";
+                }
+              }else{
+                return "lightgray";
+              }
+            })
+            .style("fill", function(d){
+              if(selectedAxis.length === 2){
+                if(selectedAxis[0] === d.x && selectedAxis[1] === d.y){
+                  return "#969696";
+                }else{
+                  return "none";
+                }
+              }else{
+                return "none";
+              }
+            });
+
+            if(selectedAxis.length === 2){
+              sendSelectedAxis(selectedAxis[0], selectedAxis[1]);
+              onAxisChanged();
+            }
         });
+
+      function sendSelectedAxis(_f1, _f2){
+        const _data = new FormData();
+        _data.set('feature_1', _f1);
+        _data.set('feature_2', _f2);
+        axios.post(`http://${window.location.hostname}:5000/api/data/selectedAxis`, _data)
+        .then(response => {
+          if (response.data.status === 'success') {
+              console.log('selected features saved');
+          } else if (response.data.status === 'failed') {
+              alert(`Failed save selected features - ${response.data.reason}`);
+          }
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+        });
+      }
+      
+      var aS = d3.scaleLinear()
+        .range([-margin.top + 5, drawHeight + margin.bottom - 5])
+        .domain([1, -1]);
+              
+      var yA = d3.axisRight()
+        .scale(aS)
+        .tickPadding(7);
+
+      var aG = svg.append("g")
+        .attr("class", "y axis")
+        .call(yA)
+        .attr("transform", "translate(" + (drawWidth + margin.right / 2) + " ,0)")
+
+      var iR = d3.range(-1, 1.01, 0.01);
+      var h = drawHeight / iR.length + 3;
+      iR.forEach(function(d){
+        aG.append('rect')
+        .style('fill',color(d))
+        .style('stroke-width', 0)
+        .style('stroke', 'none')
+        .attr('height', h)
+        .attr('width', 10)
+        .attr('x', 0)
+        .attr('y', aS(d))
+      });
     });
 
     
-  }, [dataURL]);
+  }, [props.dataURL, props.features]);
 
   return (
     <>
