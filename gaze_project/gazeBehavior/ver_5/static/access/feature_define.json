@@ -1,0 +1,1 @@
+[[0, "center_bias", "f_00"], [1, "contrast_intensity", "f_01"], [2, "contrast_color", "f_02"], [3, "contrast_orientation", "f_03"], [4, "HOG", "f_04"], [5, "horizontal_line", "f_05"], [6, "LOG_spectrum", "f_06"], [7, "saliency_intensity", "f_07"], [8, "saliency_color", "f_08"], [9, "saliency_orientation", "f_09"], [10, "saliency_computed", "f_10"]]
