@@ -13,7 +13,7 @@ ul {
 
 .app {
   display: grid;
-  grid-template-columns: 50px auto 300px;
+  grid-template-columns: 50px 400px auto;
   grid-template-rows: auto 50px;
   height: 100%;
   color: #555;
@@ -90,13 +90,13 @@ ul {
   .page-header {
     display: grid;
     height: 100px;
-    margin: -20px -20px 10px -20px;
-    padding-left: 50px;
+    margin: -20px -20px 5px -20px;
+    padding-left: 15px;
     align-content: center;
     background-color: #f5f5f5;
   }
   .page-section {
-    margin: 10px 0;
+    margin: 5px -10px;
   }
   .button-wrapper {
     text-align: right;
@@ -104,12 +104,12 @@ ul {
   .submit-button {
     padding: 5px;
     color: white;
-    background-color: #ffa600;
+    background-color: gray;
     border: none;
     cursor: pointer;
 
     &:hover {
-      background-color: #fcc96a;
+      background-color: black;
     }
   }
   .vis-image {
@@ -130,27 +130,6 @@ ul {
     display: inline-block;
     width: 300px;
     margin: 10px;
-  }
-  .power-spectra-left {
-    float: left;
-  }
-  .power-spectra-right {
-    display: inline-block;
-    width: 300px;
-    height: 410px;
-    margin: 10px;
-  }
-  .power-spectra-wrapper {
-    width: 300px;
-    height: 200px;
-    margin: 10px;
-  }
-  .bispectra-wrapper {
-    display: inline-block;
-    width: 200px;
-    height: 300px;
-    margin: 10px;
-    border: 1px solid black;
   }
 }
 
