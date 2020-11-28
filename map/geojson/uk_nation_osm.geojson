@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [8.8783259, 54.4934]}, "properties": {"osmid": 25254731, "cell_id": 0, "name": "England", "type": "nation", "postcode": "E92000001"}}]}
