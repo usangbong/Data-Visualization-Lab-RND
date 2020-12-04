@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-// import axios from 'axios';
 
 function ScatterPlot(props) {
   const { width, height, dataURL, axis } = props;
@@ -13,9 +12,9 @@ function ScatterPlot(props) {
     d3.select(svgRef.current).selectAll("*").remove();
     
       // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    drawWidth = 460 - margin.left - margin.right,
-    drawHeight = 400 - margin.top - margin.bottom;
+    var margin = {top: 30, right: 30, bottom: 30, left: 30},
+    drawWidth = width - margin.left - margin.right,
+    drawHeight = height - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select(svgRef.current)
