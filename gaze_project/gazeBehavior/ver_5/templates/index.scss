@@ -1,0 +1,219 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Noto Sans Korean', Arial, Helvetica;
+}
+
+h1, h2, h3, p, ul {
+  margin: 0;
+}
+ul {
+  list-style: none;
+}
+
+.app {
+  width:2200px;
+  height:1200px;
+  border: 1px black solid;
+  box-sizing: border-box;
+}
+.menu {
+  grid-row: span 2;
+  background-color: #ddd;
+
+  .menu-list {
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+
+    > .menu-item-wrapper {
+      .menu-item {
+        position: relative;
+
+        &:hover {
+          .inner-menu {
+            display: block;
+          }
+        }
+        .inner-menu {
+          position: absolute;
+          display: none;
+          top: 0;
+          left: 50px;
+          width: 200px;
+          padding: 0;
+          background-color: #aaa;
+          border: 2px solid #333;
+          list-style: none;
+          
+          > li {
+            padding: 5px;
+
+            .depth-1 {
+              padding: 3px 5px;
+              color: white;
+              background-color: #3333aa;
+              border: 1px solid #5555cc;
+            }
+          }
+        }
+        .menu-button {
+          display: block;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          margin: 2px 0 2px 10px;
+          font-weight: bold;
+          font-size: 1.2em;
+          text-align: center;
+          text-decoration: none;
+          color: #777;
+          background-color: #eee;
+          border: none;
+          cursor: pointer;
+
+          &.active {
+            color: #333;
+            background-color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+#my_dataviz{
+  position: relative;
+}
+.content {
+  box-sizing: border-box;
+  padding: 20px;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width:100%;
+  height: 1200px;
+  color: #555;
+  
+  .inputBoxWrap{
+    width:400px;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px black solid;
+  }
+  .dataAbstractWrap{
+    width:450px;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px black solid;
+  }
+  .dataVisualizationWrap{
+    width:900px;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px black solid;
+  }
+  .stimulusDivsWrap{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    border: 1px black solid;
+    .stimulusClass{
+      width: 400px;
+      height: 340px;
+      box-sizing: border-box;
+      border: 1px black solid;
+    }
+    .patchClass{
+      width: 300px;
+      height: 340px;
+      box-sizing: border-box;
+      border: 1px black solid;
+    }
+    .functionClass{
+      width: 200px;
+      height: 340px;
+      box-sizing: border-box;
+      border: 1px black solid;
+    }
+  }
+  .dataResultWrap{
+    width:450px;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px black solid;
+  }
+  .page-header {
+    display: grid;
+    height: 60px;
+    /*margin: -20px -20px 5px -20px;*/
+    padding-left: 15px;
+    align-content: center;
+    background-color: #f5f5f5;
+  }
+  .section-header {
+    display: grid;
+    height: 30px;
+    padding-left: 10px;
+    align-content: center;
+    background-color: #f5f5f5;
+  }
+  .page-section {
+    margin: 0px 0px;
+  }
+  .button-wrapper {
+    text-align: right;
+  }
+  .submit-button {
+    padding: 5px;
+    color: white;
+    background-color: gray;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: black;
+    }
+  }
+}
+
+.aside {
+  grid-row: span 2;
+  padding: 10px;
+  color: #777;
+  background-color: #eee;
+
+  .header {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .modal-wrapper {
+    position: absolute;
+    width: 200px;
+    background-color: white;
+  }
+}
+
+.footer {
+  line-height: 49px;
+  grid-column: 2;
+  font-size: .8em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #aaa;
+  
+  hr {
+    width: 50%;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
