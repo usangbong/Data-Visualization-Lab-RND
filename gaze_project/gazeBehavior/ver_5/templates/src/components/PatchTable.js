@@ -361,16 +361,15 @@ function PatchTable(props) {
       }else{
         selectedPatches.push([parseInt(d.class), d.order]);
       }
-      console.log("selectedPatches");
-      console.log(selectedPatches);
+      // console.log("selectedPatches");
+      // console.log(selectedPatches);
       const _data = new FormData();
       _data.set('selectedPatches', selectedPatches);
       axios.post(`http://${window.location.hostname}:5000/api/patchTable/selectedPatchesUpdate`, _data)
         .then(response => {
           if (response.data.status === 'success') {
             // selecte patches update signal: patchTable -> Data.js
-            // selectedPatchUpdate();
-            console.log("test");
+            selectedPatchUpdate();
           } else if (response.data.status === 'failed') {
             alert(`Failed to load data - ${response.data.reason}`);
           }
@@ -387,7 +386,6 @@ function PatchTable(props) {
           let _clu = selectedPatches[i][0];
           let _ord = selectedPatches[i][1];
           if(parseInt(d.class) == _clu && d.order == _ord){
-            console.log(i);
             colorApplied = true;
             break;
           }

@@ -11,10 +11,10 @@ function Patch(props) {
   useEffect(() => {
     if(patchURL.length === 0 || patchCluster < 0)
       return;
-    console.log("patchURL");
-    console.log(patchURL);
-    console.log("patchCluster");
-    console.log(patchCluster);
+    // console.log("patchURL");
+    // console.log(patchURL);
+    // console.log("patchCluster");
+    // console.log(patchCluster);
     d3.select(svgRef.current).selectAll("*").remove();
     
     // set the dimensions and margins of the graph
@@ -29,10 +29,10 @@ function Patch(props) {
       let _featType = "";
       for(let i=0; i<feature_define.length; i++){
         if(patchSelectedFeature == feature_define[i][0]){
-          console.log("patchSelectedFeature");
-          console.log(i);
-          console.log(patchSelectedFeature);
-          console.log(feature_define[i][0]);
+          // console.log("patchSelectedFeature");
+          // console.log(i);
+          // console.log(patchSelectedFeature);
+          // console.log(feature_define[i][0]);
           _featType=feature_define[i][2]
         }
       }
