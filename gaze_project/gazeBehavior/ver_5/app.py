@@ -17,7 +17,7 @@ from sklearn.decomposition import FastICA
 from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
-from PIL import ImageColor
+# from PIL import ImageColor
 from flask import *
 from flask_cors import CORS
 
@@ -493,6 +493,10 @@ def generateFeatureImage(_featPath, _outDirPath, _featureType, _patchSizse, _fix
   cv2.imwrite(_patchFeatSavePath, cropImg)
   return _patchFeatSavePath
 
+def hex_to_rgb(hex):
+  hex = hex.lstrip('#')
+  hlen = len(hex)
+  return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
 
 # from Data.js
@@ -569,10 +573,14 @@ def patchAnalysisStiFix():
       _fixPoint = [_mmDF_list[getFixOrder][1], _mmDF_list[getFixOrder][2]]
       # print("_fixPoint")
       # print(_fixPoint)
-      _color = ImageColor.getcolor(COLORS[getPatchClu], "RGB")
+      _colorBGR = hex_to_rgb(COLORS[getPatchClu])
+      _colorRGB = [_colorBGR[2], _colorBGR[1], _colorBGR[0]]
+      # _color = ImageColor.getcolor(COLORS[getPatchClu], "RGB")
+      # _color = [_color[0], _color[1], _color[2]]
+      # print(_colorRGB)
       # print("_featType")
       # print(_featType)
-      _path = generateFeatureImage(_featPath, _patchDirPath, _featType, PATCH_SIZE, _fixPoint, _color)
+      _path = generateFeatureImage(_featPath, _patchDirPath, _featType, PATCH_SIZE, _fixPoint, _colorRGB)
       # print(_path)
       patchFeatureImagePath.append(_path.split('.')[1]+".png")
     # patch feature image path save
