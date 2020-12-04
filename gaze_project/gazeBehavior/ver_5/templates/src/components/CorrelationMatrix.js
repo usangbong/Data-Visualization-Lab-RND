@@ -33,8 +33,9 @@ function CorrelationMatrix(props) {
           });
         }
       });
+      // console.log(data);
       
-      var margin = {top: 20, right: 70, bottom: 20, left: 20};
+      var margin = {top: 25, right: 70, bottom: 25, left: 20};
       var drawWidth = width - margin.left - margin.right;
       var drawHeight = height - margin.top - margin.bottom;
       var domain = d3.set(data.map(function(d) {
@@ -56,9 +57,14 @@ function CorrelationMatrix(props) {
     
       var xSpace = x.range()[1] - x.range()[0],
       ySpace = y.range()[1] - y.range()[0];
-      ySpace = y.range()[1] - y.range()[0];
+      // ySpace = y.range()[1] - y.range()[0];
+      // console.log("x.range: "+x.range());
+      // console.log("xSpace: "+xSpace);
+      // console.log("ySpace: "+ySpace);
+      // console.log("xSpace/10: "+xSpace/10);
+      // console.log("-xSpace/(12*2): "+(-xSpace/((num-1)*2)));
+      // console.log(features);
 
-            
       var svg = d3.select(svgRef.current)
         .attr("width", drawWidth + margin.left + margin.right)
         .attr("height", drawHeight + margin.top + margin.bottom)
@@ -81,10 +87,10 @@ function CorrelationMatrix(props) {
         });
         
       cor.append("rect")
-        .attr("width", xSpace/10)
-        .attr("height", ySpace/10)
-        .attr("x", -xSpace / 20)
-        .attr("y", -ySpace / 20)
+        .attr("width", xSpace/(num-1))
+        .attr("height", ySpace/(num-1))
+        .attr("x", -xSpace/((num-1)*2))
+        .attr("y", -ySpace/((num-1)*2))
         .style("fill", "none")
         .attr("stroke", "lightgray")
         .attr("stroke-width", "1px")
