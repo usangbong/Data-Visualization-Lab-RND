@@ -547,14 +547,14 @@ def patchAnalysisStiFix():
     os.makedirs(os.path.join(_patchDirPath))
     _featureDirPath = "./static/data/"+DATASET+"/feature/"
     _featDirList = os.listdir(_featureDirPath)
-    # print("_featDirList")
-    # print(_featDirList)
+    print("_featDirList")
+    print(_featDirList)
     _mmDF_list = _mmDF.values.tolist()
     patchFeatureImagePath = []
     for _feat in _featDirList:
       _featPath = "./static/data/"+DATASET+"/feature/"+_feat+"/"+getStiClass+"_"+getStiName+".csv"
-      # print("_featPath")
-      # print(_featPath)
+      print("_featPath")
+      print(_featPath)
       _featType = ""
       for i in range(0, len(FEATURE_DEFINE)):
         if _feat == FEATURE_DEFINE[i][1]:
@@ -570,10 +570,13 @@ def patchAnalysisStiFix():
       # print("_fixPoint")
       # print(_fixPoint)
       _color = ImageColor.getcolor(COLORS[getPatchClu], "RGB")
+      # print("_featType")
+      # print(_featType)
       _path = generateFeatureImage(_featPath, _patchDirPath, _featType, PATCH_SIZE, _fixPoint, _color)
       # print(_path)
       patchFeatureImagePath.append(_path.split('.')[1]+".png")
-    print("patch feature image path save")
+    # patch feature image path save
+    # print("patch feature image path save")
     _patchFeatureImageAccessPath = "./static/access/patch_feature_image.json"
     makeJSON(_patchFeatureImageAccessPath, patchFeatureImagePath)
 
@@ -591,8 +594,17 @@ def selectedPatchesUpdate():
   response = {}
   try:
     print(request.form)
-    selectedPatches = request.form['selectedPatches']
-    
+    getPatchString = request.form['selectedPatches']
+    # split and transfer type 
+    _getPatches = getPatchString.split(",")
+    print("_getPatches")
+    print(_getPatches)
+    _selectedPatches = []
+    for i in range(0, int(len(_getPatches)/2)):
+      _selectedPatches.append([int(_getPatches[i*2]), int(_getPatches[i*2+1])])
+    print(_selectedPatches)
+    _accessPathSelectedPatch = "./static/access/selected_patch_table_index.json"
+    makeJSON(_accessPathSelectedPatch, _selectedPatches)    
     
     response['status'] = 'success'
   except Exception as e:
