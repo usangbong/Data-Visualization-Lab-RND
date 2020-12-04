@@ -152,7 +152,7 @@ function LineChart(props) {
       // focus
       //   .attr("cx", x(selectedData.x))
       //   .attr("cy", v(selectedData.v));
-      if(clickEvent == 0){
+      if(clickEvent === 0){
         focusLine
           .attr("x1", 0)
           .attr("y1", my)
@@ -168,7 +168,7 @@ function LineChart(props) {
     }
     function mouseout() {
       // focus.style("opacity", 0)
-      if(clickEvent == 0){
+      if(clickEvent === 0){
         focusLine.style("opacity", 0);
         focusText.style("opacity", 0);
       }else{
