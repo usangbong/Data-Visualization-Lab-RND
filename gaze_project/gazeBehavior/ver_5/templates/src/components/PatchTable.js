@@ -21,9 +21,11 @@ function PatchTable(props) {
     let fixFrame = [];
     let viewFrame = [];
 
-    var margin = {top: 10, right: 30, bottom: 20, left: 30},
+    var margin = {top: 10, right: 30, bottom: 10, left: 30},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
+
+    var resizingFlag = true;
 
     // col, row
     let dataframe = [features.length, numClusters+1];
@@ -48,7 +50,9 @@ function PatchTable(props) {
             "id": patchURLs[j][0],
             "x": 0,
             "y": 0,
-            "url": "http://localhost:5000"+patchURLs[j][1]+"?"+Math.random()
+            "url": "http://localhost:5000"+patchURLs[j][1]+"?"+Math.random(),
+            "fValue": 0,
+            "renderingIndex": -1
           }
           _cluPoints.push(_cluPoint);
         }
@@ -72,6 +76,7 @@ function PatchTable(props) {
     // console.log("down-sizing");
     let totalHeight = boxSize.height + reorderingData.length*(_padding*2) + totalPatchRows*patchSize;
     while(totalHeight>drawHeight){
+      resizingFlag = false;
       _rowMax += 5;
       totalPatchRows = 0;
       for(let i=0; i<reorderingData.length; i++){
@@ -103,27 +108,14 @@ function PatchTable(props) {
       }
     }
     
-    // console.log("up-sizing");
-    totalHeight = boxSize.height + reorderingData.length*(_padding*2) + totalPatchRows*patchSize;
-    while(totalHeight<700){
-      if(_rowMax < 10){
-        break;
-      }
-      _rowMax -= 5;
-      totalPatchRows = 0;
-      for(let i=0; i<reorderingData.length; i++){
-        let _dataNum = reorderingData[i].length;
-        let _numRow = parseInt(Math.floor(_dataNum/_rowMax));
-        if(_dataNum%_rowMax !== 0){
-          _numRow += 1;
-        }
-        totalPatchRows += _numRow;
-      }
-      patchSize = (drawWidth-(2*_padding)-boxSize.width)/_rowMax;
+    if(resizingFlag){
+      // console.log("up-sizing");
       totalHeight = boxSize.height + reorderingData.length*(_padding*2) + totalPatchRows*patchSize;
-      // console.log("drawHeight: "+drawHeight+", totalHeight: "+totalHeight+", patchSize: "+patchSize+", rowMax: "+_rowMax);
-      if(totalHeight > drawHeight){
-        _rowMax += 5;
+      while(totalHeight<drawHeight-50){
+        if(_rowMax < 10){
+          break;
+        }
+        _rowMax -= 5;
         totalPatchRows = 0;
         for(let i=0; i<reorderingData.length; i++){
           let _dataNum = reorderingData[i].length;
@@ -136,12 +128,29 @@ function PatchTable(props) {
         patchSize = (drawWidth-(2*_padding)-boxSize.width)/_rowMax;
         totalHeight = boxSize.height + reorderingData.length*(_padding*2) + totalPatchRows*patchSize;
         // console.log("drawHeight: "+drawHeight+", totalHeight: "+totalHeight+", patchSize: "+patchSize+", rowMax: "+_rowMax);
-        break;
+        if(totalHeight > drawHeight){
+          _rowMax += 5;
+          totalPatchRows = 0;
+          for(let i=0; i<reorderingData.length; i++){
+            let _dataNum = reorderingData[i].length;
+            let _numRow = parseInt(Math.floor(_dataNum/_rowMax));
+            if(_dataNum%_rowMax !== 0){
+              _numRow += 1;
+            }
+            totalPatchRows += _numRow;
+          }
+          patchSize = (drawWidth-(2*_padding)-boxSize.width)/_rowMax;
+          totalHeight = boxSize.height + reorderingData.length*(_padding*2) + totalPatchRows*patchSize;
+          // console.log("drawHeight: "+drawHeight+", totalHeight: "+totalHeight+", patchSize: "+patchSize+", rowMax: "+_rowMax);
+          break;
+        }
       }
     }
+    
 
     let patchData = [];
     let stack_y = 0;
+    let stackIndex = 0;
     for(let i=0; i<reorderingData.length; i++){
       for(let j=0; j<reorderingData[i].length; j++){
         if(j != 0 && j%_rowMax == 0){
@@ -165,6 +174,8 @@ function PatchTable(props) {
         reorderingData[i][j].x = _x;
         reorderingData[i][j].y = _y;
         reorderingData[i][j].order = j;
+        reorderingData[i][j].renderingIndex = stackIndex;
+        stackIndex+=1;
       }
       stack_y += _padding;
       stack_y += patchSize;
@@ -285,30 +296,6 @@ function PatchTable(props) {
       .attr("y", function(d){ return _padding+d.height/2})
       .text(function(d, i){ return features[i][2]})
       .style("fill", "black");
-
-    d3.selectAll(".fixs")
-      .on('click', function(d){
-        // console.log(d);
-        if(selectedFeature==-1 || selectedFeature != d.index-1){
-          let _featureIdx = d.index-1;
-          const _data = new FormData();
-          _data.set('selectedFeature', _featureIdx);
-          axios.post(`http://${window.location.hostname}:5000/api/patchTable/selectFeature`, _data)
-          .then(response => {
-            if (response.data.status === 'success') {
-              // console.log(response.data);
-              passSelectedFeature();
-            } else if (response.data.status === 'failed') {
-              alert(`Failed to load data - ${response.data.reason}`);
-            }
-          }).catch(error => {
-            alert(`Error - ${error.message}`);
-          });
-          selectedFeature = _featureIdx;
-        }else{
-          selectedFeature = -1;
-        }
-    });
 
     var pats = svg.selectAll(".view")
       .data(viewFrame)
@@ -444,7 +431,7 @@ function PatchTable(props) {
         if(colorApplied){
           return "#b30000";
         }else{
-          return "black";
+          return "#969696";
         }
       })
       .attr("stroke-width", function(d){
@@ -465,6 +452,234 @@ function PatchTable(props) {
           return "1px";
         }
       });
+
+      d3.selectAll(".fixs")
+      .on('click', function(d){
+        // console.log(d);
+        if(selectedFeature==-1 || selectedFeature != d.index-1){
+          let _featureIdx = d.index-1;
+          let _selectedPatchesID = [];
+          for(let i=0; i<reorderingData.length; i++){
+            let _ids = [];
+            for(let j=0; j<reorderingData[i].length; j++){
+              _ids.push(reorderingData[i][j].id);
+            }
+            _selectedPatchesID.push(_ids);
+          }
+          let _selectedPatchesClu = [];
+          for(let i=0; i<reorderingData.length; i++){
+            let _clus = [];
+            for(let j=0; j<reorderingData[i].length; j++){
+              _clus.push(parseInt(reorderingData[i][j].clu));
+            }
+            _selectedPatchesClu.push(_clus);
+          }
+
+          const _data = new FormData();
+          _data.set('selectedFeature', _featureIdx);
+          _data.set('patchesId', _selectedPatchesID);
+          _data.set('patchesClu', _selectedPatchesClu);
+          axios.post(`http://${window.location.hostname}:5000/api/patchTable/selectFeature`, _data)
+          .then(response => {
+            if (response.data.status === 'success') {
+              // console.log(response.data);
+              passSelectedFeature();
+              axios.get(`http://${window.location.hostname}:5000/static/access/patchTable_sorting_update.json?`+Math.random())
+              .then(response => {
+                let _update = response.data;
+                let updatedData = [];
+                let selectedPatchesIDList = [];
+                for(let i=0; i<selectedPatches.length; i++){
+                  let _patch={
+                    "id": reorderingData[selectedPatches[i][0]][selectedPatches[i][1]].id,
+                    "clu": parseInt(selectedPatches[i][0])
+                  };
+                  selectedPatchesIDList.push(_patch);
+                }
+                for(let i=0; i<_update.length; i++){
+                  let _clu = [];
+                  for(let j=0; j<_update[i].length; j++){
+                    let _renderedOrder = _update[i][j][3];
+                    let _p = {
+                      "order": _update[i][j][4],
+                      "ox": reorderingData[i][_renderedOrder].ox,
+                      "oy": reorderingData[i][_renderedOrder].oy,
+                      "clu": i,
+                      "id": _update[i][j][1],
+                      "x": 0,
+                      "y": 0,
+                      "url": reorderingData[i][_renderedOrder].url,
+                      "fValue": _update[i][j][2],
+                      "renderingIndex": reorderingData[i][_renderedOrder].renderingIndex
+                    }
+                    _clu.push(_p)
+                  }
+                  updatedData.push(_clu);
+                }
+                // update patchData array
+                let stack_y = 0;
+                let stackIndex = 0;
+                for(let i=0; i<updatedData.length; i++){
+                  for(let j=0; j<updatedData[i].length; j++){
+                    if(j != 0 && j%_rowMax == 0){
+                      stack_y += patchSize;
+                    }
+                    let _x = _padding + boxSize.width + (j*patchSize) - Math.floor((j/_rowMax))*(_rowMax*patchSize);
+                    let _y = (i+1)*_padding + boxSize.height + stack_y;       
+                    patchData[updatedData[i][j].renderingIndex].order = j;
+                    patchData[updatedData[i][j].renderingIndex].class = updatedData[i][j].clu;
+                    patchData[updatedData[i][j].renderingIndex].id = updatedData[i][j].id;
+                    patchData[updatedData[i][j].renderingIndex].url = updatedData[i][j].url;
+                    patchData[updatedData[i][j].renderingIndex].x = _x;
+                    patchData[updatedData[i][j].renderingIndex].y = _y;
+                    patchData[updatedData[i][j].renderingIndex].ox = updatedData[i][j].ox;
+                    patchData[updatedData[i][j].renderingIndex].oy = updatedData[i][j].oy;
+
+                    updatedData[i][j].x = _x;
+                    updatedData[i][j].y = _y;
+                    updatedData[i][j].renderingIndex = stackIndex;
+                    stackIndex+=1;
+                  }
+                  stack_y += _padding;
+                  stack_y += patchSize;
+                }
+                // update renderingData array
+                for(let i=0; i<reorderingData.length; i++){
+                  for(let j=0; j<reorderingData[i].length; j++){
+                    reorderingData[i][j].order = updatedData[i][j].order;
+                    reorderingData[i][j].ox = updatedData[i][j].ox;
+                    reorderingData[i][j].oy = updatedData[i][j].oy;
+                    reorderingData[i][j].clu = updatedData[i][j].clu;
+                    reorderingData[i][j].id = updatedData[i][j].id;
+                    reorderingData[i][j].x = updatedData[i][j].x;
+                    reorderingData[i][j].y = updatedData[i][j].y;
+                    reorderingData[i][j].url = updatedData[i][j].url;
+                    reorderingData[i][j].fValue = updatedData[i][j].fValue;
+                    reorderingData[i][j].renderingIndex = updatedData[i][j].renderingIndex;
+                  }
+                }
+
+                // update slected pacthes array [[clu, order], ..., [...]]
+                for(let i=0; i<selectedPatches.length; i++){
+                  let _c = selectedPatchesIDList[i].clu;
+                  let _i = selectedPatchesIDList[i].id;
+                  for(let j=0; j<reorderingData[_c].length; j++){
+                    if(_i == reorderingData[_c][j].id){
+                      selectedPatches[i][1] = j;
+                      break;
+                    }
+                  }
+                }
+                const _spaUpdate = new FormData();
+                _spaUpdate.set('selectedPatches', selectedPatches);
+                axios.post(`http://${window.location.hostname}:5000/api/patchTable/selectedPatchesUpdate`, _spaUpdate)
+                  .then(response => {
+                    if (response.data.status === 'success') {
+                      // selecte patches update signal: patchTable -> Data.js
+                      selectedPatchUpdate();
+                    } else if (response.data.status === 'failed') {
+                      alert(`Failed to load data - ${response.data.reason}`);
+                    }
+                  }).catch(error => {
+                    alert(`Error - ${error.message}`);
+                });
+
+                // update d3 rendering
+                d3.selectAll(".patch").transition()
+                .attr("transform", function(d) {
+                  let _x = d.x;
+                  let _y = d.y;
+                  return "translate(" + _x + "," + _y + ")";
+                });
+
+                d3.selectAll(".pFrame").transition()
+                .attr("transform", function(d) {
+                  let _x = d.x;
+                  let _y = d.y;
+                  return "translate(" + _x + "," + _y + ")";
+                });
+
+                d3.selectAll(".pFrame rect").transition()
+                .attr("stroke", function(d){
+                  let colorApplied = false;
+                  for(let i=0; i<selectedPatches.length; i++){
+                    // console.log("selectedPatches["+i+"]");
+                    // console.log(selectedPatches[i]);
+                    let _clu = selectedPatches[i][0];
+                    let _ord = selectedPatches[i][1];
+                    if(parseInt(d.class) == _clu && d.order == _ord){
+                      colorApplied = true;
+                      break;
+                    }
+                  }
+                  if(colorApplied){
+                    return "#b30000";
+                  }else{
+                    return "black";
+                  }
+                })
+                .attr("stroke-width", function(d){
+                  let colorApplied = false;
+                  for(let i=0; i<selectedPatches.length; i++){
+                    let _clu = selectedPatches[i][0];
+                    let _ord = selectedPatches[i][1];
+                    if(parseInt(d.class) == _clu && d.order == _ord){
+                      colorApplied = true;
+                      break;
+                    }
+                  }
+                  if(colorApplied){
+                    return "3px";
+                  }else{
+                    return "1px";
+                  }
+                });
+
+
+              //   let duplicated = false;
+              //   let duplicatedIdx = -1;
+              //   for(let i=0; i<selectedPatches.length; i++){
+              //     let _clu = selectedPatches[i][0];
+              //     let _ord = selectedPatches[i][1];
+              //     if(parseInt(d.class) == _clu && d.order == _ord){
+              //       duplicated = true;
+              //       duplicatedIdx = i;
+              //       break;
+              //     }
+              //   }
+              //   if(duplicated){
+              //     selectedPatches.splice(duplicatedIdx, 1);
+              //   }else{
+              //     selectedPatches.push([parseInt(d.class), d.order]);
+              //   }
+              //   // console.log("selectedPatches");
+              //   // console.log(selectedPatches);
+              //   const _data = new FormData();
+              //   _data.set('selectedPatches', selectedPatches);
+              //   axios.post(`http://${window.location.hostname}:5000/api/patchTable/selectedPatchesUpdate`, _data)
+              //     .then(response => {
+              //       if (response.data.status === 'success') {
+              //         // selecte patches update signal: patchTable -> Data.js
+              //         selectedPatchUpdate();
+              //       } else if (response.data.status === 'failed') {
+              //         alert(`Failed to load data - ${response.data.reason}`);
+              //       }
+              //     }).catch(error => {
+              //       alert(`Error - ${error.message}`);
+              //   });
+
+              });
+            } else if (response.data.status === 'failed') {
+              alert(`Failed to load data - ${response.data.reason}`);
+            }
+          }).catch(error => {
+            alert(`Error - ${error.message}`);
+          });
+          selectedFeature = _featureIdx;
+        }else{
+          selectedFeature = -1;
+        }
+    });
     
     
   }, [, props.patchURLs, props.patchScatterData, props.numClusters, props.features]);
