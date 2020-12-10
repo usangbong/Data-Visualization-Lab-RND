@@ -59,6 +59,7 @@ class Data extends React.Component {
       datasetList: [],
       fixationFilters: [],
       pIsDisabled: true,
+      fIsDisabled: true,
       participants: [],
       featureTypes: [],
       stimulusTypes: [],
@@ -67,6 +68,7 @@ class Data extends React.Component {
       selectedDataset: null,
       selectedParticipant: null,
       selectedFilter: null,
+      selectedFilterName: "",
       selectedProcessMethod: null,
       selectedCorrelationMethod: null,
       feature_define: [],
@@ -79,6 +81,7 @@ class Data extends React.Component {
       selectedPatchIndex: 0,
       selectedPatchCluster: 0,
       selectedPatchOrder: 0,
+      selectedPatchId: 0,
       patchData: [],
       filteredData: [],
       joinData: [],
@@ -433,12 +436,6 @@ class Data extends React.Component {
     let _maxClusterNum = this.state.numCluster;
     let _patchData = this.state.patchData;
     let _filteredData = this.state.filteredData;
-    // console.log("_maxClusterNum");
-    // console.log(_maxClusterNum);
-    // console.log("_patchData");
-    // console.log(_patchData);
-    // console.log("_filteredData");
-    // console.log(_filteredData);
     let _cluDivData = [];
     for(let i=0; i<_maxClusterNum+1; i++){
       let _cluData = [];
@@ -497,6 +494,7 @@ class Data extends React.Component {
     // console.log(_dlJoinData[0][0]);
     let _ipPath = "";
     let _selectedPatchIndex = 0;
+    let _patchId = 0;
     // console.log("this.state.patchURLs");
     // console.log(this.state.patchURLs);
     for(let i=0; i<this.state.patchURLs.length; i++){
@@ -506,19 +504,24 @@ class Data extends React.Component {
         // console.log(this.state.patchURLs[i][0]);
         // console.log("_initPatch.id");
         // console.log(_initPatch.id);
+        _patchId = this.state.patchURLs[i][0];
         _ipPath = this.state.patchURLs[i][1];
         _selectedPatchIndex = i;
+        this.setState({
+          selectedPatchIndex: _selectedPatchIndex
+        });
+        this.setState({
+          selectedPatchId: _patchId
+        });
+        break;
       }
     }
-    this.setState({
-      selectedPatchIndex: _selectedPatchIndex
-    });
-
+    
     // console.log("_ipPath");
     // console.log(_ipPath);
-    let _stiClass = _ipPath.split("/")[4];
-    let _stiName = _ipPath.split("/")[5];
-    let _fixOrder = parseInt(_ipPath.split("/")[6]);
+    let _stiClass = _ipPath.split("/")[8];
+    let _stiName = _ipPath.split("/")[9];
+    let _fixOrder = parseInt(_ipPath.split("/")[10]);
     this.setState({
       selectedPatchOrder: _fixOrder
     });
@@ -527,11 +530,12 @@ class Data extends React.Component {
       selectedPatchCluster: _patchClu
     });
     const _data = new FormData();
+    _data.set('patchId', _patchId);
     _data.set('stimulusClass', _stiClass);
     _data.set('stimulusName', _stiName);
     _data.set('fixationOrder', _fixOrder);
     _data.set('patchCluster', _patchClu);
-    axios.post(`http://${window.location.hostname}:5000/api/patchAnalysis/stimulus`, _data)
+    axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
       .then(response => {
         if (response.data.status === 'success') {
           // load stimulus and inner fixation location with id
@@ -581,12 +585,12 @@ class Data extends React.Component {
       .then(response => {
         // console.log("get selected patches table index");
         // get selected patches table index
-        let _data = response.data;
+        let _getData = response.data;
         this.setState({
-          selectedPatchesTableIndex: _data
+          selectedPatchesTableIndex: _getData
         });
         // set last selected patch table index
-        let _lastSelectedPatch = _data[_data.length-1]
+        let _lastSelectedPatch = _getData[_getData.length-1]
         this.setState({
           lastSelectedPatchTableIndex: _lastSelectedPatch
         });
@@ -599,20 +603,25 @@ class Data extends React.Component {
         let _patchURLs = this.state.patchURLs;
         let _lastSelectedIndex = this.state.selectedPatchIndex;
         let _lpPath = "";
+        let _patchId = 0;
         for(let i=0; i<_patchURLs.length; i++){
           if(_patchURLs[i][0] == _lastSelectedPatchID){
+            _patchId = _patchURLs[i][0];
+            _lpPath = _patchURLs[i][1];
             _lastSelectedIndex=i;
             this.setState({
               selectedPatchIndex: _lastSelectedIndex
-            })
-            _lpPath = _patchURLs[i][1];
+            });
+            this.setState({
+              selectedPatchId: _patchId
+            });
             break;
           }
         }
 
-        let _stiClass = _lpPath.split("/")[4];
-        let _stiName = _lpPath.split("/")[5];
-        let _fixOrder = parseInt(_lpPath.split("/")[6]);
+        let _stiClass = _lpPath.split("/")[8];
+        let _stiName = _lpPath.split("/")[9];
+        let _fixOrder = parseInt(_lpPath.split("/")[10]);
         this.setState({
           selectedPatchOrder: _fixOrder
         });
@@ -620,12 +629,13 @@ class Data extends React.Component {
         this.setState({
           selectedPatchCluster: _patchClu
         });
-        const _data_ = new FormData();
-        _data_.set('stimulusClass', _stiClass);
-        _data_.set('stimulusName', _stiName);
-        _data_.set('fixationOrder', _fixOrder);
-        _data_.set('patchCluster', _patchClu);
-        axios.post(`http://${window.location.hostname}:5000/api/patchAnalysis/stimulus`, _data_)
+        const _data = new FormData();
+        _data.set('patchId', _patchId);
+        _data.set('stimulusClass', _stiClass);
+        _data.set('stimulusName', _stiName);
+        _data.set('fixationOrder', _fixOrder);
+        _data.set('patchCluster', _patchClu);
+        axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
           .then(response => {
             if (response.data.status === 'success') {
               // load stimulus and inner fixation location with id
@@ -656,7 +666,11 @@ class Data extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/gaze_data/submit`, data)
       .then(response => {
         if (response.data.status === 'success') {
-          // console.log('loadSubmitApi');
+          console.log(response.data)
+          console.log(response.data.filterName)
+          this.setState({
+            selectedFilterName: response.data.filterName
+          });
           this.loadSPMeanPath();
           // alert('Data loaded');
           // console.log(response.data);
@@ -690,6 +704,9 @@ class Data extends React.Component {
   participantChange = selectedParticipant => {
     this.setState({selectedParticipant});
     // console.log(selectedParticipant.value);
+    this.setState({
+      fIsDisabled: false
+    });
   }
 
   filterChange = selectedFilter => {
@@ -708,13 +725,12 @@ class Data extends React.Component {
     const data = new FormData();
     data.set('processing', this.state.selectedProcessMethod.value);
     data.set('correlation', selectedCorrelationMethod.value);
-    axios.post(`http://${window.location.hostname}:5000/api/corr/process`, data)
+    axios.post(`http://${window.location.hostname}:5000/api/data/process`, data)
     .then(response => {
       if (response.data.status === 'success') {
         // alert('Data pre-processing and correlation methods aplied');
-        console.log('Data pre-processing and correlation methods aplied');
+        // console.log('Data pre-processing and correlation methods aplied');
         this.loadCorrMatrixPath();
-
         // load selected features define
         this.loadSelectedFeatureDefine();
         // load scatter plot url
@@ -730,13 +746,13 @@ class Data extends React.Component {
   }
 
   render() {
-    const { datasetList, selectedDataset, pIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedProcessMethod, selectedCorrelationMethod } = this.state;
+    const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName, selectedProcessMethod, selectedCorrelationMethod } = this.state;
     const { spHeatmapDataURL, corrMatDataURL } = this.state;
     const { feature_define, sti_class_define } = this.state;
     const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
     const { patchURLs, numCluster, patchData } = this.state;
     const { filteredData, joinData } = this.state;
-    const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature } = this.state
+    const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId } = this.state
     
     return (
       <>
@@ -764,6 +780,7 @@ class Data extends React.Component {
         </div>
         <div className="page-section select-filter">
           <Select 
+            isDisabled={fIsDisabled}
             value={selectedFilter}
             onChange={this.filterChange}
             options={fixationFilters}
@@ -777,13 +794,16 @@ class Data extends React.Component {
           <div id="heat" className="page-section heatmap">
             <Heatmap 
               width={400}
-              height={400}
+              height={300}
               dataURL={spHeatmapDataURL}
               FEATURE_DEFINE={feature_define}
               STI_CLASS_DEFINE={sti_class_define}
             />
           </div>
         }
+        <div className="section-header">
+          <h4> Data overview </h4>
+        </div>
         {spHeatmapDataURL.length > 0 &&
           <div className="page-section select-process ">
             <Select
@@ -872,7 +892,7 @@ class Data extends React.Component {
           <div className="page-section">
             <PatchTable 
               width={900}
-              height={800}
+              height={780}
               patchURLs={patchURLs}
               patchScatterData={patchData}
               numClusters={numCluster}
@@ -905,13 +925,17 @@ class Data extends React.Component {
             </div>
             {patchURLs.length>0 && patchFeatureImageURLs.length>0 &&
               <Patch 
-                width={233}
+                width={235}
                 height={300}
                 patchURL={patchURLs[selectedPatchIndex]}
                 patchCluster={selectedPatchCluster}
                 patchFeatureImageURLs={patchFeatureImageURLs}
                 patchSelectedFeature={patchSelectedFeature}
                 feature_define={feature_define}
+                dataset={selectedDataset.value}
+                participant={selectedParticipant.value}
+                filterName={selectedFilterName}
+                selectedPatchId={selectedPatchId}
               />
             }
           </div>
