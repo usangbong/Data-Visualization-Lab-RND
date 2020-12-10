@@ -11,12 +11,12 @@ function Stimulus(props) {
   useEffect(() => {
     if(stimulusPath.length === 0 || stimulusPath.length === 0)
       return;
-    console.log("stimulusData");
-    console.log(stimulusData);
-    console.log("stimulusPath");
-    console.log(stimulusPath);
-    console.log("patchCluster");
-    console.log(patchCluster);
+    // console.log("stimulusData");
+    // console.log(stimulusData);
+    // console.log("stimulusPath");
+    // console.log(stimulusPath);
+    // console.log("patchCluster");
+    // console.log(patchCluster);
     d3.select(svgRef.current).selectAll("*").remove();
     
     // set the dimensions and margins of the graph
