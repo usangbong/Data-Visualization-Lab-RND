@@ -90,7 +90,7 @@ function Stimulus(props) {
       .attr("width", stiWidth)
       .attr("height", stiHeight)
       .attr("stroke", "black")
-      .attr("stroke-width", "2px")
+      .attr("stroke-width", "1px")
       .style("fill", "none");
     
     var saccade = svg.selectAll(".saccade")
