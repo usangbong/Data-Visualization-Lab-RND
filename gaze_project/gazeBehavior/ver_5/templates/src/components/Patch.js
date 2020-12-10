@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 
 function Patch(props) {
-  const { width, height, patchURL, patchCluster, patchFeatureImageURLs, patchSelectedFeature, feature_define } = props;
+  const { width, height, patchURL, patchCluster, patchFeatureImageURLs, patchSelectedFeature, feature_define, dataset, participant, filterName, selectedPatchId } = props;
   const svgRef = useRef();
   const d3 = window.d3;
   const colors = ["#a6cee3", "#fb9a99", "#fdbf6f", "#cab2d6", "#b15928", "#b2df8a", "#ffff99", "#1f78b4", "#e31a1c", "#ff7f00", "#33a02c", "#6a3d9a"];
@@ -29,14 +29,10 @@ function Patch(props) {
       let _featType = "";
       for(let i=0; i<feature_define.length; i++){
         if(patchSelectedFeature == feature_define[i][0]){
-          // console.log("patchSelectedFeature");
-          // console.log(i);
-          // console.log(patchSelectedFeature);
-          // console.log(feature_define[i][0]);
           _featType=feature_define[i][2]
         }
       }
-      _patchURL = `http://${window.location.hostname}:5000`+"/static/access/PATCH/"+_featType+".png?"+Math.random();
+      _patchURL = `http://${window.location.hostname}:5000`+"/static/data/"+dataset+"/"+participant+"/patch/"+filterName+"/features/"+selectedPatchId+"/"+_featType+".png?"+Math.random();
     }else{
       _patchURL = `http://${window.location.hostname}:5000`+patchURL[1]+"?"+Math.random();
     }
