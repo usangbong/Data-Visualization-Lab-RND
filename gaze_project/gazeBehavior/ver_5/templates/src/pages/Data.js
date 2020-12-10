@@ -90,7 +90,8 @@ class Data extends React.Component {
       stimulusData: [],
       patchSelectedFeature: -1,
       selectedPatchesTableIndex: [],
-      lastSelectedPatchTableIndex: [],
+      lastSelectedPatchTableIndex: [0, 0],
+      selectedPatchSelectOption: null,
     };
   }
 
@@ -418,7 +419,7 @@ class Data extends React.Component {
   loadPatchFeatureImageURLs = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/patch_feature_image.json?`+Math.random())
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         // let _patchFeatureImageURLs = [];
         // for (let value of response.data.split('\n')) {
         //   if (value.length > 0){
@@ -580,81 +581,233 @@ class Data extends React.Component {
     });
   }
 
+  // selectedPatchUpdate_clickPatch = () =>{
+  //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
+  //   .then(response => {
+  //     // console.log("get selected patches table index");
+  //     // get selected patches table index
+  //     let _getData = response.data;
+  //     this.setState({
+  //       selectedPatchesTableIndex: _getData
+  //     });
+  //     // set last selected patch table index
+  //     let _lastSelectedPatch = _getData[_getData.length-1]
+  //     this.setState({
+  //       lastSelectedPatchTableIndex: _lastSelectedPatch
+  //     });
+
+  //     // change Stimulus and Patch image
+  //     // set patch url
+  //     let _lastSelectedPatchIndex = this.state.selectedPatchIndex;
+  //     let _joinData = this.state.joinData;
+  //     let _lastSelectedPatchID = _joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].id;
+  //     let _patchURLs = this.state.patchURLs;
+  //     let _lastSelectedIndex = this.state.selectedPatchIndex;
+  //     let _lpPath = "";
+  //     let _patchId = 0;
+  //     for(let i=0; i<_patchURLs.length; i++){
+  //       if(_patchURLs[i][0] == _lastSelectedPatchID){
+  //         _patchId = _patchURLs[i][0];
+  //         _lpPath = _patchURLs[i][1];
+  //         _lastSelectedIndex=i;
+  //         this.setState({
+  //           selectedPatchIndex: _lastSelectedIndex
+  //         });
+  //         this.setState({
+  //           selectedPatchId: _patchId
+  //         });
+  //         break;
+  //       }
+  //     }
+
+  //     let _stiClass = _lpPath.split("/")[8];
+  //     let _stiName = _lpPath.split("/")[9];
+  //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
+  //     this.setState({
+  //       selectedPatchOrder: _fixOrder
+  //     });
+  //     let _patchClu = parseInt(_joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].clu);
+  //     this.setState({
+  //       selectedPatchCluster: _patchClu
+  //     });
+  //     const _data = new FormData();
+  //     _data.set('patchId', _patchId);
+  //     _data.set('stimulusClass', _stiClass);
+  //     _data.set('stimulusName', _stiName);
+  //     _data.set('fixationOrder', _fixOrder);
+  //     _data.set('patchCluster', _patchClu);
+  //     axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
+  //       .then(response => {
+  //         if (response.data.status === 'success') {
+  //           // load stimulus and inner fixation location with id
+  //           this.loadStimulusFixation();
+  //           // load patch feature image urls
+  //           this.loadPatchFeatureImageURLs();
+  //         } else if (response.data.status === 'failed') {
+  //           alert(`Failed to load data - ${response.data.reason}`);
+  //         }
+  //       }).catch(error => {
+  //         alert(`Error - ${error.message}`);
+  //     });
+  //     // make stimulus path
+  //     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
+  //     .then(response => {
+  //       this.setState({
+  //         stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
+  //       });
+  //     });
+  //   });
+  // }
+
+  // selectedPatchUpdate_clickFeat = () =>{
+  //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
+  //   .then(response => {
+  //     // console.log("get selected patches table index");
+  //     // get selected patches table index
+  //     let _getData = response.data;
+  //     this.setState({
+  //       selectedPatchesTableIndex: _getData
+  //     });
+  //     // set last selected patch table index
+  //     let _lastSelectedPatch = _getData[_getData.length-1]
+  //     this.setState({
+  //       lastSelectedPatchTableIndex: _lastSelectedPatch
+  //     });
+
+  //     // change Stimulus and Patch image
+  //     // set patch url
+  //     let _lastSelectedPatchID = _lastSelectedPatch[2];
+  //     let _patchURLs = this.state.patchURLs;
+  //     let _lastSelectedIndex = this.state.selectedPatchIndex;
+  //     let _lpPath = "";
+  //     let _patchId = 0;
+  //     for(let i=0; i<_patchURLs.length; i++){
+  //       if(_patchURLs[i][0] == _lastSelectedPatchID){
+  //         _patchId = _patchURLs[i][0];
+  //         _lpPath = _patchURLs[i][1];
+  //         _lastSelectedIndex=i;
+  //         this.setState({
+  //           selectedPatchIndex: _lastSelectedIndex
+  //         });
+  //         this.setState({
+  //           selectedPatchId: _patchId
+  //         });
+  //         break;
+  //       }
+  //     }
+
+  //     let _stiClass = _lpPath.split("/")[8];
+  //     let _stiName = _lpPath.split("/")[9];
+  //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
+  //     this.setState({
+  //       selectedPatchOrder: _fixOrder
+  //     });
+  //     let _patchClu = parseInt(_lastSelectedPatch[0]);
+  //     this.setState({
+  //       selectedPatchCluster: _patchClu
+  //     });
+  //     const _data = new FormData();
+  //     _data.set('patchId', _patchId);
+  //     _data.set('stimulusClass', _stiClass);
+  //     _data.set('stimulusName', _stiName);
+  //     _data.set('fixationOrder', _fixOrder);
+  //     _data.set('patchCluster', _patchClu);
+  //     axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
+  //       .then(response => {
+  //         if (response.data.status === 'success') {
+  //           // load stimulus and inner fixation location with id
+  //           this.loadStimulusFixation();
+  //           // load patch feature image urls
+  //           this.loadPatchFeatureImageURLs();
+  //         } else if (response.data.status === 'failed') {
+  //           alert(`Failed to load data - ${response.data.reason}`);
+  //         }
+  //       }).catch(error => {
+  //         alert(`Error - ${error.message}`);
+  //     });
+  //     // make stimulus path
+  //     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
+  //     .then(response => {
+  //       this.setState({
+  //         stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
+  //       });
+  //     });
+  //   });
+  // }
+
   selectedPatchUpdate = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
-      .then(response => {
-        // console.log("get selected patches table index");
-        // get selected patches table index
-        let _getData = response.data;
-        this.setState({
-          selectedPatchesTableIndex: _getData
-        });
-        // set last selected patch table index
-        let _lastSelectedPatch = _getData[_getData.length-1]
-        this.setState({
-          lastSelectedPatchTableIndex: _lastSelectedPatch
-        });
+    .then(response => {
+      // console.log("get selected patches table index");
+      // get selected patches table index
+      let _getData = response.data;
+      this.setState({
+        selectedPatchesTableIndex: _getData
+      });
+      // set last selected patch table index
+      let _lastSelectedPatch = _getData[_getData.length-1]
+      this.setState({
+        lastSelectedPatchTableIndex: _lastSelectedPatch
+      });
 
-        // change Stimulus and Patch image
-        // set patch url
-        let _lastSelectedPatchIndex = this.state.selectedPatchIndex;
-        let _joinData = this.state.joinData;
-        let _lastSelectedPatchID = _joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].id;
-        let _patchURLs = this.state.patchURLs;
-        let _lastSelectedIndex = this.state.selectedPatchIndex;
-        let _lpPath = "";
-        let _patchId = 0;
-        for(let i=0; i<_patchURLs.length; i++){
-          if(_patchURLs[i][0] == _lastSelectedPatchID){
-            _patchId = _patchURLs[i][0];
-            _lpPath = _patchURLs[i][1];
-            _lastSelectedIndex=i;
-            this.setState({
-              selectedPatchIndex: _lastSelectedIndex
-            });
-            this.setState({
-              selectedPatchId: _patchId
-            });
-            break;
-          }
+      // change Stimulus and Patch image
+      // set patch url
+      let _lastSelectedPatchID = _lastSelectedPatch[2];
+      let _patchURLs = this.state.patchURLs;
+      let _lastSelectedIndex = this.state.selectedPatchIndex;
+      let _lpPath = "";
+      let _patchId = 0;
+      for(let i=0; i<_patchURLs.length; i++){
+        if(_patchURLs[i][0] == _lastSelectedPatchID){
+          _patchId = _patchURLs[i][0];
+          _lpPath = _patchURLs[i][1];
+          _lastSelectedIndex=i;
+          this.setState({
+            selectedPatchIndex: _lastSelectedIndex
+          });
+          this.setState({
+            selectedPatchId: _patchId
+          });
+          break;
         }
+      }
 
-        let _stiClass = _lpPath.split("/")[8];
-        let _stiName = _lpPath.split("/")[9];
-        let _fixOrder = parseInt(_lpPath.split("/")[10]);
+      let _stiClass = _lpPath.split("/")[8];
+      let _stiName = _lpPath.split("/")[9];
+      let _fixOrder = parseInt(_lpPath.split("/")[10]);
+      this.setState({
+        selectedPatchOrder: _fixOrder
+      });
+      let _patchClu = parseInt(_lastSelectedPatch[0]);
+      this.setState({
+        selectedPatchCluster: _patchClu
+      });
+      const _data = new FormData();
+      _data.set('patchId', _patchId);
+      _data.set('stimulusClass', _stiClass);
+      _data.set('stimulusName', _stiName);
+      _data.set('fixationOrder', _fixOrder);
+      _data.set('patchCluster', _patchClu);
+      axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
+        .then(response => {
+          if (response.data.status === 'success') {
+            // load stimulus and inner fixation location with id
+            this.loadStimulusFixation();
+            // load patch feature image urls
+            this.loadPatchFeatureImageURLs();
+          } else if (response.data.status === 'failed') {
+            alert(`Failed to load data - ${response.data.reason}`);
+          }
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+      });
+      // make stimulus path
+      axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
+      .then(response => {
         this.setState({
-          selectedPatchOrder: _fixOrder
+          stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
         });
-        let _patchClu = parseInt(_joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].clu);
-        this.setState({
-          selectedPatchCluster: _patchClu
-        });
-        const _data = new FormData();
-        _data.set('patchId', _patchId);
-        _data.set('stimulusClass', _stiClass);
-        _data.set('stimulusName', _stiName);
-        _data.set('fixationOrder', _fixOrder);
-        _data.set('patchCluster', _patchClu);
-        axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
-          .then(response => {
-            if (response.data.status === 'success') {
-              // load stimulus and inner fixation location with id
-              this.loadStimulusFixation();
-              // load patch feature image urls
-              this.loadPatchFeatureImageURLs();
-            } else if (response.data.status === 'failed') {
-              alert(`Failed to load data - ${response.data.reason}`);
-            }
-          }).catch(error => {
-            alert(`Error - ${error.message}`);
-        });
-        // make stimulus path
-        axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
-          .then(response => {
-            this.setState({
-              stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
-            });
-        });
+      });
     });
   }
 
@@ -666,8 +819,7 @@ class Data extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/gaze_data/submit`, data)
       .then(response => {
         if (response.data.status === 'success') {
-          console.log(response.data)
-          console.log(response.data.filterName)
+          // console.log(response.data);
           this.setState({
             selectedFilterName: response.data.filterName
           });
@@ -752,7 +904,7 @@ class Data extends React.Component {
     const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
     const { patchURLs, numCluster, patchData } = this.state;
     const { filteredData, joinData } = this.state;
-    const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId } = this.state
+    const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId,  selectedPatchSelectOption} = this.state
     
     return (
       <>
@@ -900,6 +1052,8 @@ class Data extends React.Component {
               filteredData={filteredData}
               passSelectedFeature={this.loadPatchSelectedFeature}
               selectedPatchUpdate={this.selectedPatchUpdate}
+              // selectedPatchUpdateClickPatch={this.selectedPatchUpdate_clickPatch}
+              // selectedPatchUpdateClickFeat={this.selectedPatchUpdate_clickFeat}
             />
           </div>
         }
@@ -908,7 +1062,7 @@ class Data extends React.Component {
             <div className="section-header">
               <h4>Stimulus</h4>
             </div>
-            {stimulusData.length>0 && stimulusPath.length>0 && 
+            {stimulusData.length>0 && stimulusPath.length>0 &&
               <Stimulus 
                 width={400}
                 height={300}
@@ -944,6 +1098,8 @@ class Data extends React.Component {
               <h4>Functions</h4>
             </div>
             <Select
+              value={selectedPatchSelectOption}
+              onChange={this.pMethodChange}
               options={patchSelectOption}
               placeholder="Select option"
             />
