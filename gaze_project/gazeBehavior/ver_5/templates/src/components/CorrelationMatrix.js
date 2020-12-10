@@ -195,7 +195,7 @@ function CorrelationMatrix(props) {
         const _data = new FormData();
         _data.set('feature_1', _f1);
         _data.set('feature_2', _f2);
-        axios.post(`http://${window.location.hostname}:5000/api/data/selectedAxis`, _data)
+        axios.post(`http://${window.location.hostname}:5000/api/correlationMatrix/selectedAxis`, _data)
         .then(response => {
           if (response.data.status === 'success') {
               console.log('selected features saved');
