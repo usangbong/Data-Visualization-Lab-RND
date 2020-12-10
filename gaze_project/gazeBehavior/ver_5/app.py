@@ -38,6 +38,7 @@ REMOVE_CLASSES = []
 REMOVE_FEATURES = []
 SCATTER_FEATURES = []
 PATCH_SIZE = 50
+PATCH_DICTIONARY = []
 PATCH_INDEX_PATH = []
 COLORS = ["#a6cee3", "#fb9a99", "#fdbf6f", "#cab2d6", "#b15928", "#b2df8a", "#ffff99", "#1f78b4", "#e31a1c", "#ff7f00", "#33a02c", "#6a3d9a"]
 
@@ -362,9 +363,12 @@ def dataPreProcessing(_method, _data):
   else:
     print("Data processing: default (Min-Max Normalization)")
     _pd = MinMaxScaler().fit_transform(_data)
-
   return _pd
 
+#
+#
+#
+# remove this function after debugging
 def generatePatch(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
   global PATCH_INDEX_PATH
   # print("generatePatch")
@@ -373,7 +377,6 @@ def generatePatch(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
   image = cv2.imread(_stiPath, cv2.IMREAD_COLOR)
   iWidth, iHeight = image.shape[:2]
   # print(image.size)
-
   _lenPatch = [_patchSizse, _patchSizse]
   _x = _fix[0]
   _y = _fix[1]
@@ -384,23 +387,16 @@ def generatePatch(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
     _padding[2] = abs(_point[0])
     _point[0] = 0
     _lenPatch[0] = _lenPatch[0]-_padding[2]
-
   if _point[0]+_lenPatch[0] > iWidth:
     _padding[3] = (_point[0]+_lenPatch[0]) - iWidth
     _lenPatch[0] = _lenPatch[0] - _padding[3]
-
   if _point[1] <0:
     _padding[0] = abs(_point[1])
     _point[1] = 0
     _lenPatch[1] = _lenPatch[1]-_padding[0]
-
   if _point[1]+_lenPatch[1] > iHeight:
     _padding[4] = (_point[1]+_lenPatch[1]) - iHeight
     _lenPatch[1] = _lenPatch[1]-_padding[1]
-
-  # print(_lenPatch)
-  # print(_point)
-  # print(_padding)
 
   _left = int(_point[0])
   _top = int(_point[1])
@@ -422,37 +418,190 @@ def generatePatch(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
   _outPath = _outPath+"/"+str(_idx).zfill(3)+".png"
   cv2.imwrite(_outPath, cropImg)
   PATCH_INDEX_PATH.append([_id, _outPath.split(".")[1]+".png"])
+# remove this function after debugging
+#
+#
+#
 
-def analysisPCA(_components, _df, _featuresColumns):
-  pca = PCA(n_components=_components)
-  pcaTransform = pca.fit_transform(_df[_featuresColumns])
-  return pcaTransform
+def appendPatchImageIndexPath(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
+  global PATCH_INDEX_PATH
+  _outPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
+  _outPath = makePath_Filter(FILTER, FILTER_THRESHOLD, _outPath)
+  _outPath = _outPath+"/images/"+_stiClass+"/"+_stiName+"/"+str(_idx).zfill(3)+".png"
+  PATCH_INDEX_PATH.append([_id, _outPath.split(".")[1]+".png"])
 
-def analysisICA(_components, _df, _featuresColumns):
-  ica = FastICA(n_components=_components)
-  icaTransform = ica.fit_transform(_df[_featuresColumns])
-  return icaTransform
+def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initFlag):
+  print("patch id: %d"%_id)
+  global PATCH_DICTIONARY
+  global PATCH_INDEX_PATH
+  color = [255, 255, 255]
+  _appendColumns = ['id', 'stimulusClass','stimulusName', 'fixationIndex', 'type', 'path']
+  
+  _stiPath = "./static/data/"+DATASET+"/stimulus/"+_stiClass+"/"+_stiName+".jpg"
+  if not(os.path.isfile(_stiPath)):
+    _stiPath = "."+_stiPath.split(".")[1]+".png"
+  
+  image = cv2.imread(_stiPath, cv2.IMREAD_COLOR)
+  iWidth, iHeight = image.shape[:2]
+  _lenPatch = [_patchSizse, _patchSizse]
+  _x = _fix[0]
+  _y = _fix[1]
+  _point = [_x-(_lenPatch[0]/2), _y-(_lenPatch[1]/2)]
+  # top bottom left right
+  _padding = [0, 0, 0, 0]
+  if _point[0] < 0:
+    _padding[2] = abs(_point[0])
+    _point[0] = 0
+    _lenPatch[0] = _lenPatch[0]-_padding[2]
+  if _point[0]+_lenPatch[0] > iWidth:
+    _padding[3] = (_point[0]+_lenPatch[0]) - iWidth
+    _lenPatch[0] = _lenPatch[0] - _padding[3]
+  if _point[1] <0:
+    _padding[0] = abs(_point[1])
+    _point[1] = 0
+    _lenPatch[1] = _lenPatch[1]-_padding[0]
+  if _point[1]+_lenPatch[1] > iHeight:
+    _padding[4] = (_point[1]+_lenPatch[1]) - iHeight
+    _lenPatch[1] = _lenPatch[1]-_padding[1]
+  _left = int(_point[0])
+  _top = int(_point[1])
+  _right = int(_point[0]+_lenPatch[0])
+  _bottom = int(_point[1]+_lenPatch[1])
+  cropImg = image[_top:_bottom, _left:_right]
+  cropImg = cv2.copyMakeBorder(cropImg, int(_padding[0]), int(_padding[1]), int(_padding[2]), int(_padding[3]), cv2.BORDER_CONSTANT, value=color)
 
-def analysisMDS(_components, _df, _featuresColumns):
-  mds = MDS(n_components=_components)
-  mdsTranform = mds.fit_transform(_df[_featuresColumns])
-  return mdsTranform
+  _outStandardDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
+  _outPath = ""
+  if not(os.path.exists(_outStandardDir)):
+    os.makedirs(os.path.join(_outStandardDir))
+  _outStandardDir = makePath_Filter(FILTER, FILTER_THRESHOLD, _outStandardDir)
+  if not(os.path.exists(_outStandardDir)):
+    os.makedirs(os.path.join(_outStandardDir))
+  _outPath = _outStandardDir+"/images"
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+_stiClass
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+_stiName
+  if not(os.path.exists(_outPath)):
+    os.makedirs(os.path.join(_outPath))
+  _outPath = _outPath+"/"+str(_idx).zfill(3)+".png"
+  cv2.imwrite(_outPath, cropImg)
+  PATCH_INDEX_PATH.append([_id, _outPath.split(".")[1]+".png"])
+  if _initFlag:
+    _appendData = []
+    _appendData.append([_id, _stiClass, _stiName, _idx, "image", _outPath.split(".")[1]+".png"])
+    _appendDF =pd.DataFrame(_appendData, columns=_appendColumns)
+    PATCH_DICTIONARY = PATCH_DICTIONARY.append(_appendDF, ignore_index=True)
+  _featOutPath = _outStandardDir+"/features"
+  if not(os.path.exists(_featOutPath)):
+    os.makedirs(os.path.join(_featOutPath))
+  _matrixOutPath = _outStandardDir+"/matrix"
+  if not(os.path.exists(_matrixOutPath)):
+    os.makedirs(os.path.join(_matrixOutPath))
 
-def analysisTSNE(_learningRate, _df, _featuresColumns):
-  tsne = TSNE(learning_rate=_learningRate)
-  tsneTransform = tsne.fit_transform(_df[_featuresColumns])
-  return tsneTransform
+  _featOutPathSaved = _featOutPath
+  _matrixOutPathSave = _matrixOutPath
+  # genearte feature images
+  for i in range(len(FEATURE_DEFINE)):
+    _featureType = FEATURE_DEFINE[i][1]
+    _featPath = "./static/data/"+DATASET+"/feature/"+_featureType+"/"+_stiClass+"_"+_stiName+".csv"
+    featDF = pd.read_csv(_featPath, header=None)
+    featNP = featDF.to_numpy()
+    featTrain = MinMaxScaler().fit_transform(featNP)
+    featTrain = np.abs(featTrain*255-255)
+    _savePath = "./static/access/feature.png"
+    cv2.imwrite(_savePath, featTrain)
+    featureImage = cv2.imread(_savePath, cv2.IMREAD_COLOR)
+    _left = int(_point[0])
+    _top = int(_point[1])
+    _right = int(_point[0]+_lenPatch[0])
+    _bottom = int(_point[1]+_lenPatch[1])
+    featureCropImg = featureImage[_top:_bottom, _left:_right]
+    featureCropImg = cv2.copyMakeBorder(featureCropImg, int(_padding[0]), int(_padding[1]), int(_padding[2]), int(_padding[3]), cv2.BORDER_CONSTANT, value=color)
+    featureCropImgGray = cv2.cvtColor(featureCropImg, cv2.COLOR_BGR2GRAY)
+    _featOutPath = _featOutPathSaved+"/"+str(_id)
+    if not(os.path.exists(_featOutPath)):
+      os.makedirs(os.path.join(_featOutPath))
+    _fTypeShort = FEATURE_DEFINE[i][2]
+    _featOutPath = _featOutPath+"/"+_fTypeShort+".png"
+    cv2.imwrite(_featOutPath, featureCropImgGray)
+    if _initFlag:
+      _appendData = []
+      _appendData.append([_id, _stiClass, _stiName, _idx, "feature", _featOutPath.split(".")[1]+".png"])
+      _appendDF =pd.DataFrame(_appendData, columns=_appendColumns)
+      PATCH_DICTIONARY = PATCH_DICTIONARY.append(_appendDF, ignore_index=True)
+    _matrixOutPath = _matrixOutPathSave+"/"+str(_id)
+    if not(os.path.exists(_matrixOutPath)):
+      os.makedirs(os.path.join(_matrixOutPath))
+    _fTypeShort = FEATURE_DEFINE[i][2]
+    _matrixOutPath = _matrixOutPath+"/"+_fTypeShort+".json"
+    makeJSON(_matrixOutPath, featureCropImgGray.tolist())
+    _matrixOutPath = "."+_matrixOutPath.split(".")[1]+".csv"
+    ciDF = pd.DataFrame(featureCropImgGray)
+    ciDF.to_csv(_matrixOutPath, mode='w', index=False, header=False)
+    if _initFlag:
+      _appendData = []
+      _appendData.append([_id, _stiClass, _stiName, _idx, "matrix", _matrixOutPath.split(".")[1]+".png"])
+      _appendDF = pd.DataFrame(_appendData, columns=_appendColumns)
+      PATCH_DICTIONARY = PATCH_DICTIONARY.append(_appendDF, ignore_index=True)
 
-def transformYeoJohnson(_df, _selectedFeature):
-  yeoJohson = PowerTransformer(method='yeo-johnson')
-  yeoJohson.fit(_df)
-  npTransform = yeoJohson.transform(_df)
-  yjDf = pd.DataFrame(npTransform, columns=_selectedFeature)
-  return yjDf
-
+#
+#
+#
+# remove this function after debugging
 def generateFeatureImage(_featPath, _outDirPath, _featureType, _patchSizse, _fix, color):
   # print("generateFeatureImage")
-  featDF = pd.read_csv(_featPath)
+  featDF = pd.read_csv(_featPath, header=None)
+  featNP = featDF.to_numpy()
+  featTrain = MinMaxScaler().fit_transform(featNP)
+  featTrain = np.abs(featTrain*255-255)
+  _savePath = _outDirPath+"feature.png"
+  cv2.imwrite(_savePath, featTrain)
+  image = cv2.imread(_savePath, cv2.IMREAD_COLOR)
+  iWidth, iHeight = image.shape[:2]
+  
+  _lenPatch = [_patchSizse, _patchSizse]
+  _x = _fix[0]
+  _y = _fix[1]
+  _point = [_x-(_lenPatch[0]/2), _y-(_lenPatch[1]/2)]
+  # top bottom left right
+  _padding = [0, 0, 0, 0]
+  if _point[0] < 0:
+    _padding[2] = abs(_point[0])
+    _point[0] = 0
+    _lenPatch[0] = _lenPatch[0]-_padding[2]
+  if _point[0]+_lenPatch[0] > iWidth:
+    _padding[3] = (_point[0]+_lenPatch[0]) - iWidth
+    _lenPatch[0] = _lenPatch[0] - _padding[3]
+  if _point[1] <0:
+    _padding[0] = abs(_point[1])
+    _point[1] = 0
+    _lenPatch[1] = _lenPatch[1]-_padding[0]
+  if _point[1]+_lenPatch[1] > iHeight:
+    _padding[4] = (_point[1]+_lenPatch[1]) - iHeight
+    _lenPatch[1] = _lenPatch[1]-_padding[1]
+
+  _left = int(_point[0])
+  _top = int(_point[1])
+  _right = int(_point[0]+_lenPatch[0])
+  _bottom = int(_point[1]+_lenPatch[1])
+  cropImg = image[_top:_bottom, _left:_right]
+  cropImg = cv2.copyMakeBorder(cropImg, int(_padding[0]), int(_padding[1]), int(_padding[2]), int(_padding[3]), cv2.BORDER_CONSTANT, value=color)
+
+  _patchFeatSavePath = _outDirPath+_featureType+".png"
+  cv2.imwrite(_patchFeatSavePath, cropImg)
+  return _patchFeatSavePath
+# remove this function after debugging
+#
+#
+#
+
+def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patchSizse, _fix, color):
+  featDF = pd.read_csv(_featPath, header=None)
   featNP = featDF.to_numpy()
   featTrain = MinMaxScaler().fit_transform(featNP)
   featTrain = np.abs(featTrain*255-255)
@@ -493,18 +642,53 @@ def generateFeatureImage(_featPath, _outDirPath, _featureType, _patchSizse, _fix
   cv2.imwrite(_patchFeatSavePath, cropImg)
   return _patchFeatSavePath
 
+def analysisPCA(_components, _df, _featuresColumns):
+  pca = PCA(n_components=_components)
+  pcaTransform = pca.fit_transform(_df[_featuresColumns])
+  return pcaTransform
+
+def analysisICA(_components, _df, _featuresColumns):
+  ica = FastICA(n_components=_components)
+  icaTransform = ica.fit_transform(_df[_featuresColumns])
+  return icaTransform
+
+def analysisMDS(_components, _df, _featuresColumns):
+  mds = MDS(n_components=_components)
+  mdsTranform = mds.fit_transform(_df[_featuresColumns])
+  return mdsTranform
+
+def analysisTSNE(_learningRate, _df, _featuresColumns):
+  tsne = TSNE(learning_rate=_learningRate)
+  tsneTransform = tsne.fit_transform(_df[_featuresColumns])
+  return tsneTransform
+
+def transformYeoJohnson(_df, _selectedFeature):
+  yeoJohson = PowerTransformer(method='yeo-johnson')
+  yeoJohson.fit(_df)
+  npTransform = yeoJohson.transform(_df)
+  yjDf = pd.DataFrame(npTransform, columns=_selectedFeature)
+  return yjDf
+
 def hex_to_rgb(hex):
   hex = hex.lstrip('#')
   hlen = len(hex)
   return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
+def calcPatchFeatureMeanValue(_matrixPath):
+  df = pd.read_csv(_matrixPath, header=None)
+  sumList = df.sum().values.tolist()
+  dataCount = PATCH_SIZE*PATCH_SIZE
+  _sum = sum(sumList)
+  _mean = _sum/dataCount
+  return _mean
 
 # from Data.js
-@app.route('/api/patchAnalysis/stimulus', methods=['POST'])
+@app.route('/api/data/stimulus', methods=['POST'])
 def patchAnalysisStiFix():
   response = {}
   try:
     print(request.form)
+    getPatchId = request.form['patchId']
     getStiClass = request.form['stimulusClass']
     getStiName = request.form['stimulusName']
     getFixOrder = int(request.form['fixationOrder'])
@@ -542,7 +726,7 @@ def patchAnalysisStiFix():
     _patchLocationPath = "./static/access/stimulus_fixations.csv"
     _mmDF.to_csv(_patchLocationPath, mode='w', index=False)
 
-    _patchDirPath = "./static/access/PATCH/"
+    _patchDirPath = "./static/access/PATCH_FEATURES/"
     if os.path.isdir(_patchDirPath):
       try:
         shutil.rmtree(_patchDirPath)
@@ -555,34 +739,27 @@ def patchAnalysisStiFix():
     print(_featDirList)
     _mmDF_list = _mmDF.values.tolist()
     patchFeatureImagePath = []
-    for _feat in _featDirList:
-      _featPath = "./static/data/"+DATASET+"/feature/"+_feat+"/"+getStiClass+"_"+getStiName+".csv"
-      print("_featPath")
-      print(_featPath)
-      _featType = ""
-      for i in range(0, len(FEATURE_DEFINE)):
-        if _feat == FEATURE_DEFINE[i][1]:
-          # print("_feat")
-          # print(_feat)
-          # print("FEATURE_DEFINE[i][1]")
-          # print(FEATURE_DEFINE[i][1])
-          # print("FEATURE_DEFINE[i][2]")
-          # print(FEATURE_DEFINE[i][2])
-          _featType = FEATURE_DEFINE[i][2]
-          break
-      _fixPoint = [_mmDF_list[getFixOrder][1], _mmDF_list[getFixOrder][2]]
-      # print("_fixPoint")
-      # print(_fixPoint)
-      _colorBGR = hex_to_rgb(COLORS[getPatchClu])
-      _colorRGB = [_colorBGR[2], _colorBGR[1], _colorBGR[0]]
-      # _color = ImageColor.getcolor(COLORS[getPatchClu], "RGB")
-      # _color = [_color[0], _color[1], _color[2]]
-      # print(_colorRGB)
-      # print("_featType")
-      # print(_featType)
-      _path = generateFeatureImage(_featPath, _patchDirPath, _featType, PATCH_SIZE, _fixPoint, _colorRGB)
-      # print(_path)
+    
+    _patchFeatureImageDirPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
+    _patchFeatureImageDirPath = makePath_Filter(FILTER, FILTER_THRESHOLD, _patchFeatureImageDirPath)
+    _patchFeatureImageDirPath = _patchFeatureImageDirPath+"/features/"+getPatchId+"/"
+    for i in range(0, len(FEATURE_DEFINE)):
+      _fType = FEATURE_DEFINE[i][2]
+      _path = _patchFeatureImageDirPath+_fType+".png"
       patchFeatureImagePath.append(_path.split('.')[1]+".png")
+
+    # for _feat in _featDirList:
+    #   _featPath = "./static/data/"+DATASET+"/feature/"+_feat+"/"+getStiClass+"_"+getStiName+".csv"
+    #   _featType = ""
+    #   for i in range(0, len(FEATURE_DEFINE)):
+    #     if _feat == FEATURE_DEFINE[i][1]:
+    #       _featType = FEATURE_DEFINE[i][2]
+    #       break
+    #   _fixPoint = [_mmDF_list[getFixOrder][1], _mmDF_list[getFixOrder][2]]
+    #   _colorBGR = hex_to_rgb(COLORS[getPatchClu])
+    #   _colorRGB = [_colorBGR[2], _colorBGR[1], _colorBGR[0]]
+    #   # _path = generateFeatureImage(_featPath, _patchDirPath, _featType, PATCH_SIZE, _fixPoint, _colorRGB)
+    #   patchFeatureImagePath.append(_path.split('.')[1]+".png")
     # patch feature image path save
     # print("patch feature image path save")
     _patchFeatureImageAccessPath = "./static/access/patch_feature_image.json"
@@ -605,12 +782,9 @@ def selectedPatchesUpdate():
     getPatchString = request.form['selectedPatches']
     # split and transfer type 
     _getPatches = getPatchString.split(",")
-    print("_getPatches")
-    print(_getPatches)
     _selectedPatches = []
     for i in range(0, int(len(_getPatches)/2)):
       _selectedPatches.append([int(_getPatches[i*2]), int(_getPatches[i*2+1])])
-    print(_selectedPatches)
     _accessPathSelectedPatch = "./static/access/selected_patch_table_index.json"
     makeJSON(_accessPathSelectedPatch, _selectedPatches)    
     
@@ -631,7 +805,61 @@ def patchSelectFeature():
     selectedFeature = request.form['selectedFeature']
     _accessPath = "./static/access/patch_selected_feature.json"
     makeJSON(_accessPath, selectedFeature)
+
+    # get patches id data from client and make string data to list
+    patchesId = request.form['patchesId']
+    patchesIdList = []
+    for _pid in patchesId.split(","):
+      patchesIdList.append(int(_pid))
+    # get patches clu data from client and make string data to list
+    patchesClu = request.form['patchesClu']
+    patchesCluList = []
+    for _pclu in patchesClu.split(","):
+      patchesCluList.append(int(_pclu))
+    _cluSet = set(patchesCluList)
+    cluSetList = list(_cluSet)
+    cluSetList.sort()
+    # calculate patch features mean value and make list
+    patchesFeatureMeanValue = []
+    for _id in patchesIdList:
+      _matrixPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"+FILTER_NAME+"/matrix/"+str(_id)+"/"+FEATURE_DEFINE[int(selectedFeature)][2]+".csv"
+      _mVal = calcPatchFeatureMeanValue(_matrixPath)
+      patchesFeatureMeanValue.append(_mVal)
+    # merge patches clu, id, and feature mean value data
+    patchesMergeList = []
+    for i in range(0, len(patchesCluList)):
+      patchesMergeList.append([patchesCluList[i], patchesIdList[i], patchesFeatureMeanValue[i]])
+    patchesDF = pd.DataFrame(patchesMergeList, columns=["clu", "id", "feature"])
+
+    # make list divided by cluster
+    # print("make list divided by cluster")
+    patchDivByClu = []
+    for _clu in cluSetList:
+      _isclu = patchesDF['clu'] == _clu
+      _ids = patchesDF[_isclu]
+      patchDivByClu.append(_ids.values.tolist())
+    # append patchTable rendering order index
+    for i in range(0, len(patchDivByClu)):
+      renderingIndex = 0
+      for j in range(0, len(patchDivByClu[i])):
+        patchDivByClu[i][j].append(renderingIndex)
+        renderingIndex+=1
+    # make list sorted by feature mean value
+    # print("make list sorted by feature mean value")
+    patchDivByCluSorting = []
+    for _arr in patchDivByClu:
+      _arr.sort(reverse=True, key=lambda x:x[2])
+      patchDivByCluSorting.append(_arr)
+    # append updated order index
+    for i in range(0, len(patchDivByCluSorting)):
+      updateIndex = 0
+      for j in range(0, len(patchDivByCluSorting[i])):
+        patchDivByCluSorting[i][j].append(updateIndex)
+        updateIndex+=1
     
+    _accessUpdatedPatchDataPath = "./static/access/patchTable_sorting_update.json"
+    makeJSON(_accessUpdatedPatchDataPath, patchDivByCluSorting)
+
     response['status'] = 'success'
   except Exception as e:
     response['status'] = 'failed'
@@ -641,7 +869,7 @@ def patchSelectFeature():
   return json.dumps(response)
 
 # from pages/Data.js
-@app.route('/api/corr/process', methods=['POST'])
+@app.route('/api/data/process', methods=['POST'])
 def corrProcess():
   global DATAPROCESSING
   global CORRELATION_METHOD
@@ -712,7 +940,7 @@ def corrProcess():
     _selectedFeatureDefineAccessPath = "./static/access/selected_feature_define.json"
     makeJSON(_selectedFeatureDefineAccessPath, SELECTED_FEATURE_DEFINE)
 
-    # generate patch images
+    # append patch images path on memory
     PATCH_INDEX_PATH = []
     _outPath = "./static/access/"+DATASET
     if os.path.isdir(_outPath):
@@ -733,10 +961,11 @@ def corrProcess():
       _cur = _sc+"_"+_sn
       if _prev != _cur:
         _patchIdx = 0
-      generatePatch(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
+      # generatePatch(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
+      appendPatchImageIndexPath(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
       _patchIdx+=1
       _prev = _cur
-    print("all patches are generated")
+    print("filtered patches are appended")
     _accessPath_patches = "./static/access/index_patches.json"
     makeJSON(_accessPath_patches, PATCH_INDEX_PATH)
 
@@ -831,7 +1060,7 @@ def corrProcess():
   
   return json.dumps(response)
 
-@app.route('/api/data/selectedAxis', methods=['POST'])
+@app.route('/api/correlationMatrix/selectedAxis', methods=['POST'])
 def selectedAxis():
   global SCATTER_FEATURES
 
@@ -873,7 +1102,7 @@ def selectedAxis():
   return json.dumps(response)
 
 
-@app.route('/api/data/removefilter', methods=['POST'])
+@app.route('/api/heatmap/removefilter', methods=['POST'])
 def removefilter():
   global REMOVE_CLASSES
   global REMOVE_FEATURES
@@ -920,17 +1149,16 @@ def gazeDataSubmit():
   global STI_CLASS_DEFINE
   global FILTER_THRESHOLD
   global PATCH_INDEX_PATH
+  global PATCH_DICTIONARY
   
   print(request.form)
   # print(request.form['data-origin'])
   response = {}
-
   try:
     # get selected dataset, participant, and fixation filter from client
     DATASET = request.form['dataset']
     PARTICIPANT = request.form['participant']  
     FILTER = request.form['filter']
-
     # set filter threshold
     FILTER_THRESHOLD = []
     if FILTER == "ivt":
@@ -941,7 +1169,6 @@ def gazeDataSubmit():
     else:
       # default set: ivt filter
       FILTER_THRESHOLD.append(THRESHOLD_VELOCITY)
-    
     # get feature types from server static directory
     FEATURE_TYPES = []
     featureFilePath = "./static/features.csv"
@@ -957,7 +1184,6 @@ def gazeDataSubmit():
       FEATURE_DEFINE.append([i, FEATURE_TYPES[i], "f_"+str(i).zfill(2)])
     _accessFeatureDefine = "./static/access/feature_define.json"
     makeJSON(_accessFeatureDefine, FEATURE_DEFINE)
-
     # get stimulus classes from server static directory
     STIMULUS_CLASSES = []
     stimulusDir = "./static/data"+"/"+DATASET+"/stimulus"
@@ -977,20 +1203,32 @@ def gazeDataSubmit():
     _accessStiClassDataPath = "./static/access/sti_class_define.json"
     makeJSON(_accessStiClassDataPath, STI_CLASS_DEFINE)
     
-    # check fixation cache
+    # make cache directories path
     fixationDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/fixation/"
     psdFixDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"
     randomDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/random/"
     spDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/sp_variance/"
     corrDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/correlation/"
-
-
+    patchDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
+    # directory exist check
+    if not(os.path.exists(fixationDir)):
+      os.makedirs(os.path.join(fixationDir))
+    if not(os.path.exists(psdFixDir)):
+      os.makedirs(os.path.join(psdFixDir))
+    if not(os.path.exists(randomDir)):
+      os.makedirs(os.path.join(randomDir))
+    if not(os.path.exists(spDir)):
+      os.makedirs(os.path.join(spDir))
+    if not(os.path.exists(corrDir)):
+      os.makedirs(os.path.join(corrDir))
+    if not(os.path.exists(patchDir)):
+      os.makedirs(os.path.join(patchDir))
     fixationDir = makePath_Filter(FILTER, FILTER_THRESHOLD, fixationDir)
     psdFixDir = makePath_Filter(FILTER, FILTER_THRESHOLD, psdFixDir)
     randomDir = makePath_Filter(FILTER, FILTER_THRESHOLD, randomDir)
     spDir = makePath_Filter(FILTER, FILTER_THRESHOLD, spDir)
     corrDir = makePath_Filter(FILTER, FILTER_THRESHOLD, corrDir)
-
+    patchDir = makePath_Filter(FILTER, FILTER_THRESHOLD, patchDir)
     
     # if fixation and random cache files does not exist
     print("generate fixation and random cache files")
@@ -1062,7 +1300,7 @@ def gazeDataSubmit():
           print(writeRandomPath_csv)
     
     # if processed fixation cache file does not exist
-    print("PFIX: generate processed fixation cache files")
+    print("Processed fixation cache works: generate processed fixation cache files")
     if not(os.path.exists(psdFixDir)):
       os.makedirs(os.path.join(psdFixDir))
       # get stimulusClass_stimulusName file list
@@ -1108,10 +1346,18 @@ def gazeDataSubmit():
       # save processed fixations cache file
       psdFixationPath_csv = psdFixDir+"/"+"all_fix.csv"
       allFixDF.to_csv(psdFixationPath_csv, mode='w', index=False)
-      print("save processed fixation cache file")
+      print("Processed fixation cache works: save processed fixation cache file")
 
+    # if patch images, patch feature images, and patch feature matrix files does not exist
+    if not(os.path.exists(patchDir)):
+      print("Patch cache works: generate patch images, patch feature images, and patch feature matrix cache files")
+      os.makedirs(os.path.join(patchDir))
       # generate patch images
+      PATCH_DICTIONARY = []
+      PATCH_DICTIONARY = pd.DataFrame(index=range(0,0), columns=['id', 'stimulusClass','stimulusName', 'type', 'path'])
       PATCH_INDEX_PATH = []
+      psdFixationPath_csv = psdFixDir+"/"+"all_fix.csv"
+      allFixDF = pd.read_csv(psdFixationPath_csv)
       print(allFixDF)
       _fixAllDf = allFixDF[['id', 'stimulusClass','stimulusName','x','y']]
       _fixList = _fixAllDf.values.tolist()
@@ -1125,12 +1371,15 @@ def gazeDataSubmit():
         _cur = _sc+"_"+_sn
         if _prev != _cur:
           _patchIdx = 0
-        generatePatch(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
+        # generatePatch(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
+        generatePatchCache(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx, True)
         _patchIdx+=1
         _prev = _cur
-      print("all patches are generated")
+      print("all patche cache are generated")
       _accessPath_patches = "./static/access/index_patches.json"
       makeJSON(_accessPath_patches, PATCH_INDEX_PATH)
+      print(PATCH_DICTIONARY)
+      print(PATCH_INDEX_PATH)
 
     # if feature mean cache files does not exist
     print("generate feature mean cache files")
@@ -1356,7 +1605,7 @@ def gazeDataSubmit():
     spFHDF = pd.DataFrame(spFormHeatmapData, columns=spFormHeatmapColumnNames)
     print(spFHDF)
     spHeatmapDataPath = spDir+"/"+"sp_heatmap.csv"
-    spFHDF.to_csv(spHeatmapDataPath, index=False)
+    spFHDF.to_csv(spHeatmapDataPath, mode='w', index=False)
     # save spatial variance mean data file path
     spHeatmapDataFilePath_filePath = "./static/access/sp_heatmap_path.json"
     makeJSON(spHeatmapDataFilePath_filePath, spHeatmapDataPath.split(".")[1]+".csv")
@@ -1405,11 +1654,14 @@ def gazeDataSubmit():
     print("save correlation matrix data file")
 
     response['status'] = 'success'
-    response['data'] = {
-      'dataset': DATASET,
-      'participant': PARTICIPANT,
-      'filter': FILTER
-    }
+    # response['data'] = {
+    #   'dataset': DATASET,
+    #   'participant': PARTICIPANT,
+    #   'filter': FILTER,
+    #   'filterName': FILTER_NAME
+    # }
+    response['filterName'] = FILTER_NAME
+
     
   except Exception as e:
     response['status'] = 'failed'
