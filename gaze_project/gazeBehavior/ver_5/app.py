@@ -783,8 +783,8 @@ def selectedPatchesUpdate():
     # split and transfer type 
     _getPatches = getPatchString.split(",")
     _selectedPatches = []
-    for i in range(0, int(len(_getPatches)/2)):
-      _selectedPatches.append([int(_getPatches[i*2]), int(_getPatches[i*2+1])])
+    for i in range(0, int(len(_getPatches)/3)):
+      _selectedPatches.append([int(_getPatches[i*3]), int(_getPatches[i*3+1]), int(_getPatches[i*3+2])])
     _accessPathSelectedPatch = "./static/access/selected_patch_table_index.json"
     makeJSON(_accessPathSelectedPatch, _selectedPatches)    
     
