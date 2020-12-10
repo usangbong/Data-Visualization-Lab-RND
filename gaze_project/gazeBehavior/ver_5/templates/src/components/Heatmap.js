@@ -17,7 +17,7 @@ function Heatmap(props) {
     // console.log(svgRef.current)
     
     // set the dimensions and margins of the graph
-    var margin = {top: 30, right: 30, bottom: 30, left: 30},
+    var margin = {top: 10, right: 10, bottom: 20, left: 30},
     drawWidth = width - margin.left - margin.right,
     drawHeight = height - margin.top - margin.bottom;
 
@@ -60,12 +60,12 @@ function Heatmap(props) {
             }
           }
           if(_selected){
-            return "red";
+            return "#737373";
           }else{
             return "black";
           }
       })
-      .style("font", "7px sans-serif")
+      .style("font", "8px sans-serif")
       .call(d3.axisBottom(x))
 
     d3.selectAll(".xaxis .tick")
@@ -108,14 +108,14 @@ function Heatmap(props) {
             }
           }
           if(_selected){
-            return "red";
+            return "#737373";
           }else{
             return "black";
           }
       });
 
       svg.selectAll("rect").transition()
-      .style("fill", function(d){
+      .attr("stroke", function(d){
         var _ccheck = false;
         for(let i=0; i<selectedCols.length; i++){
           if(d.group === selectedCols[i]){
@@ -132,14 +132,58 @@ function Heatmap(props) {
         }
 
         if(_rcheck || _ccheck){
-          return "#e31a1c";
+          return "#737373";
         }else{
-          if(d.value == -999)
-            return "#fb9a99";
-          else if(d.value < 1)
-            return "#fdbf6f";
-          else
-            return myColor(d.value);
+          // if(d.value == -999)
+          //   return "#fb9a99";
+          // else if(d.value < 1)
+          //   return "#fdbf6f";
+          // else
+          //   return myColor(d.value);
+          return "#636363";
+        }
+      })
+      .attr("fill", function(d){
+        var _rcheck = false;
+        for(let i=0; i<selectedRows.length; i++){
+          if(d.variable === selectedRows[i]){
+            _rcheck = true;
+            break;
+          }
+        }
+        var _ccheck = false;
+        for(let i=0; i<selectedCols.length; i++){
+          if(d.group === selectedCols[i]){
+            _ccheck = true;
+            break;
+          }
+        }
+        if(d.value == -999)
+          return "#fb9a99";
+        else if(d.value < 1)
+          return "#fdbf6f";
+        else
+          return myColor(d.value);
+      })
+      .attr("opacity", function(d){
+        var _rcheck = false;
+        for(let i=0; i<selectedRows.length; i++){
+          if(d.variable === selectedRows[i]){
+            _rcheck = true;
+            break;
+          }
+        }
+        var _ccheck = false;
+        for(let i=0; i<selectedCols.length; i++){
+          if(d.group === selectedCols[i]){
+            _ccheck = true;
+            break;
+          }
+        }
+        if(_rcheck || _ccheck){
+          return 0.3;
+        }else{
+          return 1;
         }
       });
       sendRemoveList(selectedCols, selectedRows);
@@ -161,12 +205,12 @@ function Heatmap(props) {
           }
         }
         if(_selected){
-          return "red";
+          return "#737373";
         }else{
           return "black";
         }
       })
-      .style("font", "7px sans-serif")
+      .style("font", "8px sans-serif")
       .call(d3.axisLeft(y));
 
     d3.selectAll(".yaxis .tick")
@@ -209,14 +253,14 @@ function Heatmap(props) {
               }
             }
             if(_selected){
-              return "red";
+              return "#737373";
             }else{
               return "black";
             }
           });
           
           svg.selectAll("rect").transition()
-          .style("fill", function(d){
+          .attr("stroke", function(d){
             var _rcheck = false;
             for(let i=0; i<selectedRows.length; i++){
               if(d.variable === selectedRows[i]){
@@ -233,17 +277,60 @@ function Heatmap(props) {
             }
 
             if(_rcheck || _ccheck){
-              return "#e31a1c";
+              return "#737373";
             }else{
-              if(d.value == -999)
-                return "#fb9a99";
-              else if(d.value < 1)
-                return "#fdbf6f";
-              else
-                return myColor(d.value);
+              // if(d.value == -999)
+              //   return "#fb9a99";
+              // else if(d.value < 1)
+              //   return "#fdbf6f";
+              // else
+              //   return myColor(d.value);
+              return "#636363";
+            }
+          })
+          .attr("fill", function(d){
+            var _rcheck = false;
+            for(let i=0; i<selectedRows.length; i++){
+              if(d.variable === selectedRows[i]){
+                _rcheck = true;
+                break;
+              }
+            }
+            var _ccheck = false;
+            for(let i=0; i<selectedCols.length; i++){
+              if(d.group === selectedCols[i]){
+                _ccheck = true;
+                break;
+              }
+            }
+            if(d.value == -999)
+              return "#fb9a99";
+            else if(d.value < 1)
+              return "#fdbf6f";
+            else
+              return myColor(d.value);
+          })
+          .attr("opacity", function(d){
+            var _rcheck = false;
+            for(let i=0; i<selectedRows.length; i++){
+              if(d.variable === selectedRows[i]){
+                _rcheck = true;
+                break;
+              }
+            }
+            var _ccheck = false;
+            for(let i=0; i<selectedCols.length; i++){
+              if(d.group === selectedCols[i]){
+                _ccheck = true;
+                break;
+              }
+            }
+            if(_rcheck || _ccheck){
+              return 0.3;
+            }else{
+              return 1;
             }
           });
-
           sendRemoveList(selectedCols, selectedRows);
       });
 
@@ -286,8 +373,10 @@ function Heatmap(props) {
       .data(data, function(d) {return d.group+':'+d.variable;})
       .enter()
       .append("rect")
-        .attr("x", function(d) { return x(d.group) })
+        .attr("x", function(d) { return x(d.group)+1 })
         .attr("y", function(d) { return y(d.variable) })
+        .attr("rx", 4)
+        .attr("ry", 4)
         .attr("width", x.bandwidth() )
         .attr("height", y.bandwidth() )
         .style("fill", function(d) { 
@@ -297,10 +386,12 @@ function Heatmap(props) {
             return "#fdbf6f"
           else
             return myColor(d.value);
-        } )
-      .on("mouseover", mouseover)
-      .on("mousemove", mousemove)
-      .on("mouseleave", mouseleave)
+        })
+        .attr("stroke", "#636363")
+        .attr("stroke-width", 1)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
       })
 
     function sendRemoveList(_stiClass, _stiFeat){
@@ -308,7 +399,7 @@ function Heatmap(props) {
       _data.set('removeClass', _stiClass);
       _data.set('removeFeature', _stiFeat);
 
-      axios.post(`http://${window.location.hostname}:5000/api/data/removefilter`, _data)
+      axios.post(`http://${window.location.hostname}:5000/api/heatmap/removefilter`, _data)
       .then(response => {
         if (response.data.status === 'success') {
           // alert('data columns changed');
