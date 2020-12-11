@@ -48,6 +48,11 @@ const patchSelectOption = [
   { value:'similar', label: 'Similar patches' }
 ];
 
+const imageSimilarityOption = [
+  { value:'MSE', label: 'MSE' },
+  { value:'SSIM', label: 'SSIM' }
+];
+
 let moveDestClusterOption = [
 
 ];
@@ -92,6 +97,7 @@ class Data extends React.Component {
       selectedPatchesTableIndex: [],
       lastSelectedPatchTableIndex: [0, 0],
       selectedPatchSelectOption: null,
+      selectedSimilarityOption: null,
     };
   }
 
@@ -570,10 +576,12 @@ class Data extends React.Component {
         let _data = parseInt(response.data);
         let _patchSelectedFeature = this.state.patchSelectedFeature;
         if(_patchSelectedFeature == _data){
+          // patchSelectedFeature == -1: feature unselected
           this.setState({
             patchSelectedFeature: -1
           });
         }else{
+          // patchSelectedFeature != -1: feature selected
           this.setState({
             patchSelectedFeature: parseInt(response.data)
           });
@@ -897,6 +905,24 @@ class Data extends React.Component {
     });
   }
 
+  similarityOptionChanged = selectedSimilarityOption =>{
+    this.setState({selectedSimilarityOption});
+
+    let _patchSelectedFeature = this.state.patchSelectedFeature;
+    let _selectedSimilarityOption = selectedSimilarityOption.value;
+    const data = new FormData();
+    data.set('selectedFeature', _patchSelectedFeature);
+    data.set('selectedSimilarityOption', _selectedSimilarityOption);
+    // patchIds
+    axios.post(`http://${window.location.hostname}:5000/api/data/similarity`, data)
+    .then(response => {
+      console.log("get patches calculated similarity values");
+
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
+  }
+
   render() {
     const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName, selectedProcessMethod, selectedCorrelationMethod } = this.state;
     const { spHeatmapDataURL, corrMatDataURL } = this.state;
@@ -905,6 +931,7 @@ class Data extends React.Component {
     const { patchURLs, numCluster, patchData } = this.state;
     const { filteredData, joinData } = this.state;
     const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId,  selectedPatchSelectOption} = this.state
+    const { selectedSimilarityOption } = this.state;
     
     return (
       <>
@@ -1102,6 +1129,13 @@ class Data extends React.Component {
               onChange={this.pMethodChange}
               options={patchSelectOption}
               placeholder="Select option"
+            />
+
+            <Select 
+              value={selectedSimilarityOption}
+              onChange={this.similarityOptionChanged}
+              options={imageSimilarityOption}
+              placeholder="Similarity option"
             />
             
             <h4>Move to</h4>
