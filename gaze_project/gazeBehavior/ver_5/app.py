@@ -888,8 +888,10 @@ def similaritySSIM(_select, _target):
   return score
 
 # Mean Square Error
+# https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similarityMSE(_select, _target):
-  return 0
+  score = np.linalg.norm(_select-_target)
+  return score
 
 # Peak Signal-to-Noise Ratio
 def similarityPSNR(_select, _target):
