@@ -17,6 +17,7 @@ from sklearn.decomposition import FastICA
 from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
+from skimage.metrics import structural_similarity as SSIM
 # from PIL import ImageColor
 from flask import *
 from flask_cors import CORS
@@ -494,7 +495,7 @@ def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initF
   if _initFlag:
     _appendData = []
     _appendData.append([_id, _stiClass, _stiName, _idx, "image", _outPath.split(".")[1]+".png"])
-    _appendDF =pd.DataFrame(_appendData, columns=_appendColumns)
+    _appendDF = pd.DataFrame(_appendData, columns=_appendColumns)
     PATCH_DICTIONARY = PATCH_DICTIONARY.append(_appendDF, ignore_index=True)
   _featOutPath = _outStandardDir+"/features"
   if not(os.path.exists(_featOutPath)):
@@ -782,11 +783,14 @@ def selectedPatchesUpdate():
     getPatchString = request.form['selectedPatches']
     # split and transfer type 
     _getPatches = getPatchString.split(",")
-    _selectedPatches = []
+    selectedPatches = []
     for i in range(0, int(len(_getPatches)/3)):
-      _selectedPatches.append([int(_getPatches[i*3]), int(_getPatches[i*3+1]), int(_getPatches[i*3+2])])
+      selectedPatches.append([int(_getPatches[i*3]), int(_getPatches[i*3+1]), int(_getPatches[i*3+2])])
     _accessPathSelectedPatch = "./static/access/selected_patch_table_index.json"
-    makeJSON(_accessPathSelectedPatch, _selectedPatches)    
+    makeJSON(_accessPathSelectedPatch, selectedPatches)
+    selectedPatchesDF = pd.DataFrame(selectedPatches, columns=['cluster', 'order', 'id'])
+    _selectedPatchesAccessPath = "./static/access/selected_patch_table_index.csv"
+    selectedPatchesDF.to_csv(_selectedPatchesAccessPath, mode='w', index=False)
     
     response['status'] = 'success'
   except Exception as e:
@@ -859,6 +863,115 @@ def patchSelectFeature():
     
     _accessUpdatedPatchDataPath = "./static/access/patchTable_sorting_update.json"
     makeJSON(_accessUpdatedPatchDataPath, patchDivByCluSorting)
+
+    # make list for saving csv
+    patchDivByCluSortingCSV = []
+    for _clu in patchDivByCluSorting:
+      for _p in _clu:
+        patchDivByCluSortingCSV.append(_p)
+    patchDivByCluSortingDF = pd.DataFrame(patchDivByCluSortingCSV, columns=['cluster', 'id', 'value', 'old', 'current'])
+    print("patchDivByCluSortingDF")
+    _patchDivByCluSortingAccessPath = "./static/access/patchTable_sorting_update.csv"
+    patchDivByCluSortingDF.to_csv(_patchDivByCluSortingAccessPath, mode='w', index=False)
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
+
+# Structural Similarity Index
+def similaritySSIM(_select, _target):
+  score = SSIM(_select, _target, data_range=_target.max()-_target.min())
+  return score
+
+# Mean Square Error
+def similarityMSE(_select, _target):
+  return 0
+
+# Peak Signal-to-Noise Ratio
+def similarityPSNR(_select, _target):
+  return 0
+
+def similarityCalculation(_method, _matSelected, _matTarget):
+  res = 0
+  if _method == "SSIM":
+    print(_method)
+    res = similaritySSIM(_matSelected, _matTarget)
+  elif _method == "MSE":
+    print(_method)
+    res = similarityMSE(_matSelected, _matTarget)
+  elif _method == "PSNR":
+    print(_method)
+    res = similarityPSNR(_matSelected, _matTarget)
+  else:
+    print("Wrong similarity calculation method")
+  return res
+
+
+# from pages/Data.js
+@app.route('/api/data/similarity',  methods=['POST'])
+def similarityProcess():
+  response = {}
+  try:
+    print(request.form)
+    getSelectedFeature = int(request.form['selectedFeature'])
+    selectedFeatureType = FEATURE_DEFINE[getSelectedFeature][2]
+    similarityMethod = request.form['selectedSimilarityOption']
+    # get selected pathces
+    _selectedPatchesAccessPath = "./static/access/selected_patch_table_index.csv"
+    selectedPatchesDF = pd.read_csv(_selectedPatchesAccessPath)
+    # get selected pacthes id
+    selectedPatchIDList = selectedPatchesDF[['id']].values.tolist()
+    # get last selected patch id
+    selectedPatchID = selectedPatchIDList[len(selectedPatchIDList)-1][0]
+    
+    # read patch data on patchTable
+    _patchOnTablePath = "./static/access/patchTable_sorting_update.csv"
+    patchOnTableDF = pd.read_csv(_patchOnTablePath)
+    patchIdsOnTableDF = patchOnTableDF[['id']]
+    patchIdsOnTableList = []
+    for _v in patchIdsOnTableDF.values.tolist():
+      patchIdsOnTableList.append(_v[0])
+    
+    patchFeatureMatrixPathList = []
+    selectedPatchIndexInDF = 0
+    _idx = 0
+    for _id in patchIdsOnTableList:
+      _path = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"+FILTER_NAME+"/features/"+str(int(_id))+"/"+selectedFeatureType+".png"
+      _lastSelectedPatchFlag = False
+      if int(_id) == int(selectedPatchID):
+        selectedPatchIndexInDF = _idx
+        _lastSelectedPatchFlag = True
+      patchFeatureMatrixPathList.append([_path, int(_id), _lastSelectedPatchFlag])
+      _idx+=1
+    
+    similarityScores = []
+    selectedPatchFeature = cv2.imread(patchFeatureMatrixPathList[selectedPatchIndexInDF][0], cv2.IMREAD_GRAYSCALE)
+    for _row in patchFeatureMatrixPathList:
+      _selectedPatchFlag = _row[2]
+      # if target patch equals selected patch, continue the roop
+      if _selectedPatchFlag:
+        continue
+      _targetPath = _row[0]
+      targetPatchFeature = cv2.imread(_targetPath, cv2.IMREAD_GRAYSCALE)
+      # [id, score]
+      _score = similarityCalculation(similarityMethod, selectedPatchFeature, targetPatchFeature)
+      similarityScores.append([_row[1], _score])
+    similarityScoresDF = pd.DataFrame(similarityScores, columns=['id', 'score'])
+    _similarityScoresAccessPath = "./static/access/similarity_scores.csv"
+    similarityScoresDF.to_csv(_similarityScoresAccessPath, mode='w', index=False)
+    _similarityScoresAccessPath = "./static/access/similarity_scores.json"
+    makeJSON(_similarityScoresAccessPath, similarityScores)
+    
+    _list = similarityScoresDF.values.tolist()
+    _list.sort(reverse=True, key=lambda x:x[1])
+    _sortingDF = pd.DataFrame(_list, columns=['id', 'score'])
+    _sortingDF.dropna(inplace=True)
+    _similarityScoresAccessPath = "./static/access/similarity_scores_sorting.csv"
+    _sortingDF.to_csv(_similarityScoresAccessPath, mode='w', index=False)
 
     response['status'] = 'success'
   except Exception as e:
