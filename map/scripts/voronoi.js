@@ -2,36 +2,38 @@ const fs = require('fs');
 const path = require('path');
 const turf = require('@turf/turf');
 
-module.exports = function(place) {
-  const geojson = fs.readFileSync(path.resolve(__dirname, `../data/kr_${place}_osm.json`));
-  const geodata = JSON.parse(geojson);
-  let voronoi = turf.voronoi(geodata, {});
+module.exports = function(country, place) {
+  // OSM 데이터 로드
+  const osmJson = fs.readFileSync(path.resolve(__dirname, `../data/${country}_${place}_osm.geojson`));
+  const osmData = JSON.parse(osmJson);
 
-  /*const boundjson = fs.readFileSync(path.resolve(__dirname, '../data/kr_boundary.json'));
-  const bounddata = JSON.parse(boundjson);
-  const boundcoords = bounddata.features[0].geometry.coordinates;*/
+  // 보로노이 연산
+  let voronoi = turf.voronoi(osmData, {});
+
+  // 윤곽선 폴리곤 로드
+  const boundJson = fs.readFileSync(path.resolve(__dirname, `../data/${country}_boundary.geojson`));
+  const boundPolygon = JSON.parse(boundJson);
+  const boundCoords = boundPolygon.features[0].geometry.coordinates;
 
   const result = {
     type: 'FeatureCollection',
     features: []
   };
 
-  let from = process.argv[2];
-  let to = process.argv[3];
-  if (from == undefined || from < 0)
-    from = 0;
-  if (to == undefined || to > voronoi.features.length)
-    to = voronoi.features.length;
-
-  for (let i = from; i < to; i++) {
+  for (let i = 0; i < voronoi.features.length; i++) {
     if (!voronoi.features[i])
       continue;
 
+    // 보로노이와 윤곽선 교차 연산
+    //const voronoiIntersection = turf.intersect(voronoi.features[i], boundPolygon.features[0]);
+    //console.log(voronoiIntersection);
+
+    // properties 병합
     const feature = voronoi.features[i];
     feature.properties = {
       ...feature.properties,
-      ...geodata.features[i].properties,
-      osmcoord: geodata.features[i].geometry.coordinates
+      ...osmData.features[i].properties,
+      osmcoord: osmData.features[i].geometry.coordinates
     };
 
     /*const multipolygon = [];
@@ -53,6 +55,6 @@ module.exports = function(place) {
   }
 
   const output = JSON.stringify(result);
-  fs.writeFileSync(path.resolve(__dirname, `../data/kr_${place}_voronoi.json`), output, 'utf8');
-  console.log('[voronoi] input:', geodata.features.length, ' voronoi:', voronoi.features.length, ' output:', result.features.length);
+  fs.writeFileSync(path.resolve(__dirname, `../data/${country}_${place}_voronoi.geojson`), output, 'utf8');
+  console.log('[voronoi] input:', osmData.features.length, ' voronoi:', voronoi.features.length, ' output:', result.features.length);
 }
