@@ -18,7 +18,6 @@ from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 from skimage.metrics import structural_similarity as SSIM
-# from PIL import ImageColor
 from flask import *
 from flask_cors import CORS
 
@@ -512,7 +511,8 @@ def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initF
     _featPath = "./static/data/"+DATASET+"/feature/"+_featureType+"/"+_stiClass+"_"+_stiName+".csv"
     featDF = pd.read_csv(_featPath, header=None)
     featNP = featDF.to_numpy()
-    featTrain = MinMaxScaler().fit_transform(featNP)
+    # featTrain = MinMaxScaler().fit_transform(featNP)
+    minmaxNP = (featNP-featNP.min(axis=0)) / (featNP.max(axis=0) - featNP.min(axis=0))
     featTrain = np.abs(featTrain*255-255)
     _savePath = "./static/access/feature.png"
     cv2.imwrite(_savePath, featTrain)
@@ -692,8 +692,8 @@ def patchAnalysisStiFix():
     getPatchId = request.form['patchId']
     getStiClass = request.form['stimulusClass']
     getStiName = request.form['stimulusName']
-    getFixOrder = int(request.form['fixationOrder'])
-    getPatchClu = int(request.form['patchCluster'])
+    # getFixOrder = int(request.form['fixationOrder'])
+    # getPatchClu = int(request.form['patchCluster'])
     _stimulusPath = "./static/data/"+DATASET+"/stimulus/"+getStiClass+"/"+getStiName+".jpg"
     _accessStiPathJson = "./static/access/stimulus_path.json"
     makeJSON(_accessStiPathJson, _stimulusPath.split(".")[1]+".jpg")
@@ -727,20 +727,20 @@ def patchAnalysisStiFix():
     _patchLocationPath = "./static/access/stimulus_fixations.csv"
     _mmDF.to_csv(_patchLocationPath, mode='w', index=False)
 
-    _patchDirPath = "./static/access/PATCH_FEATURES/"
-    if os.path.isdir(_patchDirPath):
-      try:
-        shutil.rmtree(_patchDirPath)
-      except Exception as e:
-        print(e)
-    os.makedirs(os.path.join(_patchDirPath))
-    _featureDirPath = "./static/data/"+DATASET+"/feature/"
-    _featDirList = os.listdir(_featureDirPath)
-    print("_featDirList")
-    print(_featDirList)
-    _mmDF_list = _mmDF.values.tolist()
+    # _patchDirPath = "./static/access/PATCH_FEATURES/"
+    # if os.path.isdir(_patchDirPath):
+    #   try:
+    #     shutil.rmtree(_patchDirPath)
+    #   except Exception as e:
+    #     print(e)
+    # os.makedirs(os.path.join(_patchDirPath))
+    # _featureDirPath = "./static/data/"+DATASET+"/feature/"
+    # _featDirList = os.listdir(_featureDirPath)
+    # print("_featDirList")
+    # print(_featDirList)
+    # _mmDF_list = _mmDF.values.tolist()
+
     patchFeatureImagePath = []
-    
     _patchFeatureImageDirPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
     _patchFeatureImageDirPath = makePath_Filter(FILTER, FILTER_THRESHOLD, _patchFeatureImageDirPath)
     _patchFeatureImageDirPath = _patchFeatureImageDirPath+"/features/"+getPatchId+"/"
@@ -748,7 +748,6 @@ def patchAnalysisStiFix():
       _fType = FEATURE_DEFINE[i][2]
       _path = _patchFeatureImageDirPath+_fType+".png"
       patchFeatureImagePath.append(_path.split('.')[1]+".png")
-
     # for _feat in _featDirList:
     #   _featPath = "./static/data/"+DATASET+"/feature/"+_feat+"/"+getStiClass+"_"+getStiName+".csv"
     #   _featType = ""
@@ -771,7 +770,6 @@ def patchAnalysisStiFix():
     response['status'] = 'failed'
     response['reason'] = e
     print(e)
-  
   return json.dumps(response)
 
 # from components/PatchTable.js
@@ -797,7 +795,6 @@ def selectedPatchesUpdate():
     response['status'] = 'failed'
     response['reason'] = e
     print(e)
-  
   return json.dumps(response)
 
 # from components/PatchTable.js
@@ -883,6 +880,7 @@ def patchSelectFeature():
   return json.dumps(response)
 
 # Structural Similarity Index
+# https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similaritySSIM(_select, _target):
   score = SSIM(_select, _target, data_range=_target.max()-_target.min())
   return score
@@ -912,9 +910,79 @@ def similarityCalculation(_method, _matSelected, _matTarget):
     print("Wrong similarity calculation method")
   return res
 
+def splitDataset(_datasetPath, _splitRatio):
+  df = pd.read_csv(_datasetPath)
+  fixationCount = len(df.index)
+  splitCount = int(fixationCount*_splitRatio)
+  IDsDF = df[['id']]
+  IDsList = IDsDF.values.tolist() 
+  trainList = random.sample(IDsList, splitCount)
+  trainList.sort()
+  testList = []
+  for _id in IDsList:
+    _duplicateFlag = False
+    for _tid in trainList:
+      if _id == _tid:
+        _duplicateFlag = True
+        break
+    if _duplicateFlag:
+      continue
+    else:
+      testList.append(_id)
+  return trainList, testList
+
+# from pages/Data.js - Interaction: components/Heatmap.js
+@app.route('/api/data/dataRecord', methods=['POST'])
+def updateDataRecord():
+  response = {}
+  try:
+    # print(request.form)
+    # getSelectedFeature = int(request.form['selectedFeature'])
+    selected_stimulus_class_idx = []
+    for i in range(0, len(STI_CLASS_DEFINE)):
+      _dupFlag = True
+      _c = STI_CLASS_DEFINE[i][2]
+      for _rmStiClass in REMOVE_CLASSES:
+        if _c == _rmStiClass:
+          _dupFlag = False
+          break
+      if _dupFlag:
+        selected_stimulus_class_idx.append(i)
+    # print("/api/data/dataRecord selected stimulus")
+    # print(selected_stimulus_class_idx)
+    _all_fix_path = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"+FILTER_NAME+"/"+"all_fix.csv"
+    _afDF = pd.read_csv(_all_fix_path)
+    
+    selectedFixCount = 0
+    if len(selected_stimulus_class_idx) == len(STI_CLASS_DEFINE):
+      selectedFixCount = len(_afDF)
+      # print("if: selectedFixCount: %d"%selectedFixCount)
+    else:
+      for _cIdx in selected_stimulus_class_idx:
+        # print(STI_CLASS_DEFINE[_cIdx][2])
+        is_class = _afDF['stimulusClass'] == STI_CLASS_DEFINE[_cIdx][1]
+        _cDF = _afDF[is_class]
+        selectedFixCount += len(_cDF)
+      # print("else: selectedFixCount: %d"%selectedFixCount)
+    record_train = int(selectedFixCount*0.7)
+    record_test = int(selectedFixCount-record_train)
+    if record_train == 0:
+      record_test = 0
+    
+    response['status'] = 'success'
+    response['datarecord'] = {
+      'train': str(record_train),
+      'test': str(record_test)
+    }
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
 
 # from pages/Data.js
-@app.route('/api/data/similarity',  methods=['POST'])
+@app.route('/api/data/similarity', methods=['POST'])
 def similarityProcess():
   response = {}
   try:
@@ -1137,14 +1205,14 @@ def corrProcess():
     # Min-max
     # z-score
     # Yeo-Johnson
-    yjTranform = transformYeoJohnson(filteredFeatDf, selectedFeature)
+    transformData = transformYeoJohnson(filteredFeatDf, selectedFeature)
     print("Yeo-Johnson")
-    # print(yjTranform)
+    # print(transformData)
     # MDS
     # PCA
     # ICA
     # t-SNE
-    tsneAnalysis = analysisTSNE(100, yjTranform, selectedFeature)
+    tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
     print("Yeo-Johnosn, t-SNE result: numpy")
     # print(tsneAnalysis)
     yj_tsne_df_coordinates = pd.DataFrame(tsneAnalysis, columns=["x","y"])
@@ -1157,7 +1225,7 @@ def corrProcess():
     makeJSON(accessPath_YJ_TSNE_json, accessPath_YJ_TSNE.split(".")[1]+".csv")
     # k-means
     kmeans = KMeans(n_clusters=5)
-    kmeans.fit(yjTranform[yjTranform.columns.difference(['id'])])
+    kmeans.fit(transformData[transformData.columns.difference(['id'])])
     kmeans_labels = kmeans.labels_
     kmeans_lebels_df = pd.DataFrame(kmeans_labels, columns=['clu'])
     scatterWithLabel = pd.merge(yj_tsne_df, kmeans_lebels_df, left_index=True, right_index=True)
@@ -1215,7 +1283,6 @@ def selectedAxis():
     print(e)
   
   return json.dumps(response)
-
 
 @app.route('/api/heatmap/removefilter', methods=['POST'])
 def removefilter():
