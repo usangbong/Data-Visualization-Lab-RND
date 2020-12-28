@@ -29,9 +29,11 @@ const correlationMethods = [
   { value:'kendall', label: 'Kendall rank-order' }
 ];
 const dataTransformation = [
+  { value:'raw', label: 'Raw data' },
   { value:'min_max', label: 'Min-max' },
   { value:'z_score', label: 'z-score' },
-  { value:'yeo_johonson', label: 'Yeo-Johonson' }
+  { value:'yeo_johonson', label: 'Yeo-Johonson' },
+  { value:'yeo_johonson_min_max', label: 'Yeo-Johonson + Min-max' }
 ];
 const dimensionalityReduction = [
   { value:'MDS', label: 'MDS (Multi Dimensional Scaling)' },
@@ -42,6 +44,7 @@ const dimensionalityReduction = [
 const clusteringAlgorithm = [
   { value:'random_forest', label: 'RandomForest' },
   { value:'dbscan', label: 'DBSCAN' },
+  { value:'hdbscan', label: 'hDBSCAN' },
   { value:'k_means', label: 'k-Means' }
 ];
 const patchSelectOption = [
@@ -96,6 +99,9 @@ class Data extends React.Component {
       selectedPatchSelectOption: null,
       selectedSimilarityOption: null,
       datasetRecord: [{train: '0', test: '0'}],
+      selectedDataTransformation: null,
+      selectedDimensionReduction: null,
+      selectedClusteringAlgorithm: null,
     };
   }
 
@@ -586,8 +592,6 @@ class Data extends React.Component {
     .then(response => {
       if (response.data.status === 'success') {
         // update data record
-        console.log('response.data.datarecord');
-        console.log("train: "+response.data.datarecord.train+", test: "+response.data.datarecord.test);
         let _rec = [{
           train: response.data.datarecord.train,
           test: response.data.datarecord.test
@@ -602,156 +606,6 @@ class Data extends React.Component {
       alert(`Error - ${error.message}`);
     });
   }
-
-  // selectedPatchUpdate_clickPatch = () =>{
-  //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
-  //   .then(response => {
-  //     // console.log("get selected patches table index");
-  //     // get selected patches table index
-  //     let _getData = response.data;
-  //     this.setState({
-  //       selectedPatchesTableIndex: _getData
-  //     });
-  //     // set last selected patch table index
-  //     let _lastSelectedPatch = _getData[_getData.length-1]
-  //     this.setState({
-  //       lastSelectedPatchTableIndex: _lastSelectedPatch
-  //     });
-  //     // change Stimulus and Patch image
-  //     // set patch url
-  //     let _lastSelectedPatchIndex = this.state.selectedPatchIndex;
-  //     let _joinData = this.state.joinData;
-  //     let _lastSelectedPatchID = _joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].id;
-  //     let _patchURLs = this.state.patchURLs;
-  //     let _lastSelectedIndex = this.state.selectedPatchIndex;
-  //     let _lpPath = "";
-  //     let _patchId = 0;
-  //     for(let i=0; i<_patchURLs.length; i++){
-  //       if(_patchURLs[i][0] == _lastSelectedPatchID){
-  //         _patchId = _patchURLs[i][0];
-  //         _lpPath = _patchURLs[i][1];
-  //         _lastSelectedIndex=i;
-  //         this.setState({
-  //           selectedPatchIndex: _lastSelectedIndex
-  //         });
-  //         this.setState({
-  //           selectedPatchId: _patchId
-  //         });
-  //         break;
-  //       }
-  //     }
-  //     let _stiClass = _lpPath.split("/")[8];
-  //     let _stiName = _lpPath.split("/")[9];
-  //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
-  //     this.setState({
-  //       selectedPatchOrder: _fixOrder
-  //     });
-  //     let _patchClu = parseInt(_joinData[_lastSelectedPatch[0]][_lastSelectedPatch[1]].clu);
-  //     this.setState({
-  //       selectedPatchCluster: _patchClu
-  //     });
-  //     const _data = new FormData();
-  //     _data.set('patchId', _patchId);
-  //     _data.set('stimulusClass', _stiClass);
-  //     _data.set('stimulusName', _stiName);
-  //     _data.set('fixationOrder', _fixOrder);
-  //     _data.set('patchCluster', _patchClu);
-  //     axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
-  //       .then(response => {
-  //         if (response.data.status === 'success') {
-  //           // load stimulus and inner fixation location with id
-  //           this.loadStimulusFixation();
-  //           // load patch feature image urls
-  //           this.loadPatchFeatureImageURLs();
-  //         } else if (response.data.status === 'failed') {
-  //           alert(`Failed to load data - ${response.data.reason}`);
-  //         }
-  //       }).catch(error => {
-  //         alert(`Error - ${error.message}`);
-  //     });
-  //     // make stimulus path
-  //     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
-  //     .then(response => {
-  //       this.setState({
-  //         stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
-  //       });
-  //     });
-  //   });
-  // }
-
-  // selectedPatchUpdate_clickFeat = () =>{
-  //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
-  //   .then(response => {
-  //     // console.log("get selected patches table index");
-  //     // get selected patches table index
-  //     let _getData = response.data;
-  //     this.setState({
-  //       selectedPatchesTableIndex: _getData
-  //     });
-  //     // set last selected patch table index
-  //     let _lastSelectedPatch = _getData[_getData.length-1]
-  //     this.setState({
-  //       lastSelectedPatchTableIndex: _lastSelectedPatch
-  //     });
-  //     // change Stimulus and Patch image
-  //     // set patch url
-  //     let _lastSelectedPatchID = _lastSelectedPatch[2];
-  //     let _patchURLs = this.state.patchURLs;
-  //     let _lastSelectedIndex = this.state.selectedPatchIndex;
-  //     let _lpPath = "";
-  //     let _patchId = 0;
-  //     for(let i=0; i<_patchURLs.length; i++){
-  //       if(_patchURLs[i][0] == _lastSelectedPatchID){
-  //         _patchId = _patchURLs[i][0];
-  //         _lpPath = _patchURLs[i][1];
-  //         _lastSelectedIndex=i;
-  //         this.setState({
-  //           selectedPatchIndex: _lastSelectedIndex
-  //         });
-  //         this.setState({
-  //           selectedPatchId: _patchId
-  //         });
-  //         break;
-  //       }
-  //     }
-  //     let _stiClass = _lpPath.split("/")[8];
-  //     let _stiName = _lpPath.split("/")[9];
-  //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
-  //     this.setState({
-  //       selectedPatchOrder: _fixOrder
-  //     });
-  //     let _patchClu = parseInt(_lastSelectedPatch[0]);
-  //     this.setState({
-  //       selectedPatchCluster: _patchClu
-  //     });
-  //     const _data = new FormData();
-  //     _data.set('patchId', _patchId);
-  //     _data.set('stimulusClass', _stiClass);
-  //     _data.set('stimulusName', _stiName);
-  //     _data.set('fixationOrder', _fixOrder);
-  //     _data.set('patchCluster', _patchClu);
-  //     axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
-  //       .then(response => {
-  //         if (response.data.status === 'success') {
-  //           // load stimulus and inner fixation location with id
-  //           this.loadStimulusFixation();
-  //           // load patch feature image urls
-  //           this.loadPatchFeatureImageURLs();
-  //         } else if (response.data.status === 'failed') {
-  //           alert(`Failed to load data - ${response.data.reason}`);
-  //         }
-  //       }).catch(error => {
-  //         alert(`Error - ${error.message}`);
-  //     });
-  //     // make stimulus path
-  //     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
-  //     .then(response => {
-  //       this.setState({
-  //         stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
-  //       });
-  //     });
-  //   });
-  // }
 
   selectedPatchUpdate = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
@@ -903,10 +757,6 @@ class Data extends React.Component {
         this.loadCorrMatrixPath();
         // load selected features define
         this.loadSelectedFeatureDefine();
-        // load scatter plot url
-        this.loadScatterPlotURL();
-        // load all patches url
-        this.loadPatchURLs();
       } else if (response.data.status === 'failed') {
         alert(`Failed apply data pre-processing and correlation methods - ${response.data.reason}`);
       }
@@ -931,9 +781,42 @@ class Data extends React.Component {
     });
   }
 
+  dataTransformationOptionChanged = selectedDataTransformation =>{
+    this.setState({selectedDataTransformation});
+  }
+
+  dimensionReductionOptionChanged = selectedDimensionReduction =>{
+    this.setState({selectedDimensionReduction});
+  }
+
+  clusteringAlgorithmOptionChanged = selectedClusteringAlgorithm =>{
+    this.setState({selectedClusteringAlgorithm});
+    
+    if(selectedClusteringAlgorithm.value == "random_forest"){
+      let _dataTransformationMethod = this.state.selectedDataTransformation.value;
+      let _dimensionReductionMethod = this.state.selectedDimensionReduction.value;
+      let _clusteringMethod = selectedClusteringAlgorithm.value;
+      const data = new FormData();
+      data.set('selectedTransformationOption', _dataTransformationMethod);
+      data.set('selectedDimensionReductionOption', _dimensionReductionMethod);
+      data.set('selectedClusteringOption', _clusteringMethod);
+      axios.post(`http://${window.location.hostname}:5000/api/data/tfrmcluProcessing`, data)
+      .then(response => {
+        // console.log("data transformation applied");
+        // load scatter plot url
+        this.loadScatterPlotURL();
+        // load all patches url
+        this.loadPatchURLs();
+      }).catch(error => {
+        alert(`Error - ${error.message}`);
+      });
+    }
+  }
+
   render() {
     const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName, selectedProcessMethod, selectedCorrelationMethod } = this.state;
     const { spHeatmapDataURL, corrMatDataURL, datasetRecord } = this.state;
+    const { selectedDataTransformation, selectedDimensionReduction, selectedClusteringAlgorithm } = this.state;
     const { feature_define, sti_class_define } = this.state;
     const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
     const { patchURLs, numCluster, patchData } = this.state;
@@ -1056,14 +939,20 @@ class Data extends React.Component {
           <h4> Clustering result 1 </h4>
         </div>
         <Select
+          value={selectedDataTransformation}
+          onChange={this.dataTransformationOptionChanged}
           options={dataTransformation}
           placeholder="Data transformation"
         />
         <Select
+          value={selectedDimensionReduction}
+          onChange={this.dimensionReductionOptionChanged}
           options={dimensionalityReduction}
           placeholder="Dimensionality reduction"
         />
         <Select
+          value={selectedClusteringAlgorithm}
+          onChange={this.clusteringAlgorithmOptionChanged}
           options={clusteringAlgorithm}
           placeholder="Clustering algorithm"
         />
