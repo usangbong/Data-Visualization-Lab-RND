@@ -1,0 +1,183 @@
+﻿Entity code,Entity name,Entity abbreviation,Entity theme,Entity coverage,Related entity codes,Status,Number of live instances,Number of archived instances,Number of cross-border instances,Date of last instance change,Current code (first in range),Current code (last in range),Reserved code (for CHD use),Entity owner,Date entity introduced on RGC,Entity start date
+E92,Country,CTRY,Administrative,England,"W92, S92, N92, L93, M83",Current,1,0,0,n/a,E92000001,E92000001,E92999999,ONS,01/01/2009,01/01/2009
+E00,Output Areas,OA,Statistical Building Block,England,"W00, S00, N00",Current,"171,372","7,582",0,31/12/2011,E00000001,E00176774,E00999999,ONS,01/01/2009,01/01/2009
+E01,"Super Output Areas, Lower Layer",LSOA,Statistical Building Block,England,"W01, S01",Current,"32,844","1,357",0,31/12/2011,E01000001,E01033768,E01999999,ONS,01/01/2009,01/01/2003
+E02,"Super Output Areas, Middle Layer",MSOA,Statistical Building Block,England,"W02, S02",Current,"6,791",141,0,31/12/2011,E02000001,E02006934,E02999999,ONS,01/01/2009,01/01/2003
+E04,Civil Parishes,PAR,Administrative,England,n/a,Current,"10,464","3,229",0,01/04/2019,E04000001,E04012987,E04999999,MHCLG,01/01/2009,01/01/2009
+E05,Electoral Wards/Divisions,WD,Administrative/Electoral,England,"W05, S13, N08",Current,"7,219","6,227",0,02/05/2019,E05000026,E05012989,E05999999,MHCLG,01/01/2009,01/01/2009
+E06,Unitary Authorities,UA,Administrative,England,n/a,Current,56,3,0,01/04/2019,E06000001,E06000059,E06999999,MHCLG,01/01/2009,01/01/2009
+E07,Non-metropolitan Districts,NMD,Administrative,England,n/a,Current,192,55,0,01/04/2019,E07000004,E07000246,E07999999,MHCLG,01/01/2009,01/01/2009
+E08,Metropolitan Districts,MD,Administrative,England,n/a,Current,36,1,0,01/04/2013,E08000001,E08000037,E08999999,MHCLG,01/01/2009,01/01/2009
+E09,London Boroughs,LONB,Administrative,England,n/a,Current,33,0,0,n/a,E09000001,E09000033,E09999999,MHCLG,01/01/2009,01/01/2009
+E10,Counties,CTY,Administrative,England,n/a,Current,26,8,0,01/04/2019,E10000002,E10000034,E10999999,MHCLG,01/01/2009,01/01/2009
+E11,Metropolitan Counties,MCTY,Administrative,England,n/a,Current,6,1,0,01/04/2013,E11000001,E11000007,E11999999,MHCLG,01/01/2009,01/01/2009
+E12,Regions,RGN,Administrative,England,n/a,Current,9,0,0,n/a,E12000001,E12000009,E12999999,ONS,01/01/2009,01/01/2009
+E13,Inner and Outer London,IOL,Statistical Building Block,England,n/a,Current,2,0,0,n/a,E13000001,E13000002,E13999999,MHCLG,01/01/2009,01/01/2009
+E14,Westminster Parliamentary Constituencies,WPC,Electoral,England,"W07, S14, N06",Current,533,529,0,06/05/2010,E14000530,E14001062,E14999999,LGBC,01/01/2009,01/01/2009
+E15,European Electoral Regions,EER,Electoral,England,"W08, S15, N07",Current,9,0,0,n/a,E15000001,E15000009,E15999999,ONS,01/01/2009,01/01/2009
+E16,Primary Care Trusts,PCT,Health,England,n/a,Archived,0,151,0,31/03/2013,E16000001,E16000151,E16999999,ODS,01/01/2009,01/01/2009
+E17,Care Trusts,CT,Health,England,n/a,Archived,0,6,0,31/03/2013,E17000001,E17000006,E17999999,ODS,01/01/2009,01/01/2009
+E18,Strategic Health Authorities,SHA,Health,England,"L00, M00",Archived,0,10,0,31/03/2013,E18000001,E18000010,E18999999,ODS,01/01/2009,01/01/2009
+E19,Pan Strategic Health Authorities,PSHA,Health,England,n/a,Archived,0,3,0,31/03/2013,E19000001,E19000003,E19999999,ODS,01/01/2009,01/01/2009
+E20,Cancer Registries,CANREG,Health,England,W12,Current,8,0,0,n/a,E20000001,E20000008,E20999999,PHE,01/01/2009,01/01/2009
+E21,Cancer Networks,CANNET,Health,England,W13,Archived,0,30,0,31/03/2013,E21000001,E21000030,E21999999,ODS,01/01/2009,01/01/2009
+E22,Community Safety Partnerships,CSP,Other,England,W14,Current,293,81,0,01/04/2016,E22000001,E22000374,E22999999,Home Office,01/01/2009,01/01/2009
+E23,Police Force Areas,PFA,Other,England,"W15, S23, N23",Current,39,0,0,n/a,E23000001,E23000039,E23999999,Home Office,01/01/2009,01/01/2009
+E24,Local Learning and Skills Council areas,LLSC,Other,England,n/a,Archived,0,47,0,31/03/2010,E24000001,E24000047,E24999999,ONS,01/01/2009,01/01/2009
+E25,Primary Urban Areas,PUA,Other,England,n/a,Current,56,0,0,n/a,E25000001,E25000056,E25999999,MHCLG,01/01/2009,01/01/2009
+E26,National Parks,NPARK,Other,England,"W18, S21",Current,10,2,0,01/08/2016,E26000001,E26000012,E26999999,Natural England,01/01/2009,01/01/2009
+E27,New Deal for Communities,NDC,Other,England,n/a,Archived,0,39,0,31/03/2011,E27000001,E27000039,E27999999,MHCLG,01/01/2009,01/01/2009
+E28,Registration Districts,REGD,Other,England,W20,Current,151,70,0,01/04/2019,E28000001,E28000221,E28999999,ONS,01/01/2009,01/01/2009
+E29,Registration Sub-district,REGSD,Other,England,W21,Current,151,83,0,01/04/2019,E29000001,E29000233,E29999999,ONS,01/01/2009,01/01/2009
+E30,Travel to Work Areas,TTWA,Other,England,"W22, S22, N12, K01",Current,149,206,6,31/07/2015,E30000004,E30000294,E30999999,ONS,01/01/2009,01/01/2009
+E31,Fire and Rescue Authorities,FRA,Other,England,"W25, S38, N31",Current,45,10,0,01/08/2016,E31000001,E31000047,E31999999,MHCLG,01/01/2009,01/01/2009
+E32,London Assembly Constituencies,LAC,Electoral,England,n/a,Current,14,0,0,n/a,E32000001,E32000014,E32999999,GLA,06/05/2009,04/05/2000
+E33,Workplace Zones,WZ,Census,England,"W35, S34, N19",Current,"50,868",0,0,n/a,E33000001,E33050868,E33999999,ONS,31/01/2013,31/12/2011
+E34,Built-up Areas,BUA,Census,England,"W37, K05",Current,"5,360",0,11,n/a,E34000001,E34005360,E34999999,ONS,27/06/2013,27/03/2011
+E35,Built-up Area sub-divisions,BUASD,Census,England,"W38, K06",Current,"1,662",0,4,n/a,E35000001,E35001672,E35999999,ONS,27/06/2013,27/03/2011
+E36,Census Merged Wards ,CMWD,Census,England,W39,Current,"7,678",0,0,n/a,E36000001,E36007678,E36999999,ONS,31/01/2013,31/12/2011
+E37,Local Enterprise Partnerships,LEP,Other,England,n/a,Current,38,4,0,01/04/2017,E37000001,E37000042,E37999999,BEIS,31/07/2012,11/03/2012
+E38,Clinical Commissioning Groups,CCG,Health,England,n/a,Current,191,554,0,01/04/2019,E38000001,E38000230,E38999999,ODS,01/04/2013,01/04/2013
+E39,"NHS England (Region, Local Office)",NHSRLO,Health,England,n/a,Current,14,41,0,01/04/2019,E39000018,E39000048,E39999999,ODS,01/04/2013,01/04/2013
+E40,NHS England Regions,NHSER,Health,England,n/a,Current,7,3,,01/04/2019,E40000003,E40000010,E40999999,ODS,01/04/2013,01/04/2013
+E41,Census Merged Local Authority Districts,CMLAD,Census,England,W40,Current,324,0,0,n/a,E41000001,E41000324,E41999999,ONS,01/04/2013,31/12/2011
+E42,Census Merged Counties,CMCTY,Census,England,n/a,Current,35,0,0,n/a,E42000056,E42000090,E42999999,ONS,01/04/2013,31/12/2011
+E43,Non-Civil Parished Areas,NCP,Census,England,n/a,Current,215,57,0,01/04/2019,E43000001,E43000272,E43999999,ONS,01/11/2013,31/12/2011
+E45,Public Health England Centres,PHEC,Health,England,n/a,Current,9,11,0,01/07/2015,E45000001,E45000020,E45999999,PHE,03/06/2014,01/04/2013
+E46,Public Health England Regions,PHEREG,Health,England,n/a,Current,4,0,0,n/a,E46000001,E46000004,E46999999,PHE,03/06/2014,01/04/2013
+E47,Combined Authorities,CAUTH,Administrative,England,n/a,Current,10,6,0,01/11/2018,E47000001,E47000011,E47999999,MHCLG,10/07/2015,15/04/2015
+E48,Local Resilience Forums,LRF,Other,England,W41,Current,38,4,0,01/09/2017,E48000001,E48000038,E48999999,MHCLG,23/07/2015,01/08/2015
+E49,Enterprise Zones,EZ,Other,England,n/a,Current,46,3,0,01/04/2018,E49000001,E49000047,E49999999,MHCLG,01/02/2016,13/01/2016
+E50,Waste Authorities,WA,Other,England,n/a,Current,9,2,0,01/04/2017,E50000001,E50000009,E50999999,DEFRA,22/04/2016,01/04/2016
+E51,Development Corporations,DC,Other,England,n/a,Current,4,1,0,01/08/2017,E51000001,E51000004,E51999999,MHCLG,22/04/2016,01/04/2016
+E52,LEP - overlapping part,LEPOP,Other,England,n/a,Current,15,1,0,01/04/2017,E52000001,E52000016,E52999999,BEIS,22/04/2016,01/04/2016
+E53,LEP - non overlapping part ,LEPNOP,Other,England,n/a,Current,18,3,0,01/04/2017,E53000001,E53000021,E53999999,BEIS,22/04/2016,01/04/2016
+E54,Sustainability and Transformation Partnerships,STP,Health,England,n/a,Current,42,8,0,01/04/2018,E54000005,E54000049,E54999999,NHS,22/04/2016,01/04/2016
+E55,Strategic Clinical Networks,SCN,Health,England,n/a,Current,12,2,0,03/04/2013,E55000001,E55000014,E55999999,ODS,01/09/2016,01/04/2013
+E56,Cancer Alliances,CAL,Health,England,n/a,Current,20,6,0,01/07/2019,E56000003,E56000025,E56999999,NHS,23/11/2016,01/09/2016
+E57,National Cancer Vanguards,NCV,Health,England,n/a,Archived,0,3,0,01/07/2019,E57000001,E57000003,E57999999,NHS,23/11/2016,01/09/2016
+E58,County Electoral Divisions,CED,Electoral,England,n/a,Current,"1,724",30,0,03/05/2018,E58000001,E58001754,E58999999,BCE,23/10/2017,04/05/2017
+E59,Integrated Care Systems,ICS,Health,England,n/a,Current,10,0,0,n/a,E59000001,E59000010,E59999999,NHS,15/05/2018,01/04/2018
+E60,Local Planning Authorities,LPA,Administrative,England,"N13, S44, W43",Current,330,0,0,n/a,E60000001,E60000330,E60999999,ONS,01/07/2019,01/04/2019
+E61,Greater London Authority,GLA,Administrative,England,n/a,Current,1,0,0,n/a,E61000001,E61000001,E61999999,ONS,01/07/2019,03/07/2000
+W92,Country,CTRY,Administrative,Wales,"E92, S92, N92, L93, M83",Current,1,0,0,n/a,W92000004,W92000004,W92999999,ONS,01/01/2009,01/01/2009
+W00,Output Areas,OA,Statistical Building Block,Wales,"E00, S00, N00",Current,"10,036",406,0,31/12/2011,W00000001,W00010265,W00999999,ONS,01/01/2009,01/01/2009
+W01,"Super Output Areas, Lower Layer",LSOA,Statistical Building Block,Wales,"E01, S01",Current,"1,909",99,0,31/12/2011,W01000001,W01001958,W01999999,ONS,01/01/2009,01/01/2003
+W02,"Super Output Areas, Middle Layer",MSOA,Statistical Building Block,Wales,"E02, S02",Current,410,20,0,31/12/2011,W02000001,W02000423,W02999999,ONS,01/01/2009,01/01/2003
+W03,"Super Output Areas, Upper Layer",USOA,Statistical Building Block,Wales,n/a,Current,94,3,0,31/12/2011,W03000001,W03000097,W03999999,WG (Data Unit),01/01/2009,01/01/2003
+W04,Communities,COM,Administrative,Wales,n/a,Current,877,161,0,01/04/2017,W04000001,W04001032,W04999999,WG (LGBC),01/01/2009,01/01/2009
+W05,Electoral Wards,WD,Administrative/Electoral,Wales,"E05, S13, N08",Current,852,267,0,01/04/2017,W05000041,W05001038,W05999999,WG (LGBC),01/01/2009,01/01/2009
+W06,Unitary Authorities,UA,Administrative,Wales,n/a,Current,22,2,0,01/01/2010,W06000001,W06000024,W06999999,WG (LGBC),01/01/2009,01/01/2009
+W07,Westminster Parliamentary Constituencies,WPC,Electoral,Wales,"E14, S14, N06",Current,40,40,0,06/05/2010,W07000041,W07000080,W07999999,WG (BC),01/01/2009,01/01/2009
+W08,European Electoral Regions,EER,Electoral,Wales,"E15, S15, N07",Current,1,0,0,n/a,W08000001,W08000001,W08999999,WG (BC),01/01/2009,01/01/2009
+W09,National Assembly for Wales Constituencies,NAWC,Electoral,Wales,n/a,Current,40,7,0,01/01/2012,W09000001,W09000047,W09999999,WG (BC),01/01/2009,01/01/2009
+W10,National Assembly for Wales Electoral Regions,NAWER,Electoral,Wales,n/a,Current,5,4,0,01/01/2012,W10000001,W10000009,W10999999,WG (BC),01/01/2009,01/01/2009
+W11,Local Health Boards,LHB,Health,Wales,n/a,Current,7,24,0,01/04/2019,W11000023,W11000031,W11999999,WG (Health),01/01/2009,01/01/2009
+W12,Cancer Registries,CANREG,Health,Wales,E20,Current,1,0,0,n/a,W12000001,W12000001,W12999999,ODS,01/01/2009,01/01/2009
+W13,Cancer Networks,CANNET,Health,Wales,E21,Current,2,2,0,01/04/2011,W13000001,W13000004,W13999999,ODS,01/01/2009,01/01/2009
+W14,Community Safety Partnerships,CSP,Other,Wales,E22,Current,21,3,0,16/01/2017,W14000001,W14000023,W14999999,Home Office,01/01/2009,01/01/2009
+W15,Police Force Areas,PFA,Other,Wales,"E23, S23, N23",Current,4,0,0,n/a,W15000001,W15000004,W15999999,Home Office,01/01/2009,01/01/2009
+W16,"Department for Children, Education, Lifelong Learning and Skills, WG",DCELLS,Other,Wales,n/a,Current,4,0,0,n/a,W16000001,W16000004,W16999999,WG (Educ),01/01/2009,01/04/2007
+W18,National Parks,NPARK,Other,Wales,"E26, S21",Current,3,0,0,n/a,W18000001,W18000003,W18999999,WG (Envt),01/01/2009,01/01/2009
+W19,National Assembly Economic Regions,NAER,Other,Wales,n/a,Current,4,0,0,n/a,W19000001,W19000004,W19999999,WG (Econ),01/01/2009,01/01/2009
+W20,Registration Districts,REGD,Other,Wales,E28,Current,22,19,0,13/06/2018,W20000001,W20000040,W20999999,ONS,01/01/2009,01/01/2009
+W21,Registration Sub-district,REGSD,Other,Wales,E29,Current,22,24,0,13/06/2018,W21000001,W21000045,W21999999,ONS,01/01/2009,01/01/2009
+W22,Travel to Work Areas,TTWA,Other,Wales,"E30, S22, N12, K01",Current,18,30,4,31/07/2015,W22000003,W22000034,W22999999,ONS,01/01/2009,01/01/2009
+W23,Spatial Plan Areas,SPA,Other,Wales,n/a,Current,6,0,0,n/a,W23000001,W23000006,W23999999,WG (Stats),01/01/2009,01/01/2009
+W24,Spatial Plan Sub-areas,SPSA,Other,Wales,n/a,Current,3,0,0,n/a,W24000001,W24000003,W24999999,WG (Stats),01/01/2009,01/01/2009
+W25,Fire and Rescue Authorities,FRA,Other,Wales,"E31, S38, N31",Current,3,0,0,n/a,W25000001,W25000003,W25999999,MHCLG,01/01/2009,01/01/2009
+W26,Strategic Regeneration Areas,SRA,Other,Wales,n/a,Current,7,0,0,01/01/2011,W26000001,W26000007,W26999999,WG (Econ),06/05/2010,01/01/2010
+W27,Strategic Regeneration Sub-areas,SRASub,Other,Wales,n/a,Current,2,0,0,n/a,W27000001,W27000002,W27999999,WG (Econ),06/05/2010,01/01/2010
+W28,Transport Consortia Areas,TCA,Other,Wales,n/a,Current,4,0,0,n/a,W28000001,W28000004,W28999999,WG (Econ),06/05/2010,01/01/2009
+W29,Agricultural Regions,AgricReg,Other,Wales,n/a,Current,7,0,0,n/a,W29000001,W29000007,W29999999,WG (Stats),31/10/2010,01/01/2009
+W30,Agricultural Small Areas,AgricSmall,Other,Wales,n/a,Current,235,0,0,n/a,W30000001,W30000235,W30999999,WG (Stats),31/10/2010,01/01/2009
+W31,Non-National Park Area,NonNPARK,Other,Wales,n/a,Current,1,0,0,n/a,W31000001,W31000001,W31999999,WG (Envt),31/10/2010,01/01/2009
+W32,Non-Strategic Regeneration Area,NonSRA,Other,Wales,n/a,Current,1,0,0,n/a,W32000001,W32000001,W32999999,WG (Econ),31/10/2010,01/01/2010
+W33,Communities First Areas,CFA,Other,Wales,n/a,Current,52,153,0,01/04/2013,W33000154,W33000205,W33999999,WG (Econ),01/01/2011,01/01/2009
+W34,Non-Communities First Areas,NonCFA,Other,Wales,n/a,Current,1,1,0,01/04/2013,W34000002,W34000002,W34999999,WG (Econ),01/01/2011,01/01/2009
+W35,Workplace Zones,WZ,Census,Wales,"E33, S34, N19",Current,"2,710",0,0,n/a,W35000001,W35002710,W35999999,ONS,31/01/2013,31/12/2011
+W36,Footprint Regions for Public Service Collaboration,PSCReg,Administrative,Wales,n/a,Current,6,0,0,n/a,W36000001,W36000006,W36999999,WG,01/09/2011,01/09/2011
+W37,Built-up Areas,BUA,Census,Wales,"E34, K05",Current,459,0,11,n/a,W37000001,W37000459,W37999999,ONS,27/06/2013,27/03/2011
+W38,Built-up Area sub-divisions,BUASD,Census,Wales,"E35, K06",Current,160,0,4,n/a,W38000001,W38000160,W38999999,ONS,27/06/2013,27/03/2011
+W39,Census Merged Wards,CMWD,Census,Wales,E36,Current,868,0,0,n/a,W39000001,W39000868,W39999999,ONS,31/01/2013,31/12/2011
+W40,Census Merged Local Authority Districts,CMLAD,Census,Wales,E41,Current,22,0,0,n/a,W40000001,W40000022,W40999999,ONS,01/04/2013,31/12/2011
+W41,Local Resilience Forums,LRF,Other,Wales,E48,Current,4,0,0,n/a,W41000001,W41000004,W41999999,MHCLG,23/07/2015,01/08/2015
+W42,City Regions,CREG,Other,Wales,n/a,Current,4,0,0,n/a,W42000001,W42000004,W42999999,WG (Econ),05/07/2018,01/07/2018
+W43,Local Planning Authorities,LPA,Administrative,Wales,"E60, N13, S44",Current,25,0,0,n/a,W43000001,W43000025,W43999999,ONS,01/07/2019,01/04/2019
+S92,Country,CTRY,Administrative,Scotland,"E92, W92, N92, L93, M83",Current,1,0,0,n/a,S92000003,S92000003,S92999999,ONS,01/01/2009,01/01/2009
+S00,Output Areas,OA,Statistical Building Block,Scotland,"E00, W00, N00",Current,"46,351","42,604",0,27/03/2011,S00088956,S00135306,S00999999,NRS,01/01/2009,01/01/2001
+S01,Data Zones,DZ,Statistical Building Block,Scotland,"E01, W01",Current,"6,976","6,505",0,06/11/2014,S01000001,S01013481,S01999999,SG,01/01/2009,01/02/2004
+S02,Intermediate Zones,IZ,Statistical Building Block,Scotland,"E02, W02",Current,"1,279","1,259",0,06/11/2014,S02000001,S02002514,S02999999,SG,01/01/2009,01/02/2005
+S03,Community Health Partnerships,CHP,Health,Scotland,n/a,Archived,0,44,0,31/03/2015,S03000001,S03000044,S03999999,SG,01/01/2009,01/04/2005
+S04,Regeneration Outcome Agreement Areas - Scotland,ROAS,Housing and Regeneration,Scotland,n/a,Current,1,0,0,n/a,S04000001,S04000001,S04999999,SG,01/01/2009,31/03/2006
+S05,Regeneration Outcome Areas - Community Planning Partnerships,ROAC,Housing and Regeneration,Scotland,n/a,Current,28,0,0,n/a,S05000001,S05000028,S05999999,SG,01/01/2009,31/03/2006
+S06,Regeneration Outcome Areas - Local Areas,ROAL,Housing and Regeneration,Scotland,n/a,Current,180,0,0,n/a,S06000001,S06000180,S06999999,SG,01/01/2009,31/03/2006
+S07,Regional Transport Partnerships,RTP,Transport,Scotland,n/a,Current,7,0,0,n/a,S07000001,S07000007,S07999999,SG,01/01/2009,01/12/2005
+S08,Health Board areas,HB,Health,Scotland,n/a,Current,14,18,0,01/04/2019,S08000015,S08000032,S08999999,SG,01/01/2009,01/04/1974
+S09,Enterprise Regions,ER,Economic,Scotland,n/a,Current,6,0,0,n/a,S09000001,S09000006,S09999999,SE,01/01/2009,26/09/2007
+S10,Urban Regeneration Companies,URC,Economic,Scotland,n/a,Current,6,0,0,n/a,S10000001,S10000006,S10999999,SG,01/01/2009,01/06/2004
+S11,Strategic Development Plan Areas,SDPA,Administrative,Scotland,n/a,Current,4,0,0,n/a,S11000001,S11000004,S11999999,SG,01/01/2009,25/06/2008
+S12,Council Areas,CA,Administrative,Scotland,n/a,Current,32,12,0,01/04/2019,S12000005,S12000050,S12999999,LGBC,01/01/2009,01/04/1996
+S13,Electoral Wards,WD,Administrative/Electoral,Scotland,"E05, W05, N08",Current,354,416,0,01/04/2019,S13002516,S13003134,S13999999,LGBC,01/01/2009,05/05/1994
+S14,Westminster Parliamentary Constituencies,WPC,Electoral,Scotland,"E14, W07, N06",Current,59,0,0,n/a,S14000001,S14000059,S14999999,LGBC,01/01/2009,10/02/2005
+S15,European Electoral Regions,EER,Electoral,Scotland,"N07, E15, W08",Current,1,0,0,n/a,S15000001,S15000001,S15999999,LGBC,01/01/2009,01/05/1999
+S16,Scottish Parliamentary Constituencies ,SPC,Electoral,Scotland,n/a,Current,73,92,0,05/05/2016,S16000074,S16000148,S16999999,LGBC,01/01/2009,19/11/1998
+S17,Scottish Parliamentary Regions,SPR,Electoral,Scotland,n/a,Current,8,10,0,05/05/2016,S17000009,S17000018,S17999999,LGBC,01/01/2009,19/11/1998
+S19,Localities,LOC,Other,Scotland,n/a,Current,655,1272,0,12/03/2018,S19001273,S19001927,S19999999,NRS,01/01/2009,24/05/2012
+S20,Settlements,SETT,Other,Scotland,n/a,Current,519,1018,0,12/03/2018,S20001019,S20001537,S20999999,NRS,01/01/2009,24/05/2012
+S21,National Parks,NPARK,Other,Scotland,"E26, W18",Current,2,1,0,02/10/2010,S21000002,S21000003,S21999999,SG,01/01/2009,25/04/2002
+S22,Travel to Work Areas,TTWA,Other,Scotland,"E30, N12, W22, K01",Current,45,60,2,31/07/2015,S22000005,S22000086,S22999999,ONS,01/01/2009,01/09/2007
+S23,Police Force Areas,PFA,Other,Scotland,"E23, W15, N23",Current,1,8,0,01/04/2013,S23000009,S23000009,S23999999,SG,01/01/2009,16/05/1975
+S24,Highlands and Islands Enterprise,HIE,Economic,Scotland,n/a,Current,8,0,0,n/a,S24000001,S24000008,S24999999,HIE,01/01/2009,01/11/2008
+S25,Community Justice Authorities,CJA,Other,Scotland,n/a,Current,8,0,0,n/a,S25000001,S25000008,S25999999,SG,01/01/2009,03/04/2006
+S26,Community Health Partnerships sub-areas,CHCP,Health,Scotland,n/a,Archived,0,38,0,31/03/2015,S26000001,S26000038,S26999999,SG,01/11/2013,22/03/2011
+S27,ISD Health Board of Treatment,ISDT,Health,Scotland,n/a,Current,2,0,0,n/a,S27000001,S27000002,S27999999,NHS,01/11/2013,05/12/2011
+S28,Census Detailed Characteristics,CDC,Census,Scotland,n/a,Current,866,0,0,n/a,S28000001,S28000866,S28999999,NRS,01/11/2013,27/03/2011
+S29,Census Local Characteristics,CLC,Census,Scotland,n/a,Current,"1,012",0,0,n/a,S29000001,S29001012,S29999999,NRS,01/11/2013,27/03/2011
+S30,Local Administrative Units 1,LAU1,Administrative,Scotland,n/a,Current,41,12,0,07/05/2019,S30000003,S30000053,S30999999,SG,01/11/2013,01/01/2008
+S31,Local Administrative Units 2,LAU2,Administrative,Scotland,n/a,Current,1229,0,0,n/a,S31000001,S31001229,S31999999,SG,01/11/2013,01/01/2008
+S32,Scottish Police Divisions,SPD,Other,Scotland,n/a,Current,13,6,0,01/04/2019,S32000003,S32000019,S32999999,SG,01/11/2013,01/04/2013
+S33,Broad Rental Market Areas,BRMA,Housing and Regeneration,Scotland,n/a,Current,18,0,0,n/a,S33000001,S33000018,S33999999,SG,09/07/2015,05/01/2009
+S34,Workplace Zones,WZ,Census,Scotland,"E33, W35, N19",Current,"5,375",0,0,n/a,S34000001,S34005375,S34999999,NRS,20/10/2016,31/12/2011
+S35,Civil Parish,CVP,Administrative,Scotland,n/a,Archived,0,871,0,16/05/1930,S35000001,S35000871,S35999999,NRS,01/02/2016,15/05/1892
+S36,Island Groups,ISLG,Other,Scotland,n/a,Current,57,0,0,n/a,S36000001,S36000057,S36999999,NRS,01/02/2016,15/08/2013
+S37,Integration Authorities,HIA,Health,Scotland,n/a,Current,31,4,0,01/04/2019,S37000001,S37000035,S37999999,NHS,01/02/2016,01/04/2016
+S38,Scottish Fire and Rescue Service,SFRS,Other,Scotland,"E31, W25, N31",Current,1,0,0,n/a,S38000001,S38000001,S38999999,SG,01/02/2016,01/04/2013
+S39,Scottish Fire and Rescue Local Senior Officer Areas,SFRLSO,Other,Scotland,n/a,Current,17,4,0,01/04/2019,S39000001,S39000021,S39999999,SG,01/02/2016,01/04/2013
+S40,Scottish Fire and Rescue Service Delivery Areas,SFRSDA,Other,Scotland,n/a,Current,3,2,0,02/02/2018,S40000003,S40000005,S40999999,SG,01/02/2016,01/04/2013
+S41,Scottish Marine Regions,SMR,Other,Scotland,n/a,Current,11,0,0,n/a,S41000001,S41000011,S41999999,MS,31/12/2018,13/05/2015
+S42,Scottish Local Resilience Partnerships,SLRP,Other,Scotland,n/a,Current,12,0,0,n/a,S42000001,S42000012,S42999999,SG,01/07/2019,01/04/2019
+S43,Scottish Regional Resilience Partnerships,SRRP,Other,Scotland,n/a,Current,3,0,0,n/a,S43000001,S43000003,S43999999,SG,01/07/2019,01/04/2019
+S44,Local Planning Authorities,LPA,Administrative,Scotland,"E60, N13, W43",Current,34,0,0,n/a,S44000001,S44000034,S44999999,ONS,01/07/2019,01/04/2019
+N92,Country,CTRY,Administrative,Northern Ireland,"E92, W92, S92, L93, M83",Current,1,0,0,n/a,N92000002,N92000002,N92999999,ONS,06/05/2010,01/01/2009
+N00,Small Areas,SA,Statistical Building Block,Northern Ireland,"E00, W00, S00",Current,"4,537",0,0,n/a,N00000001,N00004537,N00999999,NISRA,31/01/2013,31/12/2011
+N06,Westminster Parliamentary Constituencies,WPC,Electoral,Northern Ireland,"E14, W07, S14",Current,18,0,0,n/a,N06000001,N06000018,N06999999,BCNI,06/05/2010,06/05/2010
+N07,European Electoral Regions,EER,Electoral,Northern Ireland,"E15, W08, S15",Current,1,0,0,n/a,N07000001,N07000001,N07999999,BCNI,06/05/2010,01/01/2009
+N08,Electoral Wards,WD,Administrative/Electoral,Northern Ireland,"E05, S13, W05",Current,462,0,0,n/a,N08000101,N08001140,N08999999,NISRA,01/04/2015,01/04/2015
+N09,Local Government Districts,LGD,Administrative,Northern Ireland,n/a,Current,11,0,0,n/a,N09000001,N09000011,N09999999,NISRA,01/04/2015,01/04/2015
+N10,District Electoral Areas,DEA,Electoral,Northern Ireland,n/a,Current,80,0,0,n/a,N10000101,N10001107,N10999999,BCNI,22/05/2014,22/05/2014
+N11,Settlement 2015,SETT2015,Census,Northern Ireland,n/a,Current,639,0,0,n/a,N11000001,N11000639,N11999999,NISRA,29/01/2015,29/01/2015
+N12,Travel to Work Areas,TTWA,Other,Northern Ireland,"E30, W22, S22, K01",Current,10,0,0,n/a,N12000001,N12000010,N12999999,ONS,31/07/2015,31/07/2015
+N13,Local Planning Authorities,LPA,Administrative,Northern Ireland,"E60, S44, W43",Current,12,0,0,n/a,N13000001,N13000012,N13999999,ONS,01/07/2019,01/04/2019
+N19,Workplace Zones,WZ,Census,Northern Ireland,"E33, W35, S34",Current,"1,756",0,0,n/a,N19000001,N19001756,N19999999,NISRA,20/10/2016,31/12/2011
+N23,Police Force Areas,PFA,Other,Northern Ireland,"E23, W15, S23",Current,1,0,0,n/a,N23000001,N23000001,N23999999,PSNI,01/02/2016,01/04/2015
+N24,Police Force Districts,PFD,Other,Northern Ireland,n/a,Current,11,0,0,n/a,N24000001,N24000011,N24999999,PSNI,01/02/2016,01/04/2015
+N31,Northern Ireland Fire and Rescue Service,NIFRS,Other,Northern Ireland,"E31, W25, S38",Current,1,0,0,n/a,N31000001,N31000001,N31999999,NIFRS,01/02/2016,01/02/2016
+N32,Northern Ireland Fire and Rescue Service Areas,NIFRSA,Other,Northern Ireland,n/a,Current,4,0,0,n/a,N32000001,N32000004,N32999999,NIFRS,01/02/2016,01/02/2016
+N33,Northern Ireland Fire and Rescue Service Districts,NIFRSD,Other,Northern Ireland,n/a,Current,14,0,0,n/a,N33000001,N33000014,N33999999,NIFRS,01/02/2016,01/02/2016
+K01,Travel to Work Areas,TTWA,Other,United Kingdom,"E30, W22, S22, N12",Current,6,12,6,31/07/2015,K01000005,K01000014,K01999999,ONS,01/01/2009,01/01/2009
+K02,United Kingdom,UK,Administrative,United Kingdom,"E92, W92, S92, N92",Current,1,0,1,n/a,K02000001,K02000001,K02999999,ONS,31/10/2010,31/10/2010
+K03,Great Britain,GB,Administrative,Great Britain,"E92, W92, S92",Current,1,0,1,n/a,K03000001,K03000001,K03999999,ONS,31/10/2010,31/10/2010
+K04,England and Wales,E&W,Administrative,England and Wales,"E92, W92",Current,1,0,1,n/a,K04000001,K04000001,K04999999,ONS,31/10/2010,31/10/2010
+K05,Built Up Areas,BUA,Census,England and Wales,"E34, W37",Current,11,0,11,n/a,K05000001,K05000011,K05999999,ONS,27/06/2013,27/03/2011
+K06,Built Up Area sub divisions,BUASD,Census,England and Wales,"E35, W38",Current,4,0,4,n/a,K06000001,K06000004,K06999999,ONS,27/06/2013,27/03/2011
+L93,British Crown Dependencies,BCD,Administrative,Channel Islands,"E92, W92, S92, N92, M83",Current,1,0,0,n/a,L93000001,L93000001,L93999999,ONS,01/01/2009,01/01/2009
+L00,Strategic Health Authorities,SHA,Health,Channel Islands,"E18, M00",Current,3,0,0,n/a,L00000001,L00000003,L00999999,ODS,01/01/2009,01/01/2009
+M83,British Crown Dependency,BCD,Administrative,Isle of Man,"E92, W92, S92, N92, L93",Current,1,0,0,n/a,M83000003,M83000003,M83999999,ONS,01/01/2009,01/01/2009
+M00,Strategic Health Authorities,SHA,Health,Isle of Man,"E18, L00",Current,1,0,0,n/a,M00000001,M00000001,M00999999,ODS,01/01/2009,01/01/2009
+M01,Primary Healthcare Directorate,PHD,Health,Isle of Man,n/a,Current,1,0,0,n/a,M01000001,M01000001,M01999999,ODS,06/05/2010,01/06/2008
+J01,Major Towns and Cities,TCITY,Experimental,England and Wales,n/a,Current,112,0,0,n/a,J01000001,J01000112,J01999999,ONS,22/04/2016,17/03/2016
+J02,1961 Census Parishes,PAR,Census,England and Wales,"E92, W92",Current,11852,0,0,n/a,J02000001,J02011852,J02999999,ONS,20/11/2018,20/11/2018
+J03,1961 Census Wards,WD,Census,England and Wales,"E92, W92",Current,5212,0,0,n/a,J03000001,J03005212,J03999999,ONS,20/11/2018,20/11/2018
+J04,1961 Census Districts,LAD,Census,England and Wales,"E92, W92",Current,1467,0,0,n/a,J04000001,J04001467,J04999999,ONS,20/11/2018,20/11/2018
+J05,1961 Census Counties,CTY,Census,England and Wales,"E92, W92",Current,62,0,0,n/a,J05000001,J05000062,J05999999,ONS,20/11/2018,20/11/2018
