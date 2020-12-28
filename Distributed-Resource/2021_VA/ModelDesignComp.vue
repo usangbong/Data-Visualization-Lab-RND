@@ -51,7 +51,7 @@
       
       <div class="WrapComponent FeatureWrap">
         <v-card class="CardComponent FeatureCard" elevation="1">
-            <CorrBarChart  v-if="featureDataLoaded" :chartData="featureBarChart" :style="corrBarStyle" />
+          <CorrBarChart  v-if="featureDataLoaded" :chartData="featureBarChart" :style="corrBarStyle" />
         </v-card>
         <div class="StepName">
           <h2>Feature</h2>
@@ -77,7 +77,8 @@
           </div>
           <br><div> Picked : {{ picked }}</div>
           <div class="TransformChart" elevation="1">
-              <TransfmBarChart  v-if="transfmDataLoaded" :chartData="transfmBarChart" :style="transfmBarStyle"/>
+            <TransfmBarChart  v-if="transfmDataLoaded0" :chartData="transfmBarChart0" :style="transfmBarStyle"/>
+            <TransfmBarChart  v-if="transfmDataLoaded1" :chartData="transfmBarChart1" :style="transfmBarStyle"/>
           </div>
         </v-card>
         <div class="StepName">
@@ -144,7 +145,10 @@ var myColors = {
       rawData:undefined,
       featureIdxs:undefined,
       slicedData:undefined,
-      transformedData:undefined,
+      transformedData0:undefined,
+      transformedData1:undefined,
+      transformedData2:undefined,
+      transformedData3:undefined,
       modelParams:undefined,
 
       corrBarStyle:{
@@ -173,7 +177,19 @@ var myColors = {
           }]
       },
       transfmDataLoaded:false,
-      transfmBarChart: {
+      transfmDataLoaded0:false,
+      transfmDataLoaded1:false,
+      transfmDataLoaded2:false,
+      transfmDataLoaded3:false,
+      transfmBarChart0: {
+        labels: ['None'],
+        datasets: [{
+          label: 'None',
+          backgroundColor: myColors.grey, //'#f87979',
+          data: [10]
+          }]
+      },
+      transfmBarChart1: {
         labels: ['None'],
         datasets: [{
           label: 'None',
@@ -267,35 +283,45 @@ var myColors = {
                   { data:this.slicedData, mode:picked}).then((r) => {
           console.log("picked transform mode: " + picked)
           console.log("r.data : "  + r.data)
+          //console.log("transf_r.data : "  + transf_r.data)
+          //console.log(origin_r.data.length)
           
-          this.transformedData = JSON.parse(r.data)//[0]
-          this.transfmDataLoaded = true;
-          this.transfmBarChart= {
-            labels: Object.keys(this.transformedData),
+          // test [0]
+
+          this.transformedData0 = JSON.parse(r.data)[0]
+          this.transfmDataLoaded0 = true;
+          this.transfmBarChart0= {
+            labels: Object.keys(this.transformedData0),
             datasets: [
               {
-                label: 'PCC',//Pearson Correlation Coefficient
+                label: picked,//Pearson Correlation Coefficient
                 backgroundColor: myColors.grey,//'#f87979',
                 borderColor: myColors.dark_orange,
                 hoverBorderColor: myColors.blue,
-                data: Object.values(this.transformedData),
+                data: Object.values(this.transformedData0),
               }
             ]
           }
-          console.log(this.transformedData)
-          // Transformation 그래프 찍기
-          /*
-          this.featureDataLoaded = true;
-          this.featureBarChart= {
-            labels: Object.keys(transform),
+          console.log(this.transformedData0)
+        
+          // test [1]
+
+          this.transformedData1 = JSON.parse(r.data)[1]
+          this.transfmDataLoaded1 = true;
+          this.transfmBarChart1= {
+            labels: Object.keys(this.transformedData1),
             datasets: [
               {
-                label: 'Data One',
-                backgroundColor: '#f87979',
-                data: Object.values(transform),
+                label: picked,//Pearson Correlation Coefficient
+                backgroundColor: myColors.grey,//'#f87979',
+                borderColor: myColors.dark_orange,
+                hoverBorderColor: myColors.blue,
+                data: Object.values(this.transformedData1),
               }
             ]
-          }*/
+          }
+          console.log(this.transformedData1)
+        
         }).catch((e)=>console.log(e));
         
       },
