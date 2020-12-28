@@ -12,50 +12,47 @@ import LengthBoxPlot from 'components/LengthBoxPlot';
 import Stimulus from 'components/Stimulus';
 import Patch from 'components/Patch';
 
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+
+import '../../node_modules/ag-grid-enterprise';
+import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+import '../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
+
 const dataProcessingMethods = [
   { value: 'raw_data', label: 'raw data'},
   { value: 'min_max', label: 'min-max' },
   { value: 'z_score', label: 'z-score'}
 ];
-
 const correlationMethods = [
   { value:'pearson', label: 'Pearson linear' },
   { value:'spearman', label: 'Spearman rank-order' },
   { value:'kendall', label: 'Kendall rank-order' }
 ];
-
 const dataTransformation = [
   { value:'min_max', label: 'Min-max' },
   { value:'z_score', label: 'z-score' },
   { value:'yeo_johonson', label: 'Yeo-Johonson' }
 ];
-
 const dimensionalityReduction = [
   { value:'MDS', label: 'MDS (Multi Dimensional Scaling)' },
   { value:'PCA', label: 'PCA (Principal Component Analysis)' },
   { value:'ICA', label: 'ICA (Independent Component Aanalysis)' },
   { value:'t_SNE', label: 't-SNE' }
 ];
-
 const clusteringAlgorithm = [
   { value:'random_forest', label: 'RandomForest' },
   { value:'dbscan', label: 'DBSCAN' },
   { value:'k_means', label: 'k-Means' }
 ];
-
 const patchSelectOption = [
   { value:'none', label: 'None' },
   { value:'similar', label: 'Similar patches' }
 ];
-
 const imageSimilarityOption = [
   { value:'MSE', label: 'MSE' },
   { value:'SSIM', label: 'SSIM' }
 ];
-
-let moveDestClusterOption = [
-
-];
+let moveDestClusterOption = [];
 
 class Data extends React.Component {
   constructor(props) {
@@ -98,6 +95,7 @@ class Data extends React.Component {
       lastSelectedPatchTableIndex: [0, 0],
       selectedPatchSelectOption: null,
       selectedSimilarityOption: null,
+      datasetRecord: [{train: '0', test: '0'}],
     };
   }
 
@@ -106,7 +104,6 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response.data);
         let dataset_options = [];
-
         for (let value of response.data.split('\n')){
           if(value.length>0){
             var _d = {
@@ -116,7 +113,6 @@ class Data extends React.Component {
             dataset_options.push(_d);
           }
         }
-
         // console.log(dataset_options);
         this.setState({
           datasetList: dataset_options
@@ -129,7 +125,6 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response.data);
         let participants_options = [];
-
         for (let value of response.data.split('\n')){
           if(value.length>0){
             var _d = {
@@ -139,7 +134,6 @@ class Data extends React.Component {
             participants_options.push(_d);
           }
         }
-
         // console.log(participants_options);
         this.setState({
           participants: participants_options
@@ -174,7 +168,6 @@ class Data extends React.Component {
         .then(response => {
           // console.log(response);
           let selected_feature_define = response.data;
-          
           this.setState({
             corr_feature_define: selected_feature_define
           });
@@ -226,7 +219,6 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response.data);
         let filter_options = [];
-
         for (let value of response.data.split('\n')){
           if(value.length>0){
             var _d = {
@@ -236,7 +228,6 @@ class Data extends React.Component {
             filter_options.push(_d);
           }
         }
-
         // console.log(filter_options);
         this.setState({
           fixationFilters: filter_options
@@ -277,7 +268,6 @@ class Data extends React.Component {
       .then(response => {
         // console.log(response);
         let _axis = response.data;
-        
         this.setState({
           scatter_axis: _axis
         });
@@ -290,11 +280,9 @@ class Data extends React.Component {
         // console.log(response);
         let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
         // console.log(_path);
-        
         this.setState({
           analysisScatterURL: _path
         });
-
         axios.get(_path)
         .then(response => {
           let _scatterData = [];
@@ -314,7 +302,6 @@ class Data extends React.Component {
               _scatterData.push(_row);
             }
           }
-          
           let _clus = []
           for(let i=0; i<_scatterData.length; i++){
             _clus.push(parseInt(_scatterData[i]["clu"]))
@@ -331,7 +318,6 @@ class Data extends React.Component {
           // console.log("loadScatterPlot data");
           // console.log(_scatterData);
           this.loadFilteredData();
-
           // set moving cluster option
           // remove duplicated cluster number
           let _set = _clus.filter(function(a, i, self){
@@ -589,6 +575,34 @@ class Data extends React.Component {
     });
   }
 
+  splitDataIdUpdateFunction = () =>{
+    // function for updating trainig & test dataset id
+
+  }
+
+  dataRecordUpdateFunction = () =>{
+    // function for updating trainig & test data record
+    axios.post(`http://${window.location.hostname}:5000/api/data/dataRecord`)
+    .then(response => {
+      if (response.data.status === 'success') {
+        // update data record
+        console.log('response.data.datarecord');
+        console.log("train: "+response.data.datarecord.train+", test: "+response.data.datarecord.test);
+        let _rec = [{
+          train: response.data.datarecord.train,
+          test: response.data.datarecord.test
+        }];
+        this.setState({
+          datasetRecord: _rec
+        });
+      } else if (response.data.status === 'failed') {
+        alert(`Failed to load data - ${response.data.reason}`);
+      }
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
+  }
+
   // selectedPatchUpdate_clickPatch = () =>{
   //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_patch_table_index.json?`+Math.random())
   //   .then(response => {
@@ -603,7 +617,6 @@ class Data extends React.Component {
   //     this.setState({
   //       lastSelectedPatchTableIndex: _lastSelectedPatch
   //     });
-
   //     // change Stimulus and Patch image
   //     // set patch url
   //     let _lastSelectedPatchIndex = this.state.selectedPatchIndex;
@@ -627,7 +640,6 @@ class Data extends React.Component {
   //         break;
   //       }
   //     }
-
   //     let _stiClass = _lpPath.split("/")[8];
   //     let _stiName = _lpPath.split("/")[9];
   //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
@@ -681,7 +693,6 @@ class Data extends React.Component {
   //     this.setState({
   //       lastSelectedPatchTableIndex: _lastSelectedPatch
   //     });
-
   //     // change Stimulus and Patch image
   //     // set patch url
   //     let _lastSelectedPatchID = _lastSelectedPatch[2];
@@ -703,7 +714,6 @@ class Data extends React.Component {
   //         break;
   //       }
   //     }
-
   //     let _stiClass = _lpPath.split("/")[8];
   //     let _stiName = _lpPath.split("/")[9];
   //     let _fixOrder = parseInt(_lpPath.split("/")[10]);
@@ -907,7 +917,6 @@ class Data extends React.Component {
 
   similarityOptionChanged = selectedSimilarityOption =>{
     this.setState({selectedSimilarityOption});
-
     let _patchSelectedFeature = this.state.patchSelectedFeature;
     let _selectedSimilarityOption = selectedSimilarityOption.value;
     const data = new FormData();
@@ -917,7 +926,6 @@ class Data extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/data/similarity`, data)
     .then(response => {
       console.log("get patches calculated similarity values");
-
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
@@ -925,7 +933,7 @@ class Data extends React.Component {
 
   render() {
     const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName, selectedProcessMethod, selectedCorrelationMethod } = this.state;
-    const { spHeatmapDataURL, corrMatDataURL } = this.state;
+    const { spHeatmapDataURL, corrMatDataURL, datasetRecord } = this.state;
     const { feature_define, sti_class_define } = this.state;
     const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
     const { patchURLs, numCluster, patchData } = this.state;
@@ -938,7 +946,7 @@ class Data extends React.Component {
       {/* col 1*/}
       <div className="inputBoxWrap">
         <div className="page-header">
-          <h3>logo + System Title Area</h3>
+          <div id="logo"></div><div><h3>Title Area</h3></div>
         </div>
         <div className="page-section select-data">
           <Select 
@@ -967,7 +975,7 @@ class Data extends React.Component {
           />
         </div>
         <div className="section-header">
-          <h4> Spatial Variance Matrix </h4>
+          <h4>Spatial Variance Matrix</h4>
         </div>
         {spHeatmapDataURL.length > 0 &&
           <div id="heat" className="page-section heatmap">
@@ -977,12 +985,24 @@ class Data extends React.Component {
               dataURL={spHeatmapDataURL}
               FEATURE_DEFINE={feature_define}
               STI_CLASS_DEFINE={sti_class_define}
+              dataRecordUpdate={this.dataRecordUpdateFunction}
             />
           </div>
         }
         <div className="section-header">
           <h4> Data overview </h4>
         </div>
+        {datasetRecord.length > 0 &&
+          <div className="ag-theme-alpine" style={ { width: 395, height: 75 } }>
+            <AgGridReact
+              rowData={datasetRecord}
+              suppressHorizontalScroll={true}
+              headerHeight={'30'}>
+              <AgGridColumn headerName="#Training data record" field="train"></AgGridColumn>
+              <AgGridColumn headerName="#Test data record" field="test"></AgGridColumn>
+            </AgGridReact>
+          </div>
+        }
         {spHeatmapDataURL.length > 0 &&
           <div className="page-section select-process ">
             <Select
@@ -1026,17 +1046,15 @@ class Data extends React.Component {
         </div>
         <div className="page-section">
           <ScatterPlot
-            width={450}
+            width={400}
             height={400}
             axis={scatter_axis}
             dataURL={`http://${window.location.hostname}:5000/static/access/scatter_data.csv?`+Math.random()}
           />
         </div>
-
         <div className="section-header">
           <h4> Clustering result 1 </h4>
         </div>
-
         <Select
           options={dataTransformation}
           placeholder="Data transformation"
@@ -1049,7 +1067,6 @@ class Data extends React.Component {
           options={clusteringAlgorithm}
           placeholder="Clustering algorithm"
         />
-        
         {analysisScatterURL.length > 0 &&
           <div id="analysis" className="page-section">
             <AnalysisScatter 
@@ -1079,8 +1096,6 @@ class Data extends React.Component {
               filteredData={filteredData}
               passSelectedFeature={this.loadPatchSelectedFeature}
               selectedPatchUpdate={this.selectedPatchUpdate}
-              // selectedPatchUpdateClickPatch={this.selectedPatchUpdate_clickPatch}
-              // selectedPatchUpdateClickFeat={this.selectedPatchUpdate_clickFeat}
             />
           </div>
         }
@@ -1130,14 +1145,12 @@ class Data extends React.Component {
               options={patchSelectOption}
               placeholder="Select option"
             />
-
             <Select 
               value={selectedSimilarityOption}
               onChange={this.similarityOptionChanged}
               options={imageSimilarityOption}
               placeholder="Similarity option"
             />
-            
             <h4>Move to</h4>
             {moveDestClusterOption.length > 0 &&
             <Select
