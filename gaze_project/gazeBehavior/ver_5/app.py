@@ -647,26 +647,20 @@ def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patc
   cv2.imwrite(_patchFeatSavePath, cropImg)
   return _patchFeatSavePath
 
-def analysisPCA(_components, _df, _featuresColumns):
-  pca = PCA(n_components=_components)
-  pcaTransform = pca.fit_transform(_df[_featuresColumns])
-  return pcaTransform
+def hex_to_rgb(hex):
+  hex = hex.lstrip('#')
+  hlen = len(hex)
+  return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
-def analysisICA(_components, _df, _featuresColumns):
-  ica = FastICA(n_components=_components)
-  icaTransform = ica.fit_transform(_df[_featuresColumns])
-  return icaTransform
+def calcPatchFeatureMeanValue(_matrixPath):
+  df = pd.read_csv(_matrixPath, header=None)
+  sumList = df.sum().values.tolist()
+  dataCount = PATCH_SIZE*PATCH_SIZE
+  _sum = sum(sumList)
+  _mean = _sum/dataCount
+  return _mean
 
-def analysisMDS(_components, _df, _featuresColumns):
-  mds = MDS(n_components=_components)
-  mdsTranform = mds.fit_transform(_df[_featuresColumns])
-  return mdsTranform
-
-def analysisTSNE(_learningRate, _df, _featuresColumns):
-  tsne = TSNE(learning_rate=_learningRate)
-  tsneTransform = tsne.fit_transform(_df[_featuresColumns])
-  return tsneTransform
-
+# data transformation function
 def dataTransformation(_tFunction, _df, _selectedFeature):
   if _tFunction == "min_max":
     # print("min-max")
@@ -684,19 +678,16 @@ def dataTransformation(_tFunction, _df, _selectedFeature):
   else:
     print("dataTransformation error")
     return 0
-
 def transformMinMax(_df, _selectedFeature):
   _dataList = _df.values.tolist()
   _mmTransformList = MinMaxScaler().fit_transform(_dataList)
   mmDf = pd.DataFrame(_mmTransformList, columns=_selectedFeature)
   return mmDf
-
 def transformZscore(_df, _selectedFeature):
   _dataList = _df.values.tolist()
   _zTransformList = StandardScaler().fit_transform(_dataList)
   zDf = pd.DataFrame(_zTransformList, columns=_selectedFeature)
   return zDf
-
 def transformYeoJohnson(_df, _selectedFeature):
   yeoJohson = PowerTransformer(method='yeo-johnson')
   yeoJohson.fit(_df)
@@ -704,18 +695,40 @@ def transformYeoJohnson(_df, _selectedFeature):
   yjDf = pd.DataFrame(npTransform, columns=_selectedFeature)
   return yjDf
 
-def hex_to_rgb(hex):
-  hex = hex.lstrip('#')
-  hlen = len(hex)
-  return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
+# dimension reduction function
+def dimensionReduction(_drMethod, _components, _random_state, _df, _featuresColumns):
+  if _drMethod == "MDS":
+    print("MDS")
+    dReductionMDS(_components, _random_state, _df, _featuresColumns)
+  elif _drMethod == "PCA":
+    print("PCA")
+    dReductionPCA(_components, _random_state, _df, _featuresColumns)
+  elif _drMethod == "ICA":
+    print("ICA")
+    dReductionICA(_components, _random_state, _df, _featuresColumns)
+  elif _drMethod == "t_SNE":
+    print("t-SNE")
+    dReductionTSNE(100, _random_state, _df, _featuresColumns)
+  else:
+    print("dimensionReduction error")
+    return 0
+def dReductionMDS(_components, _random_state, _df, _featuresColumns):
+  mds = MDS(n_components=_components, random_state=_random_state)
+  mdsDR = mds.fit_transform(_df[_featuresColumns])
+  return mdsDR
+def dReductionPCA(_components, _random_state, _df, _featuresColumns):
+  pca = PCA(n_components=_components, random_state=_random_state)
+  pcaDR = pca.fit_transform(_df[_featuresColumns])
+  return pcaDR
+def dReductionICA(_components, _random_state, _df, _featuresColumns):
+  ica = FastICA(n_components=_components, random_state=_random_state)
+  icaDR = ica.fit_transform(_df[_featuresColumns])
+  return icaDR
+def dReductionTSNE(_learningRate, _random_state, _df, _featuresColumns):
+  tsne = TSNE(learning_rate=_learningRate, random_state=_random_state)
+  tsneDR = tsne.fit_transform(_df[_featuresColumns])
+  return tsneDR
 
-def calcPatchFeatureMeanValue(_matrixPath):
-  df = pd.read_csv(_matrixPath, header=None)
-  sumList = df.sum().values.tolist()
-  dataCount = PATCH_SIZE*PATCH_SIZE
-  _sum = sum(sumList)
-  _mean = _sum/dataCount
-  return _mean
 
 # from Data.js
 @app.route('/api/data/stimulus', methods=['POST'])
@@ -1118,7 +1131,6 @@ def corrProcess():
     allFixationDataPath = makePath_Filter(FILTER, FILTER_THRESHOLD, allFixationDataPath)
     allFixationDataPath += "/all_fix.csv"
     afDF = pd.read_csv(allFixationDataPath)
-    columnValuesList = afDF.columns.values.tolist()
 
     # print(afDF)
     # drop unselected stimulus classes
@@ -1173,6 +1185,7 @@ def corrProcess():
     _selectedFeatureDefineAccessPath = "./static/access/selected_feature_define.json"
     makeJSON(_selectedFeatureDefineAccessPath, SELECTED_FEATURE_DEFINE)
 
+    columnValuesList = afDF.columns.values.tolist()
     # split data: training | test
     TRAINING_DATA_ID, TEST_DATA_ID = splitDataId(afDF, TRAINING_DATA_RECORD_NUMBER, TEST_DATA_RECORD_NUMBER)
     trainingDF = pd.DataFrame(index=range(0, 0), columns=columnValuesList)
@@ -1342,12 +1355,14 @@ def dataTransformationApplying():
     filteredFeatDf = filteredFeatDf.drop("duration", axis=1)
     filteredFeatDf = filteredFeatDf.drop("length", axis=1)
     
+    # data transformation, methods = {min_max, z_score, yeo_johnson, yeo_johnson_min_max}
     transformData = dataTransformation(dataTransformationMethod, filteredFeatDf, selectedFeature)
+    # dimension reduction, methods = {MDS, PCA, ICA, t_SNE}
+    drData = dimensionReduction(dimensionReductionMethod, 100, 42, transformData, selectedFeature)
+    # tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
+    # clustering, methods = {random_forest, dbscan, hdbscan, k_means}
 
-    tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
-    print("Yeo-Johnosn, t-SNE result: numpy")
-    # print(tsneAnalysis)
-    yj_tsne_df_coordinates = pd.DataFrame(tsneAnalysis, columns=["x","y"])
+    yj_tsne_df_coordinates = pd.DataFrame(drData, columns=["x","y"])
     yj_tsne_df = pd.merge(filteredIdDf, yj_tsne_df_coordinates, left_index=True, right_index=True)
     print("Yeo-Johnosn, t-SNE result: DataFrame")
     # print(yj_tsne_df)
