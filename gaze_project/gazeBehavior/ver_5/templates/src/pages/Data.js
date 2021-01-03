@@ -107,59 +107,59 @@ class Data extends React.Component {
 
   loadDatasetList = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/dataset.csv?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        let dataset_options = [];
-        for (let value of response.data.split('\n')){
-          if(value.length>0){
-            var _d = {
-              "value": value.replace('\r', ''),
-              "label": value.replace('\r', '')
-            };
-            dataset_options.push(_d);
-          }
+    .then(response => {
+      // console.log(response.data);
+      let dataset_options = [];
+      for (let value of response.data.split('\n')){
+        if(value.length>0){
+          var _d = {
+            "value": value.replace('\r', ''),
+            "label": value.replace('\r', '')
+          };
+          dataset_options.push(_d);
         }
-        // console.log(dataset_options);
-        this.setState({
-          datasetList: dataset_options
-        });
+      }
+      // console.log(dataset_options);
+      this.setState({
+        datasetList: dataset_options
       });
+    });
   }
 
   loadParticipantsList = dataName => {
     axios.get(`http://${window.location.hostname}:5000/static/data/${dataName}/participants.csv?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        let participants_options = [];
-        for (let value of response.data.split('\n')){
-          if(value.length>0){
-            var _d = {
-              "value": value.replace('\r', ''),
-              "label": value.replace('\r', '')
-            };
-            participants_options.push(_d);
-          }
+    .then(response => {
+      // console.log(response.data);
+      let participants_options = [];
+      for (let value of response.data.split('\n')){
+        if(value.length>0){
+          var _d = {
+            "value": value.replace('\r', ''),
+            "label": value.replace('\r', '')
+          };
+          participants_options.push(_d);
         }
-        // console.log(participants_options);
-        this.setState({
-          participants: participants_options
-        });
-        this.setState({
-          pIsDisabled: false
-        });
+      }
+      // console.log(participants_options);
+      this.setState({
+        participants: participants_options
       });
+      this.setState({
+        pIsDisabled: false
+      });
+    });
   }
 
   loadFeatureDefine = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/feature_define.json?`+Math.random())
-      .then(response => {
-        let features = [];
-        for(let i=0; i<response.data.length; i++){
-          features.push(response.data[i]);
-        }
-        this.setState({
-          feature_define: features
-        });
+    .then(response => {
+      let features = [];
+      for(let i=0; i<response.data.length; i++){
+        features.push(response.data[i]);
+      }
+      this.setState({
+        feature_define: features
+      });
     });
   }
 
@@ -171,262 +171,261 @@ class Data extends React.Component {
       });
     }else{
       axios.get(`http://${window.location.hostname}:5000/static/access/selected_feature_define.json?`+Math.random())
-        .then(response => {
-          // console.log(response);
-          let selected_feature_define = response.data;
-          this.setState({
-            corr_feature_define: selected_feature_define
-          });
+      .then(response => {
+        // console.log(response);
+        let selected_feature_define = response.data;
+        this.setState({
+          corr_feature_define: selected_feature_define
+        });
       });
     }
-    
   }
 
   loadSPMeanPath = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/sp_heatmap_path.json?`+Math.random())
-      .then(response => {
-        // console.log(response);
-        let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
-        // console.log("sp heatmap data access path: "+_path);
-        this.setState({
-          spHeatmapDataURL: _path
-        });
+    .then(response => {
+      // console.log(response);
+      let _path = `http://${window.location.hostname}:5000`+response.data+"?"+Math.random();
+      // console.log("sp heatmap data access path: "+_path);
+      this.setState({
+        spHeatmapDataURL: _path
       });
+    });
 
     this.loadFeatureDefine();
     this.loadSelectedFeatureDefine();
 
     axios.get(`http://${window.location.hostname}:5000/static/access/sti_class_define.json?`+Math.random())
-      .then(response => {
-        let sti_class = [];
-        for(let i=0; i<response.data.length; i++){
-          sti_class.push(response.data[i]);
-        }
-        this.setState({
-          sti_class_define: sti_class
-        });
+    .then(response => {
+      let sti_class = [];
+      for(let i=0; i<response.data.length; i++){
+        sti_class.push(response.data[i]);
+      }
+      this.setState({
+        sti_class_define: sti_class
+      });
     });
   }
   
   loadCorrMatrixPath = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/corr_matrix_path.json?`+Math.random())
-      .then(response => {
-        // console.log(response);
-        let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
-        // console.log("correlation data access path: "+_path);
-        this.setState({
-          corrMatDataURL: _path
-        });
+    .then(response => {
+      // console.log(response);
+      let _path = `http://${window.location.hostname}:5000`+response.data+"?"+Math.random();
+      // console.log("correlation data access path: "+_path);
+      this.setState({
+        corrMatDataURL: _path
+      });
     });
   }
 
   loadFixationFilters = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/fixation_filters.csv?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        let filter_options = [];
-        for (let value of response.data.split('\n')){
-          if(value.length>0){
-            var _d = {
-              "value": value.replace('\r', ''),
-              "label": value.replace('\r', '')
-            };
-            filter_options.push(_d);
-          }
+    .then(response => {
+      // console.log(response.data);
+      let filter_options = [];
+      for (let value of response.data.split('\n')){
+        if(value.length>0){
+          var _d = {
+            "value": value.replace('\r', ''),
+            "label": value.replace('\r', '')
+          };
+          filter_options.push(_d);
         }
-        // console.log(filter_options);
-        this.setState({
-          fixationFilters: filter_options
-        });
+      }
+      // console.log(filter_options);
+      this.setState({
+        fixationFilters: filter_options
       });
+    });
   }
 
   loadFeatureTypes = dataName => {
     axios.get(`http://${window.location.hostname}:5000/static/data/${dataName}/feature_types.csv`)
-      .then(response => {
-        const featureTypes = [];
-        for (let value of response.data.split('\n')) {
-          if (value.length > 0)
-            featureTypes.push(value.replace('\r', ''));
-        }
-        this.setState({
-          featureTypes: featureTypes
-        });
+    .then(response => {
+      const featureTypes = [];
+      for (let value of response.data.split('\n')) {
+        if (value.length > 0)
+          featureTypes.push(value.replace('\r', ''));
+      }
+      this.setState({
+        featureTypes: featureTypes
       });
+    });
   }
 
   loadStimulusTypes = dataName => {
     axios.get(`http://${window.location.hostname}:5000/static/data/${dataName}/stimulus_types.csv`)
-      .then(response => {
-        const stimulusTypes = [];
-        for (let value of response.data.split('\n')) {
-          if (value.length > 0)
-            stimulusTypes.push(value.replace('\r', ''));
-        }
-        this.setState({
-          stimulusTypes: stimulusTypes
-        });
+    .then(response => {
+      const stimulusTypes = [];
+      for (let value of response.data.split('\n')) {
+        if (value.length > 0)
+          stimulusTypes.push(value.replace('\r', ''));
+      }
+      this.setState({
+        stimulusTypes: stimulusTypes
       });
+    });
   }
 
   loadScatterAxis = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/scatter_axis.json?`+Math.random())
-      .then(response => {
-        // console.log(response);
-        let _axis = response.data;
-        this.setState({
-          scatter_axis: _axis
-        });
+    .then(response => {
+      // console.log(response);
+      let _axis = response.data;
+      this.setState({
+        scatter_axis: _axis
+      });
     });
   }
 
   loadScatterPlotURL = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/scatter_kmeans_path.json?`+Math.random())
+    .then(response => {
+      // console.log(response);
+      let _path = `http://${window.location.hostname}:5000`+response.data+"?"+Math.random();
+      // console.log(_path);
+      this.setState({
+        analysisScatterURL: _path
+      });
+      axios.get(_path)
       .then(response => {
-        // console.log(response);
-        let _path = "http://"+window.location.hostname+":5000"+response.data+"?"+Math.random();
-        // console.log(_path);
-        this.setState({
-          analysisScatterURL: _path
-        });
-        axios.get(_path)
-        .then(response => {
-          let _scatterData = [];
-          for (let value of response.data.split('\n')) {
-            if (value.length > 0){
-              if(value.split(",")[0]=="id"){
-                continue;
-              }
-              var _row = {
-                "id":value.split(",")[0], 
-                "duration":value.split(",")[1], 
-                "length":value.split(",")[2], 
-                "x": value.split(",")[3],
-                "y": value.split(",")[4],
-                "clu": value.split(",")[5]
-              };
-              _scatterData.push(_row);
+        let _scatterData = [];
+        for (let value of response.data.split('\n')) {
+          if (value.length > 0){
+            if(value.split(",")[0]=="id"){
+              continue;
             }
-          }
-          let _clus = []
-          for(let i=0; i<_scatterData.length; i++){
-            _clus.push(parseInt(_scatterData[i]["clu"]))
-          }
-          // console.log(_clus);
-          let _numClus = Math.max(..._clus);
-          // console.log("_numClus: "+_numClus);
-          this.setState({
-            numCluster: _numClus
-          });
-          this.setState({
-            patchData: _scatterData
-          });
-          // console.log("loadScatterPlot data");
-          // console.log(_scatterData);
-          this.loadFilteredData();
-          // set moving cluster option
-          // remove duplicated cluster number
-          let _set = _clus.filter(function(a, i, self){
-            return self.indexOf(a) === i;
-          });
-          _set.sort();
-          for(let i=0; i<_set.length; i++){
-            let _cluName = "c_"+i.toString();
-            var _option = { 
-              value: _cluName, 
-              label: _cluName 
+            var _row = {
+              "id":value.split(",")[0], 
+              "duration":value.split(",")[1], 
+              "length":value.split(",")[2], 
+              "x": value.split(",")[3],
+              "y": value.split(",")[4],
+              "clu": value.split(",")[5]
             };
-            moveDestClusterOption.push(_option);
+            _scatterData.push(_row);
           }
+        }
+        let _clus = []
+        for(let i=0; i<_scatterData.length; i++){
+          _clus.push(parseInt(_scatterData[i]["clu"]))
+        }
+        // console.log(_clus);
+        let _numClus = Math.max(..._clus);
+        // console.log("_numClus: "+_numClus);
+        this.setState({
+          numCluster: _numClus
+        });
+        this.setState({
+          patchData: _scatterData
+        });
+        // console.log("loadScatterPlot data");
+        // console.log(_scatterData);
+        this.loadFilteredData();
+        // set moving cluster option
+        // remove duplicated cluster number
+        let _set = _clus.filter(function(a, i, self){
+          return self.indexOf(a) === i;
+        });
+        _set.sort();
+        for(let i=0; i<_set.length; i++){
+          let _cluName = "c_"+i.toString();
+          var _option = { 
+            value: _cluName, 
+            label: _cluName 
+          };
+          moveDestClusterOption.push(_option);
+        }
       });
     });
   }
 
   loadPatchURLs = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/index_patches.json?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        let _paths = response.data;
-        // console.log(_paths);
-        this.setState({
-          patchURLs: _paths
-        });
+    .then(response => {
+      // console.log(response.data);
+      let _paths = response.data;
+      // console.log(_paths);
+      this.setState({
+        patchURLs: _paths
+      });
     });
   }
 
   loadFilteredData = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/filtered_data.csv?`+Math.random())
-      .then(response => {
-        // console.log("filtered data");
-        let _data = [];
-        for (let value of response.data.split('\n')) {
-          if (value.length > 0){
-            if(value.split(",")[0] === "id"){
+    .then(response => {
+      // console.log("filtered data");
+      let _data = [];
+      for (let value of response.data.split('\n')) {
+        if (value.length > 0){
+          if(value.split(",")[0] === "id"){
+            continue;
+          }
+          let _fs = [];
+          let pass = 0;
+          for(let _f of value.split(',')){
+            if(pass<3){
+              pass++;
               continue;
             }
-            let _fs = [];
-            let pass = 0;
-            for(let _f of value.split(',')){
-              if(pass<3){
-                pass++;
-                continue;
-              }
-              _fs.push(parseFloat(_f));
-            }
-            var _row = {
-              "id": parseInt(value.split(",")[0]), 
-              "duration": parseFloat(value.split(",")[1]), 
-              "length": parseFloat(value.split(",")[2]), 
-              "features": _fs
-            };
-            _data.push(_row);
+            _fs.push(parseFloat(_f));
           }
+          var _row = {
+            "id": parseInt(value.split(",")[0]), 
+            "duration": parseFloat(value.split(",")[1]), 
+            "length": parseFloat(value.split(",")[2]), 
+            "features": _fs
+          };
+          _data.push(_row);
         }
-        // console.log("loadFilteredData");
-        // console.log(_data);
-        this.setState({
-          filteredData: _data
-        });
-        this.loadJoinData();
+      }
+      // console.log("loadFilteredData");
+      // console.log(_data);
+      this.setState({
+        filteredData: _data
+      });
+      this.loadJoinData();
     });
   }
 
   loadStimulusFixation = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_fixations.csv?`+Math.random())
-      .then(response => {
-        let _stiFixData = []
-        for (let value of response.data.split('\n')) {
-          if (value.length > 0){
-            if(value.split(",")[0] === "id"){
-              continue;
-            }
-            var _row = {
-              "id": parseInt(value.split(",")[0]), 
-              "x": parseFloat(value.split(",")[1]), 
-              "y": parseFloat(value.split(",")[2])
-            };
-            _stiFixData.push(_row);
+    .then(response => {
+      let _stiFixData = []
+      for (let value of response.data.split('\n')) {
+        if (value.length > 0){
+          if(value.split(",")[0] === "id"){
+            continue;
           }
+          var _row = {
+            "id": parseInt(value.split(",")[0]), 
+            "x": parseFloat(value.split(",")[1]), 
+            "y": parseFloat(value.split(",")[2])
+          };
+          _stiFixData.push(_row);
         }
-        this.setState({
-          stimulusData: _stiFixData
-        });
+      }
+      this.setState({
+        stimulusData: _stiFixData
+      });
     });
   }
 
   loadPatchFeatureImageURLs = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/patch_feature_image.json?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        // let _patchFeatureImageURLs = [];
-        // for (let value of response.data.split('\n')) {
-        //   if (value.length > 0){
-        //     _patchFeatureImageURLs.push(value);
-        //   }
-        // }
-        this.setState({
-          patchFeatureImageURLs: response.data
-        });
+    .then(response => {
+      // console.log(response.data);
+      // let _patchFeatureImageURLs = [];
+      // for (let value of response.data.split('\n')) {
+      //   if (value.length > 0){
+      //     _patchFeatureImageURLs.push(value);
+      //   }
+      // }
+      this.setState({
+        patchFeatureImageURLs: response.data
+      });
     });
   }
 
@@ -535,49 +534,49 @@ class Data extends React.Component {
     _data.set('fixationOrder', _fixOrder);
     _data.set('patchCluster', _patchClu);
     axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
-      .then(response => {
-        if (response.data.status === 'success') {
-          // load stimulus and inner fixation location with id
-          this.loadStimulusFixation();
-          // load patch feature image urls
-          this.loadPatchFeatureImageURLs();
-        } else if (response.data.status === 'failed') {
-          alert(`Failed to load data - ${response.data.reason}`);
-        }
-      }).catch(error => {
-        alert(`Error - ${error.message}`);
+    .then(response => {
+      if (response.data.status === 'success') {
+        // load stimulus and inner fixation location with id
+        this.loadStimulusFixation();
+        // load patch feature image urls
+        this.loadPatchFeatureImageURLs();
+      } else if (response.data.status === 'failed') {
+        alert(`Failed to load data - ${response.data.reason}`);
+      }
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
     });
 
     // make stimulus path
     axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
-      .then(response => {
-        // console.log(response.data);
-        // set stimulus path
-        this.setState({
-          stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
-        });
+    .then(response => {
+      // console.log(response.data);
+      // set stimulus path
+      this.setState({
+        stimulusPath: `http://${window.location.hostname}:5000`+response.data+"?"+Math.random()
+      });
     }); 
   }
   
 
   loadPatchSelectedFeature = () =>{
     axios.get(`http://${window.location.hostname}:5000/static/access/patch_selected_feature.json?`+Math.random())
-      .then(response => {
-        // console.log("patch selected feature");
-        // console.log(response.data);
-        let _data = parseInt(response.data);
-        let _patchSelectedFeature = this.state.patchSelectedFeature;
-        if(_patchSelectedFeature == _data){
-          // patchSelectedFeature == -1: feature unselected
-          this.setState({
-            patchSelectedFeature: -1
-          });
-        }else{
-          // patchSelectedFeature != -1: feature selected
-          this.setState({
-            patchSelectedFeature: parseInt(response.data)
-          });
-        }
+    .then(response => {
+      // console.log("patch selected feature");
+      // console.log(response.data);
+      let _data = parseInt(response.data);
+      let _patchSelectedFeature = this.state.patchSelectedFeature;
+      if(_patchSelectedFeature == _data){
+        // patchSelectedFeature == -1: feature unselected
+        this.setState({
+          patchSelectedFeature: -1
+        });
+      }else{
+        // patchSelectedFeature != -1: feature selected
+        this.setState({
+          patchSelectedFeature: parseInt(response.data)
+        });
+      }
     });
   }
 
@@ -661,17 +660,17 @@ class Data extends React.Component {
       _data.set('fixationOrder', _fixOrder);
       _data.set('patchCluster', _patchClu);
       axios.post(`http://${window.location.hostname}:5000/api/data/stimulus`, _data)
-        .then(response => {
-          if (response.data.status === 'success') {
-            // load stimulus and inner fixation location with id
-            this.loadStimulusFixation();
-            // load patch feature image urls
-            this.loadPatchFeatureImageURLs();
-          } else if (response.data.status === 'failed') {
-            alert(`Failed to load data - ${response.data.reason}`);
-          }
-        }).catch(error => {
-          alert(`Error - ${error.message}`);
+      .then(response => {
+        if (response.data.status === 'success') {
+          // load stimulus and inner fixation location with id
+          this.loadStimulusFixation();
+          // load patch feature image urls
+          this.loadPatchFeatureImageURLs();
+        } else if (response.data.status === 'failed') {
+          alert(`Failed to load data - ${response.data.reason}`);
+        }
+      }).catch(error => {
+        alert(`Error - ${error.message}`);
       });
       // make stimulus path
       axios.get(`http://${window.location.hostname}:5000/static/access/stimulus_path.json?`+Math.random())
@@ -689,22 +688,22 @@ class Data extends React.Component {
     data.set('participant', this.state.selectedParticipant.value);
     data.set('filter', selectedFilter.value);
     axios.post(`http://${window.location.hostname}:5000/api/gaze_data/submit`, data)
-      .then(response => {
-        if (response.data.status === 'success') {
-          // console.log(response.data);
-          this.setState({
-            selectedFilterName: response.data.filterName
-          });
-          this.loadSPMeanPath();
-          // alert('Data loaded');
-          // console.log(response.data);
-          this.loadCorrMatrixPath();
-          this.loadFeatureDefine();
-        } else if (response.data.status === 'failed') {
-          alert(`Failed to load data - ${response.data.reason}`);
-        }
-      }).catch(error => {
-        alert(`Error - ${error.message}`);
+    .then(response => {
+      if (response.data.status === 'success') {
+        // console.log(response.data);
+        this.setState({
+          selectedFilterName: response.data.filterName
+        });
+        this.loadSPMeanPath();
+        // alert('Data loaded');
+        // console.log(response.data);
+        this.loadCorrMatrixPath();
+        this.loadFeatureDefine();
+      } else if (response.data.status === 'failed') {
+        alert(`Failed to load data - ${response.data.reason}`);
+      }
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
     });
   }
 
@@ -784,15 +783,13 @@ class Data extends React.Component {
   dataTransformationOptionChanged = selectedDataTransformation =>{
     this.setState({selectedDataTransformation});
   }
-
   dimensionReductionOptionChanged = selectedDimensionReduction =>{
     this.setState({selectedDimensionReduction});
   }
-
   clusteringAlgorithmOptionChanged = selectedClusteringAlgorithm =>{
     this.setState({selectedClusteringAlgorithm});
     
-    if(selectedClusteringAlgorithm.value == "random_forest"){
+    // if(selectedClusteringAlgorithm.value == "random_forest"){
       let _dataTransformationMethod = this.state.selectedDataTransformation.value;
       let _dimensionReductionMethod = this.state.selectedDimensionReduction.value;
       let _clusteringMethod = selectedClusteringAlgorithm.value;
@@ -810,7 +807,7 @@ class Data extends React.Component {
       }).catch(error => {
         alert(`Error - ${error.message}`);
       });
-    }
+    // }
   }
 
   render() {
