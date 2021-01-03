@@ -663,16 +663,16 @@ def calcPatchFeatureMeanValue(_matrixPath):
 # data transformation function
 def dataTransformation(_tFunction, _df, _selectedFeature):
   if _tFunction == "min_max":
-    # print("min-max")
+    print("tf: min-max")
     return transformMinMax(_df, _selectedFeature)
   elif _tFunction == "z_score":
-    # print("z-score")
+    print("tf: z-score")
     return transformZscore(_df, _selectedFeature)
   elif _tFunction == "yeo_johonson":
-    # print("Yeo-Johnson")
+    print("tf: Yeo-Johnson")
     return transformYeoJohnson(_df, _selectedFeature)
   elif _tFunction == "yeo_johonson_min_max":
-    # print("Yeo-Johnson + min-max")
+    print("tf: Yeo-Johnson + min-max")
     _tdf = transformYeoJohnson(_df, _selectedFeature)
     return transformMinMax(_tdf, _selectedFeature)
   else:
@@ -696,39 +696,38 @@ def transformYeoJohnson(_df, _selectedFeature):
   return yjDf
 
 # dimension reduction function
-def dimensionReduction(_drMethod, _components, _random_state, _df, _featuresColumns):
+def dimensionReduction(_drMethod, _learningRate, _random_state, _df, _featuresColumns):
   if _drMethod == "MDS":
-    print("MDS")
-    dReductionMDS(_components, _random_state, _df, _featuresColumns)
+    print("dr: MDS")
+    return dReductionMDS(_random_state, _df, _featuresColumns)
   elif _drMethod == "PCA":
-    print("PCA")
-    dReductionPCA(_components, _random_state, _df, _featuresColumns)
+    print("dr: PCA")
+    return dReductionPCA(_random_state, _df, _featuresColumns)
   elif _drMethod == "ICA":
-    print("ICA")
-    dReductionICA(_components, _random_state, _df, _featuresColumns)
+    print("dr: ICA")
+    return dReductionICA(_random_state, _df, _featuresColumns)
   elif _drMethod == "t_SNE":
-    print("t-SNE")
-    dReductionTSNE(100, _random_state, _df, _featuresColumns)
+    print("dr: t-SNE")
+    return dReductionTSNE(_learningRate, _random_state, _df, _featuresColumns)
   else:
     print("dimensionReduction error")
     return 0
-def dReductionMDS(_components, _random_state, _df, _featuresColumns):
-  mds = MDS(n_components=_components, random_state=_random_state)
+def dReductionMDS(_random_state, _df, _featuresColumns):
+  mds = MDS(n_components=2, random_state=_random_state)
   mdsDR = mds.fit_transform(_df[_featuresColumns])
   return mdsDR
-def dReductionPCA(_components, _random_state, _df, _featuresColumns):
-  pca = PCA(n_components=_components, random_state=_random_state)
+def dReductionPCA(_random_state, _df, _featuresColumns):
+  pca = PCA(n_components=2, random_state=_random_state)
   pcaDR = pca.fit_transform(_df[_featuresColumns])
   return pcaDR
-def dReductionICA(_components, _random_state, _df, _featuresColumns):
-  ica = FastICA(n_components=_components, random_state=_random_state)
+def dReductionICA(_random_state, _df, _featuresColumns):
+  ica = FastICA(n_components=2, random_state=_random_state)
   icaDR = ica.fit_transform(_df[_featuresColumns])
   return icaDR
 def dReductionTSNE(_learningRate, _random_state, _df, _featuresColumns):
   tsne = TSNE(learning_rate=_learningRate, random_state=_random_state)
   tsneDR = tsne.fit_transform(_df[_featuresColumns])
   return tsneDR
-
 
 # from Data.js
 @app.route('/api/data/stimulus', methods=['POST'])
@@ -1356,31 +1355,38 @@ def dataTransformationApplying():
     filteredFeatDf = filteredFeatDf.drop("length", axis=1)
     
     # data transformation, methods = {min_max, z_score, yeo_johnson, yeo_johnson_min_max}
+    print("Start: data transformation")
     transformData = dataTransformation(dataTransformationMethod, filteredFeatDf, selectedFeature)
+    print(transformData)
+    print("Done: data transformation")
     # dimension reduction, methods = {MDS, PCA, ICA, t_SNE}
+    print("Start: dimension reduction")
     drData = dimensionReduction(dimensionReductionMethod, 100, 42, transformData, selectedFeature)
+    print(drData)
+    print("Done: dimension reduction")
     # tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
     # clustering, methods = {random_forest, dbscan, hdbscan, k_means}
 
-    yj_tsne_df_coordinates = pd.DataFrame(drData, columns=["x","y"])
-    yj_tsne_df = pd.merge(filteredIdDf, yj_tsne_df_coordinates, left_index=True, right_index=True)
-    print("Yeo-Johnosn, t-SNE result: DataFrame")
-    # print(yj_tsne_df)
-    accessPath_YJ_TSNE = "./static/access/yeo_tsne_scatter.csv"
-    yj_tsne_df.to_csv(accessPath_YJ_TSNE, mode='w', index=False)
-    accessPath_YJ_TSNE_json = "./static/access/yeo_tsne_scatter_path.json"
-    makeJSON(accessPath_YJ_TSNE_json, accessPath_YJ_TSNE.split(".")[1]+".csv")
+
+    tf_dr_df_coordinates = pd.DataFrame(drData, columns=["x","y"])
+    tf_dr_df = pd.merge(filteredIdDf, tf_dr_df_coordinates, left_index=True, right_index=True)
+    print("tf_dr_df")
+    print(tf_dr_df)
+    accessPath_TF_DR = "./static/access/tf_dr_scatter.csv"
+    tf_dr_df.to_csv(accessPath_TF_DR, mode='w', index=False)
+    accessPath_TF_DR_json = "./static/access/tf_dr_scatter_path.json"
+    makeJSON(accessPath_TF_DR_json, accessPath_TF_DR.split(".")[1]+".csv")
     # k-means
     kmeans = KMeans(n_clusters=5)
     kmeans.fit(transformData[transformData.columns.difference(['id'])])
     kmeans_labels = kmeans.labels_
     kmeans_lebels_df = pd.DataFrame(kmeans_labels, columns=['clu'])
-    scatterWithLabel = pd.merge(yj_tsne_df, kmeans_lebels_df, left_index=True, right_index=True)
-    accessPath_kmeans = "./static/access/scatter_kmeans.csv"
-    scatterWithLabel.to_csv(accessPath_kmeans, mode='w', index=False)
-    accessPath_kmeans_json = "./static/access/scatter_kmeans_path.json"
-    makeJSON(accessPath_kmeans_json, accessPath_kmeans.split(".")[1]+".csv")
-    print("save scatter plot data labeled by k-means clustering")
+    scatterWithLabel = pd.merge(tf_dr_df, kmeans_lebels_df, left_index=True, right_index=True)
+    accessPath_clustering = "./static/access/scatter_clustering.csv"
+    scatterWithLabel.to_csv(accessPath_clustering, mode='w', index=False)
+    accessPath_clustering_json = "./static/access/scatter_clustering_path.json"
+    makeJSON(accessPath_clustering_json, accessPath_clustering.split(".")[1]+".csv")
+    print("save scatter plot data labeled after clustering")
 
 
 
