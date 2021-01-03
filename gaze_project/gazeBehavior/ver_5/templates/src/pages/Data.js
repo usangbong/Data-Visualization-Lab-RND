@@ -280,7 +280,7 @@ class Data extends React.Component {
   }
 
   loadScatterPlotURL = () =>{
-    axios.get(`http://${window.location.hostname}:5000/static/access/scatter_kmeans_path.json?`+Math.random())
+    axios.get(`http://${window.location.hostname}:5000/static/access/scatter_clustering_path.json?`+Math.random())
     .then(response => {
       // console.log(response);
       let _path = `http://${window.location.hostname}:5000`+response.data+"?"+Math.random();
@@ -435,6 +435,13 @@ class Data extends React.Component {
     let _patchData = this.state.patchData;
     let _filteredData = this.state.filteredData;
     let _cluDivData = [];
+    // console.log('_maxClusterNum');
+    // console.log(_maxClusterNum);
+    // console.log('_patchData');
+    // console.log(_patchData);
+    // console.log('_filteredData');
+    // console.log(_filteredData);
+
     for(let i=0; i<_maxClusterNum+1; i++){
       let _cluData = [];
       for(let j=0; j<_patchData.length; j++){
@@ -480,16 +487,16 @@ class Data extends React.Component {
       }
       _dlJoinData.push(_cluJoin);
     }
-    // console.log("_dlJoinData");
-    // console.log(_dlJoinData);
+    console.log("_dlJoinData");
+    console.log(_dlJoinData);
     this.setState({
       joinData: _dlJoinData
     });
 
     // set stimulus data to pass Stimulus.js (initial patch setting)
     let _initPatch = _dlJoinData[0][0];
-    // console.log("_dlJoinData[0][0]");
-    // console.log(_dlJoinData[0][0]);
+    console.log("_dlJoinData[0][0]");
+    console.log(_dlJoinData[0][0]);
     let _ipPath = "";
     let _selectedPatchIndex = 0;
     let _patchId = 0;
