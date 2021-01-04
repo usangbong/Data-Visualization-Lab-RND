@@ -771,6 +771,10 @@ class Data extends React.Component {
     });
   }
 
+  patchSelectOptionChanged = selectedPatchSelectOption =>{
+    this.setState({selectedPatchSelectOption});
+  }
+
   similarityOptionChanged = selectedSimilarityOption =>{
     this.setState({selectedSimilarityOption});
     let _patchSelectedFeature = this.state.patchSelectedFeature;
@@ -1034,7 +1038,7 @@ class Data extends React.Component {
             </div>
             <Select
               value={selectedPatchSelectOption}
-              onChange={this.pMethodChange}
+              onChange={this.patchSelectOptionChanged}
               options={patchSelectOption}
               placeholder="Select option"
             />
