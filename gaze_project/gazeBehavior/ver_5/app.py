@@ -928,33 +928,35 @@ def patchSelectFeature():
 # Structural Similarity Index
 # https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similaritySSIM(_select, _target):
+  # print('_select')
+  # print(_select.shape)
+  # print(_select)
+  # print('_target')
+  # print(_target.shape)
+  # print(_target)
   score = SSIM(_select, _target, data_range=_target.max()-_target.min())
   return score
-
 # Mean Square Error
 # https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similarityMSE(_select, _target):
   score = np.linalg.norm(_select-_target)
   return score
-
 # Peak Signal-to-Noise Ratio
 def similarityPSNR(_select, _target):
   return 0
-
 def similarityCalculation(_method, _matSelected, _matTarget):
-  res = 0
   if _method == "SSIM":
-    print(_method)
-    res = similaritySSIM(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similaritySSIM(_matSelected, _matTarget)
   elif _method == "MSE":
-    print(_method)
-    res = similarityMSE(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similarityMSE(_matSelected, _matTarget)
   elif _method == "PSNR":
-    print(_method)
-    res = similarityPSNR(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similarityPSNR(_matSelected, _matTarget)
   else:
     print("Wrong similarity calculation method")
-  return res
+    return 0
 
 def splitDataId(_df, _trainingDataRecord, _testDataRecord):
   # print("#TRAINING: %d"%_trainingDataRecord)
@@ -1085,9 +1087,15 @@ def similarityProcess():
       if _selectedPatchFlag:
         continue
       _targetPath = _row[0]
+      print('_targetPath')
+      print(_targetPath)
       targetPatchFeature = cv2.imread(_targetPath, cv2.IMREAD_GRAYSCALE)
       # [id, score]
-      _score = similarityCalculation(similarityMethod, selectedPatchFeature, targetPatchFeature)
+      # temp exception control
+      if selectedPatchFeature.shape == targetPatchFeature.shape:
+        _score = similarityCalculation(similarityMethod, selectedPatchFeature, targetPatchFeature)
+      else:
+        _score = 0
       similarityScores.append([_row[1], _score])
     similarityScoresDF = pd.DataFrame(similarityScores, columns=['id', 'score'])
     _similarityScoresAccessPath = "./static/access/similarity_scores.csv"
