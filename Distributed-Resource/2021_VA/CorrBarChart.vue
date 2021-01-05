@@ -25,15 +25,6 @@ export default {
                     }],
                 }
             },
-            /*
-            onClick: function(point, event) {
-                if(event.length <= 0) return;
-                console.log(event[0]['_index'])
-                //섹 변경하고
-                //append idx
-                backgroundColor[]
-            }*/
-            
     
             onClick: function(e) {
                 var element = this.getElementAtEvent(e);
@@ -43,8 +34,7 @@ export default {
                 if (element.length===0)
                     return;
 
-                if (this.data.datasets[0].clickedBarIndexes.includes(element[0]._index))
-                {
+                if (this.data.datasets[0].clickedBarIndexes.includes(element[0]._index)) {
                     this.data.datasets[0].backgroundColor[element[0]._index]='rgba(204,204,204,0.7)';
                     this.data.datasets[0].clickedBarIndexes.splice(
                         this.data.datasets[0].clickedBarIndexes.indexOf(element[0]._index),1);
@@ -54,8 +44,6 @@ export default {
                     this.data.datasets[0].clickedBarIndexes.push(element[0]._index);
                 }
                 
-                
-
                 console.log(this.data.datasets[0].clickedBarIndexes);
                 console.log(this.data.datasets[0].backgroundColor);
                 // console.log(this);
@@ -69,12 +57,8 @@ export default {
                 // console.log(this.backgroundColor);
                     //this.backgroundColor[element[0]._index] = 'red';
                 this.data.datasets[0].updateFeatureIdxs( this.data.datasets[0].clickedBarIndexes );
-                
-                
                 this.update()
-                
             }
-            
         }
     }},
     methods:{

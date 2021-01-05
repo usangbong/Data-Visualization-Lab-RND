@@ -4,7 +4,7 @@ import shutil
 import csv
 import math
 import json
-from random import *
+import random
 
 import numpy as np
 import pandas as pd
@@ -42,6 +42,10 @@ PATCH_DICTIONARY = []
 PATCH_INDEX_PATH = []
 COLORS = ["#a6cee3", "#fb9a99", "#fdbf6f", "#cab2d6", "#b15928", "#b2df8a", "#ffff99", "#1f78b4", "#e31a1c", "#ff7f00", "#33a02c", "#6a3d9a"]
 
+TRAINING_DATA_RECORD_NUMBER = 0
+TEST_DATA_RECORD_NUMBER = 0
+TRAINING_DATA_ID = []
+TEST_DATA_ID = []
 
 # eye movement event filter threshold
 FILTER_NAME = ""
@@ -643,33 +647,6 @@ def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patc
   cv2.imwrite(_patchFeatSavePath, cropImg)
   return _patchFeatSavePath
 
-def analysisPCA(_components, _df, _featuresColumns):
-  pca = PCA(n_components=_components)
-  pcaTransform = pca.fit_transform(_df[_featuresColumns])
-  return pcaTransform
-
-def analysisICA(_components, _df, _featuresColumns):
-  ica = FastICA(n_components=_components)
-  icaTransform = ica.fit_transform(_df[_featuresColumns])
-  return icaTransform
-
-def analysisMDS(_components, _df, _featuresColumns):
-  mds = MDS(n_components=_components)
-  mdsTranform = mds.fit_transform(_df[_featuresColumns])
-  return mdsTranform
-
-def analysisTSNE(_learningRate, _df, _featuresColumns):
-  tsne = TSNE(learning_rate=_learningRate)
-  tsneTransform = tsne.fit_transform(_df[_featuresColumns])
-  return tsneTransform
-
-def transformYeoJohnson(_df, _selectedFeature):
-  yeoJohson = PowerTransformer(method='yeo-johnson')
-  yeoJohson.fit(_df)
-  npTransform = yeoJohson.transform(_df)
-  yjDf = pd.DataFrame(npTransform, columns=_selectedFeature)
-  return yjDf
-
 def hex_to_rgb(hex):
   hex = hex.lstrip('#')
   hlen = len(hex)
@@ -682,6 +659,75 @@ def calcPatchFeatureMeanValue(_matrixPath):
   _sum = sum(sumList)
   _mean = _sum/dataCount
   return _mean
+
+# data transformation function
+def dataTransformation(_tFunction, _df, _selectedFeature):
+  if _tFunction == "min_max":
+    print("tf: min-max")
+    return transformMinMax(_df, _selectedFeature)
+  elif _tFunction == "z_score":
+    print("tf: z-score")
+    return transformZscore(_df, _selectedFeature)
+  elif _tFunction == "yeo_johonson":
+    print("tf: Yeo-Johnson")
+    return transformYeoJohnson(_df, _selectedFeature)
+  elif _tFunction == "yeo_johonson_min_max":
+    print("tf: Yeo-Johnson + min-max")
+    _tdf = transformYeoJohnson(_df, _selectedFeature)
+    return transformMinMax(_tdf, _selectedFeature)
+  else:
+    print("dataTransformation error")
+    return 0
+def transformMinMax(_df, _selectedFeature):
+  _dataList = _df.values.tolist()
+  _mmTransformList = MinMaxScaler().fit_transform(_dataList)
+  mmDf = pd.DataFrame(_mmTransformList, columns=_selectedFeature)
+  return mmDf
+def transformZscore(_df, _selectedFeature):
+  _dataList = _df.values.tolist()
+  _zTransformList = StandardScaler().fit_transform(_dataList)
+  zDf = pd.DataFrame(_zTransformList, columns=_selectedFeature)
+  return zDf
+def transformYeoJohnson(_df, _selectedFeature):
+  yeoJohson = PowerTransformer(method='yeo-johnson')
+  yeoJohson.fit(_df)
+  npTransform = yeoJohson.transform(_df)
+  yjDf = pd.DataFrame(npTransform, columns=_selectedFeature)
+  return yjDf
+
+# dimension reduction function
+def dimensionReduction(_drMethod, _learningRate, _random_state, _df, _featuresColumns):
+  if _drMethod == "MDS":
+    print("dr: MDS")
+    return dReductionMDS(_random_state, _df, _featuresColumns)
+  elif _drMethod == "PCA":
+    print("dr: PCA")
+    return dReductionPCA(_random_state, _df, _featuresColumns)
+  elif _drMethod == "ICA":
+    print("dr: ICA")
+    return dReductionICA(_random_state, _df, _featuresColumns)
+  elif _drMethod == "t_SNE":
+    print("dr: t-SNE")
+    return dReductionTSNE(_learningRate, _random_state, _df, _featuresColumns)
+  else:
+    print("dimensionReduction error")
+    return 0
+def dReductionMDS(_random_state, _df, _featuresColumns):
+  mds = MDS(n_components=2, random_state=_random_state)
+  mdsDR = mds.fit_transform(_df[_featuresColumns])
+  return mdsDR
+def dReductionPCA(_random_state, _df, _featuresColumns):
+  pca = PCA(n_components=2, random_state=_random_state)
+  pcaDR = pca.fit_transform(_df[_featuresColumns])
+  return pcaDR
+def dReductionICA(_random_state, _df, _featuresColumns):
+  ica = FastICA(n_components=2, random_state=_random_state)
+  icaDR = ica.fit_transform(_df[_featuresColumns])
+  return icaDR
+def dReductionTSNE(_learningRate, _random_state, _df, _featuresColumns):
+  tsne = TSNE(learning_rate=_learningRate, random_state=_random_state)
+  tsneDR = tsne.fit_transform(_df[_featuresColumns])
+  return tsneDR
 
 # from Data.js
 @app.route('/api/data/stimulus', methods=['POST'])
@@ -882,58 +928,70 @@ def patchSelectFeature():
 # Structural Similarity Index
 # https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similaritySSIM(_select, _target):
+  # print('_select')
+  # print(_select.shape)
+  # print(_select)
+  # print('_target')
+  # print(_target.shape)
+  # print(_target)
   score = SSIM(_select, _target, data_range=_target.max()-_target.min())
   return score
-
 # Mean Square Error
 # https://scikit-image.org/docs/stable/auto_examples/transform/plot_ssim.html
 def similarityMSE(_select, _target):
   score = np.linalg.norm(_select-_target)
   return score
-
 # Peak Signal-to-Noise Ratio
 def similarityPSNR(_select, _target):
   return 0
-
 def similarityCalculation(_method, _matSelected, _matTarget):
-  res = 0
   if _method == "SSIM":
-    print(_method)
-    res = similaritySSIM(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similaritySSIM(_matSelected, _matTarget)
   elif _method == "MSE":
-    print(_method)
-    res = similarityMSE(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similarityMSE(_matSelected, _matTarget)
   elif _method == "PSNR":
-    print(_method)
-    res = similarityPSNR(_matSelected, _matTarget)
+    print("similarity: "+_method)
+    return similarityPSNR(_matSelected, _matTarget)
   else:
     print("Wrong similarity calculation method")
-  return res
+    return 0
 
-def splitDataset(_datasetPath, _splitRatio):
-  df = pd.read_csv(_datasetPath)
-  fixationCount = len(df.index)
-  splitCount = int(fixationCount*_splitRatio)
-  IDsDF = df[['id']]
-  IDsList = IDsDF.values.tolist() 
-  trainList = random.sample(IDsList, splitCount)
-  trainList.sort()
-  testList = []
+def splitDataId(_df, _trainingDataRecord, _testDataRecord):
+  # print("#TRAINING: %d"%_trainingDataRecord)
+  # print("#TEST: %d"%_testDataRecord)
+  IDsDF = _df[['id']]
+  IDsList = IDsDF.values.tolist()
+  testList = random.sample(IDsList, _testDataRecord)
+  testList.sort()
+  trainList = []
   for _id in IDsList:
     _duplicateFlag = False
-    for _tid in trainList:
+    for _tid in testList:
       if _id == _tid:
         _duplicateFlag = True
         break
     if _duplicateFlag:
       continue
     else:
-      testList.append(_id)
+      trainList.append(_id)
+  trainList.sort()
+  # print("#TRAINING_LIST:%d"%len(trainList))
+  # print(trainList)
+  # print("#TEST_LIST:%d"%len(testList))
+  # print(testList)
+  if len(trainList) != _trainingDataRecord or len(testList) != _testDataRecord:
+    print("splitDataId function: diff error")
+  # print("data split done")
   return trainList, testList
 
 # from pages/Data.js - Interaction: components/Heatmap.js
 @app.route('/api/data/dataRecord', methods=['POST'])
 def updateDataRecord():
+  global TRAINING_DATA_RECORD_NUMBER
+  global TEST_DATA_RECORD_NUMBER
+
   response = {}
   try:
     # print(request.form)
@@ -968,6 +1026,9 @@ def updateDataRecord():
     record_test = int(selectedFixCount-record_train)
     if record_train == 0:
       record_test = 0
+    
+    TRAINING_DATA_RECORD_NUMBER = record_train
+    TEST_DATA_RECORD_NUMBER = record_test
     
     response['status'] = 'success'
     response['datarecord'] = {
@@ -1026,9 +1087,15 @@ def similarityProcess():
       if _selectedPatchFlag:
         continue
       _targetPath = _row[0]
+      print('_targetPath')
+      print(_targetPath)
       targetPatchFeature = cv2.imread(_targetPath, cv2.IMREAD_GRAYSCALE)
       # [id, score]
-      _score = similarityCalculation(similarityMethod, selectedPatchFeature, targetPatchFeature)
+      # temp exception control
+      if selectedPatchFeature.shape == targetPatchFeature.shape:
+        _score = similarityCalculation(similarityMethod, selectedPatchFeature, targetPatchFeature)
+      else:
+        _score = 0
       similarityScores.append([_row[1], _score])
     similarityScoresDF = pd.DataFrame(similarityScores, columns=['id', 'score'])
     _similarityScoresAccessPath = "./static/access/similarity_scores.csv"
@@ -1057,6 +1124,8 @@ def corrProcess():
   global DATAPROCESSING
   global CORRELATION_METHOD
   global PATCH_INDEX_PATH
+  global TRAINING_DATA_ID
+  global TEST_DATA_ID
   
   response = {}
   try:
@@ -1069,7 +1138,7 @@ def corrProcess():
     allFixationDataPath = makePath_Filter(FILTER, FILTER_THRESHOLD, allFixationDataPath)
     allFixationDataPath += "/all_fix.csv"
     afDF = pd.read_csv(allFixationDataPath)
-    
+
     # print(afDF)
     # drop unselected stimulus classes
     print("drop unselected stimulus classes")
@@ -1123,16 +1192,36 @@ def corrProcess():
     _selectedFeatureDefineAccessPath = "./static/access/selected_feature_define.json"
     makeJSON(_selectedFeatureDefineAccessPath, SELECTED_FEATURE_DEFINE)
 
+    columnValuesList = afDF.columns.values.tolist()
+    # split data: training | test
+    TRAINING_DATA_ID, TEST_DATA_ID = splitDataId(afDF, TRAINING_DATA_RECORD_NUMBER, TEST_DATA_RECORD_NUMBER)
+    trainingDF = pd.DataFrame(index=range(0, 0), columns=columnValuesList)
+    for _id in TRAINING_DATA_ID:
+      is_id = afDF['id'] == _id[0]
+      _tDF = afDF[is_id]
+      trainingDF = pd.concat([trainingDF, _tDF], ignore_index=True)
+    testDF = pd.DataFrame(index=range(0, 0), columns=columnValuesList)
+    for _id in TEST_DATA_ID:
+      is_id = afDF['id'] == _id[0]
+      _tDF = afDF[is_id]
+      testDF = pd.concat([testDF, _tDF], ignore_index=True)
+    # save splited data (training and test) on static/access directory
+    _trainingPath = "./static/access/all_fix_training.csv"
+    trainingDF.to_csv(_trainingPath, mode='w', index=False)
+    _testPath = "./static/access/all_fix_test.csv"
+    testDF.to_csv(_testPath, mode='w', index=False)
+    
     # append patch images path on memory
     PATCH_INDEX_PATH = []
-    _outPath = "./static/access/"+DATASET
-    if os.path.isdir(_outPath):
-      try:
-        shutil.rmtree(_outPath)
-      except Exception as e:
-        print(e)
-    print(afDF)
-    _fixAllDf = afDF[['id','stimulusClass','stimulusName','x','y']]
+    # _outPath = "./static/access/"+DATASET
+    # if os.path.isdir(_outPath):
+    #   try:
+    #     shutil.rmtree(_outPath)
+    #   except Exception as e:
+    #     print(e)
+    print('trainingDF')
+    print(trainingDF)
+    _fixAllDf = trainingDF[['id','stimulusClass','stimulusName','x','y']]
     _fixList = _fixAllDf.values.tolist()
     _prev = ""
     _patchIdx = 0
@@ -1144,7 +1233,6 @@ def corrProcess():
       _cur = _sc+"_"+_sn
       if _prev != _cur:
         _patchIdx = 0
-      # generatePatch(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
       appendPatchImageIndexPath(_id, _f, PATCH_SIZE, _sc, _sn, _patchIdx)
       _patchIdx+=1
       _prev = _cur
@@ -1160,38 +1248,110 @@ def corrProcess():
 
     # drop stimulusName, x, and y coordinate columns
     print("drop stimulusClass, stimulusName, x, and y coordinate columns")
-    afDF = afDF.drop("stimulusClass", axis=1)
-    afDF = afDF.drop("stimulusName", axis=1)
-    afDF = afDF.drop("x", axis=1)
-    afDF = afDF.drop("y", axis=1)
+    trainingDF = trainingDF.drop("stimulusClass", axis=1)
+    trainingDF = trainingDF.drop("stimulusName", axis=1)
+    trainingDF = trainingDF.drop("x", axis=1)
+    trainingDF = trainingDF.drop("y", axis=1)
     # save values where column name == id
-    _idSaveList = afDF[['id', 'duration', 'length']].values.tolist()
+    _idSaveList = trainingDF[['id', 'duration', 'length']].values.tolist()
     _idSaveDF = pd.DataFrame(_idSaveList, columns=['id', 'duration', 'length'])
     print(_idSaveDF)
     # drop id column
     print("drop id column")
-    afDF = afDF.drop("id", axis=1)
-    afDF = afDF.drop("duration", axis=1)
-    afDF = afDF.drop("length", axis=1)
+    trainingDF = trainingDF.drop("id", axis=1)
+    trainingDF = trainingDF.drop("duration", axis=1)
+    trainingDF = trainingDF.drop("length", axis=1)
     # data pre-processing: min-max normalization or z-score standardization
-    _pProData_list = afDF.values.tolist()
+    _pProData_list = trainingDF.values.tolist()
     _pProData_list = dataPreProcessing(DATAPROCESSING, _pProData_list)
-    processed_afDF = pd.DataFrame(_pProData_list, columns=selectedFeature)
-    sum_id_prcessed_afDF = pd.merge(_idSaveDF, processed_afDF, left_index=True, right_index=True)
+    processed_afDF_training = pd.DataFrame(_pProData_list, columns=selectedFeature)
+    sum_id_prcessed_afDF_training = pd.merge(_idSaveDF, processed_afDF_training, left_index=True, right_index=True)
     filteredDataPath = "./static/access/filtered_data.csv"
-    sum_id_prcessed_afDF.to_csv(filteredDataPath, mode='w', index=False)
-    filteredDataPathFP = "./static/access/filtered_data_path.json"
-    makeJSON(filteredDataPathFP, filteredDataPath.split(".")[1]+".csv")
+    sum_id_prcessed_afDF_training.to_csv(filteredDataPath, mode='w', index=False)
+    filteredDataPathFP_training = "./static/access/filtered_data_path.json"
+    makeJSON(filteredDataPathFP_training, filteredDataPath.split(".")[1]+".csv")
     # correlation
-    afDFCorrMat = processed_afDF[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr(method=CORRELATION_METHOD)
-    afDFCorrMat_access = "./static/access/correlation_mat.csv"
-    afDFCorrMat.to_csv(afDFCorrMat_access, mode='w', quoting=2)
+    afDFCorrMat_training = processed_afDF_training[selectedFeature].iloc[:,range(0,len(selectedFeature))].corr(method=CORRELATION_METHOD)
+    afDFCorrMat_training_access = "./static/access/correlation_mat.csv"
+    afDFCorrMat_training.to_csv(afDFCorrMat_training_access, mode='w', quoting=2)
     corrMatrix_access_path = "./static/access/corr_matrix_path.json"
-    makeJSON(corrMatrix_access_path, afDFCorrMat_access.split(".")[1]+".csv")
+    makeJSON(corrMatrix_access_path, afDFCorrMat_training_access.split(".")[1]+".csv")
     print("calculate and save correlation")
-    print(afDFCorrMat)
+    print(afDFCorrMat_training)
     
     # generate MDS, PCA, ICA, t-SNE scatter plot data
+    # # load fixation-feature data
+    # filteredDataPath = "./static/access/filtered_data.csv"
+    # filteredFeatDf = pd.read_csv(filteredDataPath)
+    # filteredIdList = filteredFeatDf[['id', 'duration', 'length']].values.tolist()
+    # filteredIdDf = pd.DataFrame(filteredIdList, columns=['id', 'duration', 'length'])
+    # print(filteredIdDf)
+    # filteredFeatDf = filteredFeatDf.drop("id", axis=1)
+    # filteredFeatDf = filteredFeatDf.drop("duration", axis=1)
+    # filteredFeatDf = filteredFeatDf.drop("length", axis=1)
+    # # raw data
+    # # Min-max
+    # # z-score
+    # # Yeo-Johnson
+    # # transformData = transformYeoJohnson(filteredFeatDf, selectedFeature)
+    # transformData = dataTransformation(, filteredFeatDf, selectedFeature)
+    # # print("Yeo-Johnson")
+    # # print(transformData)
+    # MDS
+    # PCA
+    # ICA
+    # t-SNE
+    # tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
+    # print("Yeo-Johnosn, t-SNE result: numpy")
+    # # print(tsneAnalysis)
+    # yj_tsne_df_coordinates = pd.DataFrame(tsneAnalysis, columns=["x","y"])
+    # yj_tsne_df = pd.merge(filteredIdDf, yj_tsne_df_coordinates, left_index=True, right_index=True)
+    # print("Yeo-Johnosn, t-SNE result: DataFrame")
+    # # print(yj_tsne_df)
+    # accessPath_YJ_TSNE = "./static/access/yeo_tsne_scatter.csv"
+    # yj_tsne_df.to_csv(accessPath_YJ_TSNE, mode='w', index=False)
+    # accessPath_YJ_TSNE_json = "./static/access/yeo_tsne_scatter_path.json"
+    # makeJSON(accessPath_YJ_TSNE_json, accessPath_YJ_TSNE.split(".")[1]+".csv")
+    # # k-means
+    # kmeans = KMeans(n_clusters=5)
+    # kmeans.fit(transformData[transformData.columns.difference(['id'])])
+    # kmeans_labels = kmeans.labels_
+    # kmeans_lebels_df = pd.DataFrame(kmeans_labels, columns=['clu'])
+    # scatterWithLabel = pd.merge(yj_tsne_df, kmeans_lebels_df, left_index=True, right_index=True)
+    # accessPath_kmeans = "./static/access/scatter_kmeans.csv"
+    # scatterWithLabel.to_csv(accessPath_kmeans, mode='w', index=False)
+    # accessPath_kmeans_json = "./static/access/scatter_kmeans_path.json"
+    # makeJSON(accessPath_kmeans_json, accessPath_kmeans.split(".")[1]+".csv")
+    # print("save scatter plot data labeled by k-means clustering")
+    
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
+
+# from pages/Data.js data transformation-dimension reduction-clustering
+@app.route('/api/data/tfrmcluProcessing', methods=['POST'])
+def dataTransformationApplying():
+  response = {}
+  try:
+    dataTransformationMethod = request.form['selectedTransformationOption']
+    dimensionReductionMethod = request.form['selectedDimensionReductionOption']
+    clusteringMethod = request.form['selectedClusteringOption']
+
+    selectedFeature = []
+    for i in range(0, len(FEATURE_TYPES)):
+      selectedFeature.append(FEATURE_DEFINE[i][2])
+    
+    for i in range(0, len(FEATURE_TYPES)):
+      _ft = FEATURE_DEFINE[i][2]
+      for _uft in REMOVE_FEATURES:
+        if _ft == _uft:
+          selectedFeature.remove(_ft)
+    print(selectedFeature)
+
     # load fixation-feature data
     filteredDataPath = "./static/access/filtered_data.csv"
     filteredFeatDf = pd.read_csv(filteredDataPath)
@@ -1201,40 +1361,45 @@ def corrProcess():
     filteredFeatDf = filteredFeatDf.drop("id", axis=1)
     filteredFeatDf = filteredFeatDf.drop("duration", axis=1)
     filteredFeatDf = filteredFeatDf.drop("length", axis=1)
-    # raw data
-    # Min-max
-    # z-score
-    # Yeo-Johnson
-    transformData = transformYeoJohnson(filteredFeatDf, selectedFeature)
-    print("Yeo-Johnson")
-    # print(transformData)
-    # MDS
-    # PCA
-    # ICA
-    # t-SNE
-    tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
-    print("Yeo-Johnosn, t-SNE result: numpy")
-    # print(tsneAnalysis)
-    yj_tsne_df_coordinates = pd.DataFrame(tsneAnalysis, columns=["x","y"])
-    yj_tsne_df = pd.merge(filteredIdDf, yj_tsne_df_coordinates, left_index=True, right_index=True)
-    print("Yeo-Johnosn, t-SNE result: DataFrame")
-    # print(yj_tsne_df)
-    accessPath_YJ_TSNE = "./static/access/yeo_tsne_scatter.csv"
-    yj_tsne_df.to_csv(accessPath_YJ_TSNE, mode='w', index=False)
-    accessPath_YJ_TSNE_json = "./static/access/yeo_tsne_scatter_path.json"
-    makeJSON(accessPath_YJ_TSNE_json, accessPath_YJ_TSNE.split(".")[1]+".csv")
+    
+    # data transformation, methods = {min_max, z_score, yeo_johnson, yeo_johnson_min_max}
+    print("Start: data transformation")
+    transformData = dataTransformation(dataTransformationMethod, filteredFeatDf, selectedFeature)
+    print(transformData)
+    print("Done: data transformation")
+    # dimension reduction, methods = {MDS, PCA, ICA, t_SNE}
+    print("Start: dimension reduction")
+    drData = dimensionReduction(dimensionReductionMethod, 100, 42, transformData, selectedFeature)
+    print(drData)
+    print("Done: dimension reduction")
+    # tsneAnalysis = analysisTSNE(100, transformData, selectedFeature)
+    # clustering, methods = {random_forest, dbscan, hdbscan, k_means}
+
+
+    tf_dr_df_coordinates = pd.DataFrame(drData, columns=["x","y"])
+    tf_dr_df = pd.merge(filteredIdDf, tf_dr_df_coordinates, left_index=True, right_index=True)
+    print("tf_dr_df")
+    print(tf_dr_df)
+    accessPath_TF_DR = "./static/access/tf_dr_scatter.csv"
+    tf_dr_df.to_csv(accessPath_TF_DR, mode='w', index=False)
+    accessPath_TF_DR_json = "./static/access/tf_dr_scatter_path.json"
+    makeJSON(accessPath_TF_DR_json, accessPath_TF_DR.split(".")[1]+".csv")
     # k-means
     kmeans = KMeans(n_clusters=5)
     kmeans.fit(transformData[transformData.columns.difference(['id'])])
     kmeans_labels = kmeans.labels_
     kmeans_lebels_df = pd.DataFrame(kmeans_labels, columns=['clu'])
-    scatterWithLabel = pd.merge(yj_tsne_df, kmeans_lebels_df, left_index=True, right_index=True)
-    accessPath_kmeans = "./static/access/scatter_kmeans.csv"
-    scatterWithLabel.to_csv(accessPath_kmeans, mode='w', index=False)
-    accessPath_kmeans_json = "./static/access/scatter_kmeans_path.json"
-    makeJSON(accessPath_kmeans_json, accessPath_kmeans.split(".")[1]+".csv")
-    print("save scatter plot data labeled by k-means clustering")
-    
+    scatterWithLabel = pd.merge(tf_dr_df, kmeans_lebels_df, left_index=True, right_index=True)
+    accessPath_clustering = "./static/access/scatter_clustering.csv"
+    scatterWithLabel.to_csv(accessPath_clustering, mode='w', index=False)
+    accessPath_clustering_json = "./static/access/scatter_clustering_path.json"
+    makeJSON(accessPath_clustering_json, accessPath_clustering.split(".")[1]+".csv")
+    print("save scatter plot data labeled after clustering")
+
+
+
+
+
     response['status'] = 'success'
   except Exception as e:
     response['status'] = 'failed'
