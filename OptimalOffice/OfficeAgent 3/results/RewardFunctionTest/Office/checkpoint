@@ -1,0 +1,2 @@
+model_checkpoint_path: "Office-240239.ckpt"
+all_model_checkpoint_paths: "Office-240239.ckpt"

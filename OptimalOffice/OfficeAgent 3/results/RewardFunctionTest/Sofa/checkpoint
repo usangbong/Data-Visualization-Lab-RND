@@ -1,0 +1,2 @@
+model_checkpoint_path: "Sofa-3998.ckpt"
+all_model_checkpoint_paths: "Sofa-3998.ckpt"
