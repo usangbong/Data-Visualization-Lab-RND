@@ -1,0 +1,3 @@
+model_checkpoint_path: "3DBall-500708.ckpt"
+all_model_checkpoint_paths: "3DBall-499708.ckpt"
+all_model_checkpoint_paths: "3DBall-500708.ckpt"
