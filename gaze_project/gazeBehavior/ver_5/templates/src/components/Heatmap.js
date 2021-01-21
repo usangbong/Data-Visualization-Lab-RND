@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 
 function Heatmap(props) {
-  const { width, height, dataURL, FEATURE_DEFINE, STI_CLASS_DEFINE} = props;
+  const {width, height, dataURL, FEATURE_DEFINE, STI_CLASS_DEFINE, dataRecordUpdate} = props;
   const svgRef = useRef();
   const d3 = window.d3;
   var selectedCols = [];
@@ -13,6 +13,7 @@ function Heatmap(props) {
   useEffect(() => {
     if (typeof dataURL !== 'string' && dataURL.length === 0)
       return;
+    dataRecordUpdate();
     d3.select(svgRef.current).selectAll("*").remove();
     // console.log(svgRef.current)
     
@@ -403,7 +404,8 @@ function Heatmap(props) {
       .then(response => {
         if (response.data.status === 'success') {
           // alert('data columns changed');
-          console.log('data columns changed');
+          // console.log('data columns changed');
+          dataRecordUpdate();
         } else if (response.data.status === 'failed') {
           alert(`Failed change data columns - ${response.data.reason}`);
         }
