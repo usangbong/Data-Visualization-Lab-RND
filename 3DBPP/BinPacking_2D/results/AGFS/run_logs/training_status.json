@@ -1,0 +1,29 @@
+{
+    "Packing": {
+        "checkpoints": [
+            {
+                "steps": 499781,
+                "file_path": "results\\AGFS\\Packing\\Packing-499781.nn",
+                "reward": 53.037498354911804,
+                "creation_time": 1605371311.9602695
+            },
+            {
+                "steps": 500698,
+                "file_path": "results\\AGFS\\Packing\\Packing-500698.nn",
+                "reward": 50.990000327428184,
+                "creation_time": 1605371312.3302786
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500698,
+            "file_path": "results\\AGFS\\Packing.nn",
+            "reward": 50.990000327428184,
+            "creation_time": 1605371312.3302786
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.1.0",
+        "mlagents_version": "0.19.0",
+        "tensorflow_version": "2.3.0"
+    }
+}
