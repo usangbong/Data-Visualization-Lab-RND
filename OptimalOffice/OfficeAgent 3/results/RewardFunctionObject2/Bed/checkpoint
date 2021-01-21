@@ -1,0 +1,2 @@
+model_checkpoint_path: "Bed-0.ckpt"
+all_model_checkpoint_paths: "Bed-0.ckpt"

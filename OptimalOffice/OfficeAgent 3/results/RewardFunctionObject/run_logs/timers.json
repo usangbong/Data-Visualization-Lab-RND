@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1609700421",
+        "python_version": "3.7.9 (default, Aug 31 2020, 17:10:11) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\vfgtr\\anaconda3\\envs\\ml-agents\\Scripts\\mlagents-learn --train config/OfficeAgent.yaml --run-id=RewardFunctionObject",
+        "mlagents_version": "0.19.0",
+        "mlagents_envs_version": "0.19.0",
+        "communication_protocol_version": "1.0.0",
+        "tensorflow_version": "2.3.0",
+        "numpy_version": "1.19.2",
+        "end_time_seconds": "1609700421"
+    },
+    "total": 0.09034980000000026,
+    "count": 1,
+    "self": 0.01881250000000012,
+    "children": {
+        "run_training.setup": {
+            "total": 0.013217299999999987,
+            "count": 1,
+            "self": 0.013217299999999987
+        },
+        "TrainerController.start_learning": {
+            "total": 0.05832000000000015,
+            "count": 1,
+            "self": 0.0028087000000001083,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 0.05360019999999999,
+                    "count": 1,
+                    "self": 0.05360019999999999
+                },
+                "trainer_threads": {
+                    "total": 1.4999999997655777e-06,
+                    "count": 1,
+                    "self": 1.4999999997655777e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.0019096000000002888,
+                    "count": 1,
+                    "self": 0.0019096000000002888
+                }
+            }
+        }
+    }
+}
