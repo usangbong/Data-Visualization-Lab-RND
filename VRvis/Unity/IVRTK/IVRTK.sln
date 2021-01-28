@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 16
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{5C6A520D-DDA0-134C-4B7B-60ED6779B903}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamVR_Actions", "SteamVR_Actions.csproj", "{99108548-B292-2166-246C-B49F14FB800F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamVR", "SteamVR.csproj", "{28FC33ED-B093-DA37-8684-A1FD41B8CC9A}"
 EndProject
@@ -25,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C6A520D-DDA0-134C-4B7B-60ED6779B903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C6A520D-DDA0-134C-4B7B-60ED6779B903}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C6A520D-DDA0-134C-4B7B-60ED6779B903}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,6 +33,10 @@ Global
 		{99108548-B292-2166-246C-B49F14FB800F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99108548-B292-2166-246C-B49F14FB800F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99108548-B292-2166-246C-B49F14FB800F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A114AFE-E22C-C370-D2C0-5A90B5D6898A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28FC33ED-B093-DA37-8684-A1FD41B8CC9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28FC33ED-B093-DA37-8684-A1FD41B8CC9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28FC33ED-B093-DA37-8684-A1FD41B8CC9A}.Release|Any CPU.ActiveCfg = Release|Any CPU

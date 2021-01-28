@@ -77,6 +77,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Editor">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -92,23 +95,14 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Editor">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="com.unity.multiplayer-weaver.Editor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XR.LegacyInputHelpers">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
@@ -122,11 +116,17 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.XR.LegacyInputHelpers">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
@@ -320,59 +320,53 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.ClientEngine">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/SuperSocket.ClientEngine.Core.0.10.0/SuperSocket.ClientEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="JMOAssets_MatCapWelcome">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/JMO Assets/Editor/JMOAssets_MatCapWelcome.dll</HintPath>
-    </Reference>
-    <Reference Include="WebSocket4Net">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/WebSocket4Net.0.15.2/WebSocket4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/SteamVR/Input/Plugins/JSON.NET/Valve.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
+    <Reference Include="DOTween">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/DOTween.dll</HintPath>
     </Reference>
     <Reference Include="DOTween43">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/DOTween43.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Analytics.Editor">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="DOTween46">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/DOTween46.dll</HintPath>
-    </Reference>
-    <Reference Include="SyntaxTree.VisualStudio.Unity.Messaging">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.Purchasing">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="JMOAssets">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/JMO Assets/Editor/JMOAssets.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/JsonNet/Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/DOTween.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.Advertisements">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityVS.VersionSpecific">
-      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll</HintPath>
     </Reference>
     <Reference Include="DOTween50">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenEditor">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/JsonNet/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.ClientEngine">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/SuperSocket.ClientEngine.Core.0.10.0/SuperSocket.ClientEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="WebSocket4Net">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/Emotiv-Unity-Plugin/Src/WebSocket4Net.0.15.2/WebSocket4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="JMOAssets">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/JMO Assets/Editor/JMOAssets.dll</HintPath>
+    </Reference>
+    <Reference Include="JMOAssets_MatCapWelcome">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/Plugins/JMO Assets/Editor/JMOAssets_MatCapWelcome.dll</HintPath>
+    </Reference>
+    <Reference Include="Valve.Newtonsoft.Json">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Assets/SteamVR/Input/Plugins/JSON.NET/Valve.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Advertisements">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.Editor">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.StandardEvents">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.Tracker">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Purchasing">
+      <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:/Users/ME/Documents/Data-Visualization-Lab-RND/VRvis/Unity/IVRTK/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
