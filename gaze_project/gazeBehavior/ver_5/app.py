@@ -40,7 +40,7 @@ SCATTER_FEATURES = []
 PATCH_SIZE = 50
 PATCH_DICTIONARY = []
 PATCH_INDEX_PATH = []
-COLORS = ["#a6cee3", "#fb9a99", "#fdbf6f", "#cab2d6", "#b15928", "#b2df8a", "#ffff99", "#1f78b4", "#e31a1c", "#ff7f00", "#33a02c", "#6a3d9a"]
+COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"]
 
 TRAINING_DATA_RECORD_NUMBER = 0
 TEST_DATA_RECORD_NUMBER = 0
@@ -427,15 +427,15 @@ def generatePatch(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
 #
 #
 
-def appendPatchImageIndexPath(_id, _fix, _patchSizse, _stiClass, _stiName, _idx):
+def appendPatchImageIndexPath(_id, _fix, _patchSize, _stiClass, _stiName, _idx):
   global PATCH_INDEX_PATH
   _outPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"
   _outPath = makePath_Filter(FILTER, FILTER_THRESHOLD, _outPath)
   _outPath = _outPath+"/images/"+_stiClass+"/"+_stiName+"/"+str(_idx).zfill(3)+".png"
   PATCH_INDEX_PATH.append([_id, _outPath.split(".")[1]+".png"])
 
-def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initFlag):
-  print("patch id: %d"%_id)
+def generatePatchCache(_id, _fix, _patchSize, _stiClass, _stiName, _idx, _initFlag):
+  # print("patch id: %d"%_id)
   global PATCH_DICTIONARY
   global PATCH_INDEX_PATH
   color = [255, 255, 255]
@@ -446,27 +446,39 @@ def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initF
     _stiPath = "."+_stiPath.split(".")[1]+".png"
   
   image = cv2.imread(_stiPath, cv2.IMREAD_COLOR)
-  iWidth, iHeight = image.shape[:2]
-  _lenPatch = [_patchSizse, _patchSizse]
-  _x = _fix[0]
-  _y = _fix[1]
+  iHeight, iWidth = image.shape[:2]
+  _lenPatch = [_patchSize, _patchSize]
+  _x = int(_fix[0])
+  _y = int(_fix[1])
+  # print("x, y = %d, %d"%(_x, _y))
+  
   _point = [_x-(_lenPatch[0]/2), _y-(_lenPatch[1]/2)]
   # top bottom left right
   _padding = [0, 0, 0, 0]
-  if _point[0] < 0:
-    _padding[2] = abs(_point[0])
-    _point[0] = 0
-    _lenPatch[0] = _lenPatch[0]-_padding[2]
-  if _point[0]+_lenPatch[0] > iWidth:
-    _padding[3] = (_point[0]+_lenPatch[0]) - iWidth
-    _lenPatch[0] = _lenPatch[0] - _padding[3]
-  if _point[1] <0:
-    _padding[0] = abs(_point[1])
+  # if _point[1] <0:
+  if _y < _lenPatch[1]/2:
+    # print("1-1")
+    _padding[0] = (_lenPatch[1]/2)-_y
     _point[1] = 0
     _lenPatch[1] = _lenPatch[1]-_padding[0]
-  if _point[1]+_lenPatch[1] > iHeight:
-    _padding[4] = (_point[1]+_lenPatch[1]) - iHeight
+  elif _y+(_lenPatch[1]/2) > iHeight-1:
+    # print("1-2")
+    _padding[1] = (iHeight-1) - (_y+(_lenPatch[1]/2))
     _lenPatch[1] = _lenPatch[1]-_padding[1]
+  if _x < _lenPatch[0]/2:
+    # print("2-1")
+    _padding[2] = (_lenPatch[0]/2) - _x
+    _point[0] = 0
+    _lenPatch[0] = _lenPatch[0]-_padding[2]
+  elif _x+(_lenPatch[0]/2) > iWidth-1:
+    # print("2-2")
+    _padding[3] = (iWidth-1) - (_x+(_lenPatch[0]/2))
+    _lenPatch[0] = _lenPatch[0] - _padding[3]
+  # if _padding[0] != 0 or _padding[1] != 0 or _padding[2] != 0 or _padding[3] != 0:
+  #   print("image size: %d, %d"%(iWidth, iHeight))
+  #   print(_point)
+  #   print(_padding)
+  #   print(_lenPatch)
   _left = int(_point[0])
   _top = int(_point[1])
   _right = int(_point[0]+_lenPatch[0])
@@ -515,8 +527,8 @@ def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initF
     _featPath = "./static/data/"+DATASET+"/feature/"+_featureType+"/"+_stiClass+"_"+_stiName+".csv"
     featDF = pd.read_csv(_featPath, header=None)
     featNP = featDF.to_numpy()
-    # featTrain = MinMaxScaler().fit_transform(featNP)
-    minmaxNP = (featNP-featNP.min(axis=0)) / (featNP.max(axis=0) - featNP.min(axis=0))
+    featTrain = MinMaxScaler().fit_transform(featNP)
+    # minmaxNP = (featNP-featNP.min(axis=0)) / (featNP.max(axis=0) - featNP.min(axis=0))
     featTrain = np.abs(featTrain*255-255)
     _savePath = "./static/access/feature.png"
     cv2.imwrite(_savePath, featTrain)
@@ -534,6 +546,11 @@ def generatePatchCache(_id, _fix, _patchSizse, _stiClass, _stiName, _idx, _initF
     _fTypeShort = FEATURE_DEFINE[i][2]
     _featOutPath = _featOutPath+"/"+_fTypeShort+".png"
     cv2.imwrite(_featOutPath, featureCropImgGray)
+    checkW, checkH = featureCropImgGray.shape[:2]
+    # if checkW != _patchSize or checkH != _patchSize:
+    #   print("(x, y) = (%d, %d), (w, h) = (%d, %d): %s"%(_x, _y, checkW, checkH, _featOutPath))
+    #   print("(l, t, r, b) = (%d, %d, %d, %d)"%(_left, _top, _right, _bottom))
+    #   print("len = (%d, %d), padding: (%d, %d, %d, %d,)"%(_lenPatch[0], _lenPatch[1], _padding[0], _padding[1], _padding[2], _padding[3]))
     if _initFlag:
       _appendData = []
       _appendData.append([_id, _stiClass, _stiName, _idx, "feature", _featOutPath.split(".")[1]+".png"])
@@ -605,7 +622,7 @@ def generateFeatureImage(_featPath, _outDirPath, _featureType, _patchSizse, _fix
 #
 #
 
-def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patchSizse, _fix, color):
+def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patchSize, _fix, color):
   featDF = pd.read_csv(_featPath, header=None)
   featNP = featDF.to_numpy()
   featTrain = MinMaxScaler().fit_transform(featNP)
@@ -615,7 +632,7 @@ def appendPatchFeatureImageIndexPath(_featPath, _outDirPath, _featureType, _patc
   image = cv2.imread(_savePath, cv2.IMREAD_COLOR)
   iWidth, iHeight = image.shape[:2]
   
-  _lenPatch = [_patchSizse, _patchSizse]
+  _lenPatch = [_patchSize, _patchSize]
   _x = _fix[0]
   _y = _fix[1]
   _point = [_x-(_lenPatch[0]/2), _y-(_lenPatch[1]/2)]
@@ -835,6 +852,89 @@ def selectedPatchesUpdate():
     selectedPatchesDF = pd.DataFrame(selectedPatches, columns=['cluster', 'order', 'id'])
     _selectedPatchesAccessPath = "./static/access/selected_patch_table_index.csv"
     selectedPatchesDF.to_csv(_selectedPatchesAccessPath, mode='w', index=False)
+    
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+# from components/PatchTable.js
+@app.route('/api/patchTable/updatePatchTableStatus', methods=['POST'])
+def updatePatchTableStatus():
+  response = {}
+  try:
+    print(request.form)
+    str_clus = request.form['reorderedClu'].replace('\r', '').split(',')
+    clus = []
+    for _c in str_clus:
+      clus.append(int(_c))
+    str_orders = request.form['reorderedOrder'].split(',')
+    orders = []
+    for _o in str_orders:
+      orders.append(int(_o))
+    str_ids = request.form['reorderedId'].split(',')
+    ids = []
+    for _i in str_ids:
+      ids.append(int(_i))
+    
+    orderedPatchData = []
+    for i in range(0, len(clus)):
+      _c = clus[i]
+      _o = orders[i]
+      _i = ids[i]
+      orderedPatchData.append([_c, _o, _i])
+    orderedPatchDF = pd.DataFrame(orderedPatchData, columns=['clu', 'order', 'id'])
+    accessCsvPath = './static/access/updated_ordered_patch.csv'
+    orderedPatchDF.to_csv(accessCsvPath, mode='w', index=False)
+    accessJsonPath = './static/access/updated_ordered_patch.json'
+    makeJSON(accessJsonPath, orderedPatchData)
+    
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+# from components/PatchTable.js
+@app.route('/api/patchTable/updateMovingPatchList', methods=['POST'])
+def updateMovingPatchList():
+  response = {}
+  try:
+    print(request.form)
+    str_clus = request.form['patchClu'].replace('\r', '').split(',')
+    clus = []
+    for _c in str_clus:
+      clus.append(int(_c))
+    str_orders = request.form['patchOrder'].split(',')
+    orders = []
+    for _o in str_orders:
+      orders.append(int(_o))
+    str_ids = request.form['patchId'].split(',')
+    ids = []
+    for _i in str_ids:
+      ids.append(int(_i))
+    
+    movingPatchData = []
+    for i in range(0, len(clus)):
+      _c = clus[i]
+      _o = orders[i]
+      _i = ids[i]
+      movingPatchData.append([_c, _o, _i])
+    
+    movingPatchDF = pd.DataFrame(movingPatchData, columns=['clu', 'order', 'id'])
+    movingPatchListAccessPath = 'static/access/moving_patch_list.csv'
+    movingPatchDF.to_csv(movingPatchListAccessPath, mode='w', index=False)
+    movingPatchListAccessPath = 'static/access/moving_patch_list.json'
+    makeJSON(movingPatchListAccessPath, movingPatchData)
+
+    # movingPatchDF = pd.DataFrame(movingPatchList, columns=['clu', 'id'])
+    # accessPath = "./static/access/move_patch_list.csv"
+    # movingPatchDF.to_csv(accessPath, mode='w', index=False)
+    # accessPath = "./static/access/move_patch_list.json"
+    # makeJSON(accessPath, movingPatchList)
     
     response['status'] = 'success'
   except Exception as e:
@@ -1103,12 +1203,96 @@ def similarityProcess():
     _similarityScoresAccessPath = "./static/access/similarity_scores.json"
     makeJSON(_similarityScoresAccessPath, similarityScores)
     
-    _list = similarityScoresDF.values.tolist()
-    _list.sort(reverse=True, key=lambda x:x[1])
-    _sortingDF = pd.DataFrame(_list, columns=['id', 'score'])
+    _similaritySortingScoreList = similarityScoresDF.values.tolist()
+    _similaritySortingScoreList.sort(reverse=True, key=lambda x:x[1])
+    _sortingDF = pd.DataFrame(_similaritySortingScoreList, columns=['id', 'score'])
     _sortingDF.dropna(inplace=True)
     _similarityScoresAccessPath = "./static/access/similarity_scores_sorting.csv"
     _sortingDF.to_csv(_similarityScoresAccessPath, mode='w', index=False)
+    _similarityScoresAccessPath = "./static/access/similarity_scores_sorting.json"
+    makeJSON(_similarityScoresAccessPath, _similaritySortingScoreList)
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  
+  return json.dumps(response)
+
+# from pages/Data.js
+@app.route('/api/data/movePatch', methods=['POST'])
+def movePatch():
+  response = {}
+  try:
+    print(request.form)
+    patchDestination = request.form['destination']
+    destClu = 0
+    
+    orderedPatchDataPath = './static/access/updated_ordered_patch.csv'
+    orderedPatchDF = pd.read_csv(orderedPatchDataPath)
+    print('orderedPatchDF - loaded')
+    print(orderedPatchDF)
+    
+    print('patchDestination')
+    print(patchDestination)
+    if patchDestination == 'add_cluster':
+      _maxCluIndex = orderedPatchDF['clu'].argmax()
+      destClu = orderedPatchDF.iloc[_maxCluIndex]['clu']
+    else:
+      destClu = int(patchDestination.split('_')[1])
+    print('destClu')
+    print(destClu)
+
+    movingPatchListAccessPath = './static/access/moving_patch_list.csv'
+    movingPatchDF = pd.read_csv(movingPatchListAccessPath)
+    movingPatchList = movingPatchDF.values.tolist()
+
+    if len(movingPatchList) == 0:
+      print("movingPatchList length 0 error")
+    else:
+      for _p in movingPatchList:
+        _i = _p[2]
+        is_id = orderedPatchDF['id'] == _i
+        _idx = orderedPatchDF.index[is_id].tolist()[0]
+        orderedPatchDF.loc[_idx, 'clu'] = destClu
+      
+      print('orderedPatchDF - changed')
+      print(orderedPatchDF)
+      _maxCluIndex = orderedPatchDF['clu'].argmax()
+      maxClu = orderedPatchDF.iloc[_maxCluIndex]['clu']
+      print('maxClu: %d'%maxClu)
+      cluCount = []
+      for _c in range(0, maxClu):
+        is_clu = orderedPatchDF['clu'] == _c
+        _df = orderedPatchDF[is_clu]
+        print("_df : clu = %d"%_c)
+        print(_df)
+        cluCount.append(len(_df))
+      print('cluCount')
+      print(cluCount)
+
+      orderedPatchDataPath = './static/access/updated_ordered_patch.csv'
+      orderedPatchDF.to_csv(orderedPatchDataPath, mode='w', index=False)
+      orderedPatchList = orderedPatchDF.values.tolist()
+      orderedPatchDataPath = './static/access/updated_ordered_patch.json'
+      makeJSON(orderedPatchDataPath, orderedPatchList)
+
+      # load filtered_data.csv file for generating updated scatter plot data
+      # filteredDataAccessPath = './static/access/filtered_data.csv'
+      # fDF = pd.read_csv(filteredDataAccessPath)
+      # df_id_duration_length = fDF[['id','duration','length']]
+      scatterCluAccessPath = './static/access/scatter_clustering.csv'
+      scDF = pd.read_csv(scatterCluAccessPath)
+      for _p in movingPatchList:
+        _i = _p[2]
+        is_id = scDF['id'] == _i
+        _idx = scDF.index[is_id].tolist()[0]
+        scDF.loc[_idx, 'clu'] = destClu
+      scatterCluUpdateAccessPath = './static/access/scatter_clustering_update.csv'
+      scDF.to_csv(scatterCluUpdateAccessPath, mode='w', index=False)
+      scatterCluUpdateAccessPathJson = './static/access/scatter_clustering_update_path.json'
+      makeJSON(scatterCluUpdateAccessPathJson, scatterCluUpdateAccessPath.split('.')[1]+".csv")
 
     response['status'] = 'success'
   except Exception as e:
@@ -1398,7 +1582,13 @@ def dataTransformationApplying():
 
 
 
-
+    # make cache file for initializing selected patch index on patchTable.js
+    selectedPatchIndexDF = pd.DataFrame([[0, 0, 0]], columns=['cluster', 'order', 'id'])
+    selectedPatchIndexAccessPath = "./static/access/selected_patch_table_index.csv"
+    selectedPatchIndexDF.to_csv(selectedPatchIndexAccessPath, mode='w', index=False)
+    selectedPatchIndexList = [[0, 0, 0]]
+    selectedPatchIndexAccessPath = "./static/access/selected_patch_table_index.json"
+    makeJSON(selectedPatchIndexAccessPath, selectedPatchIndexList)
 
     response['status'] = 'success'
   except Exception as e:
@@ -1727,6 +1917,69 @@ def gazeDataSubmit():
       makeJSON(_accessPath_patches, PATCH_INDEX_PATH)
       print(PATCH_DICTIONARY)
       print(PATCH_INDEX_PATH)
+
+    # if not(os.path.isfile("./static/access/max_fix_count.csv")):
+    #   maxFixCount = 0
+    #   patchDir = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"+FILTER_NAME+"/images/"
+    #   stiDirList = os.listdir(patchDir)
+    #   for _stiType in stiDirList:
+    #     imageDir = patchDir + _stiType + "/"
+    #     imageList = os.listdir(imageDir)
+    #     for _imageName in imageList:
+    #       fixPatchDir = imageDir + _imageName
+    #       fixList = os.listdir(fixPatchDir)
+    #       if maxFixCount < len(fixList):
+    #         maxFixCount = len(fixList)
+    
+    patchImageDirPath = "./static/access/patches.png"
+    if not(os.path.isfile(patchImageDirPath)):
+      fixFilePath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/processedFixation/"+FILTER_NAME+"/all_fix.csv"
+      fixDF = pd.read_csv(fixFilePath)
+      firstPatch = 0
+      prevName = ""
+      count = 0
+      indexCount = 0
+      for index, row in fixDF.iterrows():
+        patchId = row['id']
+        stiClass = row['stimulusClass']
+        stiName = str(row['stimulusName']).zfill(3)
+        patchPath = "./static/data/"+DATASET+"/"+PARTICIPANT+"/patch/"+FILTER_NAME+"/images/"+stiClass+"/"+stiName+"/"
+        if patchId == 0:
+          patchPath = patchPath + str(count).zfill(3) + ".png"
+          if os.path.isfile(patchPath):
+            firstPatch = cv2.imread(patchPath)
+            # print(firstPatch.shape)
+          else:
+            firstPatch = np.empty((PATCH_SIZE, PATCH_SIZE, 3), dtype=np.uint8)
+          count = count+1
+          indexCount = indexCount+1
+          prevName = stiName
+          continue
+        while patchId != indexCount:
+          rightPatch = np.empty((PATCH_SIZE, PATCH_SIZE, 3), dtype=np.uint8)
+          # print(rightPatch.shape)
+          print("FALSE: %d -- %d: %s"%(patchId, indexCount, patchPath))
+          addImg = np.hstack((firstPatch, rightPatch))
+          firstPatch = addImg.copy()
+          indexCount = indexCount+1
+        if prevName != stiName:
+          count = 0
+        patchPath = patchPath + str(count).zfill(3) + ".png"
+        rightPatch = 0
+        if os.path.isfile(patchPath):
+          rightPatch = cv2.imread(patchPath)
+          print("TRUE: %d -- %d: %s"%(patchId, indexCount, patchPath))
+        else:
+          rightPatch = np.empty((PATCH_SIZE, PATCH_SIZE, 3), dtype=np.uint8)
+          print("FALSE: %d -- %d: %s"%(patchId, indexCount, patchPath))
+        addImg = np.hstack((firstPatch, rightPatch))
+        firstPatch = addImg.copy()
+        count = count+1
+        indexCount = indexCount+1
+        prevName = stiName
+      cv2.imwrite(patchImageDirPath, firstPatch)
+      print("Patch access image for stripe finished")
+
 
     # if feature mean cache files does not exist
     print("generate feature mean cache files")
