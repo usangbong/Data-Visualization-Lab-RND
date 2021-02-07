@@ -48,7 +48,7 @@ const clusteringAlgorithm = [
   { value:'k_means', label: 'k-Means' }
 ];
 const patchSelectOption = [
-  { value:'none', label: 'None' },
+  { value:'selected', label: 'Selected patches' },
   { value:'similar', label: 'Similar patches' }
 ];
 const imageSimilarityOption = [
@@ -56,6 +56,7 @@ const imageSimilarityOption = [
   { value:'SSIM', label: 'SSIM' }
 ];
 let moveDestClusterOption = [];
+const SIMILARITY_THRESHOLD = 0.8;
 
 class Data extends React.Component {
   constructor(props) {
@@ -102,6 +103,11 @@ class Data extends React.Component {
       selectedDataTransformation: null,
       selectedDimensionReduction: null,
       selectedClusteringAlgorithm: null,
+      similarPatchesId: [],
+      similarPatchList: [],
+      selectedMoveDestination: null,
+      similarDisabled: true,
+      updateScatterURL: "",
     };
   }
 
@@ -337,7 +343,21 @@ class Data extends React.Component {
           };
           moveDestClusterOption.push(_option);
         }
+        moveDestClusterOption.push({value: 'add_cluster', label: 'add cluster'});
       });
+    });
+  }
+
+  loadUpdatedScatterPlotURL = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/access/scatter_clustering_update_path.json?`+Math.random())
+    .then(response => {
+      // console.log(response);
+      let _path = `http://${window.location.hostname}:5000`+response.data+"?"+Math.random();
+      // console.log(_path);
+      this.setState({
+        updateScatterURL: _path
+      });
+      
     });
   }
 
@@ -773,6 +793,15 @@ class Data extends React.Component {
 
   patchSelectOptionChanged = selectedPatchSelectOption =>{
     this.setState({selectedPatchSelectOption});
+    if(selectedPatchSelectOption.value == 'similar'){
+      this.setState({
+        similarDisabled: false
+      });
+    }else{
+      this.setState({
+        similarDisabled: true
+      });
+    }
   }
 
   similarityOptionChanged = selectedSimilarityOption =>{
@@ -786,8 +815,142 @@ class Data extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/data/similarity`, data)
     .then(response => {
       console.log("get patches calculated similarity values");
+      // get sorted similarity values with id
+      axios.get(`http://${window.location.hostname}:5000/static/access/similarity_scores_sorting.json?`+Math.random())
+      .then(response => {
+        console.log(response.data);
+        let simIds = [];
+        let simIdsTh = [];
+        for(let i=0; i<response.data.length; i++){
+          let _simPatch = {
+            id: response.data[i][0],
+            score: response.data[i][1]
+          };
+          simIds.push(_simPatch);
+          if(parseFloat(response.data[i][1]) > SIMILARITY_THRESHOLD){
+            simIdsTh.push(_simPatch);
+          }
+        }
+        this.setState({
+          similarPatchesId: simIds
+        });
+        this.setState({
+          similarPatchList: simIdsTh
+        });
+      })
+      .then(()=>{
+        axios.get(`http://${window.location.hostname}:5000/static/access/updated_ordered_patch.json?`+Math.random())
+        .then(response => {
+          console.log(response.data);
+          let _updatePatch = [];
+          for(let i=0; i<response.data.length; i++){
+            let _patch = {
+              clu: response.data[i][0],
+              order: response.data[i][1],
+              id: response.data[i][2]
+            };
+            _updatePatch.push(_patch);
+          }
+        }); 
+      });
     }).catch(error => {
       alert(`Error - ${error.message}`);
+    });
+  }
+
+  moveDestOptionChanged = selectedMoveDestination =>{
+    this.setState({selectedMoveDestination});
+    
+    const data = new FormData();
+    data.set('destination', selectedMoveDestination.value);
+    axios.post(`http://${window.location.hostname}:5000/api/data/movePatch`, data)
+    .then(response => {
+      if (response.data.status === 'success') {
+        console.log('move patch');
+      } else if (response.data.status === 'failed') {
+        alert(`Failed apply data pre-processing and correlation methods - ${response.data.reason}`);
+      }
+    }).then(()=>{
+      this.updatePatchData();
+      this.loadUpdatedScatterPlotURL();
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
+  }
+
+  updatePatchData = () =>{
+    axios.get(`http://${window.location.hostname}:5000/static/access/updated_ordered_patch.json?`+Math.random())
+    .then(response => {
+      let updatedPatchClu = response.data;
+      let targetPatchData = this.state.patchData;
+      // console.log('updatedPatchClu');
+      // console.log(updatedPatchClu);
+      // console.log('targetPatchData');
+      // console.log(targetPatchData);
+      let changeFlag = 0;
+      for(let i=0; i<updatedPatchClu.length; i++){
+        let _targetId = updatedPatchClu[i][2];
+        let _updatedClu = updatedPatchClu[i][0];
+        for(let j=0; j<targetPatchData.length; j++){
+          let _patchId = targetPatchData[j].id;
+          if(parseInt(_patchId) == _targetId){
+            targetPatchData[j].clu = _updatedClu;
+            changeFlag += 1;
+            break;
+          }
+        }
+      }
+
+      let _maxClu = 0;
+      for(let i=0; i<targetPatchData.length; i++){
+        let _clu = targetPatchData[i].clu;
+        if(_maxClu < _clu){
+          _maxClu = _clu;
+        }
+      }
+      // console.log('this.state.numCluster');
+      // console.log(this.state.numCluster);
+      // console.log('_maxClu');
+      // console.log(_maxClu);
+      if(_maxClu > this.state.numCluster){
+        this.setState({
+          numCluster: _maxClu
+        });
+      }
+
+      let updatedPatchData = [];
+      // console.log('targetPatchData');
+      // console.log(targetPatchData);
+      for(let i=0; i<targetPatchData.length; i++){
+        updatedPatchData.push(targetPatchData[i]);
+      }
+      // for(let i=0; i<this.state.numCluster+1; i++){
+      //   let _cluData = []
+      //   for(let j=0; j<targetPatchData.length; j++){
+      //     if(i == targetPatchData[j].clu){
+      //       let _d = {
+      //         "id":targetPatchData[j].id, 
+      //         "duration":targetPatchData[j].duration, 
+      //         "length":targetPatchData[j].length, 
+      //         "x": targetPatchData[j].x,
+      //         "y": targetPatchData[j].y,
+      //         "clu": targetPatchData[j].clu
+      //       };
+      //       _cluData.push(_d);
+      //     }
+      //   }
+      //   updatedPatchData.push(_cluData);
+      // }
+      // console.log('changeFlag');
+      // console.log(changeFlag);
+      if(changeFlag>0){
+        // console.log("setstate patchdata");
+        this.setState({
+          patchData: updatedPatchData
+        });
+        console.log('this.state.patchData');
+        console.log(this.state.patchData);
+      }
     });
   }
 
@@ -827,10 +990,10 @@ class Data extends React.Component {
     const { selectedDataTransformation, selectedDimensionReduction, selectedClusteringAlgorithm } = this.state;
     const { feature_define, sti_class_define } = this.state;
     const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
-    const { patchURLs, numCluster, patchData } = this.state;
+    const { patchURLs, numCluster, patchData, similarPatchList, selectedMoveDestination } = this.state;
     const { filteredData, joinData } = this.state;
     const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId,  selectedPatchSelectOption} = this.state
-    const { selectedSimilarityOption } = this.state;
+    const { selectedSimilarityOption, similarDisabled, updateScatterURL } = this.state;
     
     return (
       <>
@@ -929,7 +1092,7 @@ class Data extends React.Component {
           </div>  
         }
       </div>
-        
+      
       {/* col 2*/}
       <div className="dataAbstractWrap">
         <div className="section-header">
@@ -974,8 +1137,33 @@ class Data extends React.Component {
             />
           </div>
         }
+        <div className="section-header">
+          <h4> Clustering result 2 </h4>
+        </div>
+        <Select
+          options={dataTransformation}
+          placeholder="Data transformation"
+        />
+        <Select
+          options={dimensionalityReduction}
+          placeholder="Dimensionality reduction"
+        />
+        <Select
+          options={clusteringAlgorithm}
+          placeholder="Clustering algorithm"
+        />
+        {updateScatterURL.length > 0 &&
+          <div className="page-section">
+            <AnalysisScatter 
+              width={400}
+              height={350}
+              dataURL={updateScatterURL}
+              filteredData={filteredData}
+            />
+          </div>
+        }
       </div>
-      
+
       {/* col 3*/}
       <div className="dataVisualizationWrap">
         <div className="section-header">
@@ -993,6 +1181,7 @@ class Data extends React.Component {
               filteredData={filteredData}
               passSelectedFeature={this.loadPatchSelectedFeature}
               selectedPatchUpdate={this.selectedPatchUpdate}
+              similarPatchList={similarPatchList}
             />
           </div>
         }
@@ -1044,6 +1233,7 @@ class Data extends React.Component {
             />
             <Select 
               value={selectedSimilarityOption}
+              isDisabled={similarDisabled}
               onChange={this.similarityOptionChanged}
               options={imageSimilarityOption}
               placeholder="Similarity option"
@@ -1051,6 +1241,8 @@ class Data extends React.Component {
             <h4>Move to</h4>
             {moveDestClusterOption.length > 0 &&
             <Select
+              value={selectedMoveDestination}
+              onChange={this.moveDestOptionChanged}
               options={moveDestClusterOption}
               placeholder="Moving option"
             />
@@ -1082,19 +1274,6 @@ class Data extends React.Component {
               width={450}
               height={200}
               getData={joinData}
-            />
-          </div>
-        }
-        <div className="section-header">
-          <h4> Clustering result 2 </h4>
-        </div>
-        {analysisScatterURL.length > 0 &&
-          <div className="page-section">
-            <AnalysisScatter 
-              width={450}
-              height={400}
-              dataURL={analysisScatterURL}
-              filteredData={filteredData}
             />
           </div>
         }
