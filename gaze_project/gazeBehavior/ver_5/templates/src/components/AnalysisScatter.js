@@ -4,7 +4,7 @@ function AnalysisScatter(props) {
   const { width, height, dataURL, filteredData } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-  const colors = ["#a6cee3", "#fb9a99", "#fdbf6f", "#cab2d6", "#b15928", "#b2df8a", "#ffff99", "#1f78b4", "#e31a1c", "#ff7f00", "#33a02c", "#6a3d9a"];
+  const colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   
   useEffect(() => {
     if(typeof dataURL !== 'string' || dataURL.length === 0)
