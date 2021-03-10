@@ -67,31 +67,52 @@ function Stimulus(props) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var stimulus = svg.selectAll(".sti")
-      .data(fixations)
-      .enter()
-      .append("g")
-      .attr("class", "sti")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // var stimulus = svg.selectAll(".sti")
+    //   .data(fixations)
+    //   .enter()
+    //   .append("g")
+    //   .attr("class", "sti")
+    //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
-    stimulus.append("image")
-      .attr("width", stiWidth)
-      .attr("height", stiHeight)
-      .attr("xlink:href", stimulusPath);
+    // stimulus.append("image")
+    //   .attr("width", stiWidth)
+    //   .attr("height", stiHeight)
+    //   .attr("xlink:href", stimulusPath);
+    // var stimulus = svg.select(".sti")
+    //   .datum(stimulusPath)
+    //   .enter()
+    //   .append("g")
+    //   .attr("class", "sti")
+    //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+    svg.append("image")
+    .attr('x', margin.left)
+    .attr('y', margin.top)
+    .attr("width", stiWidth)
+    .attr("height", stiHeight)
+    .attr("xlink:href", stimulusPath);
 
-    var sFrame = svg.selectAll(".sFrame")
-      .data(fixations)
-      .enter()
-      .append("g")
-      .attr("class", "sFrame")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    svg.append("rect")
+    .attr('x', margin.left)
+    .attr('y', margin.top)
+    .attr("width", stiWidth)
+    .attr("height", stiHeight)
+    .attr("stroke", "black")
+    .attr("stroke-width", "1px")
+    .style("fill", "none");
+    // var sFrame = svg.selectAll(".sFrame")
+    //   .data(fixations)
+    //   .enter()
+    //   .append("g")
+    //   .attr("class", "sFrame")
+    //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-    sFrame.append("rect")
-      .attr("width", stiWidth)
-      .attr("height", stiHeight)
-      .attr("stroke", "black")
-      .attr("stroke-width", "1px")
-      .style("fill", "none");
+    // sFrame.append("rect")
+    //   .attr("width", stiWidth)
+    //   .attr("height", stiHeight)
+    //   .attr("stroke", "black")
+    //   .attr("stroke-width", "1px")
+    //   .style("fill", "none");
     
     var saccade = svg.selectAll(".saccade")
       .data(saccadeData)
