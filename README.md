@@ -11,20 +11,20 @@ vis.sejong.ac.kr
   - Seokyeon Kim
 - Ph.D 
   - Sangbong Yoo
-  - Mingyu Pi
+  - Seongmin Jeong
+  - (military service) Mingyu Pi
 - Master
   - Hyesook Son
   - Hyeyeon Park
-- Undergraduate
   - Yejin Kim
-  - Changyoung Yonn
-  - Soobin Yim
   - Hyein Hong
-  - Seongbum Seo
   - Giwoong Park
+- Undergraduate
+  - Changyoung Yonn
+  - Seongbum Seo
+  - Soobin Yim
 - Alumni
   - (Ph.D) Hanbyul Yeon
-  - (Master) Seongmin Jeong
   - (Master) Daekyo Jeong
   - Hewon Baek
   - Hyunjin Kang
