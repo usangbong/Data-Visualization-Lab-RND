@@ -1,16 +1,20 @@
 import React from 'react';
 import Select from 'react-select';
+import InputNumber from 'react-input-number';
 import axios from 'axios';
 
 import Heatmap from 'components/Heatmap';
 import CorrelationMatrix from 'components/CorrelationMatrix';
 import ScatterPlot from 'components/ScatterPlot';
-import PatchTable from 'components/PatchTable';
+// import PatchTable from 'components/PatchTable';
+import PatchVisualization from 'components/PatchVisualization';
 import AnalysisScatter from 'components/AnalysisScatter';
+import ClusteringScatterPlot from 'components/ClusteringScatterPlot';
 import DurationBoxPlot from 'components/DurationBoxPlot';
 import LengthBoxPlot from 'components/LengthBoxPlot';
 import Stimulus from 'components/Stimulus';
 import Patch from 'components/Patch';
+import ScanpathVisualization from 'components/ScanpathVisualization';
 
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -55,6 +59,35 @@ const imageSimilarityOption = [
   { value:'MSE', label: 'MSE' },
   { value:'SSIM', label: 'SSIM' }
 ];
+
+const tempSelectOption = [
+  { value:'scanpath', label:'scanpath' },
+  { value:'test', label:'test' }
+];
+
+const stimulusSwitchSelectOption = [
+  { value:'on', label:'Stimulus On'},
+  { value:'off', label:'Sitmulus Off'}
+];
+const scanpathSimilaritySelectOption = [
+  { value:'jd', label: 'Jaccard Coefficient' },
+  { value:'dtw', label: 'Dynamic Time Warping' },
+  { value:'lcs', label: 'Longest Common Subsequence' },
+  { value:'fd', label: 'Frechet Distance' },
+  { value:'ed', label: 'Edit (Levenshtein) Distance' }
+];
+
+// options for patch visualization view
+const patchVisualizationStyle = [
+  { value:'clustering', label: 'Clustering Table' },
+  { value:'scatterplot', label: 'Scatter Plot' }
+];
+const patchNodeStyle = [
+  { value:'cluster', label: 'Cluster' },
+  { value:'patch', label: 'Patch Image' }
+];
+
+
 let moveDestClusterOption = [];
 const SIMILARITY_THRESHOLD = 0.8;
 
@@ -78,6 +111,7 @@ class Data extends React.Component {
       selectedProcessMethod: null,
       selectedCorrelationMethod: null,
       feature_define: [],
+      selected_feature_define: [],
       corr_feature_define: [],
       sti_class_define: [],
       scatter_axis: [],
@@ -108,6 +142,22 @@ class Data extends React.Component {
       selectedMoveDestination: null,
       similarDisabled: true,
       updateScatterURL: "",
+      selectedVisStyle: "",
+      nodeSelectDisabledFlag: true,
+      selectedNodeStyle: "",
+      nodeSizeSpinnerValue: 10,
+      dtfSelectDisableFlag: true,
+      drSelectDisableFlag: true,
+      cluSelectDisableFlag: true,
+      selectedTempOption: null,
+      selectedStimulusSwitchOption: null,
+      stimulusSwitchDisableFlag: true,
+      scanpathData: [],
+      scanpathSimClu: [],
+      selectSimilarityMethodOption: null,
+      similaritySelectDeisableFlag: true,
+      scanpathSimData: [],
+
     };
   }
 
@@ -171,17 +221,29 @@ class Data extends React.Component {
 
   loadSelectedFeatureDefine = () =>{
     // console.log(this.state.corr_feature_define);
-    if(this.state.corr_feature_define.length === 0){
+    // if(this.state.corr_feature_define.length === 0){
+    //   this.setState({
+    //     corr_feature_define: this.state.feature_define
+    //   });
+    // }else{
+    //   axios.get(`http://${window.location.hostname}:5000/static/access/selected_feature_define.json?`+Math.random())
+    //   .then(response => {
+    //     // console.log(response);
+    //     this.setState({
+    //       corr_feature_define: response.data
+    //     });
+    //   });
+    // }
+    if(this.state.selected_feature_define.length === 0){
       this.setState({
-        corr_feature_define: this.state.feature_define
+        selected_feature_define: this.state.feature_define
       });
     }else{
       axios.get(`http://${window.location.hostname}:5000/static/access/selected_feature_define.json?`+Math.random())
       .then(response => {
         // console.log(response);
-        let selected_feature_define = response.data;
         this.setState({
-          corr_feature_define: selected_feature_define
+          corr_feature_define: response.data
         });
       });
     }
@@ -763,6 +825,9 @@ class Data extends React.Component {
     this.setState({selectedFilter});
     // console.log(selectedFilter.value);
     this.loadSubmitApi(selectedFilter);
+    this.setState({
+      dtfSelectDisableFlag: false
+    });
   };
 
   pMethodChange = selectedProcessMethod => {
@@ -956,45 +1021,204 @@ class Data extends React.Component {
 
   dataTransformationOptionChanged = selectedDataTransformation =>{
     this.setState({selectedDataTransformation});
+    // load selected features define
+    this.loadSelectedFeatureDefine();
+
+    const _emptyData = new FormData();
+    axios.post(`http://${window.location.hostname}:5000/api/data/select/filtering`, _emptyData)
+    .then(response => {
+      // console.log(response);
+      this.setState({
+        drSelectDisableFlag: false
+      });
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+      this.setState({
+        drSelectDisableFlag: true
+      });
+    });
   }
   dimensionReductionOptionChanged = selectedDimensionReduction =>{
     this.setState({selectedDimensionReduction});
+    this.setState({
+      cluSelectDisableFlag: false
+    });
   }
   clusteringAlgorithmOptionChanged = selectedClusteringAlgorithm =>{
     this.setState({selectedClusteringAlgorithm});
-    
-    // if(selectedClusteringAlgorithm.value == "random_forest"){
-      let _dataTransformationMethod = this.state.selectedDataTransformation.value;
-      let _dimensionReductionMethod = this.state.selectedDimensionReduction.value;
-      let _clusteringMethod = selectedClusteringAlgorithm.value;
-      const data = new FormData();
-      data.set('selectedTransformationOption', _dataTransformationMethod);
-      data.set('selectedDimensionReductionOption', _dimensionReductionMethod);
-      data.set('selectedClusteringOption', _clusteringMethod);
-      axios.post(`http://${window.location.hostname}:5000/api/data/tfrmcluProcessing`, data)
-      .then(response => {
-        // console.log("data transformation applied");
-        // load scatter plot url
-        this.loadScatterPlotURL();
-        // load all patches url
-        this.loadPatchURLs();
-      }).catch(error => {
-        alert(`Error - ${error.message}`);
-      });
-    // }
+
+    let _dataTransformationMethod = this.state.selectedDataTransformation.value;
+    let _dimensionReductionMethod = this.state.selectedDimensionReduction.value;
+    let _clusteringMethod = selectedClusteringAlgorithm.value;
+    const data = new FormData();
+    data.set('selectedTransformationOption', _dataTransformationMethod);
+    data.set('selectedDimensionReductionOption', _dimensionReductionMethod);
+    data.set('selectedClusteringOption', _clusteringMethod);
+    axios.post(`http://${window.location.hostname}:5000/api/data/tfrmcluProcessing`, data)
+    .then(response => {
+      // console.log("data transformation applied");
+      // load scatter plot url
+      this.loadScatterPlotURL();
+      // load all patches url
+      this.loadPatchURLs();
+
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
   }
 
+  visStyleChanged = selectedVisStyle => {
+    this.setState({selectedVisStyle});
+    if(selectedVisStyle.value == 'scatterplot'){
+      this.setState({
+        nodeSelectDisabledFlag: false
+      });
+    }else{
+      this.setState({
+        nodeSelectDisabledFlag: true
+      });
+    }
+  }
+  nodeStyleChanged = selectedNodeStyle => {
+    this.setState({selectedNodeStyle});
+  }
+  
+  loadScanpathData = () =>{
+    if(this.state.selectedTempOption.value == 'scanpath'){
+      const data = new FormData();
+      axios.post(`http://${window.location.hostname}:5000/api/data/scanpath`, data)
+      .then(response => {
+        console.log(response.data);
+        var _sData = response.data.scanpath;
+
+        var _sList = [];
+        for(let i=0; i<_sData.length; i++){
+          var _path = [];
+          for(let j=0; j<_sData[i].length; j++){
+            var _fix = {
+              'x': _sData[i][j][0],
+              'y': _sData[i][j][1]
+            };
+            _path.push(_fix);
+          }
+          _sList.push(_path);
+        }
+        this.setState=({
+          scanpathData: _sList
+        });
+        console.log(_sList);
+      })
+      .then(()=>{
+        const data = new FormData();
+        axios.post(`http://${window.location.hostname}:5000/api/scanpath/sim`, data)
+        .then(response => {
+          console.log(response.data);
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+        });
+        
+      })
+      .catch(error => {
+        alert(`Error - ${error.message}`);
+      });
+    }else{
+      console.log("test");
+    }
+  }
+  scanpathSelectChanged = selectedTempOption => {
+    this.setState({selectedTempOption});
+    if(selectedTempOption.value == 'scanpath'){
+      const data = new FormData();
+      axios.post(`http://${window.location.hostname}:5000/api/data/scanpath`, data)
+      .then(response => {
+        console.log(response.data);
+        var _sData = response.data.scanpath;
+
+        var _sList = [];
+        for(let i=0; i<_sData.length; i++){
+          var _path = [];
+          for(let j=0; j<_sData[i].length; j++){
+            var _fix = {
+              'x': _sData[i][j][0],
+              'y': _sData[i][j][1]
+            };
+            _path.push(_fix);
+          }
+          _sList.push(_path);
+        }
+        this.setState({
+          scanpathData: _sList
+        });
+        console.log(_sList);
+      })
+      .then(()=>{
+        const data = new FormData();
+        axios.post(`http://${window.location.hostname}:5000/api/scanpath/sim`, data)
+        .then(response => {
+          console.log(response.data);
+          this.setState({
+            scanpathSimClu: response.data.similarityclu
+          });
+        }).catch(error => {
+          alert(`Error - ${error.message}`);
+        });
+      })
+      .then(()=>{
+        this.setState({similaritySelectDeisableFlag: false});
+      })
+      .catch(error => {
+        alert(`Error - ${error.message}`);
+      });
+    }
+  }
+  scanpathSimilarityChanged = selectSimilarityMethodOption => {
+    this.setState({selectSimilarityMethodOption});
+    let _scanpathSimData = [];
+    for(let i=0; i<this.state.scanpathData.length; i++){
+      var simClu = [];
+      for(let j=0; j<this.state.scanpathSimClu.length; j++){
+        if(this.state.scanpathSimClu[j].method == selectSimilarityMethodOption.value){
+          simClu = this.state.scanpathSimClu[j].clu;
+          break;
+        }
+      }
+      var _scanpthCluVal = 0;
+      if(i==0){
+        _scanpthCluVal = 2;
+      }else{
+        _scanpthCluVal = simClu[i-1];
+      }
+      var _scan ={
+        'scanpath': this.state.scanpathData[i],
+        'clu': _scanpthCluVal
+      };
+      _scanpathSimData.push(_scan);
+    }
+    console.log(_scanpathSimData);
+    this.setState({
+      scanpathSimData: _scanpathSimData
+    });
+    this.setState({stimulusSwitchDisableFlag: false});
+  }
+
+  stimulusSwitchChanged = selectedStimulusSwitchOption => {
+    this.setState({selectedStimulusSwitchOption});
+  }
+
+  
+
   render() {
-    const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName, selectedProcessMethod, selectedCorrelationMethod } = this.state;
-    const { spHeatmapDataURL, corrMatDataURL, datasetRecord } = this.state;
+    const { datasetList, selectedDataset, pIsDisabled, fIsDisabled, participants, selectedParticipant, fixationFilters, selectedFilter, selectedFilterName } = this.state;
+    const { spHeatmapDataURL, datasetRecord } = this.state;
     const { selectedDataTransformation, selectedDimensionReduction, selectedClusteringAlgorithm } = this.state;
-    const { feature_define, sti_class_define } = this.state;
-    const { scatter_axis, corr_feature_define, analysisScatterURL } = this.state;
-    const { patchURLs, numCluster, patchData, similarPatchList, selectedMoveDestination } = this.state;
-    const { filteredData, joinData } = this.state;
+    const { feature_define, sti_class_define, selected_feature_define } = this.state;
+    const { analysisScatterURL, patchURLs, numCluster, patchData, similarPatchList, selectedMoveDestination } = this.state;
     const { stimulusData, stimulusPath, selectedPatchIndex, patchFeatureImageURLs, selectedPatchOrder, selectedPatchCluster, patchSelectedFeature, selectedPatchId,  selectedPatchSelectOption} = this.state
-    const { selectedSimilarityOption, similarDisabled, updateScatterURL } = this.state;
-    
+    const { selectedSimilarityOption, similarDisabled } = this.state;
+    const { selectedVisStyle, selectedNodeStyle, nodeSelectDisabledFlag, nodeSizeSpinnerValue } = this.state;
+    const { dtfSelectDisableFlag, drSelectDisableFlag, cluSelectDisableFlag } = this.state;
+    // const { selectedProcessMethod, selectedCorrelationMethod, corrMatDataURL, scatter_axis, corr_feature_define, filteredData, joinData, updateScatterURL } = this.state;
+    const { selectedTempOption, selectedStimulusSwitchOption, scanpathData, scanpathSimData, stimulusSwitchDisableFlag,  selectSimilarityMethodOption, similaritySelectDeisableFlag} = this.state;
     return (
       <>
       {/* col 1*/}
@@ -1057,7 +1281,31 @@ class Data extends React.Component {
             </AgGridReact>
           </div>
         }
-        {spHeatmapDataURL.length > 0 &&
+        <div className="page-section">
+          <Select 
+            value={selectedTempOption}
+            onChange={this.scanpathSelectChanged}
+            options={tempSelectOption}
+          />
+        </div>
+        <div className="page-section">
+          <Select
+            isDisabled={stimulusSwitchDisableFlag}
+            value={selectedStimulusSwitchOption}
+            onChange={this.stimulusSwitchChanged}
+            options={stimulusSwitchSelectOption}
+          />
+        </div>
+        <div className="page-section">
+          <Select
+            isDisabled={similaritySelectDeisableFlag}
+            value={selectSimilarityMethodOption}
+            onChange={this.scanpathSimilarityChanged}
+            options={scanpathSimilaritySelectOption}
+          />
+        </div>
+
+        {/* {spHeatmapDataURL.length > 0 &&
           <div className="page-section select-process ">
             <Select
               value={selectedProcessMethod}
@@ -1090,11 +1338,45 @@ class Data extends React.Component {
               onAxisChanged={this.loadScatterAxis}
             />
           </div>  
+        } */}
+
+        <div className="section-header">
+          <h4> Clustering result 1 </h4>
+        </div>
+        <Select
+          value={selectedDataTransformation}
+          isDisabled={dtfSelectDisableFlag}
+          onChange={this.dataTransformationOptionChanged}
+          options={dataTransformation}
+          placeholder="Data transformation"
+        />
+        <Select
+          value={selectedDimensionReduction}
+          isDisabled={drSelectDisableFlag}
+          onChange={this.dimensionReductionOptionChanged}
+          options={dimensionalityReduction}
+          placeholder="Dimensionality reduction"
+        />
+        <Select
+          value={selectedClusteringAlgorithm}
+          isDisabled={cluSelectDisableFlag}
+          onChange={this.clusteringAlgorithmOptionChanged}
+          options={clusteringAlgorithm}
+          placeholder="Clustering algorithm"
+        />
+        {analysisScatterURL.length > 0 &&
+          <div id="analysis" className="page-section">
+            <ClusteringScatterPlot 
+              width={400}
+              height={350}
+              dataURL={analysisScatterURL}
+            />
+          </div>
         }
       </div>
       
       {/* col 2*/}
-      <div className="dataAbstractWrap">
+      {/* <div className="dataAbstractWrap">
         <div className="section-header">
           <h4> Selected feature </h4>
         </div>
@@ -1106,37 +1388,7 @@ class Data extends React.Component {
             dataURL={`http://${window.location.hostname}:5000/static/access/scatter_data.csv?`+Math.random()}
           />
         </div>
-        <div className="section-header">
-          <h4> Clustering result 1 </h4>
-        </div>
-        <Select
-          value={selectedDataTransformation}
-          onChange={this.dataTransformationOptionChanged}
-          options={dataTransformation}
-          placeholder="Data transformation"
-        />
-        <Select
-          value={selectedDimensionReduction}
-          onChange={this.dimensionReductionOptionChanged}
-          options={dimensionalityReduction}
-          placeholder="Dimensionality reduction"
-        />
-        <Select
-          value={selectedClusteringAlgorithm}
-          onChange={this.clusteringAlgorithmOptionChanged}
-          options={clusteringAlgorithm}
-          placeholder="Clustering algorithm"
-        />
-        {analysisScatterURL.length > 0 &&
-          <div id="analysis" className="page-section">
-            <AnalysisScatter 
-              width={400}
-              height={350}
-              dataURL={analysisScatterURL}
-              filteredData={filteredData}
-            />
-          </div>
-        }
+        
         <div className="section-header">
           <h4> Clustering result 2 </h4>
         </div>
@@ -1162,16 +1414,52 @@ class Data extends React.Component {
             />
           </div>
         }
-      </div>
+      </div> */}
 
       {/* col 3*/}
       <div className="dataVisualizationWrap">
         <div className="section-header">
-          <h4> Patch Clustering </h4>
+          <h4> Patch Clustering Visualization </h4>
+        </div>
+        <div className="visControlClass">
+          <div className="visSelect">
+          <Select 
+            value={selectedVisStyle}
+            onChange={this.visStyleChanged}
+            options={patchVisualizationStyle}
+            placeholder="Visualization Style"
+            // defaultInputValue="Clustering Table"
+          />
+          </div>
+          <div className="nodeSelect">
+          <Select 
+            value={selectedNodeStyle}
+            isDisabled={nodeSelectDisabledFlag}
+            onChange={this.nodeStyleChanged}
+            options={patchNodeStyle}
+            placeholder="Node Style"
+            // defaultInputValue="Cluster"
+          />
+          </div>
+          <div className="nodeSizeSpinner">
+            <InputNumber
+              width={100}
+              min={10}
+              step={1}
+              value={nodeSizeSpinnerValue}
+              onChange={this.nodeSizeChanged}
+            />
+          </div>
+          <div className="featureSelect">
+          <Select 
+            options={patchNodeStyle}
+            placeholder="Features"
+          />
+          </div>
         </div>
         {patchURLs.length > 0 && numCluster != 0 && patchData.length != 0 &&
           <div className="page-section">
-            <PatchTable 
+            {/* <PatchTable 
               width={900}
               height={780}
               patchURLs={patchURLs}
@@ -1182,13 +1470,26 @@ class Data extends React.Component {
               passSelectedFeature={this.loadPatchSelectedFeature}
               selectedPatchUpdate={this.selectedPatchUpdate}
               similarPatchList={similarPatchList}
+            /> */}
+            <PatchVisualization 
+              width={900}
+              height={760}
+              visStyle={selectedVisStyle.value}
+              nodeStyle={selectedNodeStyle.value}
+              nodeSpinnerSize={nodeSizeSpinnerValue}
+              patchURLs={patchURLs}
+              patchScatterData={patchData}
+              numClusters={numCluster}
+              features={selected_feature_define}
+              selectedPatchUpdate={this.selectedPatchUpdate}
+              similarPatchList={similarPatchList}
             />
           </div>
         }
         <div className="stimulusDivsWrap">
           <div className="stimulusClass">
             <div className="section-header">
-              <h4>Stimulus</h4>
+              <h4>Stimulus view</h4>
             </div>
             {stimulusData.length>0 && stimulusPath.length>0 &&
               <Stimulus 
@@ -1203,7 +1504,7 @@ class Data extends React.Component {
           </div>
           <div className="patchClass">
             <div className="section-header">
-              <h4>Patch</h4>
+              <h4>Patch view</h4>
             </div>
             {patchURLs.length>0 && patchFeatureImageURLs.length>0 &&
               <Patch 
@@ -1252,7 +1553,7 @@ class Data extends React.Component {
       </div>
 
       {/* col 4*/}
-      <div className="dataResultWrap">
+      {/* <div className="dataResultWrap">
         <div className="section-header">
           <h4> Box plot: duration </h4>
         </div>
@@ -1277,7 +1578,17 @@ class Data extends React.Component {
             />
           </div>
         }
-      </div>
+      </div> */}
+        <div className="visWarp">
+        {selectedStimulusSwitchOption != null && scanpathSimData.length != 0 &&
+          <ScanpathVisualization
+            width={960}
+            height={550}
+            scanpathList={scanpathSimData}
+            stimulusSwitch={selectedStimulusSwitchOption.value}
+          />
+          }
+        </div>
       </>
     );
   }
