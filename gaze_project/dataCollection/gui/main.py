@@ -212,24 +212,20 @@ class Ui_MainWindow(object):
         else:
             object.setText("on")
 
-
 class Board(QLabel):
     def __init__(self, parent):
         super().__init__(parent=parent)
         self.setAcceptDrops(True)
-
     def dragEnterEvent(self, e: QDragEnterEvent):
         if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore()
-
     def dropEvent(self, e: QDropEvent):
         if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore()
-
 
 if __name__ == "__main__":
     import sys

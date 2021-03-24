@@ -5,14 +5,11 @@
 # Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLabel
 
 from objects.object import Point, Size
 from random import *
-
 
 
 class Ui_MainWindow(object):
@@ -79,18 +76,6 @@ class Ui_MainWindow(object):
         self.label_7.setStyleSheet("background-color: #7e7e7e;")
         self.label_8.setStyleSheet("background-color: #7e7e7e;")
         self.label_9.setStyleSheet("background-color: #7e7e7e;")
-        
-    # def setBackgroundColor_red(self):
-    #     self.label.setStyleSheet("background-color: #fb9a99;")
-    
-    # def setBackgroundColor_green(self):
-    #     self.label.setStyleSheet("background-color: #b2df8a;")
-    
-    # def setBackgroundColor_gray(self):
-    #     self.label.setStyleSheet("background-color: #878787;")
-    
-    # def setBackgroundColor_black(self):
-    #     self.label.setStyleSheet("background-color: black;")
 
 
 class Paint(QLabel):
@@ -137,6 +122,11 @@ class Paint(QLabel):
         else:
             self.stiPosX = randint(0, 1000)
             self.stiPosY = randint(0, 500)
+
+    def setImagePosition(self, _width, _height):
+        self.stiPosX = (2920/2)-(_width/2)
+        self.stiPosY = (1580/2)-(_height/2)
+
 
     def getStiPosition(self, _idx):
         if _idx == 0 :
