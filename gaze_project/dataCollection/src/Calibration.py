@@ -11,7 +11,6 @@ from gui.calibration import Ui_MainWindow
 
 class Calibration(QMainWindow, Ui_MainWindow):
     resized = QtCore.pyqtSignal()
-
     def __init__(self, parent, url, image_size):
         super().__init__()
         self.main = parent
@@ -22,13 +21,11 @@ class Calibration(QMainWindow, Ui_MainWindow):
         self.image_size = image_size
         self.setBackgroundExists()
         self.resized.connect(self.synchronize)
-
         flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setWindowFlags(flags)
         sizegrip = QSizeGrip(self)
         sizegrip.setVisible(True)
         self.gridLayout.addWidget(sizegrip)
-
         self.pushButton_close.clicked.connect(self.on_click)
         self.pushButton_cancel.clicked.connect(self.on_click)
         self.pushbutton_calibrate.clicked.connect(self.on_click)
@@ -62,10 +59,7 @@ class Calibration(QMainWindow, Ui_MainWindow):
                 if self.pressing:
                     self.end = self.mapToGlobal(event.pos())
                     self.movement = self.end - self.start
-                    self.setGeometry(self.mapToGlobal(self.movement).x(),
-                                            self.mapToGlobal(self.movement).y(),
-                                            self.width(),
-                                            self.height())
+                    self.setGeometry(self.mapToGlobal(self.movement).x(), self.mapToGlobal(self.movement).y(), self.width(), self.height())
                     self.start = self.end
             if event.type() == QtCore.QEvent.MouseButtonRelease:
                 self.pressing = False
@@ -98,7 +92,6 @@ class Calibration(QMainWindow, Ui_MainWindow):
     def synchronize(self):
         if self.isBackgroundExists is False: return
         if self.isSameAspectRatio(self.size(), self.image.size()): return
-
         height = (self.size().width() * self.image.size().height()) / self.image.size().width()
         self.image_size = QSize(self.size().width(), height)
         self.setBackground()
@@ -109,7 +102,6 @@ class Calibration(QMainWindow, Ui_MainWindow):
         palette = QPalette()
         palette.setBrush(10, QBrush(scaled))
         self.resize(self.image_size)
-
         self.setPalette(palette)
         self.lwidth_value.setText("%d" % self.image_size.width())
         self.lheight_value.setText("%d" % self.image_size.height())
@@ -119,10 +111,3 @@ class Calibration(QMainWindow, Ui_MainWindow):
         ratio1 = size1.width() / size1.height()
         ratio2 = size2.width() / size2.height()
         return True if ratio1 == ratio2 else False
-
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = Calibration(QImage())
-#     ex.show()
-#     sys.exit(app.exec_())

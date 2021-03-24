@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import tobii_research as tr
 
 
@@ -25,7 +24,6 @@ class Tobii:
 
     def to_dictionary(self):
         index = len(self.raw_data.left_gaze_point_on_display_area) - 1
-
         dictionary = {
             'id': self.raw_data.id,
             'left_gaze_point_on_display_area': self.raw_data.left_gaze_point_on_display_area[index],
@@ -35,7 +33,6 @@ class Tobii:
             'device_time_stamp': self.raw_data.device_time_stamp[index]
         }
         self.tracker.plot(dictionary)
-
 
 class RawData:
     def __init__(self, tobii):

@@ -32,65 +32,48 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data = GazeData(self)
         self.tobii = Tobii(self)
         self.setupGeometries()
-        self.stiPath = "./resources/sti"
+        self.stiPath = "./resources/stimuli"
         self.stanbyImagePath = "./resources/stanby.jpg"
         self.checkList = []
-        self.dirList = []
+        self.stiList = []
         self.fileList = []
-        self.oneSetNumber = 3
-        self.dirNumber = 20
-        self.totalStimulus = self.oneSetNumber * self.dirNumber
+        self.oneSetNumber = 10
+        self.totalStimulus = 0
         self.setFilelist()
-        #self.stanbyTime = 1000
-        #self.showTime = 5000
-        self.stanbyTime = 100
-        self.showTime = 100
+        self.stanbyTime = 1000
+        self.showTime = 5000
+        # self.stanbyTime = 500
+        # self.showTime = 500
         self.timerVal = QTimer()
         self.timerVal.setInterval(self.stanbyTime)
         self.timerVal.timeout.connect(self.do_timeout)
         self.db_conn = self.db_connect()
 
         self.dirShowCount = 0
-        
         self.stanbyFlag = True
         self.stanbyCounting = 0
         self.dirIdx = 0
         self.fileIdx = 0
         self.stiFilePath = ""
 
+
     def setFilelist(self):
-        if self.oneSetNumber*self.dirNumber > 2000:
-            self.oneSetNumber = 100
-            self.dirNumber = 20
-        if self.oneSetNumber > 100:
-            self.oneSetNumber = 100
-        if self.dirNumber > 20:
-            self.dirNumber = 20
-
-        self.totalStimulus = self.oneSetNumber * self.dirNumber
-
-        self.dirList = os.listdir(self.stiPath)
+        self.stiList = os.listdir(self.stiPath)
         self.fileList = []
-        self.checkList = []
+        for stiDataset in self.stiList:
+            dirList = os.listdir(self.stiPath+"/"+stiDataset)
+            for dirname in dirList:
+                if stiDataset == "MIT1003":
+                    _filePath = self.stiPath+"/"+stiDataset+"/"+dirname
+                    self.fileList.append(_filePath)
+                    self.totalStimulus += 1
+                else:
+                    imageList = os.listdir(self.stiPath+"/"+stiDataset+"/"+dirname)
+                    for imgFile in imageList:
+                        _filePath = self.stiPath+"/"+stiDataset+"/"+dirname+"/"+imgFile
+                        self.fileList.append(_filePath)
+                        self.totalStimulus += 1
 
-        dirCount = 0
-        for dirname in self.dirList:
-            if dirCount > self.dirNumber:
-                break
-            _fileInDir = []
-            _checkList = []
-
-            _n = 1
-            while _n <= self.oneSetNumber:
-                _fileInDir.append(self.stiPath+"/"+dirname+"/"+str(_n*2).zfill(3)+".jpg")
-                _checkList.append(0)
-                _n += 1
-            self.fileList.append(_fileInDir)
-            self.checkList.append(_checkList)
-            dirCount += 1
-
-        #print(self.fileList[0])
-        #print(len(self.fileList))
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_1:
@@ -98,16 +81,6 @@ class Tracker(QMainWindow, Ui_MainWindow):
         elif event.key() == Qt.Key_2:
             self.tobiiPressed()
             self.timerVal.start()
-        # elif event.key() == Qt.Key_3:
-        #     self.imgCounting += 1
-        #     print("imgCounting ++")
-        #     if self.imgCounting < 4:
-        #         self.image_url = self.fileList[self.imgCounting-1]
-        #         self.setupImage()
-        #     else:
-        #         self.image_url = "./resources/default.jpg"
-        #         self.setupImage()
-        #         print("over index")
         elif event.key() == Qt.Key_Escape:
             self.timerVal.stop()
             self.db_disconnect()
@@ -125,10 +98,12 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.isPlotting = True if self.isPlotting is False else False
 
     def setupImage(self):
-        #self.paint.setFixedWidth(self.image_size.width()+1000)
-        #self.paint.setFixedHeight(self.image_size.height()+500)
-        self.paint.setFixedWidth(1920+1000)
-        self.paint.setFixedHeight(1080+500)
+        _exW = 2920-self.image_size.width()
+        _exH = 1580-self.image_size.height()
+        self.paint.setFixedWidth(self.image_size.width()+_exW)
+        self.paint.setFixedHeight(self.image_size.height()+_exH)
+        # self.paint.setFixedWidth(1920+1000)
+        # self.paint.setFixedHeight(1080+500)
 
         pixmap = QPixmap(self.image_url)
         pixmap = pixmap.scaled(self.image_size)
@@ -136,9 +111,15 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.paint.setPixmap(pixmap)
 
     def setupImagePainter(self):
-        self.paint.setFixedWidth(1920+1000)
-        self.paint.setFixedHeight(1080+500)
-        self.paint.setRandomPosition(self.imgCounting, self.totalStimulus)
+        _exW = 2920-self.image_size.width()
+        _exH = 1580-self.image_size.height()
+        self.paint.setFixedWidth(self.image_size.width()+_exW)
+        self.paint.setFixedHeight(self.image_size.height()+_exH)
+        # self.paint.setFixedWidth(1920+1000)
+        # self.paint.setFixedHeight(1080+500)
+        # self.paint.setRandomPosition(self.imgCounting, self.totalStimulus)
+        self.paint.setImagePosition(self.image_size.width(), self.image_size.height())
+
 
         self.paint.setStiImage(self.image_url)
         self.paint.repaint()
@@ -193,7 +174,7 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data.order_in_time()
         _sti_x = self.paint.getStiPosition(0)
         _sti_y = self.paint.getStiPosition(1)
-        self.data.save(self.db_conn, self.id, self.imgCounting, self.stiFilePath, _sti_x, _sti_y)
+        self.data.save(self.db_conn, self.id, self.imgCounting, self.image_url, self.image_size.width(), self.image_size.height(), _sti_x, _sti_y)
         self.data.reset_data()
         
     def save(self):
@@ -217,10 +198,16 @@ class Tracker(QMainWindow, Ui_MainWindow):
         self.data.save(dbconn, self.id)
         dbconn.close()
 
+    # def setStanbyFlag(self, _itv):
+    #     if self.stanbyFlag == True:
+    #         if self.stanbyCounting == 2:
+    #             self.stanbyFlag = False
+    #     else:
+    #         self.stanbyFlag = True
+    #     self.timerVal.setInterval(_itv)
     def setStanbyFlag(self, _itv):
         if self.stanbyFlag == True:
-            if self.stanbyCounting == 2:
-                self.stanbyFlag = False
+            self.stanbyFlag = False
         else:
             self.stanbyFlag = True
         self.timerVal.setInterval(_itv)
@@ -229,50 +216,29 @@ class Tracker(QMainWindow, Ui_MainWindow):
         return self.stanbyFlag
     
     def do_timeout(self):
-        #print(self.imgCounting)
-        self.dirIdx = self.imgCounting%self.dirNumber
-        self.fileIdx = int(self.imgCounting/self.dirNumber)
-        #print("dirIdx: %d"%self.dirIdx)
-        #print("fileIdx: %d"%self.fileIdx)
         if self.imgCounting < self.totalStimulus:
             if self.stanbyFlag == True:
-                if self.stanbyCounting == 0:
-                    self.image_url = self.stanbyImagePath
-                    #self.setupImage()
-                    self.setupImagePainter()
-                    self.setStanbyFlag(self.stanbyTime)
-                    self.stanbyCounting += 1
-                elif self.stanbyCounting == 1:
-                    self.setStanbyFlag(self.stanbyTime)
-                    self.stanbyCounting += 1
-                elif self.stanbyCounting == 2:
-                    self.setStanbyFlag(self.stanbyTime)
-                    self.stanbyCounting = 0
+                # if self.stanbyCounting == 0:
+                #     self.image_url = self.stanbyImagePath
+                #     #self.setupImage()
+                #     self.setupImagePainter()
+                #     self.setStanbyFlag(self.stanbyTime)
+                #     self.stanbyCounting += 1
+                # elif self.stanbyCounting == 1:
+                #     self.setStanbyFlag(self.stanbyTime)
+                #     self.stanbyCounting += 1
+                # elif self.stanbyCounting == 2:
+                #     self.setStanbyFlag(self.stanbyTime)
+                #     self.stanbyCounting = 0
+                self.image_url = self.stanbyImagePath
+                self.setupImagePainter()
+                self.setStanbyFlag(self.stanbyTime)
+                
             else:
-                # self.setStanbyFlag(1000)
                 self.setStanbyFlag(self.showTime)
-                self.image_url = self.fileList[self.dirIdx][self.fileIdx]
-                self.checkList[self.dirIdx][self.fileIdx] += 1
-                stiPathBackString = self.fileList[self.dirIdx][self.fileIdx][-7:-4]
-                self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
-                print(self.stiFilePath[:-4])
-                print(self.dirIdx)
-                print(self.fileIdx)
-                # if self.imgCounting < self.dirNumber:
-                #     self.image_url = self.fileList[self.dirIdx][0]
-                #     self.checkList[self.dirIdx][0] += 1
-                #     stiPathBackString = self.fileList[self.dirIdx][0][-7:-4]
-                #     self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
-                # elif self.imgCounting < self.totalStimulus/2:
-                #     self.setNoneDupStimulus()
-                #     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
-                # else:
-                #     # test tmp
-                #     #self.setDupStimulus()
-                #     self.setNoneDupStimulus()
-                    
-                #     #self.image_url = self.fileList[self.dirIdx][0]
-                #     #self.image_url = self.fileList[self.dirIdx][self.fileIdx]
+                self.image_url = self.fileList[self.imgCounting]
+                print(self.image_url)
+                
                 self.db_save()
                 self.imgCounting += 1
                 #self.setupImage()
@@ -283,30 +249,6 @@ class Tracker(QMainWindow, Ui_MainWindow):
             self.db_disconnect()
             self.tobii.end()
             self.close()
-    
-    def setNoneDupStimulus(self):
-        rVal = -999
-        while rVal < 0:
-            rVal = randint(1, len(self.checkList[self.dirIdx])-1)
-            if self.checkList[self.dirIdx][rVal] == 0:
-                self.checkList[self.dirIdx][rVal] += 1
-                break
-            else:
-                rVal = -999
-        self.image_url = self.fileList[self.dirIdx][rVal]
-        stiPathBackString = self.fileList[self.dirIdx][rVal][-7:-4]
-        self.stiFilePath = self.dirList[self.dirIdx] + "_" + stiPathBackString + ".csv"
-        
-    def setDupStimulus(self):
-        rVal = -999
-        while rVal < 0:
-            rVal = randint(0, len(self.checkList[self.dirIdx])-1)
-            if self.checkList[self.dirIdx][rVal] != 0:
-                self.checkList[self.dirIdx][rVal] += 1
-                break
-            else:
-                rVal = -999
-        self.image_url = self.fileList[self.dirIdx][rVal]
 
 
 if __name__ == '__main__':
@@ -315,5 +257,4 @@ if __name__ == '__main__':
     ex.showFullScreen()
     ex.setFixedSize(ex.size())
     # ex.startTracking()
-
     sys.exit(app.exec_())
