@@ -1,7 +1,6 @@
 import math
 import sys
 from operator import eq
-
 import pyautogui
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QSize
@@ -14,25 +13,18 @@ from src.Calibration import Calibration
 import database.constant as dbconstant
 from src.Tracker import Tracker
 
-
 class MainWindow(QMainWindow, Ui_MainWindow):
     resized = QtCore.pyqtSignal()
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.pushButton_bubble.clicked.connect(self.on_click)
         self.pushButton_dbsetting.clicked.connect(self.on_click)
-        #self.pushButton_shortcuts.clicked.connect(self.on_click)
-        # self.pushButton_calibrate.clicked.connect(self.on_click)
         self.pushButton_start.clicked.connect(self.on_click)
-        #self.pushButton_ok.clicked.connect(self.on_click)
         self.pushButton_cancel.clicked.connect(self.on_click)
         self.pushButton_apply.clicked.connect(self.on_click)
-        # self.edit_ratioValue.returnPressed.connect(self.on_enter)
         self.edit_id.returnPressed.connect(self.on_enter)
         self.check_id.stateChanged.connect(self.on_check)
-        # self.frame_board.installEventFilter(self)
         self.image = QImage()
         self.image_size = QSize()
         self.stack.setCurrentWidget(self.page_main)
@@ -48,21 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image_size.setWidth(width)
         self.image_size.setHeight(self.getScaledHeight(width))
         self.setImageSize(self.image_size)
-        # self.setBoardBackground()
-
-
-    # def on_calibration_click(self, name):
-    #     if eq(name, "close"):
-    #         self.calibration_window.destroy()
-    #     if eq(name, "cancel"):
-    #         self.calibration_window.destroy()
-    #     if eq(name, "calibrate"):
-    #         if eq(self.calibration_window.url, ""): return
-    #         self.url = self.calibration_window.url
-    #         self.setImageSize(self.calibration_window.image_size)
-    #         self.calibration_window.destroy()
-    #         self.setBoardBackground()
-
+        
     def on_check(self):
         if self.check_id.isChecked():
             if self.isExistingID():
@@ -71,18 +49,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_enter(self):
         sending_edit = self.sender()
-        # if eq(sending_edit.objectName(), "edit_ratioValue"):
-        #     if self.isFloat(self.edit_ratioValue.displayText()) is not True: return
-        #     if eq(self.url, "") is True:
-        #         self.edit_ratioValue.setText("")
-        #         return
-        #     width = (float(self.edit_ratioValue.displayText()) * self.image.size().width()) / 100
-        #     if width <= 0:
-        #         self.setImageSize(self.image_size)
-        #         return
-        #     self.image_size.setWidth(width)
-        #     self.image_size.setHeight(self.getScaledHeight(width))
-        #     self.setImageSize(self.image_size)
         if eq(sending_edit.objectName(), "edit_id"):
             if self.isExistingID():
                 self.warning("Duplicated ID!")
@@ -142,17 +108,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.toggleName(sending_button)
         if eq(sending_button.objectName(), "pushButton_dbsetting"):
             self.stack.setCurrentWidget(self.page_database)
-        # if eq(sending_button.objectName(), "pushButton_shortcuts"):
-        #     self.stack.setCurrentWidget(self.page_shortcuts)
-        # if eq(sending_button.objectName(), "pushButton_calibrate"):
-        #     if self.image_size.width() > pyautogui.size().width or self.image_size.height() > pyautogui.size().height:
-        #         self.warning("Image size is too big")
-        #         return
-        #     self.calibration_window = Calibration(self, self.url, self.image_size)
-        #     self.calibration_window.show()
         if eq(sending_button.objectName(), "pushButton_start"):
             isPlotting = True
-            # 2. db 체크
+            # 2. db check
             if self.check_id.isChecked():
                 if eq(self.edit_id.text(), ""):
                     self.warning("there is no id")
@@ -163,7 +121,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 id = self.edit_id.text()
             else:
                 id = ""
-            # 3. 이미지 체크
+            # 3. image check
             self.url = "./resources/stanby.jpg"
             self.setInitImageSize(self.url)
             if eq(self.url, ""):
@@ -224,23 +182,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return True
 
     def eventFilter(self, object, event):
-        # if object is self.frame_board:
-        #     if event.type() == QtCore.QEvent.Drop:
-        #         if event.mimeData().hasUrls():
-        #             event.accept()
-        #             # self.url = event.mimeData().urls()[0].toLocalFile()
-        #             # self.setBoardBackground()
-        #             # self.setImageSize(self.image.size())
-        #         else:
-        #             event.ignore()
         return False
 
     def setBoardBackground(self):
         print("setBoardBackground")
-        # self.image = QImage(self.url)
-        # pixmap = QPixmap(self.url)
-        # pixmap = pixmap.scaled(self.frame_board.width(), self.getScaledHeight(self.frame_board.width()))
-        # self.frame_board.setPixmap(pixmap)
 
     def getScaledHeight(self, width):
         #print("getScaledHeight")
