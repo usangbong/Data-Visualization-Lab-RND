@@ -79,19 +79,25 @@ ul {
     background-color: white;
     .visViewDiv{
       width: 900px;
-      height: 800px;
+      height: 600px;
       box-sizing: border-box;
       background-color: white;
     }
     .viewControlDiv{
       width: 290px;
-      height: 795px;
+      height: 595px;
       margin-top: 5px;
       margin-left: 5px;
       margin-right: 5px;
       box-sizing: border-box;
       background-color: white;
     }
+  }
+  .clusteringViewWrap{
+    width: 1200px;
+    height: 535px;
+    box-sizing: border-box;
+    background-color: white;
   }
   
   .visControlClass{
