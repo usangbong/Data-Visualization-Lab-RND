@@ -19,10 +19,13 @@ from sklearn.decomposition import PCA
 from sklearn.decomposition import FastICA
 from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
+from sklearn.cross_decomposition import PLSRegression
 from sklearn.cluster import KMeans
+from sklearn.pipeline import make_pipeline
 
 from flask import *
 from flask_cors import CORS
+
 
 # init dataset name, feature types, and stimulus type
 STI_DATASET = ""
@@ -165,6 +168,8 @@ def dimensionReduction(drMethod, df, featureList):
     return dr_ICA(df, featureList)
   elif drMethod == "t_SNE":
     return dr_TSNE(df, featureList)
+  elif drMethod == "PLS":
+    return dr_PLS(df, featureList)
   else:
     print("ERROR: unavailable dimension reduction method selected")
     return df[['x', 'y']]
@@ -184,10 +189,14 @@ def dr_ICA(df, featureList):
   drDF = drm.fit_transform(df[featureList])
   return drDF
 
-
 def dr_TSNE(df, featureList):
   drm = TSNE(learning_rate=100, random_state=0)
   drDF = drm.fit_transform(df[featureList])
+  return drDF
+
+def dr_PLS(df, featureList):
+  drm = PLSRegression(n_components=2)
+  drDF, _ = drm.fit_transform(df[featureList], df["label"])
   return drDF
 
 ################################
@@ -484,15 +493,15 @@ def clustering_processing():
     
     # data transformation
     tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered)
-    print('tfDF')
-    print(tfDF)
+    # print('tfDF')
+    # print(tfDF)
     
     # dimension reduction
     dr = dimensionReduction(GET_DIMEN_REDUCTION_METHOD, tfDF, FEATURE_ordered)
     # print(dr)
     drDF = pd.DataFrame(dr, columns=['x', 'y'])
-    print("drDF")
-    print(drDF)
+    # print("drDF")
+    # print(drDF)
 
     
     indexCount = 0
