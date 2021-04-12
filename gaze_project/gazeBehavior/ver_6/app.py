@@ -12,6 +12,13 @@ from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 from collections import OrderedDict
 
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import PowerTransformer
+from sklearn.manifold import MDS
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
+
 from flask import *
 from flask_cors import CORS
 
@@ -20,6 +27,7 @@ STI_DATASET = ""
 STI_CLASS = []
 PARTICIPANT = []
 FEATURE = []
+FEATURE_ordered = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"]
 COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"]
 PATCH_SIZE = 20
 
@@ -37,6 +45,113 @@ def makeJSON(_path, _data):
   wf = open(_path, "w", newline='', encoding='utf-8')
   wf.write(json.dumps(_data))
   wf.close()
+
+################################
+# clustering related functions #
+################################
+def label_groundTruthFixationMap(_gt, _x, _y):
+  if np.array_equal(_gt[_y][_x], np.array([0, 0, 0])):
+    return 0
+  else:
+    return 1
+
+def getFeatureMeanVal(_featDF, _x, _y, _stiWidth, _stiHeight, _patchSize):
+  meanVal = 0
+  min_x = int(_x - _patchSize/2)
+  max_x = int(_x + _patchSize/2)
+  if min_x < 0:
+    min_x = 0
+  if max_x > _stiWidth-1:
+    max_x = int(_stiWidth-1)
+  min_y = int(_y - _patchSize/2)
+  max_y = int(_y + _patchSize/2)
+  if min_y < 0:
+    min_y = 0
+  if max_y > _stiHeight-1:
+    max_y = int(_stiHeight-1)
+  featNP = _featDF.to_numpy()
+  # print("top: %d, bottom: %d, left: %d, right: %d"%(min_y, max_y, min_x, max_x))
+  patch = featNP[min_y:max_y, min_x:max_x]
+  # print(patch.shape)
+  meanVal = patch.mean()
+  return meanVal
+
+def dataTransformation(tMethod, df, featureList):
+  print("Data transformation method: "+tMethod)
+  if tMethod == "raw":
+    return df
+  elif tMethod == "min_max":
+    return dt_minMax(df, featureList)
+  elif tMethod == "z_score":
+    return dt_zScore(df, featureList)
+  elif tMethod == "yeo_johonson":
+    return dt_yeoJohnson(df, featureList)
+  elif tMethod == "yeo_johonson_min_max":
+    return dt_yeoJohnson_minMax(df, featureList)
+  else:
+    print("ERROR: unavailable data transformation method selected")
+    return df
+
+def dt_minMax(df, featureList):
+  getColNames = df.columns
+  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  for featureName in featureList:
+    colFeatDF = df[featureName]
+    scaler = MinMaxScaler()
+    _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
+    # tfDF.loc[:, featureName] = _tf
+    tfDF[featureName] = _tf
+  return tfDF
+
+def dt_zScore(df, featureList):
+  getColNames = df.columns
+  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  for featureName in featureList:
+    colFeatDF = df[featureName]
+    scaler = StandardScaler()
+    _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
+    tfDF[featureName] = _tf
+  return tfDF
+
+def dt_yeoJohnson(df, featureList):
+  getColNames = df.columns
+  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  for featureName in featureList:
+    colFeatDF = df[featureName]
+    scaler = PowerTransformer(method='yeo-johnson')
+    _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
+    tfDF[featureName] = _tf
+  return tfDF
+
+def dt_yeoJohnson_minMax(df, featureList):
+  _df_1 = dt_yeoJohnson(df, featureList)
+  _df_2 = dt_minMax(_df_1, featureList)
+  return _df_2
+
+def dataClustering(cMethod):
+  print("Data clustering method: "+cMethod)
+  if cMethod == "random_forest":
+    return dc_randomForest()
+  elif cMethod == "dbscan":
+    return dc_dbscan()
+  elif cMethod == "hdbscan":
+    return dc_hdbscan()
+  elif cMethod == "k_means":
+    return dc_kMeans()
+  else:
+    print("ERROR: unavailable data clustering method selected")
+
+def dc_randomForest():
+  return 0
+
+def dc_dbscan():
+  return 0
+
+def dc_hdbscan():
+  return 0
+
+def dc_kMeans():
+  return 0
 
 ################################
 # processing related functions #
@@ -243,6 +358,115 @@ def IQRclusteringRange(Q1, Q3, val):
     clu = 6
   return clu
 
+##################################
+# patch clustering analysis APIs #
+##################################
+@app.route('/api/clustering/loadCacheList', methods=['POST'])
+def clustering_loadCacheList():
+  print("clustering_loadCacheList")
+  print(request.form)
+  response = {}
+  try:
+    cacheDirPath = "./static/__cache__/"
+    filesInDir = os.listdir(cacheDirPath)
+    cacheFileList = []
+    for fileName in filesInDir:
+      fileType = fileName.split("_")[0]
+      if fileType == "cache":
+        cacheFileList.append(fileName)
+
+    response['status'] = 'success'
+    response['caches'] = cacheFileList
+    
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+@app.route('/api/clustering/processing', methods=['POST'])
+def clustering_processing():
+  print("clustering_processing")
+  print(request.form)
+  response = {}
+  try:
+    GET_TRANSFORMATION_METHOD = request.form['transformationMethod']
+    GET_CLUSTERING_METHOD = request.form['clusteringMethod']
+    print(GET_TRANSFORMATION_METHOD)
+    print(GET_CLUSTERING_METHOD)
+    print(PARTICIPANT)
+    print(FEATURE_ordered)
+
+    
+    midCacheFlag = False
+    midCacheFilePath = "./static/__cache__/midcache.csv"
+
+    fixDirPath = "./static/fix/"
+    featureDirPath = "./static/feature/"
+    groundTruthDirPath = "./static/ground_truth/"
+    aggregatedDataList = []
+    for observer in PARTICIPANT:
+      dataName = observer.split("/")[0]
+      className = observer.split("/")[1]
+      stiNameDir = observer.split("/")[2]
+      stiName = stiNameDir.split("_")[0]
+      stiExt = stiNameDir.split("_")[1]
+      userId = observer.split("/")[3]
+      if os.path.exists(midCacheFilePath):
+        midCacheFlag = True
+        break
+      
+      fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
+      print(fixFilePath)
+      fixDF = pd.read_csv(fixFilePath)
+      fixList = fixDF.values.tolist()
+      gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +"."+ stiExt
+      groundTruthFixMap = cv2.imread(gtFixMapPath)
+      fmHeight, fmWidth = groundTruthFixMap.shape[:2]
+      for _fp in fixList:
+        _x = int(_fp[0])
+        _y = int(_fp[1])
+        _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+        _midStack = [observer, _x, _y, _label]
+        for _f in FEATURE_ordered:
+          featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
+          featureDF = pd.read_csv(featureFilePath)
+          fMean = getFeatureMeanVal(featureDF, _x, _y, fmWidth, fmHeight, PATCH_SIZE)
+          _midStack.append(fMean)
+        aggregatedDataList.append(_midStack)
+    
+    aggDF = []
+    dfCols = ["id", "x", "y", "label"]
+    for featName in FEATURE_ordered:
+      dfCols.append(featName)
+    if midCacheFlag == False:
+      print("make file: "+midCacheFilePath)
+      aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
+      aggDF.to_csv(midCacheFilePath, mode='w', index=False)
+    else:
+      print("load file: "+midCacheFilePath)
+      aggDF = pd.read_csv(midCacheFilePath)
+    
+    # data transformation
+    tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered)
+    print(tfDF)
+    tsne = TSNE(learning_rate= 100, random_state=42)
+    tsneDR = tsne.fit_transform(tfDF[FEATURE_ordered])
+    print(tsneDR)
+
+    # data clustering
+
+
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+
+
 ##########################
 # scanpath analysis APIs #
 ##########################
@@ -353,11 +577,14 @@ def scanpath_calc_similarity():
 ###################
 @app.route('/api/processing/genFixationDataList', methods=['POST'])
 def processing_gen_fixationDataList():
+  print("processing_gen_fixationDataList")
   print(request.form)
   response = {}
   try:
     GET_PARTICIPANT = request.form['participantList']
     split_get_participant = GET_PARTICIPANT.split("-")
+
+    # generate fixations (scanpath) data list
     PARTICIPANT_FIX_FILE_LIST = []
     for _participant in split_get_participant:
       split_pData = _participant.split("/")
@@ -376,6 +603,47 @@ def processing_gen_fixationDataList():
       df = pd.read_csv(_path)
       dfList = df.values.tolist()
       FIX_DATA_LIST.append([_id, dfList])
+
+    # generate aggregated fixation patches image
+    fixatedPatchPath = "./static/output_image_patch/"
+    patchPos = 0
+    aggregatedPatchImage = 0
+    aggregatedPatchPath = "./static/__cache__/aggregated_patch.png"
+    # patchInfo = []
+    firstFlag = True
+    for i in range(0, len(FIX_DATA_LIST)):
+      fixData = FIX_DATA_LIST[i]
+      dataName = fixData[0][0]
+      className = fixData[0][1]
+      stiName = fixData[0][2]
+      userId = fixData[0][3]
+      patchDirPath = fixatedPatchPath + dataName +"/"+ className +"/"+ stiName +"/"
+      scanpath = fixData[1]
+      _fixs = []
+      for j in range(0, len(scanpath)):
+        _fixs.append({'index': str(j).zfill(3), 'px': patchPos, 'py': 0})
+        patchPath = patchDirPath + userId +"_"+ str(j).zfill(3) +".png"
+        # print(patchPath)
+        patch = 0
+        if os.path.exists(patchPath):
+          patch = cv2.imread(patchPath)
+          if firstFlag == True:
+            aggregatedPatchImage = patch.copy()
+            patchPos = patchPos+PATCH_SIZE
+            firstFlag = False
+            continue
+        else:
+          patch = np.empty((PATCH_SIZE, PATCH_SIZE, 3), dtype=np.uint8)
+          if firstFlag == True:
+            aggregatedPatchImage = patch.copy()
+            patchPos = patchPos+PATCH_SIZE
+            firstFlag = False
+            continue
+        processAggImg = np.hstack((aggregatedPatchImage, patch))
+        aggregatedPatchImage = processAggImg.copy()
+        patchPos = patchPos+PATCH_SIZE
+      FIX_DATA_LIST[i].append(_fixs)
+    cv2.imwrite(aggregatedPatchPath, aggregatedPatchImage)
 
     response['status'] = 'success'
     response['fixDataList'] = FIX_DATA_LIST
@@ -412,6 +680,15 @@ def processing_load_fixationDataList():
         _pdata = sti[0] +"/"+ sti[1] +"/"+ sti[2] +"_"+ sti[3] +"/" + _p.split(".")[0]
         PARTICIPANT.append(_pdata)
     # PARTICIPANT = list(set(PARTICIPANT))
+    
+    # # temp test 20210409 move the code position
+    # for sti in sti_files_list:
+    #   _path = './static/ground_truth/'+ sti[0] +"/"+ sti[1] +"/"+ sti[2] +"."+ sti[3]
+    #   print('_path')
+    #   print(_path)
+    #   print('test')
+    #   groundTruthFixationMapToMat(_path)
+
 
     response['status'] = 'success'
     response['participantList'] = PARTICIPANT
