@@ -15,6 +15,8 @@ from collections import OrderedDict
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PowerTransformer
+from sklearn.decomposition import PCA
+from sklearn.decomposition import FastICA
 from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
@@ -152,6 +154,41 @@ def dc_hdbscan():
 
 def dc_kMeans():
   return 0
+
+def dimensionReduction(drMethod, df, featureList):
+  print("Dimension reduction method: "+drMethod)
+  if drMethod == "MDS":
+    return dr_MDS(df, featureList)
+  elif drMethod == "PCA":
+    return dr_PCA(df, featureList)
+  elif drMethod == "ICA":
+    return dr_ICA(df, featureList)
+  elif drMethod == "t_SNE":
+    return dr_TSNE(df, featureList)
+  else:
+    print("ERROR: unavailable dimension reduction method selected")
+    return df[['x', 'y']]
+
+def dr_MDS(df, featureList):
+  drm = MDS(n_components=2, random_state=0)
+  drDF = drm.fit_transform(df[featureList])
+  return drDF
+
+def dr_PCA(df, featureList):
+  drm = PCA(n_components=2, random_state=0)
+  drDF = drm.fit_transform(df[featureList])
+  return drDF
+
+def dr_ICA(df, featureList):
+  drm = FastICA(n_components=2, random_state=0)
+  drDF = drm.fit_transform(df[featureList])
+  return drDF
+
+
+def dr_TSNE(df, featureList):
+  drm = TSNE(learning_rate=100, random_state=0)
+  drDF = drm.fit_transform(df[featureList])
+  return drDF
 
 ################################
 # processing related functions #
@@ -391,13 +428,11 @@ def clustering_processing():
   response = {}
   try:
     GET_TRANSFORMATION_METHOD = request.form['transformationMethod']
-    GET_CLUSTERING_METHOD = request.form['clusteringMethod']
+    GET_DIMEN_REDUCTION_METHOD = request.form['dimensionReductionMethod']
     print(GET_TRANSFORMATION_METHOD)
-    print(GET_CLUSTERING_METHOD)
+    print(GET_DIMEN_REDUCTION_METHOD)
     print(PARTICIPANT)
-    print(FEATURE_ordered)
 
-    
     midCacheFlag = False
     midCacheFilePath = "./static/__cache__/midcache.csv"
 
@@ -449,16 +484,47 @@ def clustering_processing():
     
     # data transformation
     tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered)
+    print('tfDF')
     print(tfDF)
-    tsne = TSNE(learning_rate= 100, random_state=42)
-    tsneDR = tsne.fit_transform(tfDF[FEATURE_ordered])
-    print(tsneDR)
+    
+    # dimension reduction
+    dr = dimensionReduction(GET_DIMEN_REDUCTION_METHOD, tfDF, FEATURE_ordered)
+    # print(dr)
+    drDF = pd.DataFrame(dr, columns=['x', 'y'])
+    print("drDF")
+    print(drDF)
 
-    # data clustering
-
-
+    
+    indexCount = 0
+    processedDF = pd.DataFrame(aggDF['id'].values.tolist(), columns=['id'])
+    indexCount = indexCount+1
+    processedDF.insert(indexCount, "x", drDF['x'].values.tolist(), True)
+    indexCount = indexCount+1
+    processedDF.insert(indexCount, "y", drDF['y'].values.tolist(), True)
+    indexCount = indexCount+1
+    processedDF.insert(indexCount, "label", aggDF['label'].values.tolist(), True)
+    indexCount = indexCount+1
+    for featName in FEATURE_ordered:
+      processedDF.insert(indexCount, featName, tfDF[featName].values.tolist(), True)
+      indexCount = indexCount+1
+      
+    
+    # print('processedDF')
+    # print(processedDF)
+    dataColumns = processedDF.columns.values.tolist()
+    # print("dataColumns")
+    # print(dataColumns)
+    processedDataList = processedDF.values.tolist()
+    # print("processedDataList")
+    # print(processedDataList)
+    rawDataList = aggDF.values.tolist()
+    # print("rawDataList")
+    # print(rawDataList)
 
     response['status'] = 'success'
+    response['dataColumns'] = dataColumns
+    response['processingData'] = processedDataList
+    response['rawData'] = rawDataList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
