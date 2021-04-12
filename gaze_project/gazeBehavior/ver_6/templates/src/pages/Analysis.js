@@ -47,12 +47,20 @@ const select_option_dataTransformation = [
   { value:'yeo_johonson_min_max', label: 'Yeo-Johonson + Min-max' }
 ];
 
-const select_option_dataClustering = [
-  { value:'random_forest', label: 'RandomForest' },
-  { value:'dbscan', label: 'DBSCAN' },
-  { value:'hdbscan', label: 'hDBSCAN' },
-  { value:'k_means', label: 'k-Means' }
+const select_option_dimensionReduction = [
+  { value:'MDS', label: 'MDS (Multi Dimensional Scaling)' },
+  { value:'PCA', label: 'PCA (Principal Component Analysis)' },
+  { value:'ICA', label: 'ICA (Independent Component Aanalysis)' },
+  { value:'t_SNE', label: 't-SNE (t-Stochastic Neighbor Embedding)' },
+  { value:'PLS', label: 'PLS (Partial Least Squares)' }
 ];
+
+// const select_option_dataClustering = [
+//   { value:'random_forest', label: 'RandomForest' },
+//   { value:'dbscan', label: 'DBSCAN' },
+//   { value:'hdbscan', label: 'hDBSCAN' },
+//   { value:'k_means', label: 'k-Means' }
+// ];
 
 
 class Analysis extends React.Component {
@@ -68,14 +76,16 @@ class Analysis extends React.Component {
       select_scanpathSimilarityMetohd: null,
       select_main_scanpath: null,
       select_dataTransformation: null,
-      select_dataClustering: null,
+      // select_dataClustering: null,
+      select_dimensionReduction: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
       select_isDisabled_stiName: true,
       select_isDisabled_scanpathSimilarity: true,
       select_isDisabled_mainScanpath: true,
       select_isDisabled_dataTransformation: true,
-      select_isDisabled_dataClustering: true,
+      // select_isDisabled_dataClustering: true,
+      select_isDisabled_dimensionReduction: true,
       select_isDisabled_useCache: true,
       select_isDisabled_cacheFile: true,
       select_option_participant: [],
@@ -91,7 +101,10 @@ class Analysis extends React.Component {
       alphaPicker_stimulusAlpha: 1,
       alphaPicker_stimulusColor: {},
       tempColor: {r: '255', g: '255', b: '255', a:'1'},
-
+      processingDataColumns: [],
+      processingDataList: [],
+      rawDataList: [],
+      patchDataList: [],
     };
   }
 
@@ -359,8 +372,8 @@ class Analysis extends React.Component {
       data.set('participantList', selectedParticipant_str);
       axios.post(`http://${window.location.hostname}:5000/api/processing/genFixationDataList`, data)
       .then(response => {
-        console.log('response.data.fixDataList');
-        console.log(response.data.fixDataList);
+        // console.log('response.data.fixDataList');
+        // console.log(response.data.fixDataList);
         let getFixDataList = response.data.fixDataList;
         let scanpathDataList = [];
         for(let i=0; i<getFixDataList.length; i++){
@@ -572,7 +585,7 @@ class Analysis extends React.Component {
         select_isDisabled_dataTransformation: _cacheFlag
       });
       this.setState({
-        select_isDisabled_dataClustering: _cacheFlag
+        select_isDisabled_dimensionReduction: _cacheFlag
       });
       this.setState({
         select_isDisabled_cacheFile: true
@@ -585,14 +598,30 @@ class Analysis extends React.Component {
     this.setState({select_cacheFile});
   }
 
-  run_transformation_clustering = (tMethod, cMethod) =>{
+  run_transformation_clustering = (tMethod, drMethod) =>{
     const data = new FormData();
     data.set('transformationMethod', tMethod);
-    data.set('clusteringMethod', cMethod);
+    data.set('dimensionReductionMethod', drMethod);
     axios.post(`http://${window.location.hostname}:5000/api/clustering/processing`, data)
     .then(response => {
-      console.log(response.data);
+      // console.log(response.data);
+      this.setState({
+        processingDataColumns: response.data.dataColumns
+      });
+      this.setState({
+        processingDataList: response.data.processingData
+      });
+      this.setState({
+        rawDataList: response.data.rawData
+      });
       
+      let getPorcessedDataList = response.data.processingData;
+      let unprocessedDataList = this.state.scanpathList;
+      
+      this.setState({
+        patchDataList: getPorcessedDataList
+      });
+
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
@@ -601,18 +630,26 @@ class Analysis extends React.Component {
   select_onChanged_dataTransformation = select_dataTransformation =>{
     console.log("select_onChanged_dataTransformation");
     this.setState({select_dataTransformation});
-    if(select_dataTransformation !== null && select_dataTransformation !== undefined && this.state.select_dataClustering !== null && this.state.select_dataClustering !== undefined){
-      this.run_transformation_clustering(select_dataTransformation.value, this.state.select_dataClustering.value);
+    if(select_dataTransformation !== null && select_dataTransformation !== undefined && this.state.select_dimensionReduction !== null && this.state.select_dimensionReduction !== undefined){
+      this.run_transformation_clustering(select_dataTransformation.value, this.state.select_dimensionReduction.value);
     }
   }
 
-  select_onChanged_dataClustering = select_dataClustering =>{
-    this.setState({select_dataClustering});
-    if(select_dataClustering !== null && select_dataClustering !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
-      console.log("select_onChanged_dataClustering");
-      this.run_transformation_clustering(this.state.select_dataTransformation.value, select_dataClustering.value);
+  select_onChanged_dimensionReduction = select_dimensionReduction =>{
+    console.log("select_onChanged_dimensionReduction");
+    this.setState({select_dimensionReduction});
+    if(select_dimensionReduction !== null && select_dimensionReduction !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
+      this.run_transformation_clustering(this.state.select_dataTransformation.value, select_dimensionReduction.value);
     }
   }
+
+  // select_onChanged_dataClustering = select_dataClustering =>{
+  //   this.setState({select_dataClustering});
+  //   if(select_dataClustering !== null && select_dataClustering !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
+  //     console.log("select_onChanged_dataClustering");
+  //     this.run_transformation_clustering(this.state.select_dataTransformation.value, select_dataClustering.value);
+  //   }
+  // }
 
   alphaPicker_onChange_stimulusAlpha = (color) =>{
     this.setState({alphaPicker_stimulusColor: color.rgb});
@@ -638,9 +675,11 @@ class Analysis extends React.Component {
     // scanpath similarity
     const { select_main_scanpath, select_isDisabled_mainScanpath, select_option_mainScanpath, select_scanpathSimilarityMetohd, select_isDisabled_scanpathSimilarity } = this.state;
     // patch clustering
-    const { select_useCache, select_cacheFile, select_dataTransformation, select_dataClustering, select_option_cacheFile } = this.state;
-    const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dataClustering } = this.state;
-    
+    const { select_useCache, select_cacheFile, select_option_cacheFile, select_dataTransformation, select_dimensionReduction } = this.state;
+    // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
+    const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
+    const { patchDataList } = this.state;
+
     return (
     <>
       {/* data filter */}
@@ -750,11 +789,11 @@ class Analysis extends React.Component {
           placeholder="Select transformation method"
         />
         <Select
-          value={select_dataClustering}
-          isDisabled={select_isDisabled_dataClustering}
-          options={select_option_dataClustering}
-          onChange={this.select_onChanged_dataClustering}
-          placeholder="Select clustering method"
+          value={select_dimensionReduction}
+          isDisabled={select_isDisabled_dimensionReduction}
+          options={select_option_dimensionReduction}
+          onChange={this.select_onChanged_dimensionReduction}
+          placeholder="Select dimension reduction method"
         />
         </div>
         }
@@ -797,13 +836,13 @@ class Analysis extends React.Component {
         <div className="section-header">
           <h4> Clustering View </h4>
         </div>
-        { scanpathList.length != 0 &&
+        { patchDataList.length != 0 &&
         <div className="clusteringViewWrap">
           <PatchVisualization 
             width={900}
             height={535}
             patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-            scanpathList={scanpathList}
+            patchList={patchDataList}
           />
         </div>
         }
