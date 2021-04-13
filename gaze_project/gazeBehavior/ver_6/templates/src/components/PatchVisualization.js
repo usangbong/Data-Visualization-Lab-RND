@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 function PatchVisualization(props) {
-  const { width, height, patchURLs, patchList} = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag} = props;
   const svgRef = useRef();
   const d3 = window.d3;
   const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
@@ -130,106 +130,105 @@ function PatchVisualization(props) {
     })
     .attr("stroke-width", "3px");
 
-    var patch = svg.selectAll(".patch")
-    .data(patchData)
-    // .data(scanpathData)
-    .enter()
-    .append("g")
-    .attr("class", "patch")
-    .attr("transform", function(d) {
-      let _x = x(d.x) - PATCH_DRAW_LENGTH/2;
-      let _y = y(d.y) - PATCH_DRAW_LENGTH/2;
-      return "translate(" + _x + "," + _y + ")";
-    })
-    .on('mousedown', function(d){
-      selectPatchID = "bar"+String(d.index);
-      console.log(selectPatchID);
-      d3.select(svgRef.current).selectAll('.patch').on("mousemove", mousemove);
-    })
-    .on('mouseup', function(d){
-      selectPatchID = "";
-      console.log(selectPatchID);
-      d3.select(svgRef.current).selectAll('.patch').on("mousemove", null);
-    });
+    if(patchDrawFlag == "image"){
+      var patch = svg.selectAll(".patch")
+      .data(patchData)
+      // .data(scanpathData)
+      .enter()
+      .append("g")
+      .attr("class", "patch")
+      .attr("transform", function(d) {
+        let _x = x(d.x) - PATCH_DRAW_LENGTH/2;
+        let _y = y(d.y) - PATCH_DRAW_LENGTH/2;
+        return "translate(" + _x + "," + _y + ")";
+      })
+      .on('mousedown', function(d){
+        selectPatchID = "bar"+String(d.index);
+        console.log(selectPatchID);
+        d3.select(svgRef.current).selectAll('.patch').on("mousemove", mousemove);
+      })
+      .on('mouseup', function(d){
+        selectPatchID = "";
+        console.log(selectPatchID);
+        d3.select(svgRef.current).selectAll('.patch').on("mousemove", null);
+      });
 
-    function mousemove(){
-      if(selectPatchID !== ""){
-        var m = d3.mouse(this);
-        var _x = m[0];
-        var _y = m[1];
-        if(prevPos[0] == 0 && prevPos[1]==0){
-          prevPos=[_x, _y];
-        }
-        var _trs = "translate(" + _x + "," + _y + ")";
-        console.log("move: "+m[0]+", "+m[1]);
-        for(let i=0; i<patchData.length; i++){
-          if("bar"+String(patchData[i].index) == selectPatchID){
-            patchData[i].x = patchData[i].x+_x-(PATCH_SIZE/2);
-            patchData[i].y = patchData[i].y+_y-(PATCH_SIZE/2);
-            break;
+      function mousemove(){
+        if(selectPatchID !== ""){
+          var m = d3.mouse(this);
+          var _x = m[0];
+          var _y = m[1];
+          if(prevPos[0] == 0 && prevPos[1]==0){
+            prevPos=[_x, _y];
           }
+          var _trs = "translate(" + _x + "," + _y + ")";
+          console.log("move: "+m[0]+", "+m[1]);
+          for(let i=0; i<patchData.length; i++){
+            if("bar"+String(patchData[i].index) == selectPatchID){
+              patchData[i].x = patchData[i].x+_x-(PATCH_SIZE/2);
+              patchData[i].y = patchData[i].y+_y-(PATCH_SIZE/2);
+              break;
+            }
+          }
+          // for(let i=0; i<scanpathData.length; i++){
+          //   if("bar"+String(scanpathData[i].index) == selectPatchID){
+          //     scanpathData[i].x = scanpathData[i].x+_x-(PATCH_SIZE/2);
+          //     scanpathData[i].y = scanpathData[i].y+_y-(PATCH_SIZE/2);
+          //     break;
+          //   }
+          // }
+
+          // d3.selectAll(".pFrame rect").transition()
+          // .attr("transform", function(d){
+          //   if("bar"+String(d.index) == selectPatchID){
+          //     return _trs;
+          //   }
+          // });
+          // d3.selectAll(".pFrame rect").transition()
+          // .attr("transform", function(d) {
+          //   if("bar"+String(d.index) == selectPatchID){
+          //     // return "translate(" + d.x + "," + d.y + ")";
+          //     return _trs;
+          //   }
+          // });
+          d3.selectAll(".pFrame")
+          .attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+          });
+
+          d3.selectAll(".patch")
+          .attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+          });
+          // d3.selectAll(".patch "+selectPatchID).attr("transform", _trs);
         }
-        // for(let i=0; i<scanpathData.length; i++){
-        //   if("bar"+String(scanpathData[i].index) == selectPatchID){
-        //     scanpathData[i].x = scanpathData[i].x+_x-(PATCH_SIZE/2);
-        //     scanpathData[i].y = scanpathData[i].y+_y-(PATCH_SIZE/2);
-        //     break;
-        //   }
-        // }
-
-        // d3.selectAll(".pFrame rect").transition()
-        // .attr("transform", function(d){
-        //   if("bar"+String(d.index) == selectPatchID){
-        //     return _trs;
-        //   }
-        // });
-        // d3.selectAll(".pFrame rect").transition()
-        // .attr("transform", function(d) {
-        //   if("bar"+String(d.index) == selectPatchID){
-        //     // return "translate(" + d.x + "," + d.y + ")";
-        //     return _trs;
-        //   }
-        // });
-        d3.selectAll(".pFrame")
-        .attr("transform", function(d) {
-          return "translate(" + d.x + "," + d.y + ")";
-        });
-
-        d3.selectAll(".patch")
-        .attr("transform", function(d) {
-          return "translate(" + d.x + "," + d.y + ")";
-        });
-        // d3.selectAll(".patch "+selectPatchID).attr("transform", _trs);
+        prevPos=[_x, _y];
       }
-      prevPos=[_x, _y];
+
+      patch.append('symbol')
+      .attr("id", function(d){ return "bar"+String(d.index)})
+      .attr("viewBox", function(d){
+        let _xPos = d.index*PATCH_SIZE
+        let _rVal = String(_xPos)+" 0 20 20"
+        return _rVal
+      })
+      .append("image")
+      .attr("width", String(aggregatedPatchImageLength)+"px")
+      .attr("height", "20px")
+      .attr("xlink:href", patchURLs)
+      .attr('x', 0)
+      .attr('y', 0);
+
+      patch.append('use')
+      .attr("xlink:href", function(d){ return "#bar"+String(d.index)})
+      .attr('width', PATCH_DRAW_LENGTH)
+      .attr('height', PATCH_DRAW_LENGTH)
+      .attr('x', 0)
+      .attr('y', 0);
     }
-
-    patch.append('symbol')
-    .attr("id", function(d){ return "bar"+String(d.index)})
-    .attr("viewBox", function(d){
-      let _xPos = d.index*PATCH_SIZE
-      let _rVal = String(_xPos)+" 0 20 20"
-      return _rVal
-    })
-    .append("image")
-    .attr("width", String(aggregatedPatchImageLength)+"px")
-    .attr("height", "20px")
-    .attr("xlink:href", patchURLs)
-    .attr('x', 0)
-    .attr('y', 0);
-
-    patch.append('use')
-    .attr("xlink:href", function(d){ return "#bar"+String(d.index)})
-    .attr('width', PATCH_DRAW_LENGTH)
-    .attr('height', PATCH_DRAW_LENGTH)
-    .attr('x', 0)
-    .attr('y', 0);
-
     
 
-    
-    
-  }, [props.patchURLs, props.patchList]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag]);
   
   return (
     <>
