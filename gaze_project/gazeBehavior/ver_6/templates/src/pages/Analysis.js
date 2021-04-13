@@ -9,6 +9,8 @@ import Heatmap from 'components/Heatmap';
 import PatchVisualization from 'components/PatchVisualization';
 import ScanpathVisualization from 'components/ScanpathVisualization';
 import BoxPlot from 'components/BoxPlot';
+import LineChart from 'components/LineChart';
+import HumanFixationMap from '../components/HumanFixationMap';
 
 // import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -100,6 +102,7 @@ class Analysis extends React.Component {
       FEATURE_LIST: [],
       spDataURL: "",
       stiURL: [],
+      humanFixationMapURL: [],
       scanpathList: [],
       alphaPicker_stimulusAlpha: 1,
       alphaPicker_stimulusColor: {},
@@ -258,6 +261,7 @@ class Analysis extends React.Component {
     if(select_stiName !== null && select_stiName !== undefined){
       let stiURLList = [];
       let stiList_str = "";
+      let hfmURLList = [];
       for(let i=0; i<select_stiName.length; i++){
         // console.log(select_stiName[i].value);
         let splitValue = select_stiName[i].value.split("/");
@@ -269,7 +273,13 @@ class Analysis extends React.Component {
           width: stiWidth,
           height: stiHeight
         };
+        let _hfmURL = {
+          url: `http://${window.location.hostname}:5000/static/ground_truth/`+pathString,
+          width: stiWidth,
+          height: stiHeight
+        }
         stiURLList.push(_sURL);
+        hfmURLList.push(_hfmURL);
         if(i==0){
           stiList_str = pathString;
         }else{
@@ -278,6 +288,9 @@ class Analysis extends React.Component {
       }
       this.setState({
         stiURL: stiURLList
+      });
+      this.setState({
+        humanFixationMapURL: hfmURLList
       });
       // console.log(stiURLList);
       // console.log(stiList_str);
@@ -640,10 +653,10 @@ class Analysis extends React.Component {
           onHFMPatches.push(getPorcessedDataList[i]);
         }
       }
-      console.log("onHFMPatches");
-      console.log(onHFMPatches);
-      console.log("outsideHFMPatches");
-      console.log(outsideHFMPatches);
+      // console.log("onHFMPatches");
+      // console.log(onHFMPatches);
+      // console.log("outsideHFMPatches");
+      // console.log(outsideHFMPatches);
       this.setState({
         patchesOnHumanFixationMap: onHFMPatches
       });
@@ -712,7 +725,7 @@ class Analysis extends React.Component {
     const { select_useCache, select_cacheFile, select_option_cacheFile, select_dataTransformation, select_dimensionReduction } = this.state;
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
     const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
-    const { patchDataList, select_patchImageFlag } = this.state;
+    const { patchDataList, select_patchImageFlag, humanFixationMapURL, rawDataList } = this.state;
     // saliency features visualization
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap } = this.state;
 
@@ -884,16 +897,24 @@ class Analysis extends React.Component {
             />
           </div>
           }
-          { patchDataList.length != 0 &&
           <div className="patchViewControl">
+          { patchDataList.length != 0 &&
             <Select
               value={select_patchImageFlag}
               options={select_option_patchImageFlag}
               onChange={this.select_onChanged_patchImageFlag}
               placeholder="Select fixated patch style"
             />
-          </div>
           }
+          { humanFixationMapURL.length != 0 && rawDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+          <HumanFixationMap
+            width={290}
+            height={290}
+            humanFixationMapURL={humanFixationMapURL}
+            patchDataList={rawDataList}
+          />
+          }
+          </div>
         </div>
       </div>
 
@@ -914,6 +935,15 @@ class Analysis extends React.Component {
           />
         </div>
         }
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        <div className="saliencyView_linechart">
+          <LineChart
+            width={390}
+            height={200}
+            patchDataList={patchDataList}
+          />
+        </div>
+        }
         <div className="section-header">
           <h4> Patches on fixation map: {patchesOnHumanFixationMap.length} </h4>
         </div>
@@ -922,6 +952,15 @@ class Analysis extends React.Component {
           <BoxPlot
             width={390}
             height={150}
+            patchDataList={patchesOnHumanFixationMap}
+          />
+        </div>
+        }
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        <div className="saliencyView_linechart">
+          <LineChart
+            width={390}
+            height={200}
             patchDataList={patchesOnHumanFixationMap}
           />
         </div>
@@ -938,9 +977,15 @@ class Analysis extends React.Component {
           />
         </div>
         }
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
         <div className="saliencyView_linechart">
-
+          <LineChart
+            width={390}
+            height={200}
+            patchDataList={patchesOutsideHumanFixationMap}
+          />
         </div>
+        }
       </div>
     </>
     );
