@@ -104,7 +104,7 @@ function PatchVisualization(props) {
     .attr("height", PATCH_DRAW_LENGTH)
     .style("fill", function(d){
       if(d.clu == 0){
-        return "black";
+        return "blue";
       }else if(d.clu == 1){
         return "red";
       }else if(d.clu == 2 || d.clu == 6){
@@ -117,7 +117,7 @@ function PatchVisualization(props) {
     })
     .attr("stroke", function(d){
       if(d.clu == 0){
-        return "black";
+        return "blue";
       }else if(d.clu == 1){
         return "red";
       }else if(d.clu == 2 || d.clu == 6){
