@@ -7,9 +7,6 @@ import { AlphaPicker, SketchPicker } from 'react-color';
 
 import Heatmap from 'components/Heatmap';
 import PatchVisualization from 'components/PatchVisualization';
-import ClusteringScatterPlot from 'components/ClusteringScatterPlot';
-import Stimulus from 'components/Stimulus';
-import Patch from 'components/Patch';
 import ScanpathVisualization from 'components/ScanpathVisualization';
 
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
