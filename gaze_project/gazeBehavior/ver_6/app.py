@@ -100,32 +100,40 @@ def dataTransformation(tMethod, df, featureList):
 def dt_minMax(df, featureList):
   getColNames = df.columns
   tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  colCount = 3
   for featureName in featureList:
+    colCount = colCount+1
     colFeatDF = df[featureName]
     scaler = MinMaxScaler()
     _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
-    # tfDF.loc[:, featureName] = _tf
-    tfDF[featureName] = _tf
+    tfDF.insert(colCount, featureName, _tf, True)
+    # tfDF[featureName] = _tf
   return tfDF
 
 def dt_zScore(df, featureList):
   getColNames = df.columns
   tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  colCount = 3
   for featureName in featureList:
+    colCount = colCount+1
     colFeatDF = df[featureName]
     scaler = StandardScaler()
     _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
-    tfDF[featureName] = _tf
+    tfDF.insert(colCount, featureName, _tf, True)
+    # tfDF[featureName] = _tf
   return tfDF
 
 def dt_yeoJohnson(df, featureList):
   getColNames = df.columns
   tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
+  colCount = 3
   for featureName in featureList:
+    colCount = colCount+1
     colFeatDF = df[featureName]
     scaler = PowerTransformer(method='yeo-johnson')
     _tf = scaler.fit_transform(colFeatDF.values.reshape(-1, 1))
-    tfDF[featureName] = _tf
+    tfDF.insert(colCount, featureName, _tf, True)
+    # tfDF[featureName] = _tf
   return tfDF
 
 def dt_yeoJohnson_minMax(df, featureList):
