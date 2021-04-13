@@ -8,13 +8,14 @@ import { AlphaPicker, SketchPicker } from 'react-color';
 import Heatmap from 'components/Heatmap';
 import PatchVisualization from 'components/PatchVisualization';
 import ScanpathVisualization from 'components/ScanpathVisualization';
+import BoxPlot from 'components/BoxPlot';
 
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+// import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
-import '../../node_modules/ag-grid-enterprise';
-import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { stringToArray } from 'ag-grid-community';
+// import '../../node_modules/ag-grid-enterprise';
+// import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+// import '../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
+// import { stringToArray } from 'ag-grid-community';
 
 const select_option_dataset = [
   { value:'all', label: 'All Stimulus Dataset' },
@@ -59,6 +60,10 @@ const select_option_dimensionReduction = [
 //   { value:'k_means', label: 'k-Means' }
 // ];
 
+const select_option_patchImageFlag = [
+  { value:'image', label: 'Draw fixated patch images' },
+  { value:'box', label: 'Draw only label box' }
+];
 
 class Analysis extends React.Component {
   constructor(props) {
@@ -75,6 +80,7 @@ class Analysis extends React.Component {
       select_dataTransformation: null,
       // select_dataClustering: null,
       select_dimensionReduction: null,
+      select_patchImageFlag: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
       select_isDisabled_stiName: true,
@@ -102,6 +108,8 @@ class Analysis extends React.Component {
       processingDataList: [],
       rawDataList: [],
       patchDataList: [],
+      patchesOnHumanFixationMap: [],
+      patchesOutsideHumanFixationMap: [],
     };
   }
 
@@ -602,6 +610,7 @@ class Analysis extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/clustering/processing`, data)
     .then(response => {
       // console.log(response.data);
+      console.log(response.data.dataColumns);
       this.setState({
         processingDataColumns: response.data.dataColumns
       });
@@ -619,6 +628,29 @@ class Analysis extends React.Component {
         patchDataList: getPorcessedDataList
       });
 
+      let onHFMPatches = [];
+      let outsideHFMPatches = [];
+      for(let i=0; i<getPorcessedDataList.length; i++){
+        let _label = getPorcessedDataList[i][3];
+        if(_label == 0){
+          // label 0: outside
+          outsideHFMPatches.push(getPorcessedDataList[i]);
+        }else{
+          // label 1: on
+          onHFMPatches.push(getPorcessedDataList[i]);
+        }
+      }
+      console.log("onHFMPatches");
+      console.log(onHFMPatches);
+      console.log("outsideHFMPatches");
+      console.log(outsideHFMPatches);
+      this.setState({
+        patchesOnHumanFixationMap: onHFMPatches
+      });
+      this.setState({
+        patchesOutsideHumanFixationMap: outsideHFMPatches
+      });
+      
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
@@ -648,6 +680,11 @@ class Analysis extends React.Component {
   //   }
   // }
 
+  select_onChanged_patchImageFlag = select_patchImageFlag =>{
+    console.log("select_onChanged_patchImageFlag");
+    this.setState({select_patchImageFlag});
+  }
+
   alphaPicker_onChange_stimulusAlpha = (color) =>{
     this.setState({alphaPicker_stimulusColor: color.rgb});
     this.setState({
@@ -675,7 +712,9 @@ class Analysis extends React.Component {
     const { select_useCache, select_cacheFile, select_option_cacheFile, select_dataTransformation, select_dimensionReduction } = this.state;
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
     const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
-    const { patchDataList } = this.state;
+    const { patchDataList, select_patchImageFlag } = this.state;
+    // saliency features visualization
+    const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap } = this.state;
 
     return (
     <>
@@ -796,7 +835,7 @@ class Analysis extends React.Component {
         }
       </div>
 
-      {/* col 2*/}
+      {/* col 2 */}
       <div className="dataVisualizationWrap">
         <div className="section-header">
           <h4> Scanpath Visualization </h4>
@@ -831,18 +870,77 @@ class Analysis extends React.Component {
         </div>
 
         <div className="section-header">
-          <h4> Clustering View </h4>
+          <h4> Patch Visualization View </h4>
         </div>
-        { patchDataList.length != 0 &&
-        <div className="clusteringViewWrap">
-          <PatchVisualization 
-            width={900}
-            height={535}
-            patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-            patchList={patchDataList}
+        <div className="patchVisualizationViewWrap">
+          { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+          <div className="patchView">
+            <PatchVisualization 
+              width={900}
+              height={535}
+              patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
+              patchList={patchDataList}
+              patchDrawFlag={select_patchImageFlag.value}
+            />
+          </div>
+          }
+          { patchDataList.length != 0 &&
+          <div className="patchViewControl">
+            <Select
+              value={select_patchImageFlag}
+              options={select_option_patchImageFlag}
+              onChange={this.select_onChanged_patchImageFlag}
+              placeholder="Select fixated patch style"
+            />
+          </div>
+          }
+        </div>
+      </div>
+
+      {/* col 3 */}
+      <div className="featureVisualizationViewWrap">
+        <div className="colorEncodeLabelDescriptionBox">
+          Salinecy feature color encode description
+        </div>
+        <div className="section-header">
+          <h4> All patches: {patchDataList.length} </h4>
+        </div>
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        <div className="saliencyView_boxplot">
+          <BoxPlot
+            width={390}
+            height={150}
+            patchDataList={patchDataList}
           />
         </div>
         }
+        <div className="section-header">
+          <h4> Patches on fixation map: {patchesOnHumanFixationMap.length} </h4>
+        </div>
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        <div className="saliencyView_boxplot">
+          <BoxPlot
+            width={390}
+            height={150}
+            patchDataList={patchesOnHumanFixationMap}
+          />
+        </div>
+        }
+        <div className="section-header">
+          <h4> Patches outside on fixation map: {patchesOutsideHumanFixationMap.length} </h4>
+        </div>
+        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        <div className="saliencyView_boxplot">
+          <BoxPlot
+            width={390}
+            height={150}
+            patchDataList={patchesOutsideHumanFixationMap}
+          />
+        </div>
+        }
+        <div className="saliencyView_linechart">
+
+        </div>
       </div>
     </>
     );
