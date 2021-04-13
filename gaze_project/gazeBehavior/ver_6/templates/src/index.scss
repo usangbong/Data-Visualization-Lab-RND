@@ -13,7 +13,7 @@ ul {
 }
 
 .app {
-  width:2200;
+  width:2000px;
   height:1200px;
   // border: 1px black solid;
   box-sizing: border-box;
@@ -93,12 +93,64 @@ ul {
       background-color: white;
     }
   }
-  .clusteringViewWrap{
-    width: 1200px;
-    height: 535px;
+  .patchVisualizationViewWrap{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
     box-sizing: border-box;
+    // border: 1px #BFBFBF solid;
     background-color: white;
+    .patchView{
+      width: 900px;
+      height: 535px;
+      box-sizing: border-box;
+      background-color: wihte;
+    }
+    .patchViewControl{
+      width: 290px;
+      height: 525px;
+      margin-top: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+      box-sizing: border-box;
+      background-color: wihte;
+      border: 1px #BFBFBF solid;
+    }
   }
+  
+
+  .featureVisualizationViewWrap{
+    width: 390px;
+    height: 100%;
+    box-sizing: border-box;
+    // border: 1px #BFBFBF solid;
+    background-color: white;
+    .colorEncodeLabelDescriptionBox{
+      margin: 5px;
+      width: 380px;
+      height: 90px;
+      box-sizing: border-box;
+      border: 1px #BFBFBF solid;
+      background-color: gray;
+      text-align: center;
+      color: white;
+    }
+    .saliencyView_boxplot{
+      width: 390px;
+      height: 150px;
+      box-sizing: border-box;
+      background-color: white;
+    }
+    .saliencyView_linechart{
+      width: 390px;
+      height: 300px;
+      box-sizing: border-box;
+      background-color: skyblue;
+    }
+  }
+
+  
   
   .visControlClass{
     display: flex;
