@@ -5,11 +5,12 @@
 import React, { useEffect, useRef } from 'react';
 
 function ScanpathVisualization(props) {
-  const { width, height, stimulusURL, scanpathList, imageOpacity } = props;
+  const { width, height, stimulusURL, scanpathList, imageOpacity, colorEncoding } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-  const colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
+  // const colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   useEffect(() => {
+    console.log(colorEncoding);
     if(stimulusURL.length == 0)
       return;
     d3.select(svgRef.current).selectAll("*").remove();
@@ -107,19 +108,7 @@ function ScanpathVisualization(props) {
     
     scanpathLayer.append("path")
     .style("fill","none")
-    .style("stroke",function(d){
-      if(d.rClu == 0){
-        return "white";
-      }else if(d.rClu == 1){
-        return "red";
-      }else if(d.rClu == 2 || d.rClu == 6){
-        return "green";
-      }else if(d.rClu == 3 || d.rClu == 4 || d.rClu == 5){
-        return "blue";
-      }else{
-        return "black";
-      }
-    })
+    .style("stroke", function(d){ return colorEncoding[d.rClu] })
     .style("stroke-width","1px")
     .attr('d', function(d){
       return line(d.scanpath);
@@ -149,22 +138,10 @@ function ScanpathVisualization(props) {
       .attr("cx", function(d){return d.x;})
       .attr("cy", function(d){return d.y;})
       .attr("r", 5)
-      .style("fill", function(d){
-        if(d.clu == 0){
-          return "white";
-        }else if(d.clu == 1){
-          return "red";
-        }else if(d.clu == 2 || d.clu == 6){
-          return "green";
-        }else if(d.clu == 3 || d.clu == 4 || d.clu == 5){
-          return "blue";
-        }else{
-          return "black";
-        }
-      });
+      .style("fill", function(d){ return colorEncoding[d.clu] });
     }
     
-  }, [, props.stimulusURL, props.scanpathList, props.imageOpacity]);
+  }, [, props.stimulusURL, props.scanpathList, props.imageOpacity, props.colorEncoding]);
 
   return (
     <>
