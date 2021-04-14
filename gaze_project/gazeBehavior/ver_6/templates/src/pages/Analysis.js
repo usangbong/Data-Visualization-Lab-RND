@@ -1,6 +1,8 @@
 import React from 'react';
+import reactCSS from 'reactcss';
 import axios from 'axios';
 import Select from 'react-select';
+
 // https://react-select.com/home
 import { AlphaPicker, SketchPicker } from 'react-color';
 // https://casesandberg.github.io/react-color/#api
@@ -11,6 +13,7 @@ import ScanpathVisualization from 'components/ScanpathVisualization';
 import BoxPlot from 'components/BoxPlot';
 import LineChart from 'components/LineChart';
 import HumanFixationMap from '../components/HumanFixationMap';
+import ParallelCoordinateChart from '../components/ParallelCoordinateChart';
 
 // import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -32,6 +35,11 @@ const select_option_scanpathSimilarity = [
   { value:'lcs', label: 'Longest Common Subsequence' },
   { value:'fd', label: 'Frechet Distance' },
   { value:'ed', label: 'Edit (Levenshtein) Distance' }
+];
+
+const select_option_analysisStyle = [
+  { value:'scanpath', label: 'Scanpath Analysis' },
+  { value:'patch', label: 'Patch Analysis' }
 ];
 
 const select_option_useCache = [
@@ -83,6 +91,7 @@ class Analysis extends React.Component {
       // select_dataClustering: null,
       select_dimensionReduction: null,
       select_patchImageFlag: null,
+      select_analysisStyle: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
       select_isDisabled_stiName: true,
@@ -107,16 +116,35 @@ class Analysis extends React.Component {
       alphaPicker_stimulusAlpha: 1,
       alphaPicker_stimulusColor: {},
       tempColor: {r: '255', g: '255', b: '255', a:'1'},
+      displayColorPicker_0: false,
+      displayColorPicker_1: false,
+      displayColorPicker_2: false,
+      displayColorPicker_3: false,
+      displayColorPicker_4: false,
+      displayColorPicker_5: false,
+      displayColorPicker_6: false,
+      displayColorPicker_7: false,
+      colorEncodings: [],
+      colorEncoding_0: {r: '228', g: '26', b: '28', a:'1'},
+      colorEncoding_1: {r: '55', g: '126', b: '184', a:'1'},
+      colorEncoding_2: {r: '77', g: '175', b: '74', a:'1'},
+      colorEncoding_3: {r: '255', g: '127', b: '0', a:'1'},
+      colorEncoding_4: {r: '166', g: '86', b: '40', a:'1'},
+      colorEncoding_5: {r: '153', g: '153', b: '153', a:'1'},
+      colorEncoding_6: {r: '152', g: '78', b: '163', a:'1'},
+      colorEncoding_7: {r: '247', g: '129', b: '191', a:'1'},
       processingDataColumns: [],
       processingDataList: [],
       rawDataList: [],
       patchDataList: [],
       patchesOnHumanFixationMap: [],
       patchesOutsideHumanFixationMap: [],
+      cacheFilePath: "",
     };
   }
 
   select_onChanged_stiDataset = select_stiDataset =>{
+    this.colorEncodingStateInitFunction();
     this.setState({select_stiDataset})
     if(select_stiDataset !== null && select_stiDataset !== undefined){
       // console.log(select_stiDataset);
@@ -614,6 +642,12 @@ class Analysis extends React.Component {
   select_onChange_cacheFile = select_cacheFile =>{
     console.log("select_onChange_cacheFile");
     this.setState({select_cacheFile});
+    let _cacheFilePath = `http://${window.location.hostname}:5000`+"/static/__cache__/"+select_cacheFile.value+"?"+Math.random();
+    console.log("_cacheFilePath");
+    console.log(_cacheFilePath);
+    this.setState({
+      cacheFilePath: _cacheFilePath
+    });
   }
 
   run_transformation_clustering = (tMethod, drMethod) =>{
@@ -633,13 +667,19 @@ class Analysis extends React.Component {
       this.setState({
         rawDataList: response.data.rawData
       });
+      console.log("generated cachefile path");
+      console.log(response.data.cacheFilePath);
+      console.log(`http://${window.location.hostname}:5000`+response.data.cacheFilePath+"?"+Math.random());
+      this.setState({
+        cacheFilePath: `http://${window.location.hostname}:5000`+response.data.cacheFilePath+"?"+Math.random()
+      });
       
       let getPorcessedDataList = response.data.processingData;
-      let unprocessedDataList = this.state.scanpathList;
       
       this.setState({
         patchDataList: getPorcessedDataList
       });
+      
 
       let onHFMPatches = [];
       let outsideHFMPatches = [];
@@ -698,6 +738,14 @@ class Analysis extends React.Component {
     this.setState({select_patchImageFlag});
   }
 
+  select_onChanged_analysisStyle = select_analysisStyle =>{
+    console.log("select_onChanged_analysisStyle");
+    this.setState({select_analysisStyle});
+  }
+
+
+
+  
   alphaPicker_onChange_stimulusAlpha = (color) =>{
     this.setState({alphaPicker_stimulusColor: color.rgb});
     this.setState({
@@ -705,9 +753,145 @@ class Analysis extends React.Component {
     });
   }
 
-  tempFunction = (color) =>{
-    this.setState({tempColor:color.rgb});
+  // tempFunction = (color) =>{
+  //   this.setState({tempColor:color.rgb});
+  // }
+
+  rgbToHex = (red, green, blue) =>{
+    const rgb = (red << 16) | (green << 8) | (blue << 0);
+    return '#' + (0x1000000 + rgb).toString(16).slice(1);
   }
+
+  // color encoding handle events
+  colorEncodingStateInitFunction =()=>{
+    console.log("colorEncodingStateInitFunction");
+    let colorEncoding = [
+      this.rgbToHex(this.state.colorEncoding_0.r, this.state.colorEncoding_0.g, this.state.colorEncoding_0.b ), 
+      this.rgbToHex(this.state.colorEncoding_1.r, this.state.colorEncoding_1.g, this.state.colorEncoding_1.b ), 
+      this.rgbToHex(this.state.colorEncoding_2.r, this.state.colorEncoding_2.g, this.state.colorEncoding_2.b ), 
+      this.rgbToHex(this.state.colorEncoding_3.r, this.state.colorEncoding_3.g, this.state.colorEncoding_3.b ), 
+      this.rgbToHex(this.state.colorEncoding_4.r, this.state.colorEncoding_4.g, this.state.colorEncoding_4.b ), 
+      this.rgbToHex(this.state.colorEncoding_5.r, this.state.colorEncoding_5.g, this.state.colorEncoding_5.b ), 
+      this.rgbToHex(this.state.colorEncoding_6.r, this.state.colorEncoding_6.g, this.state.colorEncoding_6.b ), 
+      this.rgbToHex(this.state.colorEncoding_7.r, this.state.colorEncoding_7.g, this.state.colorEncoding_7.b )
+    ];
+    
+    this.setState({
+      colorEncodings: colorEncoding
+    });
+  }
+
+  // colorEncodingFlagChange = (_flag, _idx) =>{
+  //   let _dcp = this.state.displayColorPickers;
+  //   _dcp[_idx] = _flag;
+  //   this.setState({
+  //     displayColorPickers: _dcp
+  //   });
+  // }
+
+  colorEncodingRGBChange = (_rgb, _idx) =>{
+    let _ce = [];
+    for(let i=0; i<this.state.colorEncodings.length; i++){
+      if(i!=_idx){
+        _ce.push(this.state.colorEncodings[i]);
+      }else{
+        _ce.push(this.rgbToHex(_rgb.r, _rgb.g, _rgb.b));
+      }
+    }
+    this.setState({
+      colorEncodings: _ce
+    });
+  }
+  // 0
+  handleClick_0 = () => {
+    this.setState({ displayColorPicker_0: !this.state.displayColorPicker_0 });
+  };
+  handleClose_0 = () => {
+    this.setState({ displayColorPicker_0: false });
+  };
+  handleChange_0 = (color) => {
+    this.setState({ colorEncoding_0: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 0);
+  };
+  // 1
+  handleClick_1 = () => {
+    this.setState({ displayColorPicker_1: !this.state.displayColorPicker_1 });
+  };
+  handleClose_1 = () => {
+    this.setState({ displayColorPicker_1: false });
+  };
+  handleChange_1 = (color) => {
+    this.setState({ colorEncoding_1: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 1);
+  };
+  // 2
+  handleClick_2 = () => {
+    this.setState({ displayColorPicker_2: !this.state.displayColorPicker_2 });
+  };
+  handleClose_2 = () => {
+    this.setState({ displayColorPicker_2: false });
+  };
+  handleChange_2 = (color) => {
+    this.setState({ colorEncoding_2: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 2);
+  };
+  // 3
+  handleClick_3 = () => {
+    this.setState({ displayColorPicker_3: !this.state.displayColorPicker_3 });
+  };
+  handleClose_3 = () => {
+    this.setState({ displayColorPicker_3: false });
+  };
+  handleChange_3 = (color) => {
+    this.setState({ colorEncoding_3: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 3);
+  };
+  // 4
+  handleClick_4 = () => {
+    this.setState({ displayColorPicker_4: !this.state.displayColorPicker_4 });
+  };
+  handleClose_4 = () => {
+    this.setState({ displayColorPicker_4: false });
+  };
+  handleChange_4 = (color) => {
+    this.setState({ colorEncoding_4: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 4);
+  };
+  // 5
+  handleClick_5 = () => {
+    this.setState({ displayColorPicker_5: !this.state.displayColorPicker_5 });
+  };
+  handleClose_5 = () => {
+    this.setState({ displayColorPicker_5: false });
+  };
+  handleChange_5 = (color) => {
+    this.setState({ colorEncoding_5: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 5);
+  };
+  // 6
+  handleClick_6 = () => {
+    this.setState({ displayColorPicker_6: !this.state.displayColorPicker_6 });
+  };
+  handleClose_6 = () => {
+    this.setState({ displayColorPicker_6: false });
+  };
+  handleChange_6 = (color) => {
+    this.setState({ colorEncoding_6: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 6);
+  };
+  // 7
+  handleClick_7 = () => {
+    this.setState({ displayColorPicker_7: !this.state.displayColorPicker_7 });
+  };
+  handleClose_7 = () => {
+    this.setState({ displayColorPicker_7: false });
+  };
+  handleChange_7 = (color) => {
+    this.setState({ colorEncoding_7: color.rgb });
+    this.colorEncodingRGBChange(color.rgb, 7);
+  };
+
+
 
   render() {
     // data filter select
@@ -716,9 +900,13 @@ class Analysis extends React.Component {
     const { select_isDisabled_participant, select_isDisabled_semanticClass, select_isDisabled_stiName } = this.state;
     // sp heatmap
     const { spDataURL, FEATURE_LIST, STI_CLASS_LIST} = this.state;
+    // analysis style setting
+    const { select_analysisStyle } = this.state;
+    const { colorEncodings, alphaPicker_stimulusColor, alphaPicker_stimulusAlpha } = this.state;
+    const { displayColorPicker_0, displayColorPicker_1, displayColorPicker_2, displayColorPicker_3, displayColorPicker_4, displayColorPicker_5, displayColorPicker_6, displayColorPicker_7 } = this.state;
+    const { colorEncoding_0, colorEncoding_1, colorEncoding_2, colorEncoding_3, colorEncoding_4, colorEncoding_5, colorEncoding_6, colorEncoding_7 } = this.state;
     // scanpath visualization
     const { stiURL, scanpathList } = this.state;
-    const { alphaPicker_stimulusColor, alphaPicker_stimulusAlpha, tempColor } = this.state;
     // scanpath similarity
     const { select_main_scanpath, select_isDisabled_mainScanpath, select_option_mainScanpath, select_scanpathSimilarityMetohd, select_isDisabled_scanpathSimilarity } = this.state;
     // patch clustering
@@ -727,7 +915,269 @@ class Analysis extends React.Component {
     const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
     const { patchDataList, select_patchImageFlag, humanFixationMapURL, rawDataList } = this.state;
     // saliency features visualization
-    const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap } = this.state;
+    const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
+
+    // color encoding reactCSS styles
+    let colorEncodingStyles = [];
+    // colorEncoding_0
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_0.r }, ${ colorEncoding_0.g }, ${ colorEncoding_0.b }, ${ colorEncoding_0.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_1
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_1.r }, ${ colorEncoding_1.g }, ${ colorEncoding_1.b }, ${ colorEncoding_1.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_2
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_2.r }, ${ colorEncoding_2.g }, ${ colorEncoding_2.b }, ${ colorEncoding_2.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_3
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_3.r }, ${ colorEncoding_3.g }, ${ colorEncoding_3.b }, ${ colorEncoding_3.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_4
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_4.r }, ${ colorEncoding_4.g }, ${ colorEncoding_4.b }, ${ colorEncoding_4.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_5
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_5.r }, ${ colorEncoding_5.g }, ${ colorEncoding_5.b }, ${ colorEncoding_5.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_6
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_6.r }, ${ colorEncoding_6.g }, ${ colorEncoding_6.b }, ${ colorEncoding_6.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    // colorEncoding_7
+    colorEncodingStyles.push(
+      reactCSS({
+        'default': {
+          color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: `rgba(${ colorEncoding_7.r }, ${ colorEncoding_7.g }, ${ colorEncoding_7.b }, ${ colorEncoding_7.a })`,
+          },
+          swatch: {
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          },
+          popover: {
+            position: 'absolute',
+            zIndex: '2',
+          },
+          cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px',
+          },
+        },
+      })
+    );
+    
+    
+
 
     return (
     <>
@@ -797,19 +1247,30 @@ class Analysis extends React.Component {
           <h4> Analysis Settings </h4>
         </div>
         <Select
-          value={select_main_scanpath}
-          isDisabled={select_isDisabled_mainScanpath}
-          options={select_option_mainScanpath}
-          onChange={this.select_onChanged_mainScanpath}
-          placeholder="Select scanpath for calculation similarity"
+          value={select_analysisStyle}
+          options={select_option_analysisStyle}
+          onChange={this.select_onChanged_analysisStyle}
+          placeholder="Select analysis mode"
         />
-        <Select
-          value={select_scanpathSimilarityMetohd}
-          isDisabled={select_isDisabled_scanpathSimilarity}
-          options={select_option_scanpathSimilarity}
-          onChange={this.select_onChanged_scanpathSimilarity}
-          placeholder="Select scanpath similarity calculation method"
-        />
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" &&
+        <div>
+          <Select
+            value={select_main_scanpath}
+            isDisabled={select_isDisabled_mainScanpath}
+            options={select_option_mainScanpath}
+            onChange={this.select_onChanged_mainScanpath}
+            placeholder="Select scanpath for calculation similarity"
+          />
+          <Select
+            value={select_scanpathSimilarityMetohd}
+            isDisabled={select_isDisabled_scanpathSimilarity}
+            options={select_option_scanpathSimilarity}
+            onChange={this.select_onChanged_scanpathSimilarity}
+            placeholder="Select scanpath similarity calculation method"
+          />
+        </div>
+        }
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
         <Select
           value={select_useCache}
           isDisabled={select_isDisabled_useCache}
@@ -817,7 +1278,8 @@ class Analysis extends React.Component {
           onChange={this.select_onChange_useCache}
           placeholder="Use cache file or not"
         />
-        { select_option_cacheFile.length > 0 && select_useCache.value == "use" &&
+        }
+        { select_option_cacheFile.length > 0 && select_useCache.value == "use" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
         <div>
           <Select
             value={select_cacheFile}
@@ -828,7 +1290,7 @@ class Analysis extends React.Component {
           />
         </div>
         }
-        { select_useCache !== null && select_useCache !== undefined && select_useCache.value == "not" &&
+        { select_useCache !== null && select_useCache !== undefined && select_useCache.value == "not" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
         <div>
         <Select
           value={select_dataTransformation}
@@ -846,15 +1308,95 @@ class Analysis extends React.Component {
         />
         </div>
         }
+        <br></br>
+        { colorEncodings.length != 0 &&
+        <div className="colorSelectBox">
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[0].swatch } onClick={ this.handleClick_0 }>
+              <div style={ colorEncodingStyles[0].color } />
+            </div>
+            { displayColorPicker_0 ? <div style={ colorEncodingStyles[0].popover }>
+              <div style={ colorEncodingStyles[0].cover } onClick={ this.handleClose_0 }/>
+              <SketchPicker color={ colorEncoding_0 } onChange={ this.handleChange_0 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[1].swatch } onClick={ this.handleClick_1 }>
+              <div style={ colorEncodingStyles[1].color } />
+            </div>
+            { displayColorPicker_1 ? <div style={ colorEncodingStyles[1].popover }>
+              <div style={ colorEncodingStyles[1].cover } onClick={ this.handleClose_1 }/>
+              <SketchPicker color={ colorEncoding_1 } onChange={ this.handleChange_1 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[2].swatch } onClick={ this.handleClick_2 }>
+              <div style={ colorEncodingStyles[2].color } />
+            </div>
+            { displayColorPicker_2 ? <div style={ colorEncodingStyles[2].popover }>
+              <div style={ colorEncodingStyles[2].cover } onClick={ this.handleClose_2 }/>
+              <SketchPicker color={ colorEncoding_2 } onChange={ this.handleChange_2 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[3].swatch } onClick={ this.handleClick_3 }>
+              <div style={ colorEncodingStyles[3].color } />
+            </div>
+            { displayColorPicker_3 ? <div style={ colorEncodingStyles[3].popover }>
+              <div style={ colorEncodingStyles[3].cover } onClick={ this.handleClose_3 }/>
+              <SketchPicker color={ colorEncoding_3 } onChange={ this.handleChange_3 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[4].swatch } onClick={ this.handleClick_4 }>
+              <div style={ colorEncodingStyles[4].color } />
+            </div>
+            { displayColorPicker_4 ? <div style={ colorEncodingStyles[4].popover }>
+              <div style={ colorEncodingStyles[4].cover } onClick={ this.handleClose_4 }/>
+              <SketchPicker color={ colorEncoding_4 } onChange={ this.handleChange_4 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[5].swatch } onClick={ this.handleClick_5 }>
+              <div style={ colorEncodingStyles[5].color } />
+            </div>
+            { displayColorPicker_5 ? <div style={ colorEncodingStyles[5].popover }>
+              <div style={ colorEncodingStyles[5].cover } onClick={ this.handleClose_5 }/>
+              <SketchPicker color={ colorEncoding_5 } onChange={ this.handleChange_5 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[6].swatch } onClick={ this.handleClick_6 }>
+              <div style={ colorEncodingStyles[6].color } />
+            </div>
+            { displayColorPicker_6 ? <div style={ colorEncodingStyles[6].popover }>
+              <div style={ colorEncodingStyles[6].cover } onClick={ this.handleClose_6 }/>
+              <SketchPicker color={ colorEncoding_6 } onChange={ this.handleChange_6 } />
+            </div> : null }
+          </div>
+          <div className="colorBox">
+            <div style={ colorEncodingStyles[7].swatch } onClick={ this.handleClick_7 }>
+              <div style={ colorEncodingStyles[7].color } />
+            </div>
+            { displayColorPicker_7 ? <div style={ colorEncodingStyles[7].popover }>
+              <div style={ colorEncodingStyles[7].cover } onClick={ this.handleClose_7 }/>
+              <SketchPicker color={ colorEncoding_7 } onChange={ this.handleChange_7 } />
+            </div> : null }
+          </div>
+        </div>
+        }
       </div>
+      
 
       {/* col 2 */}
       <div className="dataVisualizationWrap">
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" && 
         <div className="section-header">
           <h4> Scanpath Visualization </h4>
         </div>
-        <div className="visualizationViewWrap">
-          { select_stiName !== null && select_stiName !== undefined &&  
+        }
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" && 
+        <div className="scanpathVisualizationViewWrap">
           <div className="visViewDiv">
             <ScanpathVisualization 
               width={900}
@@ -862,38 +1404,40 @@ class Analysis extends React.Component {
               stimulusURL={stiURL}
               scanpathList={scanpathList}
               imageOpacity={alphaPicker_stimulusAlpha}
+              colorEncoding={colorEncodings}
             />
           </div>
-          }
-          { select_stiName !== null && select_stiName !== undefined &&  
           <div className="viewControlDiv">
-            <SketchPicker 
+            {/* <SketchPicker 
               width={260}
               color={tempColor}
               onChange={this.tempFunction}
             />
-            <br></br>
+            <br></br> */}
             <AlphaPicker
               width={280}
               color={alphaPicker_stimulusColor}
               onChange={this.alphaPicker_onChange_stimulusAlpha}
             />
           </div>
-          }
         </div>
-
+        }
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
         <div className="section-header">
           <h4> Patch Visualization View </h4>
         </div>
+        }
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
         <div className="patchVisualizationViewWrap">
           { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
           <div className="patchView">
             <PatchVisualization 
               width={900}
-              height={535}
+              height={600}
               patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
               patchList={patchDataList}
               patchDrawFlag={select_patchImageFlag.value}
+              colorEncoding={colorEncodings}
             />
           </div>
           }
@@ -916,6 +1460,19 @@ class Analysis extends React.Component {
           }
           </div>
         </div>
+        }
+        <div className="section-header">
+          <h4> Temp subtitle </h4>
+        </div>
+        { cacheFilePath !== "" &&
+        <div className="visualizationDiv">
+          <ParallelCoordinateChart
+            width={1200}
+            height={530}
+            patchDataFileURL={cacheFilePath}
+          />
+        </div>
+        }
       </div>
 
       {/* col 3 */}
@@ -932,6 +1489,7 @@ class Analysis extends React.Component {
             width={390}
             height={150}
             patchDataList={patchDataList}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
@@ -941,6 +1499,7 @@ class Analysis extends React.Component {
             width={390}
             height={200}
             patchDataList={patchDataList}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
@@ -953,6 +1512,7 @@ class Analysis extends React.Component {
             width={390}
             height={150}
             patchDataList={patchesOnHumanFixationMap}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
@@ -962,6 +1522,7 @@ class Analysis extends React.Component {
             width={390}
             height={200}
             patchDataList={patchesOnHumanFixationMap}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
@@ -974,6 +1535,7 @@ class Analysis extends React.Component {
             width={390}
             height={150}
             patchDataList={patchesOutsideHumanFixationMap}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
@@ -983,6 +1545,7 @@ class Analysis extends React.Component {
             width={390}
             height={200}
             patchDataList={patchesOutsideHumanFixationMap}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
