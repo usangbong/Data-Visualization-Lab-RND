@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import cv2
 
+from datetime import datetime
 from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 from collections import OrderedDict
@@ -452,6 +453,8 @@ def clustering_processing():
 
     midCacheFlag = False
     midCacheFilePath = "./static/__cache__/midcache.csv"
+    cacheFilePath = "./static/__cache__/cache_"+GET_TRANSFORMATION_METHOD+"-"+GET_DIMEN_REDUCTION_METHOD+"_"+datetime.today().strftime("%Y%m%d%H%M%S")+".csv"
+
 
     fixDirPath = "./static/fix/"
     featureDirPath = "./static/feature/"
@@ -538,9 +541,12 @@ def clustering_processing():
     # print("rawDataList")
     # print(rawDataList)
 
+    processedDF.to_csv(cacheFilePath, mode='w', index=False, header=True)
+
     response['status'] = 'success'
     response['dataColumns'] = dataColumns
     response['processingData'] = processedDataList
+    response['cacheFilePath'] = cacheFilePath.split(".")[1]+".csv"
     response['rawData'] = rawDataList
   except Exception as e:
     response['status'] = 'failed'
