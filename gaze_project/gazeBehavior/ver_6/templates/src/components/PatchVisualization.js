@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 function PatchVisualization(props) {
-  const { width, height, patchURLs, patchList, patchDrawFlag} = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag, colorEncoding } = props;
   const svgRef = useRef();
   const d3 = window.d3;
   const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
@@ -102,32 +102,8 @@ function PatchVisualization(props) {
     patchFrame.append('rect')
     .attr("width", PATCH_DRAW_LENGTH)
     .attr("height", PATCH_DRAW_LENGTH)
-    .style("fill", function(d){
-      if(d.clu == 0){
-        return "blue";
-      }else if(d.clu == 1){
-        return "red";
-      }else if(d.clu == 2 || d.clu == 6){
-        return "green";
-      }else if(d.clu == 3 || d.clu == 4 || d.clu == 5){
-        return "blue";
-      }else{
-        return "black";
-      }
-    })
-    .attr("stroke", function(d){
-      if(d.clu == 0){
-        return "blue";
-      }else if(d.clu == 1){
-        return "red";
-      }else if(d.clu == 2 || d.clu == 6){
-        return "green";
-      }else if(d.clu == 3 || d.clu == 4 || d.clu == 5){
-        return "blue";
-      }else{
-        return "black";
-      }
-    })
+    .style("fill", function(d){ return colorEncoding[d.clu] })
+    .attr("stroke", function(d){ return colorEncoding[d.clu] })
     .attr("stroke-width", "3px");
 
     if(patchDrawFlag == "image"){
@@ -228,7 +204,7 @@ function PatchVisualization(props) {
     }
     
 
-  }, [props.patchURLs, props.patchList, props.patchDrawFlag]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.colorEncoding]);
   
   return (
     <>
