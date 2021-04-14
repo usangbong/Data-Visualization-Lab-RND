@@ -3,10 +3,10 @@
 import React, { useEffect, useRef } from 'react';
 
 function BoxPlot(props) {
-  const { width, height, patchDataList } = props;
+  const { width, height, patchDataList, colorEncoding } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-  const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
+  // const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   const featureNumber = 8;
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function BoxPlot(props) {
       record["quartile"] = boxQuartiles(groupCount);
       record["whiskers"] = [localMin, localMax];
       // record["color"] = colorScale(key);
-      record["color"] = COLORS[parseInt(key)];
+      record["color"] = colorEncoding[parseInt(key)];
 
       boxPlotData.push(record);
     }
@@ -213,7 +213,7 @@ function BoxPlot(props) {
     function sortNumber(a,b) {
       return a - b;
     }
-  }, [,props.patchDataList]);
+  }, [,props.patchDataList, props.colorEncoding]);
 
   return (
     <>
