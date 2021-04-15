@@ -331,7 +331,7 @@ class Analysis extends React.Component {
         let getParticipantList = response.data.participantList;
         // console.log(getParticipantList);
         let participantList = [
-          { value:'all', label: 'All Participant data' }
+          { value:'all', label: 'All Participant data: #'+getParticipantList.length }
         ];
         for(let i=0; i<getParticipantList.length; i++){
           let _splitdata = getParticipantList[i].split("/")
@@ -540,8 +540,8 @@ class Analysis extends React.Component {
       axios.post(`http://${window.location.hostname}:5000/api/scanpath/calcSimilarity`, data)
       .then(response => {
         let getSSVdata = response.data.scanpathSimilarityValues;
-        // console.log('response.data.scanpathSimilarityValues');
-        // console.log(getSSVdata);
+        console.log('response.data.scanpathSimilarityValues');
+        console.log(getSSVdata);
         // console.log('this.state.scanpathList');
         // console.log(this.state.scanpathList);
         let displayedScanpath = this.state.scanpathList;
@@ -643,8 +643,8 @@ class Analysis extends React.Component {
     console.log("select_onChange_cacheFile");
     this.setState({select_cacheFile});
     let _cacheFilePath = `http://${window.location.hostname}:5000`+"/static/__cache__/"+select_cacheFile.value+"?"+Math.random();
-    console.log("_cacheFilePath");
-    console.log(_cacheFilePath);
+    // console.log("_cacheFilePath");
+    // console.log(_cacheFilePath);
     this.setState({
       cacheFilePath: _cacheFilePath
     });
@@ -657,7 +657,7 @@ class Analysis extends React.Component {
     axios.post(`http://${window.location.hostname}:5000/api/clustering/processing`, data)
     .then(response => {
       // console.log(response.data);
-      console.log(response.data.dataColumns);
+      // console.log(response.data.dataColumns);
       this.setState({
         processingDataColumns: response.data.dataColumns
       });
@@ -667,9 +667,9 @@ class Analysis extends React.Component {
       this.setState({
         rawDataList: response.data.rawData
       });
-      console.log("generated cachefile path");
-      console.log(response.data.cacheFilePath);
-      console.log(`http://${window.location.hostname}:5000`+response.data.cacheFilePath+"?"+Math.random());
+      // console.log("generated cachefile path");
+      // console.log(response.data.cacheFilePath);
+      // console.log(`http://${window.location.hostname}:5000`+response.data.cacheFilePath+"?"+Math.random());
       this.setState({
         cacheFilePath: `http://${window.location.hostname}:5000`+response.data.cacheFilePath+"?"+Math.random()
       });
