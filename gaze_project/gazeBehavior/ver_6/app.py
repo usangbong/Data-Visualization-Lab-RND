@@ -473,7 +473,7 @@ def clustering_processing():
       
       fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
       print(fixFilePath)
-      fixDF = pd.read_csv(fixFilePath)
+      fixDF = pd.read_csv(fixFilePath, header=None)
       fixList = fixDF.values.tolist()
       gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +"."+ stiExt
       groundTruthFixMap = cv2.imread(gtFixMapPath)
@@ -582,7 +582,7 @@ def scanpath_calc_similarity():
       if _fixFile == GET_SELECTED_MAIN_SCANPATH:
         mainFlag = True
       filePath = fixationDirPath + _fixFile +".csv"
-      fixDF = pd.read_csv(filePath)
+      fixDF = pd.read_csv(filePath, header=None)
       fixList = fixDF.values.tolist()
       scanpathList.append([mainFlag, _fixFile, fixList])
     
@@ -689,7 +689,7 @@ def processing_gen_fixationDataList():
     for fixFilePath in PARTICIPANT_FIX_FILE_LIST:
       _id = fixFilePath[0]
       _path = fixFilePath[1]
-      df = pd.read_csv(_path)
+      df = pd.read_csv(_path, header=None)
       dfList = df.values.tolist()
       FIX_DATA_LIST.append([_id, dfList])
 
