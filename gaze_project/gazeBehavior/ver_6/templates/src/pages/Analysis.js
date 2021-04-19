@@ -14,6 +14,7 @@ import BoxPlot from 'components/BoxPlot';
 import LineChart from 'components/LineChart';
 import HumanFixationMap from '../components/HumanFixationMap';
 import ParallelCoordinateChart from '../components/ParallelCoordinateChart';
+import BarChart from '../components/BarChart';
 
 // import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -27,6 +28,14 @@ const select_option_dataset = [
   { value:'CAT2000', label: 'CAT2000' },
   { value:'FIGRIM', label: 'FIGRIM' },
   { value:'MIT1003', label: 'MIT1003' }
+];
+
+const select_option_overview = [
+  { value:'asv', label: 'Analysis of Spatial Variance' },
+  { value:'scanpath', label: '#Scanpaths' },
+  { value:'patch_total', label: '#Patches' },
+  { value:'patch_on', label: '#On Patches' },
+  { value:'patch_out', label: '#Outside Patches' }
 ];
 
 const select_option_scanpathSimilarity = [
@@ -63,34 +72,33 @@ const select_option_dimensionReduction = [
   { value:'PLS', label: 'PLS (Partial Least Squares)' }
 ];
 
-// const select_option_dataClustering = [
-//   { value:'random_forest', label: 'RandomForest' },
-//   { value:'dbscan', label: 'DBSCAN' },
-//   { value:'hdbscan', label: 'hDBSCAN' },
-//   { value:'k_means', label: 'k-Means' }
-// ];
-
 const select_option_patchImageFlag = [
   { value:'image', label: 'Draw fixated patch images' },
   { value:'box', label: 'Draw only label box' }
+];
+
+const select_option_humanFixationMapStyle = [
+  { value:'original', label: 'Use original' },
+  { value:'discrete', label: 'Use discrete' }
 ];
 
 class Analysis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      select_overview: [],
       select_stiDataset: [],
       select_semanticClass: [],
       select_stiName: [],
       select_participant: [],
       select_useCache: null,
-      select_cacheFile: null,
+      // select_cacheFile: null,
       select_scanpathSimilarityMetohd: null,
       select_main_scanpath: null,
       select_dataTransformation: null,
-      // select_dataClustering: null,
       select_dimensionReduction: null,
-      select_patchImageFlag: null,
+      select_patchImageFlag: {value:'box', label: 'Draw only label box' },
+      select_humanFixationMapStyle : { value:'original', label: 'Use original' },
       select_analysisStyle: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
@@ -98,15 +106,19 @@ class Analysis extends React.Component {
       select_isDisabled_scanpathSimilarity: true,
       select_isDisabled_mainScanpath: true,
       select_isDisabled_dataTransformation: true,
-      // select_isDisabled_dataClustering: true,
       select_isDisabled_dimensionReduction: true,
       select_isDisabled_useCache: true,
-      select_isDisabled_cacheFile: true,
+      // select_isDisabled_cacheFile: true,
       select_option_participant: [],
       select_option_stiClass: [],
       select_option_stiName: [],
       select_option_mainScanpath: [],
-      select_option_cacheFile: [],
+      // select_option_cacheFile: [],
+      onFlag_overview_asv: false,
+      onFlag_overview_scanpath: false,
+      onFlag_overview_patch_total: false,
+      onFlag_overview_patch_on: false,
+      onFlag_overview_patch_out: false,
       STI_CLASS_LIST: [],
       FEATURE_LIST: [],
       spDataURL: "",
@@ -115,7 +127,8 @@ class Analysis extends React.Component {
       scanpathList: [],
       alphaPicker_stimulusAlpha: 1,
       alphaPicker_stimulusColor: {},
-      tempColor: {r: '255', g: '255', b: '255', a:'1'},
+      alphapicker_patchBoxAlpha: 1,
+      alphapicker_patchBoxColor: {},
       displayColorPicker_0: false,
       displayColorPicker_1: false,
       displayColorPicker_2: false,
@@ -140,12 +153,89 @@ class Analysis extends React.Component {
       patchesOnHumanFixationMap: [],
       patchesOutsideHumanFixationMap: [],
       cacheFilePath: "",
+      overviewCountDataList: [],
     };
+  }
+
+  select_onChange_overview = select_overview =>{
+    console.log("select_onChange_overview");
+    this.setState({select_overview});
+    if(select_overview !== null && select_overview !== undefined){
+      let flag_asv = false;
+      let flag_scanpath = false;
+      let flag_patch_total = false;
+      let flag_patch_on = false;
+      let flag_patch_out = false;
+      for(let i=0; i<select_overview.length; i++){
+        let _value = select_overview[i].value;
+        if(_value == "asv"){
+          flag_asv = true;
+        }else if(_value == "scanpath"){
+          flag_scanpath = true;
+        }else if(_value == "patch_total"){
+          flag_patch_total = true;
+        }else if(_value == "patch_on"){
+          flag_patch_on = true;
+        }else if(_value == "patch_out"){
+          flag_patch_out = true;
+        }else{
+          console.log("Unavailable flag selected");
+        }
+        if(this.state.select_semanticClass !== null && this.state.select_semanticClass !== undefined && this.state.select_semanticClass.length == 1){
+          let selectedSemanticClass = this.state.select_semanticClass[0].value;
+          const data = new FormData();
+          data.set("semanticClass", selectedSemanticClass);
+          axios.post(`http://${window.location.hostname}:5000/api/overview`, data)
+          .then(response => {
+            console.log(response.data.overview);
+            this.setState({
+              overviewCountDataList: response.data.overview
+            });
+          }).catch(error => {
+            alert(`Error - ${error.message}`);
+          });
+
+        }
+      }
+      this.setState({
+        onFlag_overview_asv: flag_asv
+      });
+      this.setState({
+        onFlag_overview_scanpath: flag_scanpath
+      });
+      this.setState({
+        onFlag_overview_patch_total: flag_patch_total
+      });
+      this.setState({
+        onFlag_overview_patch_on: flag_patch_on
+      });
+      this.setState({
+        onFlag_overview_patch_out: flag_patch_out
+      });
+    }else{
+      this.setState({
+        onFlag_overview_asv: false
+      });
+      this.setState({
+        onFlag_overview_scanpath: false
+      });
+      this.setState({
+        onFlag_overview_patch_total: false
+      });
+      this.setState({
+        onFlag_overview_patch_on: false
+      });
+      this.setState({
+        onFlag_overview_patch_out: false
+      });
+    }
   }
 
   select_onChanged_stiDataset = select_stiDataset =>{
     this.colorEncodingStateInitFunction();
-    this.setState({select_stiDataset})
+    this.setState({select_stiDataset});
+    // console.log("select_stiDataset");
+    // console.log(select_stiDataset);
     if(select_stiDataset !== null && select_stiDataset !== undefined){
       // console.log(select_stiDataset);
       var stiDatasetList_str = "";
@@ -242,6 +332,12 @@ class Analysis extends React.Component {
           let stiClassName = splitData[1];
           let stiFileName = splitData[2];
           let classShortName = "";
+          let stiShortName = "(S";
+          if(i<10){
+            stiShortName = stiShortName+"0"+String(i)+")";
+          }else{
+            stiShortName = stiShortName+String(i)+")";
+          }
           for(let j=0; j<this.state.select_option_stiClass.length; j++){
             let splitSelectOptionClass = this.state.select_option_stiClass[j].value.split("/");
             let _dn = splitSelectOptionClass[0];
@@ -266,7 +362,7 @@ class Analysis extends React.Component {
           }
           let stiNameOption = {
             value: datasetName+"/"+stiClassName+"/"+stiFileName+"/"+getStimulusNames[i][1]+"_"+getStimulusNames[i][2],
-            label: classShortName+" "+stiFileName+ " ("+getStimulusNames[i][1] +"x"+ getStimulusNames[i][2]+")"
+            label: classShortName+" "+stiShortName+" "+stiFileName+ " ("+getStimulusNames[i][1] +"x"+ getStimulusNames[i][2]+")"
           }; 
           stiNamesList.push(stiNameOption);
         }
@@ -302,10 +398,11 @@ class Analysis extends React.Component {
           height: stiHeight
         };
         let _hfmURL = {
-          url: `http://${window.location.hostname}:5000/static/ground_truth/`+pathString,
+          url: `http://${window.location.hostname}:5000/static/ground_truth/`+pathString.replace(".jpeg", ".jpg"),
           width: stiWidth,
           height: stiHeight
         }
+        console.log(_hfmURL);
         stiURLList.push(_sURL);
         hfmURLList.push(_hfmURL);
         if(i==0){
@@ -331,7 +428,7 @@ class Analysis extends React.Component {
         let getParticipantList = response.data.participantList;
         // console.log(getParticipantList);
         let participantList = [
-          { value:'all', label: 'All Participant data: #'+getParticipantList.length }
+          { value:'all', label: 'All observers data: #'+getParticipantList.length }
         ];
         for(let i=0; i<getParticipantList.length; i++){
           let _splitdata = getParticipantList[i].split("/")
@@ -599,61 +696,79 @@ class Analysis extends React.Component {
     console.log("select_onChange_useCache");
     this.setState({select_useCache});
     if(select_useCache !== null && select_useCache !== undefined){
-      let _cacheFlag = true;
-      if(select_useCache.value == 'use'){
-        _cacheFlag = true;
-        axios.post(`http://${window.location.hostname}:5000/api/clustering/loadCacheList`)
-        .then(response => {
-          // console.log(response.data);
-          let getCacheFileList = response.data.caches;
-          let loadedCacheList = [];
-          for(let i=0; i<getCacheFileList.length; i++){
-            let _c ={
-              value: getCacheFileList[i],
-              label: getCacheFileList[i]
-            };
-            loadedCacheList.push(_c);
-          }
-          this.setState({
-            select_option_cacheFile: loadedCacheList
-          });
-          this.setState({
-            select_isDisabled_cacheFile: false
-          });
+      // let _cacheFlag = true;
+      // if(select_useCache.value == 'use'){
+      //   _cacheFlag = true;
+      //   axios.post(`http://${window.location.hostname}:5000/api/clustering/loadCacheList`)
+      //   .then(response => {
+      //     // console.log(response.data);
+      //     let getCacheFileList = response.data.caches;
+      //     let loadedCacheList = [];
+      //     for(let i=0; i<getCacheFileList.length; i++){
+      //       let _c ={
+      //         value: getCacheFileList[i],
+      //         label: getCacheFileList[i]
+      //       };
+      //       loadedCacheList.push(_c);
+      //     }
+      //     this.setState({
+      //       select_option_cacheFile: loadedCacheList
+      //     });
+      //     this.setState({
+      //       select_isDisabled_cacheFile: false
+      //     });
           
-        }).catch(error => {
-          alert(`Error - ${error.message}`);
-        });
-      }else{
-        _cacheFlag = false;
-      }
+      //   }).catch(error => {
+      //     alert(`Error - ${error.message}`);
+      //   });
+      // }else{
+      //   _cacheFlag = false;
+      // }
+      // _cacheFlag = false;
       this.setState({
-        select_isDisabled_dataTransformation: _cacheFlag
+        select_isDisabled_dataTransformation: false
       });
       this.setState({
-        select_isDisabled_dimensionReduction: _cacheFlag
+        select_isDisabled_dimensionReduction: false
       });
-      this.setState({
-        select_isDisabled_cacheFile: true
-      });
+      // this.setState({
+      //   select_isDisabled_cacheFile: true
+      // });
     }
   }
 
-  select_onChange_cacheFile = select_cacheFile =>{
-    console.log("select_onChange_cacheFile");
-    this.setState({select_cacheFile});
-    let _cacheFilePath = `http://${window.location.hostname}:5000`+"/static/__cache__/"+select_cacheFile.value+"?"+Math.random();
-    // console.log("_cacheFilePath");
-    // console.log(_cacheFilePath);
-    this.setState({
-      cacheFilePath: _cacheFilePath
-    });
-  }
+  // select_onChange_cacheFile = select_cacheFile =>{
+  //   console.log("select_onChange_cacheFile");
+  //   this.setState({select_cacheFile});
+  //   let _cacheFilePath = `http://${window.location.hostname}:5000`+"/static/__cache__/pcache/"+select_cacheFile.value+"?"+Math.random();
+  //   this.setState({
+  //     cacheFilePath: _cacheFilePath
+  //   });
+  //   axios.post(_cacheFilePath)
+  //   .then(response => {
+  //     console.log(response.data);
+  //   }).catch(error => {
+  //     alert(`Error - ${error.message}`);
+  //   });
+  // }
 
   run_transformation_clustering = (tMethod, drMethod) =>{
+    let getStiNames = this.state.select_stiName;
+    let selectedStisStr = "";
+    for(let i=0; i<getStiNames.length; i++){
+      let stiValue = getStiNames[i].value;
+      if(i==0){
+        selectedStisStr = selectedStisStr + stiValue;
+      }else{
+        selectedStisStr = selectedStisStr +"-"+ stiValue;
+      }
+    }
+    let cacheUseFlag = this.state.select_useCache.value;
     const data = new FormData();
+    data.set('cacheUseFlag', cacheUseFlag)
     data.set('transformationMethod', tMethod);
     data.set('dimensionReductionMethod', drMethod);
+    data.set('selectedStimulus', selectedStisStr)
     axios.post(`http://${window.location.hostname}:5000/api/clustering/processing`, data)
     .then(response => {
       // console.log(response.data);
@@ -743,13 +858,44 @@ class Analysis extends React.Component {
     this.setState({select_analysisStyle});
   }
 
-
+  select_onChanged_humanFixationMapStyle = select_humanFixationMapStyle =>{
+    console.log("select_onChanged_humanFixationMapStyle");
+    this.setState({select_humanFixationMapStyle});
+    let hfmURL = [];
+    let getStiURL = this.state.stiURL[0];
+    if(select_humanFixationMapStyle.value == "original"){
+      let _url = getStiURL.url.replace("/stimulus/", "/ground_truth/");
+      _url = _url.replace(".jpeg", ".jpg")
+      hfmURL.push({
+        url: getStiURL.url.replace("/stimulus/", "/ground_truth/"),
+        width: getStiURL.width,
+        height: getStiURL.height
+      });
+    }else{
+      console.log(`http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,);
+      hfmURL.push({
+        url: `http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,
+        width: getStiURL.width,
+        height: getStiURL.height
+      });
+    }
+    this.setState({
+      humanFixationMapURL: hfmURL
+    });
+  }
 
   
   alphaPicker_onChange_stimulusAlpha = (color) =>{
     this.setState({alphaPicker_stimulusColor: color.rgb});
     this.setState({
       alphaPicker_stimulusAlpha: color.rgb.a
+    });
+  }
+
+  alphaPicker_onChange_patchBoxAlpha = (color) =>{
+    this.setState({alphapicker_patchBoxColor: color.rgb});
+    this.setState({
+      alphapicker_patchBoxAlpha: color.rgb.a
     });
   }
 
@@ -894,6 +1040,8 @@ class Analysis extends React.Component {
 
 
   render() {
+    // overview
+    const { select_overview, overviewCountDataList, onFlag_overview_asv, onFlag_overview_scanpath, onFlag_overview_patch_total, onFlag_overview_patch_on, onFlag_overview_patch_out } = this.state;
     // data filter select
     const { select_stiDataset, select_participant, select_semanticClass, select_stiName } = this.state;
     const { select_option_participant, select_option_stiClass, select_option_stiName } = this.state;
@@ -902,7 +1050,7 @@ class Analysis extends React.Component {
     const { spDataURL, FEATURE_LIST, STI_CLASS_LIST} = this.state;
     // analysis style setting
     const { select_analysisStyle } = this.state;
-    const { colorEncodings, alphaPicker_stimulusColor, alphaPicker_stimulusAlpha } = this.state;
+    const { colorEncodings, alphaPicker_stimulusColor, alphaPicker_stimulusAlpha, alphapicker_patchBoxAlpha, alphapicker_patchBoxColor } = this.state;
     const { displayColorPicker_0, displayColorPicker_1, displayColorPicker_2, displayColorPicker_3, displayColorPicker_4, displayColorPicker_5, displayColorPicker_6, displayColorPicker_7 } = this.state;
     const { colorEncoding_0, colorEncoding_1, colorEncoding_2, colorEncoding_3, colorEncoding_4, colorEncoding_5, colorEncoding_6, colorEncoding_7 } = this.state;
     // scanpath visualization
@@ -910,9 +1058,11 @@ class Analysis extends React.Component {
     // scanpath similarity
     const { select_main_scanpath, select_isDisabled_mainScanpath, select_option_mainScanpath, select_scanpathSimilarityMetohd, select_isDisabled_scanpathSimilarity } = this.state;
     // patch clustering
-    const { select_useCache, select_cacheFile, select_option_cacheFile, select_dataTransformation, select_dimensionReduction } = this.state;
+    const { select_useCache, select_dataTransformation, select_dimensionReduction } = this.state;
+    // const { select_cacheFile, select_option_cacheFile, select_isDisabled_cacheFile } = this.state;
+    const { select_humanFixationMapStyle } = this.state;
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
-    const { select_isDisabled_useCache, select_isDisabled_cacheFile, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
+    const { select_isDisabled_useCache, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
     const { patchDataList, select_patchImageFlag, humanFixationMapURL, rawDataList } = this.state;
     // saliency features visualization
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
@@ -1175,9 +1325,6 @@ class Analysis extends React.Component {
         },
       })
     );
-    
-    
-
 
     return (
     <>
@@ -1187,7 +1334,7 @@ class Analysis extends React.Component {
           <div id="logo"></div><div><h3>Visual Attention Analysis System</h3></div>
         </div>
         <div className="section-header">
-          <h4> Analysis of Spatial Variance </h4>
+          <h4> Data Filter </h4>
         </div>
         <Select 
           value={select_stiDataset}
@@ -1196,22 +1343,8 @@ class Analysis extends React.Component {
           onChange={this.select_onChanged_stiDataset}
           className="basic-multi-select"
           classNamePrefix="select"
-          placeholder="Select stimulus dataset"
+          placeholder="Stimulus dataset"
         />
-        { spDataURL.length != 0 &&
-        <div id="heat" className="page-section heatmap">
-          <Heatmap 
-            width={400}
-            height={650}
-            dataURL={spDataURL}
-            FEATURE_DEFINE={FEATURE_LIST}
-            STI_CLASS_DEFINE={STI_CLASS_LIST}
-          />
-        </div>
-        }
-        <div className="section-header">
-          <h4> Data Filter </h4>
-        </div>
         <Select 
           value={select_semanticClass}
           isDisabled={select_isDisabled_semanticClass}
@@ -1220,7 +1353,16 @@ class Analysis extends React.Component {
           onChange={this.select_onChanged_semanticClass}
           className="basic-multi-select"
           classNamePrefix="select"
-          placeholder="Select semantic class"
+          placeholder="Semantic class"
+        />
+        <Select
+          value={select_overview}
+          isMulti
+          options={select_option_overview}
+          onChange={this.select_onChange_overview}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          placeholder="Overview switch"
         />
         <Select 
           value={select_stiName}
@@ -1230,7 +1372,7 @@ class Analysis extends React.Component {
           onChange={this.select_onChanged_stiName}
           className="basic-multi-select"
           classNamePrefix="select"
-          placeholder="Select visual stimulus"
+          placeholder="Visual stimulus"
         />
         <Select 
           value={select_participant}
@@ -1240,74 +1382,95 @@ class Analysis extends React.Component {
           onChange={this.select_onChanged_participant}
           className="basic-multi-select"
           classNamePrefix="select"
-          placeholder="Select observer ID"
+          placeholder="Observer ID"
         />
-        
-        <div className="section-header">
-          <h4> Analysis Settings </h4>
-        </div>
         <Select
           value={select_analysisStyle}
           options={select_option_analysisStyle}
           onChange={this.select_onChanged_analysisStyle}
-          placeholder="Select analysis mode"
+          placeholder="Analysis mode"
         />
-        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" &&
-        <div>
-          <Select
-            value={select_main_scanpath}
-            isDisabled={select_isDisabled_mainScanpath}
-            options={select_option_mainScanpath}
-            onChange={this.select_onChanged_mainScanpath}
-            placeholder="Select scanpath for calculation similarity"
-          />
-          <Select
-            value={select_scanpathSimilarityMetohd}
-            isDisabled={select_isDisabled_scanpathSimilarity}
-            options={select_option_scanpathSimilarity}
-            onChange={this.select_onChanged_scanpathSimilarity}
-            placeholder="Select scanpath similarity calculation method"
+        { onFlag_overview_asv == true && select_stiDataset !== null && select_stiDataset !== undefined && select_stiDataset.length !=0 && 
+        <div className="section-header">
+          <h4> Analysis of Spatial Variance </h4>
+        </div>
+        }
+        { onFlag_overview_asv == true && select_stiDataset !== null && select_stiDataset !== undefined && spDataURL.length != 0 &&
+        <div id="heat" className="page-section heatmap">
+          <Heatmap 
+            width={400}
+            height={400}
+            dataURL={spDataURL}
+            FEATURE_DEFINE={FEATURE_LIST}
+            STI_CLASS_DEFINE={STI_CLASS_LIST}
           />
         </div>
         }
-        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
-        <Select
-          value={select_useCache}
-          isDisabled={select_isDisabled_useCache}
-          options={select_option_useCache}
-          onChange={this.select_onChange_useCache}
-          placeholder="Use cache file or not"
-        />
+        { onFlag_overview_scanpath == true &&
+        <div className="section-header">
+          <h4> Overview: #Scanpaths  </h4>
+        </div>
         }
-        { select_option_cacheFile.length > 0 && select_useCache.value == "use" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
+        { onFlag_overview_scanpath == true &&
         <div>
-          <Select
-            value={select_cacheFile}
-            isDisabled={select_isDisabled_cacheFile}
-            options={select_option_cacheFile}
-            onChange={this.select_onChange_cacheFile}
-            placeholder="Select cache file"
+          <BarChart
+            width={400}
+            height={400}
+            overviewSytle={"scanpath"}
+            countDataList={overviewCountDataList}
+            colorEncoding={colorEncodings}
           />
         </div>
         }
-        { select_useCache !== null && select_useCache !== undefined && select_useCache.value == "not" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
-        <div>
-        <Select
-          value={select_dataTransformation}
-          isDisabled={select_isDisabled_dataTransformation}
-          options={select_option_dataTransformation}
-          onChange={this.select_onChanged_dataTransformation}
-          placeholder="Select transformation method"
-        />
-        <Select
-          value={select_dimensionReduction}
-          isDisabled={select_isDisabled_dimensionReduction}
-          options={select_option_dimensionReduction}
-          onChange={this.select_onChanged_dimensionReduction}
-          placeholder="Select dimension reduction method"
-        />
+        { onFlag_overview_patch_total == true &&
+        <div className="section-header">
+          <h4> Overview: #Total Patches  </h4>
         </div>
         }
+        { onFlag_overview_patch_total == true &&
+        <div>
+          <BarChart
+            width={400}
+            height={400}
+            overviewSytle={"patch_total"}
+            countDataList={overviewCountDataList}
+            colorEncoding={colorEncodings}
+          />
+        </div>
+        }
+        { onFlag_overview_patch_on == true &&
+        <div className="section-header">
+          <h4> Overview: #Patches on HFM  </h4>
+        </div>
+        }
+        { onFlag_overview_patch_on == true &&
+        <div>
+          <BarChart
+            width={400}
+            height={400}
+            overviewSytle={"patch_on"}
+            countDataList={overviewCountDataList}
+            colorEncoding={colorEncodings}
+          />
+        </div>
+        }
+        { onFlag_overview_patch_out == true &&
+        <div className="section-header">
+          <h4> Overview: #Patches outside on HFM  </h4>
+        </div>
+        }
+        { onFlag_overview_patch_out == true &&
+        <div>
+          <BarChart
+            width={400}
+            height={400}
+            overviewSytle={"patch_out"}
+            countDataList={overviewCountDataList}
+            colorEncoding={colorEncodings}
+          />
+        </div>
+        }
+        
         <br></br>
         { colorEncodings.length != 0 &&
         <div className="colorSelectBox">
@@ -1408,12 +1571,24 @@ class Analysis extends React.Component {
             />
           </div>
           <div className="viewControlDiv">
-            {/* <SketchPicker 
-              width={260}
-              color={tempColor}
-              onChange={this.tempFunction}
-            />
-            <br></br> */}
+            { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" &&
+            <div>
+              <Select
+                value={select_main_scanpath}
+                isDisabled={select_isDisabled_mainScanpath}
+                options={select_option_mainScanpath}
+                onChange={this.select_onChanged_mainScanpath}
+                placeholder="Scanpath for calculation similarity"
+              />
+              <Select
+                value={select_scanpathSimilarityMetohd}
+                isDisabled={select_isDisabled_scanpathSimilarity}
+                options={select_option_scanpathSimilarity}
+                onChange={this.select_onChanged_scanpathSimilarity}
+                placeholder="Scanpath similarity calculation method"
+              />
+            </div>
+            }
             <AlphaPicker
               width={280}
               color={alphaPicker_stimulusColor}
@@ -1429,7 +1604,7 @@ class Analysis extends React.Component {
         }
         { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
         <div className="patchVisualizationViewWrap">
-          { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+          { patchDataList.length != 0 && 
           <div className="patchView">
             <PatchVisualization 
               width={900}
@@ -1437,63 +1612,160 @@ class Analysis extends React.Component {
               patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
               patchList={patchDataList}
               patchDrawFlag={select_patchImageFlag.value}
+              patchBoxOpacity={alphapicker_patchBoxAlpha}
               colorEncoding={colorEncodings}
             />
           </div>
           }
           <div className="patchViewControl">
+          { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
+          <Select
+            value={select_useCache}
+            isDisabled={select_isDisabled_useCache}
+            options={select_option_useCache}
+            onChange={this.select_onChange_useCache}
+            placeholder="Use cache file or not"
+          />
+          }
+          {/* { select_option_cacheFile.length > 0 && select_useCache.value == "use" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
+          <div>
+            <Select
+              value={select_cacheFile}
+              isDisabled={select_isDisabled_cacheFile}
+              options={select_option_cacheFile}
+              onChange={this.select_onChange_cacheFile}
+              placeholder="Cache file"
+            />
+          </div>
+          } */}
+          { select_useCache !== null && select_useCache !== undefined && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
+          <div>
+          <Select
+            value={select_dataTransformation}
+            isDisabled={select_isDisabled_dataTransformation}
+            options={select_option_dataTransformation}
+            onChange={this.select_onChanged_dataTransformation}
+            placeholder="Transformation method"
+          />
+          <Select
+            value={select_dimensionReduction}
+            isDisabled={select_isDisabled_dimensionReduction}
+            options={select_option_dimensionReduction}
+            onChange={this.select_onChanged_dimensionReduction}
+            placeholder="Dimension reduction method"
+          />
+          </div>
+          }
           { patchDataList.length != 0 &&
+          <div>
             <Select
               value={select_patchImageFlag}
               options={select_option_patchImageFlag}
               onChange={this.select_onChanged_patchImageFlag}
-              placeholder="Select fixated patch style"
+              placeholder="Fixated image patch style"
             />
+            <br></br>
+            <AlphaPicker
+              width={280}
+              color={alphapicker_patchBoxColor}
+              onChange={this.alphaPicker_onChange_patchBoxAlpha}
+            />
+            </div>
           }
-          { humanFixationMapURL.length != 0 && rawDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
-          <HumanFixationMap
-            width={290}
-            height={290}
-            humanFixationMapURL={humanFixationMapURL}
-            patchDataList={rawDataList}
-          />
+          <br></br>
+          { humanFixationMapURL.length != 0 && rawDataList.length != 0 &&
+          <div>
+            <HumanFixationMap
+              width={280}
+              height={290}
+              humanFixationMapURL={humanFixationMapURL}
+              patchDataList={rawDataList}
+              colorEncoding={colorEncodings}
+            />
+            <Select
+              value={select_humanFixationMapStyle}
+              options={select_option_humanFixationMapStyle}
+              onChange={this.select_onChanged_humanFixationMapStyle}
+            />
+          </div>
           }
           </div>
         </div>
         }
         <div className="section-header">
-          <h4> Temp subtitle </h4>
+          <h4> Saliency Feature Visaulzation View </h4>
         </div>
-        { cacheFilePath !== "" &&
-        <div className="visualizationDiv">
-          <ParallelCoordinateChart
-            width={1200}
-            height={530}
-            patchDataFileURL={cacheFilePath}
-          />
+        <div className="saliencyVisualizationWrap">
+          { cacheFilePath !== "" &&
+          <div className="visualizationDiv">
+            <ParallelCoordinateChart
+              width={900}
+              height={530}
+              patchDataFileURL={cacheFilePath}
+              colorEncoding={colorEncodings}
+            />
+          </div>
+          }
+          <div className="subSaliencyVisDiv">
+            { patchDataList.length != 0 &&
+            <div className="section-header">
+              <h4> All patches: {patchDataList.length} </h4>
+            </div>
+            }
+            { patchDataList.length != 0 && 
+            <div className="saliencyView_boxplot">
+              <BoxPlot
+                width={290}
+                height={140}
+                patchDataList={patchDataList}
+                colorEncoding={colorEncodings}
+              />
+            </div>
+            }
+            { patchDataList.length != 0 &&
+            <div className="section-header">
+              <h4> Patches on HFM: {patchesOnHumanFixationMap.length} </h4>
+            </div>
+            }
+            { patchDataList.length != 0 && 
+            <div className="saliencyView_boxplot">
+              <BoxPlot
+                width={290}
+                height={140}
+                patchDataList={patchesOnHumanFixationMap}
+                colorEncoding={colorEncodings}
+              />
+            </div>
+            }
+            { patchDataList.length != 0 &&
+            <div className="section-header">
+              <h4> Patches outside on HFM: {patchesOutsideHumanFixationMap.length} </h4>
+            </div>
+            }
+            { patchDataList.length != 0 && 
+            <div className="saliencyView_boxplot">
+              <BoxPlot
+                width={290}
+                height={140}
+                patchDataList={patchesOutsideHumanFixationMap}
+                colorEncoding={colorEncodings}
+              />
+            </div>
+            }
+          </div>
+
         </div>
-        }
+        
       </div>
 
       {/* col 3 */}
       <div className="featureVisualizationViewWrap">
-        <div className="colorEncodeLabelDescriptionBox">
+        {/* <div className="colorEncodeLabelDescriptionBox">
           Salinecy feature color encode description
-        </div>
-        <div className="section-header">
-          <h4> All patches: {patchDataList.length} </h4>
-        </div>
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
-        <div className="saliencyView_boxplot">
-          <BoxPlot
-            width={390}
-            height={150}
-            patchDataList={patchDataList}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        }
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        </div> */}
+        
+        
+        {/* { patchDataList.length != 0 && 
         <div className="saliencyView_linechart">
           <LineChart
             width={390}
@@ -1502,21 +1774,10 @@ class Analysis extends React.Component {
             colorEncoding={colorEncodings}
           />
         </div>
-        }
-        <div className="section-header">
-          <h4> Patches on fixation map: {patchesOnHumanFixationMap.length} </h4>
-        </div>
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
-        <div className="saliencyView_boxplot">
-          <BoxPlot
-            width={390}
-            height={150}
-            patchDataList={patchesOnHumanFixationMap}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        }
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        } */}
+        
+        
+        {/* { patchDataList.length != 0 && 
         <div className="saliencyView_linechart">
           <LineChart
             width={390}
@@ -1525,21 +1786,10 @@ class Analysis extends React.Component {
             colorEncoding={colorEncodings}
           />
         </div>
-        }
-        <div className="section-header">
-          <h4> Patches outside on fixation map: {patchesOutsideHumanFixationMap.length} </h4>
-        </div>
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
-        <div className="saliencyView_boxplot">
-          <BoxPlot
-            width={390}
-            height={150}
-            patchDataList={patchesOutsideHumanFixationMap}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        }
-        { patchDataList.length != 0 && select_patchImageFlag !== null && select_patchImageFlag !== undefined &&
+        } */}
+        
+        
+        {/* { patchDataList.length != 0 && 
         <div className="saliencyView_linechart">
           <LineChart
             width={390}
@@ -1548,7 +1798,7 @@ class Analysis extends React.Component {
             colorEncoding={colorEncodings}
           />
         </div>
-        }
+        } */}
       </div>
     </>
     );
