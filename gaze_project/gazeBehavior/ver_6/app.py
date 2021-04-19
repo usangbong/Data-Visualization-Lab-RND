@@ -3,12 +3,12 @@ import os
 import csv
 import math
 import json
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
 import cv2
 
-from datetime import datetime
 from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 from collections import OrderedDict
@@ -23,6 +23,7 @@ from sklearn.manifold import TSNE
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.cluster import KMeans
 from sklearn.pipeline import make_pipeline
+from scipy.stats import entropy
 
 from flask import *
 from flask_cors import CORS
@@ -44,6 +45,263 @@ if __name__ == '__main__':
   app.run(debug=True)
 CORS(app)
 
+########################################
+# saliency evaluation metirc fucntions #
+########################################
+def NSS(saliency_map, ground_truth_map):
+  """"
+  normalized scanpath saliency between two different
+  saliency maps as the mean value of the normalized saliency map at
+  fixation locations.
+    Computer NSS score.
+    :param saliency_map : predicted saliency map
+    :param fixation_map : ground truth saliency map.
+    :return score: float : score
+  """
+  if not isinstance(saliency_map, np.ndarray):
+    saliency_map = np.array(saliency_map)
+
+  if not isinstance(ground_truth_map, np.ndarray):
+    ground_truth_map = np.array(ground_truth_map)
+
+  if saliency_map.size != ground_truth_map.size:
+    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+    # saliency_map = imresize(saliency_map, fixation_map.shape)
+
+  MAP = (saliency_map - saliency_map.mean()) / (saliency_map.std())
+  mask = ground_truth_map.astype(np.bool)
+  score = MAP[mask].mean()
+  return score
+
+def CC(saliency_map, ground_truth_map):
+  """
+  This finds the linear correlation coefficient between two different
+  saliency maps (also called Pearson's linear coefficient).
+  score=1 or -1 means the maps are correlated
+  score=0 means the maps are completely uncorrelated
+  saliencyMap1 and saliencyMap2 are 2 real-valued matrices
+    Computer CC score .
+    :param saliency_map : first saliency map
+    :param saliency_map_gt : second  saliency map.
+    :return score: float : score
+  """
+  if not isinstance(saliency_map, np.ndarray):
+    saliency_map = np.array(saliency_map, dtype=np.float32)
+  elif saliency_map.dtype != np.float32:
+    saliency_map = saliency_map.astype(np.float32)
+
+  if not isinstance(ground_truth_map, np.ndarray):
+    ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
+  elif saliency_map.dtype != np.float32:
+    ground_truth_map = ground_truth_map.astype(np.float32)
+
+  if saliency_map.size != ground_truth_map.size:
+    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+    # saliency_map = imresize(saliency_map, ground_truth_map.shape)
+
+  saliency_map = (saliency_map - saliency_map.mean()) / (saliency_map.std())
+  ground_truth_map = (ground_truth_map - ground_truth_map.mean()) / (ground_truth_map.std())
+  score = np.corrcoef(saliency_map.flatten(),ground_truth_map.flatten())[0][1]
+  return score
+
+def KLdiv(saliency_map, ground_truth_map):
+  """
+  This finds the KL-divergence between two different saliency maps when
+  viewed as distributions: it is a non-symmetric measure of the information
+  lost when saliencyMap is used to estimate fixationMap.
+    Computer KL-divergence.
+    :param saliency_map : predicted saliency map
+    :param fixation_map : ground truth saliency map.
+    :return score: float : score
+  """
+  if saliency_map.size != ground_truth_map.size:
+    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+
+  if not isinstance(saliency_map, np.ndarray):
+    saliency_map = np.array(saliency_map, dtype=np.float32)
+  elif saliency_map.dtype != np.float32:
+    saliency_map = saliency_map.astype(np.float32)
+
+  if not isinstance(ground_truth_map, np.ndarray):
+    ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
+  elif ground_truth_map.dtype != np.float32:
+    ground_truth_map = ground_truth_map.astype(np.float32)
+
+  EPS = np.finfo(np.float32).eps
+  # the function will normalize maps before computing Kld
+  score = entropy(saliency_map.flatten() + EPS, ground_truth_map.flatten() + EPS)
+  return score
+
+def AUC(saliency_map, ground_truth_map):
+  """Computes AUC for given saliency map 'saliency_map' and given
+  fixation map 'fixation_map'
+  """
+  def area_under_curve(predicted, actual, labelset):
+    def roc_curve(predicted, actual, cls):
+      si = np.argsort(-predicted)
+      tp = np.cumsum(np.single(actual[si]==cls))
+      fp = np.cumsum(np.single(actual[si]!=cls))
+      tp = tp/np.sum(actual==cls)
+      fp = fp/np.sum(actual!=cls)
+      tp = np.hstack((0.0, tp, 1.0))
+      fp = np.hstack((0.0, fp, 1.0))
+      return tp, fp
+    def auc_from_roc(tp, fp):
+      h = np.diff(fp)
+      auc = np.sum(h*(tp[1:]+tp[:-1]))/2.0
+      return auc
+
+    tp, fp = roc_curve(predicted, actual, np.max(labelset))
+    auc = auc_from_roc(tp, fp)
+    return auc
+
+  ground_truth_map = (ground_truth_map>0.7).astype(int)
+  salShape = saliency_map.shape
+  fixShape = ground_truth_map.shape
+
+  predicted = saliency_map.reshape(salShape[0]*salShape[1], -1, order='F').flatten()
+  actual = ground_truth_map.reshape(fixShape[0]*fixShape[1], -1, order='F').flatten()
+  labelset = np.arange(2)
+  return area_under_curve(predicted, actual, labelset)
+
+def SAUC(saliency_map, ground_truth_map, shuf_map=np.zeros((480,640)), step_size=.01):
+  # shuf_map=np.zeros(ground_truth_map.shape)
+  # shuf_map = ground_truth_map
+  """
+    please cite:  https://github.com/NUS-VIP/salicon-evaluation
+    calculates shuffled-AUC score.
+    :param salinecy_map : predicted saliency map
+    :param fixation_map : ground truth saliency map.
+    :return score: int : score
+  """
+  
+  saliency_map -= np.min(saliency_map)
+  ground_truth_map = np.vstack(np.where(ground_truth_map!=0)).T
+  
+  if np.max(saliency_map) > 0:
+    saliency_map = saliency_map / np.max(saliency_map)
+  Sth = np.asarray([ saliency_map[y-1][x-1] for y,x in ground_truth_map ])
+  
+  Nfixations = len(ground_truth_map)
+  others = np.copy(shuf_map)
+  for y,x in ground_truth_map:
+    others[y-1][x-1] = 0
+
+  ind = np.nonzero(others) # find fixation locations on other images
+  nFix = shuf_map[ind]
+  randfix = saliency_map[ind]
+  Nothers = sum(nFix)
+
+  allthreshes = np.arange(0,np.max(np.concatenate((Sth, randfix), axis=0)),step_size)
+  allthreshes = allthreshes[::-1]
+  tp = np.zeros(len(allthreshes)+2)
+  fp = np.zeros(len(allthreshes)+2)
+  tp[-1]=1.0
+  fp[-1]=1.0
+  tp[1:-1]=[float(np.sum(Sth >= thresh))/Nfixations for thresh in allthreshes]
+  fp[1:-1]=[float(np.sum(nFix[randfix >= thresh]))/Nothers for thresh in allthreshes]
+  score = np.trapz(tp,fp)
+  return score
+
+def IG(saliency_map, ground_truth_map, baseline_map=np.zeros((480,640))):
+  """
+    please cite:
+    calculates Information gain score.
+    :param salinecy_map : predicted saliency map
+    :param fixation_map : ground truth saliency map.
+    :param baseline_fixation_map : a baseline fixtion map
+    :return score: int : score
+  """
+  if saliency_map.size != ground_truth_map.size:
+    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+
+  if not isinstance(saliency_map, np.ndarray):
+    saliency_map = np.array(saliency_map, dtype=np.float32)
+  elif saliency_map.dtype != np.float32:
+    saliency_map = saliency_map.astype(np.float32)
+
+  if not isinstance(ground_truth_map, np.ndarray):
+    ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
+  elif ground_truth_map.dtype != np.float32:
+    ground_truth_map = ground_truth_map.astype(np.float32)
+
+  if not isinstance(baseline_map, np.ndarray):
+    baseline_map = np.array(baseline_map, dtype=np.float32)
+  elif ground_truth_map.dtype != np.float32:
+    baseline_map = baseline_map.astype(np.float32)
+
+  saliency_map = (saliency_map - saliency_map.min()) / (saliency_map.max() - saliency_map.min())
+  saliency_map = saliency_map / saliency_map.sum()
+  baseline_map = (baseline_map - baseline_map.min()) / (baseline_map.max() - baseline_map.min())
+  baseline_map = baseline_map / baseline_map.sum()
+  fixs = ground_truth_map.astype(np.bool)
+  EPS = np.finfo(np.float32).eps
+  return (np.log2(EPS + saliency_map[fixs]) - np.log2(EPS + baseline_map[fixs])).mean()
+
+def SIM(saliency_map, ground_truth_map):
+  """
+    Compute similarity score.
+    :param saliency_map : predicted saliency map
+    :param fixation_map : ground truth saliency map.
+    :return score: float : score
+  """
+  if saliency_map.size != ground_truth_map.size:
+    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+    
+  if not isinstance(saliency_map, np.ndarray):
+    saliency_map = np.array(saliency_map, dtype=np.float32)
+  elif saliency_map.dtype != np.float32:
+    saliency_map = saliency_map.astype(np.float32)
+
+  if not isinstance(ground_truth_map, np.ndarray):
+    ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
+  elif ground_truth_map.dtype != np.float32:
+    ground_truth_map = ground_truth_map.astype(np.float32)
+
+  saliency_map = (saliency_map - saliency_map.min()) / (saliency_map.max() - saliency_map.min())
+  saliency_map = saliency_map / saliency_map.sum()
+  ground_truth_map = (ground_truth_map - ground_truth_map.min()) / (ground_truth_map.max() - ground_truth_map.min())
+  ground_truth_map = ground_truth_map / ground_truth_map.sum()
+  return np.minimum(saliency_map, ground_truth_map).sum()
+
+def normalize_map(s_map):
+  # normalize the salience map (as done in MIT code)
+  norm_s_map = (s_map - np.min(s_map))/((np.max(s_map)-np.min(s_map))*1.0)
+  return norm_s_map
+  
+
+######################
+# overview functions #
+######################
+def overview_count(stimulusNames, datasetName, semanticClass):
+  fixDirPath = "./static/fix/"+ datasetName +"/"+ semanticClass +"/"
+  countList = []
+  for stiFileFullName in stimulusNames:
+    stiName = stiFileFullName.split(".")[0]
+    stiExe = stiFileFullName.split(".")[1]
+    humanFixationMapPath = "./static/ground_truth/"+ datasetName +"/"+ semanticClass +"/"+ stiName +".jpg"
+    
+    humanFixationMap = cv2.imread(humanFixationMapPath)
+    fixFileDirPath = fixDirPath + stiName +"_"+ stiExe +"/"
+    fixFileList = os.listdir(fixFileDirPath)
+    patchList = []
+    patchList_on = []
+    patchList_out = []
+    for fixFileName in fixFileList:
+      path = fixFileDirPath + fixFileName
+      pDF = pd.read_csv(path, header=None)
+      pList = pDF.values.tolist()
+      for _p in pList:
+        patchList.append([_p[0], _p[1]])
+        labelVal = label_groundTruthFixationMap(humanFixationMap, int(_p[0]), int(_p[1]))
+        if labelVal == 0:
+          patchList_out.append([_p[0], _p[1]])
+        else:
+          patchList_on.append([_p[0], _p[1]])
+    countList.append([stiFileFullName, len(fixFileList), len(patchList), len(patchList_on), len(patchList_out)])
+  return countList
+
+
 ######################
 # general funcations #
 ######################
@@ -60,6 +318,17 @@ def label_groundTruthFixationMap(_gt, _x, _y):
     return 0
   else:
     return 1
+
+def generate_discrete_groundTruthFixationMap(_gt):
+  _dgtfmPath = "./static/__cache__/discrete_ground_truth_fixation_map.png"
+  gtCopy = _gt.copy()
+  for i in range(0, len(gtCopy)):
+    for j in range(0, len(gtCopy[i])):
+      replaceArr = np.array([255, 255, 255])
+      if np.array_equal(gtCopy[i][j], np.array([0, 0, 0])):
+        replaceArr = np.array([0, 0, 0])
+      gtCopy[i][j] = replaceArr
+  cv2.imwrite(_dgtfmPath, gtCopy)
 
 def getFeatureMeanVal(_featDF, _x, _y, _stiWidth, _stiHeight, _patchSize):
   meanVal = 0
@@ -432,7 +701,6 @@ def clustering_loadCacheList():
 
     response['status'] = 'success'
     response['caches'] = cacheFileList
-    
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
@@ -445,75 +713,107 @@ def clustering_processing():
   print(request.form)
   response = {}
   try:
+    GET_USE_CACHE_FLAG = request.form['cacheUseFlag']
     GET_TRANSFORMATION_METHOD = request.form['transformationMethod']
     GET_DIMEN_REDUCTION_METHOD = request.form['dimensionReductionMethod']
+    GET_SELECTED_STIMULUS_INFO_STR = request.form['selectedStimulus']
+    GET_SELECTED_STIMULUS_INFO = GET_SELECTED_STIMULUS_INFO_STR.split("-")
     print(GET_TRANSFORMATION_METHOD)
     print(GET_DIMEN_REDUCTION_METHOD)
     print(PARTICIPANT)
-
-    midCacheFlag = False
-    midCacheFilePath = "./static/__cache__/midcache.csv"
-    cacheFilePath = "./static/__cache__/cache_"+GET_TRANSFORMATION_METHOD+"-"+GET_DIMEN_REDUCTION_METHOD+"_"+datetime.today().strftime("%Y%m%d%H%M%S")+".csv"
-
-
+    print(GET_SELECTED_STIMULUS_INFO)
+    
+    # midCacheFlag = False
+    # cacheFlag = False
+    # midCacheFilePath = ""
+    cacheFilePath = ""
+    
     fixDirPath = "./static/fix/"
     featureDirPath = "./static/feature/"
     groundTruthDirPath = "./static/ground_truth/"
     aggregatedDataList = []
-    for observer in PARTICIPANT:
-      dataName = observer.split("/")[0]
-      className = observer.split("/")[1]
-      stiNameDir = observer.split("/")[2]
-      stiName = stiNameDir.split("_")[0]
-      stiExt = stiNameDir.split("_")[1]
-      userId = observer.split("/")[3]
-      if os.path.exists(midCacheFilePath):
-        midCacheFlag = True
-        break
+    for stiInfo in GET_SELECTED_STIMULUS_INFO:
+      dataName = stiInfo.split("/")[0]
+      className = stiInfo.split("/")[1]
+      stiFileName = stiInfo.split("/")[2]
+      stiName = stiFileName.split(".")[0]
+      stiExe = stiFileName.split(".")[1]
+      stiNameDir = stiName +"_"+ stiExe
       
-      fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
-      print(fixFilePath)
-      fixDF = pd.read_csv(fixFilePath, header=None)
-      fixList = fixDF.values.tolist()
-      gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +"."+ stiExt
+
+      # midCacheFlag = False
+      # cacheFlag = False
+      # midCacheFilePath = "./static/__cache__/pcache/midcache/midcache"+"-"+ dataName +"-"+ className +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
+      cacheFilePath = "./static/__cache__/pcache/cache_"+ dataName +"-"+ className +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
+      if GET_USE_CACHE_FLAG == "use" and os.path.exists(cacheFilePath):
+        print("Use cache flag on: "+cacheFilePath)
+        break
+      elif GET_USE_CACHE_FLAG == "use" and not(os.path.exists(cacheFilePath)):
+        print("Use cache flag on / do not have cache file: "+cacheFilePath)
+      # print("midCacheFilePath")
+      # print(midCacheFilePath)
+      # if os.path.exists(midCacheFilePath) or os.path.exists(cacheFilePath):
+      #   if os.path.exists(midCacheFilePath):
+      #     midCacheFlag = True
+      #   if os.path.exists(cacheFilePath):
+      #     cacheFlag = True
+      #   break
+      
+      gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +".jpg"
       groundTruthFixMap = cv2.imread(gtFixMapPath)
+      generate_discrete_groundTruthFixationMap(groundTruthFixMap)
       fmHeight, fmWidth = groundTruthFixMap.shape[:2]
-      for _fp in fixList:
-        _x = int(_fp[0])
-        _y = int(_fp[1])
-        _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
-        _midStack = [observer, _x, _y, _label]
-        for _f in FEATURE_ordered:
-          featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
-          featureDF = pd.read_csv(featureFilePath)
-          fMean = getFeatureMeanVal(featureDF, _x, _y, fmWidth, fmHeight, PATCH_SIZE)
-          _midStack.append(fMean)
-        aggregatedDataList.append(_midStack)
+      featureDFList = []
+      for _f in FEATURE_ordered:
+        featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
+        featureDF = pd.read_csv(featureFilePath)
+        featureDFList.append(featureDF)
+
+      PARTICIPANT_LIST = []
+      for obInfo in PARTICIPANT:
+        _dataName = obInfo.split("/")[0]
+        _className = obInfo.split("/")[1]
+        _stiNameDir = obInfo.split("/")[2]
+        if dataName == _dataName and className == _className and stiNameDir == _stiNameDir:
+          PARTICIPANT_LIST.append(obInfo)
+
+      for observer in PARTICIPANT_LIST:
+        # stiExt = stiNameDir.split("_")[1]
+        userId = observer.split("/")[3]
+        fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
+        ob = dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId
+        fixDF = pd.read_csv(fixFilePath, header=None)
+        fixList = fixDF.values.tolist()
+        # print(fixFilePath)
+        for _fp in fixList:
+          _x = int(_fp[0])
+          _y = int(_fp[1])
+          _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+          _midStack = [ob, _x, _y, _label]
+          for i in range(0, len(FEATURE_ordered)):
+            fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
+            _midStack.append(fMean)
+          aggregatedDataList.append(_midStack)
     
     aggDF = []
     dfCols = ["id", "x", "y", "label"]
     for featName in FEATURE_ordered:
       dfCols.append(featName)
-    if midCacheFlag == False:
-      print("make file: "+midCacheFilePath)
-      aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
-      aggDF.to_csv(midCacheFilePath, mode='w', index=False)
-    else:
-      print("load file: "+midCacheFilePath)
-      aggDF = pd.read_csv(midCacheFilePath)
+    # if midCacheFlag == False:
+    #   print("make file: "+midCacheFilePath)
+    #   aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
+    #   aggDF.to_csv(midCacheFilePath, mode='w', index=False)
+    # else:
+    #   print("load file: "+midCacheFilePath)
+    #   aggDF = pd.read_csv(midCacheFilePath)
+    aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
     
+
     # data transformation
     tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered)
-    # print('tfDF')
-    # print(tfDF)
-    
     # dimension reduction
     dr = dimensionReduction(GET_DIMEN_REDUCTION_METHOD, tfDF, FEATURE_ordered)
-    # print(dr)
     drDF = pd.DataFrame(dr, columns=['x', 'y'])
-    # print("drDF")
-    # print(drDF)
-
     
     indexCount = 0
     processedDF = pd.DataFrame(aggDF['id'].values.tolist(), columns=['id'])
@@ -527,20 +827,10 @@ def clustering_processing():
     for featName in FEATURE_ordered:
       processedDF.insert(indexCount, featName, tfDF[featName].values.tolist(), True)
       indexCount = indexCount+1
-      
-    
-    # print('processedDF')
-    # print(processedDF)
-    dataColumns = processedDF.columns.values.tolist()
-    # print("dataColumns")
-    # print(dataColumns)
-    processedDataList = processedDF.values.tolist()
-    # print("processedDataList")
-    # print(processedDataList)
-    rawDataList = aggDF.values.tolist()
-    # print("rawDataList")
-    # print(rawDataList)
 
+    dataColumns = processedDF.columns.values.tolist()
+    processedDataList = processedDF.values.tolist()
+    rawDataList = aggDF.values.tolist()
     processedDF.to_csv(cacheFilePath, mode='w', index=False, header=True)
 
     response['status'] = 'success'
@@ -768,17 +1058,7 @@ def processing_load_fixationDataList():
       for _p in participantList:
         _pdata = sti[0] +"/"+ sti[1] +"/"+ sti[2] +"_"+ sti[3] +"/" + _p.split(".")[0]
         PARTICIPANT.append(_pdata)
-    # PARTICIPANT = list(set(PARTICIPANT))
     
-    # # temp test 20210409 move the code position
-    # for sti in sti_files_list:
-    #   _path = './static/ground_truth/'+ sti[0] +"/"+ sti[1] +"/"+ sti[2] +"."+ sti[3]
-    #   print('_path')
-    #   print(_path)
-    #   print('test')
-    #   groundTruthFixationMapToMat(_path)
-
-
     response['status'] = 'success'
     response['participantList'] = PARTICIPANT
   except Exception as e:
@@ -886,6 +1166,34 @@ def processing_stiDataset():
     response['classList'] = STI_CLASS
     response['featureList'] = FEATURE
     
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+
+  return json.dumps(response)
+
+#################
+# overview APIs #
+#################
+@app.route('/api/overview', methods=['POST'])
+def overview_calc():
+  print("overview_calc")
+  print(request.form)
+  response = {}
+  try:
+    GET_SELECTED_DATAINFO = request.form['semanticClass']
+    GET_DATASET = GET_SELECTED_DATAINFO.split("/")[0]
+    GET_SEMANTIC_CLASS = GET_SELECTED_DATAINFO.split("/")[1]
+    
+    stimulusPath = "./static/stimulus/"+ GET_DATASET +"/"+ GET_SEMANTIC_CLASS +"/"
+    stimulusList = os.listdir(stimulusPath)
+    
+    OVERVIEW_COUNT_LIST = []
+    OVERVIEW_COUNT_LIST = overview_count(stimulusList, GET_DATASET, GET_SEMANTIC_CLASS)
+    
+    response['status'] = 'success'
+    response['overview'] = OVERVIEW_COUNT_LIST
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
