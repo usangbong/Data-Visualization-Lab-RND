@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 function PatchVisualization(props) {
-  const { width, height, patchURLs, patchList, patchDrawFlag, colorEncoding } = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding } = props;
   const svgRef = useRef();
   const d3 = window.d3;
-  const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
-  // const FLAG = `http://${window.location.hostname}:5000/static/access/patches.png?`+Math.random();
-  // const fixRecords = (2081+1)*50;
+  
   const PATCH_SIZE = 20;
   const PATCH_DRAW_LENGTH = 40;
   let selectPatchID = "";
@@ -104,7 +102,8 @@ function PatchVisualization(props) {
     .attr("height", PATCH_DRAW_LENGTH)
     .style("fill", function(d){ return colorEncoding[d.clu] })
     .attr("stroke", function(d){ return colorEncoding[d.clu] })
-    .attr("stroke-width", "3px");
+    .attr("stroke-width", "3px")
+    .attr("opacity", patchBoxOpacity);
 
     if(patchDrawFlag == "image"){
       var patch = svg.selectAll(".patch")
@@ -204,7 +203,7 @@ function PatchVisualization(props) {
     }
     
 
-  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.colorEncoding]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding]);
   
   return (
     <>
