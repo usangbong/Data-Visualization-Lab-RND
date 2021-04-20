@@ -138,14 +138,60 @@ ul {
       background-color: wihte;
       border: 1px #BFBFBF solid;
     }
+    .multiPatchVisWrap{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      background-color: wihte;
+
+      .multiPatchView{
+        width: 900px;
+        height: 120px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        
+        border: 1px #BFBFBF solid;
+        box-sizing: border-box;
+        background-color: wihte;
+      }
+      .multiPartView{
+        width: 180px;
+        height: 120px;
+        box-sizing: border-box;
+        background-color: wihte;
+        border: 1px #BFBFBF solid;
+      }
+    }
   }
-  .visualizationDiv{
-    width: 1200px;
-    height: 530px;
+  .saliencyVisualizationWrap{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
     box-sizing: border-box;
-    background-color: white;
     border: 1px #BFBFBF solid;
+    background-color: white;
+
+    .visualizationDiv{
+      width: 900px;
+      height: 530px;
+      box-sizing: border-box;
+      background-color: white;
+      border: 1px #BFBFBF solid;
+    }
+    .subSaliencyVisDiv{
+      width: 290px;
+      height: 530px;
+      box-sizing: border-box;
+      background-color: white;
+      border: 1px #BFBFBF solid;
+    }
   }
+  
   
 
   .featureVisualizationViewWrap{
