@@ -707,6 +707,137 @@ def clustering_loadCacheList():
     print(e)
   return json.dumps(response)
 
+@app.route('/api/clustering/processingMulti', methods=['POST'])
+def clustering_processingMulti():
+  print("clustering_processingMulti")
+  print(request.form)
+  response = {}
+  try:
+    GET_TRANSFORMATION_METHOD_STR = request.form['transformationMethod']
+    GET_DIMEN_REDUCTION_METHOD_STR = request.form['dimensionReductionMethod']
+    GET_SELECTED_STIMULUS_INFO_STR = request.form['selectedStimulus']
+
+    GET_SELECTED_STIMULUS_INFO = GET_SELECTED_STIMULUS_INFO_STR.split("-")
+    GET_TRANSFORMATION_METHOD = GET_TRANSFORMATION_METHOD_STR.split("/")
+    GET_DIMEN_REDUCTION_METHOD = GET_DIMEN_REDUCTION_METHOD_STR.split("/")
+    print(GET_TRANSFORMATION_METHOD)
+    print(GET_DIMEN_REDUCTION_METHOD)
+    print(PARTICIPANT)
+    print(GET_SELECTED_STIMULUS_INFO)
+
+    datasetName = GET_SELECTED_STIMULUS_INFO[0].split("/")[0]
+    semanticClassName = GET_SELECTED_STIMULUS_INFO[0].split("/")[1]
+    stimulusFileName = GET_SELECTED_STIMULUS_INFO[0].split("/")[2]
+    stimulusName = stimulusFileName.split(".")[0]
+    stimulusExe = stimulusFileName.split(".")[1]
+    stimulusDirName = stimulusName +"_"+ stimulusExe
+
+    groundTruthPath = "./static/ground_truth/" + datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
+    groundTruthFixMap = cv2.imread(groundTruthPath)
+    generate_discrete_groundTruthFixationMap(groundTruthFixMap)
+    fmHeight, fmWidth = groundTruthFixMap.shape[:2]
+
+    cacheFilePathList = []
+    pExistsFlag = True
+    for dtm in GET_TRANSFORMATION_METHOD:
+      for drm in GET_DIMEN_REDUCTION_METHOD:
+        cacheFilePath = "./static/__cache__/pcache/cache_"+ datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-"+ dtm +"-"+ drm +"-"+ str(len(PARTICIPANT)) +".csv"
+        existsFlag = True
+        if not(os.path.exists(cacheFilePath)):
+          existsFlag = False
+          pExistsFlag = False
+        cacheFilePathList.append([cacheFilePath, existsFlag])
+    
+    patchProcessDataLists = []
+    if pExistsFlag == True:
+      print("All cache file exists")
+      for cPath in cacheFilePathList:
+        p = cPath[0]
+        aggDF = pd.read_csv(p)
+        patchProcessDataLists.append(aggDF.values.tolist())
+    else:
+      print("Some cache files do not exists")
+      for cPath in cacheFilePathList:
+        p = cPath[0]
+        eFlag = cPath[1]
+        if eFlag == True:
+          aggDF = pd.read_csv(p)
+          patchProcessDataLists.append(aggDF.values.tolist())
+        else:
+          fixDirPath = "./static/fix/" + datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
+          featureDirPath = "./static/feature/"
+          featureDFList = []
+          for _f in FEATURE_ordered:
+            featureFilePath = featureDirPath + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+            featureDF = pd.read_csv(featureFilePath)
+            featureDFList.append(featureDF)
+          PARTICIPANT_LIST = []
+          
+          for obInfo in PARTICIPANT:
+            _dataName = obInfo.split("/")[0]
+            _className = obInfo.split("/")[1]
+            _stiNameDir = obInfo.split("/")[2]
+            if datasetName == _dataName and semanticClassName == _className and stimulusDirName == _stiNameDir:
+              PARTICIPANT_LIST.append(obInfo)
+          
+          aggregatedDataList = []
+          for observer in PARTICIPANT_LIST:
+            userId = observer.split("/")[3]
+            fixFilePath = fixDirPath + datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ userId+".csv"
+            ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ userId
+            fixDF = pd.read_csv(fixFilePath, header=None)
+            fixList = fixDF.values.tolist()
+            for _fp in fixList:
+              _x = int(_fp[0])
+              _y = int(_fp[1])
+              _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+              _midStack = [ob, _x, _y, _label]
+              for i in range(0, len(FEATURE_ordered)):
+                fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
+                _midStack.append(fMean)
+              aggregatedDataList.append(_midStack)
+          dfCols = ["id", "x", "y", "label"]
+          for featName in FEATURE_ordered:
+            dfCols.append(featName)
+          aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
+
+
+          # data transformation
+          dtm = p.split("-")[3]
+          drm = p.split("-")[4]
+          tfDF = dataTransformation(dtm, aggDF, FEATURE_ordered)
+          # dimension reduction
+          dr = dimensionReduction(drm, tfDF, FEATURE_ordered)
+          drDF = pd.DataFrame(dr, columns=['x', 'y'])
+          
+          indexCount = 0
+          processedDF = pd.DataFrame(aggDF['id'].values.tolist(), columns=['id'])
+          indexCount = indexCount+1
+          processedDF.insert(indexCount, "x", drDF['x'].values.tolist(), True)
+          indexCount = indexCount+1
+          processedDF.insert(indexCount, "y", drDF['y'].values.tolist(), True)
+          indexCount = indexCount+1
+          processedDF.insert(indexCount, "label", aggDF['label'].values.tolist(), True)
+          indexCount = indexCount+1
+          for featName in FEATURE_ordered:
+            processedDF.insert(indexCount, featName, tfDF[featName].values.tolist(), True)
+            indexCount = indexCount+1
+
+          processedDF.to_csv(p, mode='w', index=False, header=True)
+          processedDataList = processedDF.values.tolist()
+          patchProcessDataLists.append(processedDataList)
+          if os.path.exists(p):
+            cPath[1] = True
+
+    response['status'] = 'success'
+    response['processingData'] = patchProcessDataLists
+    response['cacheFilePath'] = cacheFilePathList
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
 @app.route('/api/clustering/processing', methods=['POST'])
 def clustering_processing():
   print("clustering_processing")
@@ -718,95 +849,84 @@ def clustering_processing():
     GET_DIMEN_REDUCTION_METHOD = request.form['dimensionReductionMethod']
     GET_SELECTED_STIMULUS_INFO_STR = request.form['selectedStimulus']
     GET_SELECTED_STIMULUS_INFO = GET_SELECTED_STIMULUS_INFO_STR.split("-")
+    print(GET_USE_CACHE_FLAG)
     print(GET_TRANSFORMATION_METHOD)
     print(GET_DIMEN_REDUCTION_METHOD)
     print(PARTICIPANT)
     print(GET_SELECTED_STIMULUS_INFO)
     
-    # midCacheFlag = False
-    # cacheFlag = False
-    # midCacheFilePath = ""
     cacheFilePath = ""
-    
     fixDirPath = "./static/fix/"
     featureDirPath = "./static/feature/"
     groundTruthDirPath = "./static/ground_truth/"
     aggregatedDataList = []
-    for stiInfo in GET_SELECTED_STIMULUS_INFO:
+
+    if GET_USE_CACHE_FLAG == "use":
+      print("Use cache flag on: "+cacheFilePath)
+      stiInfo = GET_SELECTED_STIMULUS_INFO[0]
+      
       dataName = stiInfo.split("/")[0]
       className = stiInfo.split("/")[1]
       stiFileName = stiInfo.split("/")[2]
       stiName = stiFileName.split(".")[0]
       stiExe = stiFileName.split(".")[1]
       stiNameDir = stiName +"_"+ stiExe
-      
+      cacheFilePath = "./static/__cache__/pcache/cache_"+ dataName +"-"+ className +"-"+ stiNameDir +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
+    else:
+      for stiInfo in GET_SELECTED_STIMULUS_INFO:
+        dataName = stiInfo.split("/")[0]
+        className = stiInfo.split("/")[1]
+        stiFileName = stiInfo.split("/")[2]
+        stiName = stiFileName.split(".")[0]
+        stiExe = stiFileName.split(".")[1]
+        stiNameDir = stiName +"_"+ stiExe
+        
+        cacheFilePath = "./static/__cache__/pcache/cache_"+ dataName +"-"+ className +"-"+ stiNameDir +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
+        
+        gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +".jpg"
+        groundTruthFixMap = cv2.imread(gtFixMapPath)
+        generate_discrete_groundTruthFixationMap(groundTruthFixMap)
+        fmHeight, fmWidth = groundTruthFixMap.shape[:2]
+        featureDFList = []
+        for _f in FEATURE_ordered:
+          featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
+          featureDF = pd.read_csv(featureFilePath)
+          featureDFList.append(featureDF)
 
-      # midCacheFlag = False
-      # cacheFlag = False
-      # midCacheFilePath = "./static/__cache__/pcache/midcache/midcache"+"-"+ dataName +"-"+ className +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
-      cacheFilePath = "./static/__cache__/pcache/cache_"+ dataName +"-"+ className +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
-      if GET_USE_CACHE_FLAG == "use" and os.path.exists(cacheFilePath):
-        print("Use cache flag on: "+cacheFilePath)
-        break
-      elif GET_USE_CACHE_FLAG == "use" and not(os.path.exists(cacheFilePath)):
-        print("Use cache flag on / do not have cache file: "+cacheFilePath)
-      # print("midCacheFilePath")
-      # print(midCacheFilePath)
-      # if os.path.exists(midCacheFilePath) or os.path.exists(cacheFilePath):
-      #   if os.path.exists(midCacheFilePath):
-      #     midCacheFlag = True
-      #   if os.path.exists(cacheFilePath):
-      #     cacheFlag = True
-      #   break
-      
-      gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +".jpg"
-      groundTruthFixMap = cv2.imread(gtFixMapPath)
-      generate_discrete_groundTruthFixationMap(groundTruthFixMap)
-      fmHeight, fmWidth = groundTruthFixMap.shape[:2]
-      featureDFList = []
-      for _f in FEATURE_ordered:
-        featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
-        featureDF = pd.read_csv(featureFilePath)
-        featureDFList.append(featureDF)
+        PARTICIPANT_LIST = []
+        for obInfo in PARTICIPANT:
+          _dataName = obInfo.split("/")[0]
+          _className = obInfo.split("/")[1]
+          _stiNameDir = obInfo.split("/")[2]
+          if dataName == _dataName and className == _className and stiNameDir == _stiNameDir:
+            PARTICIPANT_LIST.append(obInfo)
 
-      PARTICIPANT_LIST = []
-      for obInfo in PARTICIPANT:
-        _dataName = obInfo.split("/")[0]
-        _className = obInfo.split("/")[1]
-        _stiNameDir = obInfo.split("/")[2]
-        if dataName == _dataName and className == _className and stiNameDir == _stiNameDir:
-          PARTICIPANT_LIST.append(obInfo)
-
-      for observer in PARTICIPANT_LIST:
-        # stiExt = stiNameDir.split("_")[1]
-        userId = observer.split("/")[3]
-        fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
-        ob = dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId
-        fixDF = pd.read_csv(fixFilePath, header=None)
-        fixList = fixDF.values.tolist()
-        # print(fixFilePath)
-        for _fp in fixList:
-          _x = int(_fp[0])
-          _y = int(_fp[1])
-          _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
-          _midStack = [ob, _x, _y, _label]
-          for i in range(0, len(FEATURE_ordered)):
-            fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
-            _midStack.append(fMean)
-          aggregatedDataList.append(_midStack)
+        for observer in PARTICIPANT_LIST:
+          # stiExt = stiNameDir.split("_")[1]
+          userId = observer.split("/")[3]
+          fixFilePath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId+".csv"
+          ob = dataName +"/"+ className +"/"+ stiNameDir +"/"+ userId
+          fixDF = pd.read_csv(fixFilePath, header=None)
+          fixList = fixDF.values.tolist()
+          # print(fixFilePath)
+          for _fp in fixList:
+            _x = int(_fp[0])
+            _y = int(_fp[1])
+            _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+            _midStack = [ob, _x, _y, _label]
+            for i in range(0, len(FEATURE_ordered)):
+              fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
+              _midStack.append(fMean)
+            aggregatedDataList.append(_midStack)
     
     aggDF = []
-    dfCols = ["id", "x", "y", "label"]
-    for featName in FEATURE_ordered:
-      dfCols.append(featName)
-    # if midCacheFlag == False:
-    #   print("make file: "+midCacheFilePath)
-    #   aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
-    #   aggDF.to_csv(midCacheFilePath, mode='w', index=False)
-    # else:
-    #   print("load file: "+midCacheFilePath)
-    #   aggDF = pd.read_csv(midCacheFilePath)
-    aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
+    if GET_USE_CACHE_FLAG == "use":
+      aggDF = pd.read_csv(cacheFilePath)
+    else:
+      dfCols = ["id", "x", "y", "label"]
+      for featName in FEATURE_ordered:
+        dfCols.append(featName)
+      aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
     
 
     # data transformation
