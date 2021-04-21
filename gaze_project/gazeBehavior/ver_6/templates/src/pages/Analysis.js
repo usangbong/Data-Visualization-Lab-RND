@@ -161,7 +161,15 @@ class Analysis extends React.Component {
       patchesOnHumanFixationMap: [],
       patchesOutsideHumanFixationMap: [],
       cacheFilePath: "",
+      cacheFileList: [],
       overviewCountDataList: [],
+      multiPatchViewSelectedFlag: [
+        false, false, false, false, false, 
+        false, false, false, false, false, 
+        false, false, false, false, false, 
+        false, false, false, false, false, 
+        false, false, false, false, false
+      ],
     };
   }
 
@@ -195,7 +203,7 @@ class Analysis extends React.Component {
           data.set("semanticClass", selectedSemanticClass);
           axios.post(`http://${window.location.hostname}:5000/api/overview`, data)
           .then(response => {
-            console.log(response.data.overview);
+            // console.log(response.data.overview);
             this.setState({
               overviewCountDataList: response.data.overview
             });
@@ -410,7 +418,7 @@ class Analysis extends React.Component {
           width: stiWidth,
           height: stiHeight
         }
-        console.log(_hfmURL);
+        // console.log(_hfmURL);
         stiURLList.push(_sURL);
         hfmURLList.push(_hfmURL);
         if(i==0){
@@ -645,8 +653,8 @@ class Analysis extends React.Component {
       axios.post(`http://${window.location.hostname}:5000/api/scanpath/calcSimilarity`, data)
       .then(response => {
         let getSSVdata = response.data.scanpathSimilarityValues;
-        console.log('response.data.scanpathSimilarityValues');
-        console.log(getSSVdata);
+        // console.log('response.data.scanpathSimilarityValues');
+        // console.log(getSSVdata);
         // console.log('this.state.scanpathList');
         // console.log(this.state.scanpathList);
         let displayedScanpath = this.state.scanpathList;
@@ -748,7 +756,10 @@ class Analysis extends React.Component {
   select_onChange_patchView = select_patchView =>{
     console.log("select_onChange_patchView");
     this.setState({select_patchView});
-    this.run_transformation_clustering(select_patchView, "", "");
+    // console.log(select_patchView);
+    if(select_patchView.value == "multi"){
+      this.run_patch_processing(select_patchView, "", "");
+    }
   }
 
   // select_onChange_cacheFile = select_cacheFile =>{
@@ -766,7 +777,10 @@ class Analysis extends React.Component {
   //   });
   // }
 
-  run_transformation_clustering = (pView, tMethod, drMethod) =>{
+  run_patch_processing = (pView, tMethod, drMethod) =>{
+    console.log("run_patch_processing")
+    // console.log("pView");
+    // console.log(pView);
     let getStiNames = this.state.select_stiName;
     let selectedStisStr = "";
     for(let i=0; i<getStiNames.length; i++){
@@ -778,6 +792,13 @@ class Analysis extends React.Component {
       }
     }
     if(pView == "single"){
+      console.log("single view processing");
+      this.setState({
+        patchDataList_multi: []
+      });
+      this.setState({
+        cacheFileList: []
+      });
       let cacheUseFlag = this.state.select_useCache.value;
       const data = new FormData();
       data.set('cacheUseFlag', cacheUseFlag)
@@ -834,6 +855,7 @@ class Analysis extends React.Component {
         alert(`Error - ${error.message}`);
       });
     }else{
+      console.log("multi view processing");
       let tMethods_str = "";
       for(let i=0; i<select_option_dataTransformation.length; i++){
         if(i==0){
@@ -856,24 +878,66 @@ class Analysis extends React.Component {
       data.set('selectedStimulus', selectedStisStr);
       axios.post(`http://${window.location.hostname}:5000/api/clustering/processingMulti`, data)
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         let getProcessedDataLists = response.data.processingData;
         this.setState({
           patchDataList_multi: getProcessedDataLists
         });
         
-        console.log(response.data.cacheFilePath);
+        // console.log(response.data.cacheFilePath);
         let cacheFilePathList = response.data.cacheFilePath;
-        let cPath = cacheFilePathList[0][0].split(".")[1] + ".csv";
-        console.log("cPath");
-        console.log(cPath);
+        let paths = [];
+        for(let i=0; i<cacheFilePathList.length; i++){
+          paths.push(cacheFilePathList[i][0]);
+        }
+        this.setState({
+          cacheFileList: paths
+        });
+        let cPath = "";
+        let pickIndex = 0;
+        if(tMethod == "" && drMethod == ""){
+          cPath = paths[0].split(".")[1] + ".csv";
+        }else if(tMethod != "" && drMethod == ""){
+          for(let i=0; i<paths.length; i++){
+            let _tMethod = paths[i].split("-")[3];
+            if(tMethod == _tMethod){
+              cPath = paths[i].split(".")[1] + ".csv";
+              pickIndex = i;
+              break;
+            }
+          }
+        }else if(tMethod == "" && drMethod != ""){
+          for(let i=0; i<paths.length; i++){
+            let _drMethod = paths[i].split("-")[4];
+            if(drMethod == _drMethod){
+              cPath = paths[i].split(".")[1] + ".csv";
+              pickIndex = i;
+              break;
+            }
+          }
+        }else{
+          for(let i=0; i<paths.length; i++){
+            let _tMethod = paths[i].split("-")[3];
+            let _drMethod = paths[i].split("-")[4];
+            if(tMethod == _tMethod && drMethod == _drMethod){
+              cPath = paths[i].split(".")[1] + ".csv";
+              pickIndex = i;
+              break;
+            }
+          }
+        }
+        // console.log("cPath");
+        // console.log(cPath);
         this.setState({
           cacheFilePath: `http://${window.location.hostname}:5000`+cPath+"?"+Math.random()
         });
+        this.setState({
+          patchDataList: getProcessedDataLists[pickIndex]
+        })
 
         let onHFMPatches = [];
         let outsideHFMPatches = [];
-        let getProcessedDataList = getProcessedDataLists[0];
+        let getProcessedDataList = getProcessedDataLists[pickIndex];
         for(let i=0; i<getProcessedDataList.length; i++){
           let _label = getProcessedDataList[i][3];
           if(_label == 0){
@@ -899,26 +963,88 @@ class Analysis extends React.Component {
   select_onChanged_dataTransformation = select_dataTransformation =>{
     console.log("select_onChanged_dataTransformation");
     this.setState({select_dataTransformation});
-    if(select_dataTransformation !== null && select_dataTransformation !== undefined && this.state.select_dimensionReduction !== null && this.state.select_dimensionReduction !== undefined){
-      this.run_transformation_clustering(this.state.select_patchView ,select_dataTransformation.value, this.state.select_dimensionReduction.value);
+    if(this.state.select_patchView !== null && this.state.select_patchView !== undefined && this.state.select_patchView.value == "single" && select_dataTransformation !== null && select_dataTransformation !== undefined && this.state.select_dimensionReduction !== null && this.state.select_dimensionReduction !== undefined){
+      this.run_patch_processing("single", select_dataTransformation.value, this.state.select_dimensionReduction.value);
+    }else if(this.state.select_patchView !== null && this.state.select_patchView !== undefined && this.state.select_patchView.value == "multi" && select_dataTransformation !== null && select_dataTransformation !== undefined && this.state.select_dimensionReduction !== null && this.state.select_dimensionReduction !== undefined){
+      this.run_patch_processing("multi", select_dataTransformation.value, this.state.select_dimensionReduction.value);
+    }else{
+      console.log("No condition for running data processing");
     }
   }
 
   select_onChanged_dimensionReduction = select_dimensionReduction =>{
     console.log("select_onChanged_dimensionReduction");
     this.setState({select_dimensionReduction});
-    if(select_dimensionReduction !== null && select_dimensionReduction !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
-      this.run_transformation_clustering(this.state.select_patchView, this.state.select_dataTransformation.value, select_dimensionReduction.value);
+    if(this.state.select_patchView !== null && this.state.select_patchView !== undefined && this.state.select_patchView.value == "single" && select_dimensionReduction !== null && select_dimensionReduction !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
+      this.run_patch_processing("single", this.state.select_dataTransformation.value, select_dimensionReduction.value);
+    }else if(this.state.select_patchView !== null && this.state.select_patchView !== undefined && this.state.select_patchView.value == "multi" && select_dimensionReduction !== null && select_dimensionReduction !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
+      this.run_patch_processing("multi", this.state.select_dataTransformation.value, select_dimensionReduction.value);
+    }else{
+      console.log("No condition for running data processing");
     }
   }
 
-  // select_onChanged_dataClustering = select_dataClustering =>{
-  //   this.setState({select_dataClustering});
-  //   if(select_dataClustering !== null && select_dataClustering !== undefined && this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined){
-  //     console.log("select_onChanged_dataClustering");
-  //     this.run_transformation_clustering(this.state.select_dataTransformation.value, select_dataClustering.value);
-  //   }
-  // }
+  multiPatch_divSelectUpdate =()=>{
+    axios.get(`http://${window.location.hostname}:5000/static/__cache__/select_div.json?`+Math.random())
+    .then(response => {
+      // console.log(response.data);
+      let dataset = response.data[0];
+      let semanticClass = response.data[1];
+      let stiDir = response.data[2];
+      let dtm = response.data[3];
+      let drm = response.data[4];
+
+      let selectDivIdx = 0;
+      let stateCacheFileList = this.state.cacheFileList;
+      let updateFlags = [];
+      for(let i=0; i<stateCacheFileList.length; i++){
+        let _dataset = stateCacheFileList[i].split("-")[0].split("/cache_")[1];
+        let _semanticClass = stateCacheFileList[i].split("-")[1];
+        let _stiDir = stateCacheFileList[i].split("-")[2];
+        let _dtm = stateCacheFileList[i].split("-")[3];
+        let _drm = stateCacheFileList[i].split("-")[4];
+        if(dataset == _dataset && semanticClass == _semanticClass && stiDir == _stiDir && dtm == _dtm && drm == _drm){
+          updateFlags.push(true);
+          selectDivIdx = i;
+        }else{
+          updateFlags.push(false);
+        }
+
+      }
+      this.setState({
+        multiPatchViewSelectedFlag: updateFlags
+      });
+      let cPath = stateCacheFileList[selectDivIdx].split(".")[1] + ".csv";
+      // console.log("cPath");
+      // console.log(cPath);
+      this.setState({
+        cacheFilePath: `http://${window.location.hostname}:5000`+cPath+"?"+Math.random()
+      });
+      this.setState({
+        patchDataList: this.state.patchDataList_multi[selectDivIdx]
+      });
+      let onHFMPatches = [];
+      let outsideHFMPatches = [];
+      for(let i=0; i<this.state.patchDataList_multi[selectDivIdx].length; i++){
+        let _label = this.state.patchDataList_multi[selectDivIdx][i][3];
+        if(_label == 0){
+          // label 0: outside
+          outsideHFMPatches.push(this.state.patchDataList_multi[selectDivIdx][i]);
+        }else{
+          // label 1: on
+          onHFMPatches.push(this.state.patchDataList_multi[selectDivIdx][i]);
+        }
+      }
+      this.setState({
+        patchesOnHumanFixationMap: onHFMPatches
+      });
+      this.setState({
+        patchesOutsideHumanFixationMap: outsideHFMPatches
+      });
+
+
+    });
+  }
 
   select_onChanged_patchImageFlag = select_patchImageFlag =>{
     console.log("select_onChanged_patchImageFlag");
@@ -944,7 +1070,7 @@ class Analysis extends React.Component {
         height: getStiURL.height
       });
     }else{
-      console.log(`http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,);
+      // console.log(`http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,);
       hfmURL.push({
         url: `http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,
         width: getStiURL.width,
@@ -1130,7 +1256,7 @@ class Analysis extends React.Component {
     // scanpath similarity
     const { select_main_scanpath, select_isDisabled_mainScanpath, select_option_mainScanpath, select_scanpathSimilarityMetohd, select_isDisabled_scanpathSimilarity } = this.state;
     // patch clustering
-    const { select_patchView, patchDataList_multi, select_useCache, select_dataTransformation, select_dimensionReduction } = this.state;
+    const { select_patchView, patchDataList_multi, multiPatchViewSelectedFlag, cacheFileList, select_useCache, select_dataTransformation, select_dimensionReduction } = this.state;
     // const { select_cacheFile, select_option_cacheFile, select_isDisabled_cacheFile } = this.state;
     const { select_humanFixationMapStyle } = this.state;
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
@@ -1689,7 +1815,7 @@ class Analysis extends React.Component {
             />
           </div>
           }
-          { patchDataList_multi.length == 25 && select_patchView != null && select_patchView != undefined && select_patchView.value == "multi" &&
+          { patchDataList_multi.length == 25 && cacheFileList.length == 25 && select_patchView != null && select_patchView != undefined && select_patchView.value == "multi" &&
           <div className="multiPatchVisWrap">
             <div className="multiPatchView">
               <div className="multiPartView">
@@ -1698,9 +1824,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[0]}
+                  cacheFilePath={cacheFileList[0]}
+                  divSelectFlag={multiPatchViewSelectedFlag[0]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1709,21 +1838,27 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[1]}
+                  cacheFilePath={cacheFileList[1]}
+                  divSelectFlag={multiPatchViewSelectedFlag[1]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
-                <PatchVisualization 
+                <MultiPatchVisualization 
                   width={180}
                   height={120}
                   patchDrawLength={8}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[2]}
+                  cacheFilePath={cacheFileList[2]}
+                  divSelectFlag={multiPatchViewSelectedFlag[2]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1732,9 +1867,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[3]}
+                  cacheFilePath={cacheFileList[3]}
+                  divSelectFlag={multiPatchViewSelectedFlag[3]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1743,9 +1881,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[4]}
+                  cacheFilePath={cacheFileList[4]}
+                  divSelectFlag={multiPatchViewSelectedFlag[4]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
             </div>
@@ -1756,9 +1897,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[5]}
+                  cacheFilePath={cacheFileList[5]}
+                  divSelectFlag={multiPatchViewSelectedFlag[5]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1767,9 +1911,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[6]}
+                  cacheFilePath={cacheFileList[6]}
+                  divSelectFlag={multiPatchViewSelectedFlag[6]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1778,9 +1925,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[7]}
+                  cacheFilePath={cacheFileList[7]}
+                  divSelectFlag={multiPatchViewSelectedFlag[7]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1789,9 +1939,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[8]}
+                  cacheFilePath={cacheFileList[8]}
+                  divSelectFlag={multiPatchViewSelectedFlag[8]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1800,9 +1953,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[9]}
+                  cacheFilePath={cacheFileList[9]}
+                  divSelectFlag={multiPatchViewSelectedFlag[9]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
             </div>
@@ -1813,9 +1969,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[10]}
+                  cacheFilePath={cacheFileList[10]}
+                  divSelectFlag={multiPatchViewSelectedFlag[10]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1824,9 +1983,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[11]}
+                  cacheFilePath={cacheFileList[11]}
+                  divSelectFlag={multiPatchViewSelectedFlag[11]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1835,9 +1997,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[12]}
+                  cacheFilePath={cacheFileList[12]}
+                  divSelectFlag={multiPatchViewSelectedFlag[12]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1846,9 +2011,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[13]}
+                  cacheFilePath={cacheFileList[13]}
+                  divSelectFlag={multiPatchViewSelectedFlag[13]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1857,9 +2025,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[14]}
+                  cacheFilePath={cacheFileList[14]}
+                  divSelectFlag={multiPatchViewSelectedFlag[14]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
             </div>
@@ -1870,9 +2041,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[15]}
+                  cacheFilePath={cacheFileList[15]}
+                  divSelectFlag={multiPatchViewSelectedFlag[15]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1881,9 +2055,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[16]}
+                  cacheFilePath={cacheFileList[16]}
+                  divSelectFlag={multiPatchViewSelectedFlag[16]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1892,9 +2069,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[17]}
+                  cacheFilePath={cacheFileList[17]}
+                  divSelectFlag={multiPatchViewSelectedFlag[17]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1903,9 +2083,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[18]}
+                  cacheFilePath={cacheFileList[18]}
+                  divSelectFlag={multiPatchViewSelectedFlag[18]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1914,9 +2097,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[19]}
+                  cacheFilePath={cacheFileList[19]}
+                  divSelectFlag={multiPatchViewSelectedFlag[19]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
             </div>
@@ -1927,9 +2113,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[20]}
+                  cacheFilePath={cacheFileList[20]}
+                  divSelectFlag={multiPatchViewSelectedFlag[20]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1938,9 +2127,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[21]}
+                  cacheFilePath={cacheFileList[21]}
+                  divSelectFlag={multiPatchViewSelectedFlag[21]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1949,6 +2141,8 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[22]}
+                  cacheFilePath={cacheFileList[22]}
+                  divSelectFlag={multiPatchViewSelectedFlag[22]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
@@ -1960,9 +2154,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[23]}
+                  cacheFilePath={cacheFileList[23]}
+                  divSelectFlag={multiPatchViewSelectedFlag[23]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
               <div className="multiPartView">
@@ -1971,9 +2168,12 @@ class Analysis extends React.Component {
                   height={120}
                   patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
                   patchList={patchDataList_multi[24]}
+                  cacheFilePath={cacheFileList[24]}
+                  divSelectFlag={multiPatchViewSelectedFlag[24]}
                   patchDrawFlag={select_patchImageFlag.value}
                   patchBoxOpacity={alphapicker_patchBoxAlpha}
                   colorEncoding={colorEncodings}
+                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
                 />
               </div>
             </div>
@@ -1997,18 +2197,8 @@ class Analysis extends React.Component {
               placeholder="Use cache file or not"
             />
           }
-          {/* { select_option_cacheFile.length > 0 && select_useCache.value == "use" && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" &&
-          <div>
-            <Select
-              value={select_cacheFile}
-              isDisabled={select_isDisabled_cacheFile}
-              options={select_option_cacheFile}
-              onChange={this.select_onChange_cacheFile}
-              placeholder="Cache file"
-            />
-          </div>
-          } */}
-          { select_useCache !== null && select_useCache !== undefined && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && select_patchView != null && select_patchView != undefined && select_patchView.value == "single" &&
+          
+          { select_useCache !== null && select_useCache !== undefined && select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && select_patchView != null && select_patchView != undefined &&
           <div>
           <Select
             value={select_dataTransformation}
@@ -2066,62 +2256,51 @@ class Analysis extends React.Component {
           <h4> Saliency Feature Visaulzation View </h4>
         </div>
         <div className="saliencyVisualizationWrap">
-          { cacheFilePath !== "" &&
+          { cacheFilePath !== "" && patchDataList.length != 0 &&
           <div className="visualizationDiv">
-            <ParallelCoordinateChart
-              width={900}
-              height={530}
-              patchDataFileURL={cacheFilePath}
-              colorEncoding={colorEncodings}
-            />
-          </div>
-          }
-          <div className="subSaliencyVisDiv">
-            { patchDataList.length != 0 &&
-            <div className="section-header">
-              <h4> All patches: {patchDataList.length} </h4>
+            <div className="pcVisView">
+              <ParallelCoordinateChart
+                width={900}
+                height={360}
+                patchDataFileURL={cacheFilePath}
+                colorEncoding={colorEncodings}
+              />
             </div>
-            }
-            { patchDataList.length != 0 && 
-            <div className="saliencyView_boxplot">
+            <div className="countTextDiv">
+              <div className="section-subtitle-header">
+                <h5> All patches: {patchDataList.length} </h5>
+              </div>
+              <div className="section-subtitle-header">
+                <h5> Patches on HFM: {patchesOnHumanFixationMap.length} </h5>
+              </div>
+              <div className="section-subtitle-header">
+                <h5> Patches outside on HFM: {patchesOutsideHumanFixationMap.length} </h5>
+              </div>
+            </div>
+            <div className="boxVisView">
               <BoxPlot
-                width={290}
+                width={300}
                 height={140}
                 patchDataList={patchDataList}
                 colorEncoding={colorEncodings}
               />
-            </div>
-            }
-            { patchDataList.length != 0 &&
-            <div className="section-header">
-              <h4> Patches on HFM: {patchesOnHumanFixationMap.length} </h4>
-            </div>
-            }
-            { patchDataList.length != 0 && 
-            <div className="saliencyView_boxplot">
               <BoxPlot
-                width={290}
+                width={300}
                 height={140}
                 patchDataList={patchesOnHumanFixationMap}
                 colorEncoding={colorEncodings}
               />
-            </div>
-            }
-            { patchDataList.length != 0 &&
-            <div className="section-header">
-              <h4> Patches outside on HFM: {patchesOutsideHumanFixationMap.length} </h4>
-            </div>
-            }
-            { patchDataList.length != 0 && 
-            <div className="saliencyView_boxplot">
               <BoxPlot
-                width={290}
+                width={300}
                 height={140}
                 patchDataList={patchesOutsideHumanFixationMap}
                 colorEncoding={colorEncodings}
               />
             </div>
-            }
+          </div>
+          }
+          <div className="subSaliencyVisDiv">
+            
           </div>
 
         </div>
