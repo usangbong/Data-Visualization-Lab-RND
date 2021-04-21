@@ -707,6 +707,30 @@ def clustering_loadCacheList():
     print(e)
   return json.dumps(response)
 
+@app.route('/api/multiPatchVisualization/selectDivUpdate', methods=['POST'])
+def multiPatchVisualization_selectDivUpdate():
+  print("multiPatchVisualization_selectDivUpdate")
+  print(request.form)
+  response = {}
+  try:
+    SELECTED_DIV_CACHE_PATH = request.form['cachePath']
+    splitPath = SELECTED_DIV_CACHE_PATH.split("-")
+    get_dataset = splitPath[0].split("/cache_")[1]
+    get_semantic = splitPath[1]
+    get_stimulus = splitPath[2]
+    get_data_transformation = splitPath[3]
+    get_dimension_reduction = splitPath[4]
+
+    slectedDivData = [get_dataset, get_semantic, get_stimulus, get_data_transformation, get_dimension_reduction]
+    makeJSON("./static/__cache__/select_div.json", slectedDivData)
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
 @app.route('/api/clustering/processingMulti', methods=['POST'])
 def clustering_processingMulti():
   print("clustering_processingMulti")
