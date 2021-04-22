@@ -682,25 +682,83 @@ def IQRclusteringRange(Q1, Q3, val):
     clu = 6
   return clu
 
-##################################
-# patch clustering analysis APIs #
-##################################
-@app.route('/api/clustering/loadCacheList', methods=['POST'])
-def clustering_loadCacheList():
-  print("clustering_loadCacheList")
+###########################
+# interaction update APIs #
+###########################
+@app.route('/api/aggregation/selectedObserverDataAggregation', methods=['POST'])
+def selectedObserverDataAggregation():
+  print("selectedObserverDataAggregation")
   print(request.form)
   response = {}
   try:
-    cacheDirPath = "./static/__cache__/"
-    filesInDir = os.listdir(cacheDirPath)
-    cacheFileList = []
-    for fileName in filesInDir:
-      fileType = fileName.split("_")[0]
-      if fileType == "cache":
-        cacheFileList.append(fileName)
+    GET_SELECTED_OBSERVER = request.form['observerInfo']
+    splitData = GET_SELECTED_OBSERVER.split("/")
+    datsetName = splitData[0]
+    # semanticClass = splitData[1]
+    imgFileName = splitData[2]
+    # stimulusName = imgFileName.split(".")[0]
+    # stimulusExe = imgFileName.split(".")[1]
+    # stimulusDirName = stimulusName +"_"+ stimulusExe
+    observerName = splitData[4]
+    
+    fixFilePathList = []
+    stiNameList = []
+    fixPath = "./static/fix/"+ datsetName +"/"
+    semanticList = os.listdir(fixPath)
+    for semanticDir in semanticList:
+      stiDirPath = fixPath + semanticDir +"/"
+      stiDirList = os.listdir(stiDirPath)
+      sFixList = []
+      sStiNameList = []
+      for stiDir in stiDirList:
+        obFixPath = stiDirPath + stiDir +"/"+ observerName +".csv"
+        if os.path.exists(obFixPath):
+          sFixList.append(obFixPath)
+          sStiNameList.append([semanticDir, stiDir.split("_")[0]])
+      fixFilePathList.append(sFixList)
+      stiNameList.append(sStiNameList)
+
+    gtList = []
+    for i in range(0, len(stiNameList)):
+      gts = []
+      for j in range(0, len(stiNameList[i])):
+        semanticDir = stiNameList[i][j][0]
+        stiName = stiNameList[i][j][1]
+        gtPath = "./static/ground_truth/"+ datsetName +"/"+ semanticDir +"/"+ stiName +".jpg"
+        if not(os.path.exists(gtPath)):
+          print("ERROR: NO STIMULUS IMAGE FILE: "+gtPath)
+        gt = cv2.imread(gtPath)
+        gts.append(gt)
+      gtList.append(gts)
+
+    fixCountList = []
+    for i in range(0, len(fixFilePathList)):
+      fixCounts = []
+      for j in range(0, len(fixFilePathList[i])):
+        obFixFilePath = fixFilePathList[i][j]
+        # print(obFixFilePath)
+        scDir = obFixFilePath.split("/")[4]
+        imgDir = obFixFilePath.split("/")[5]
+        df = pd.read_csv(obFixFilePath, header=None)
+        l0 = 0
+        l1 = 0
+        _tList = []
+        for _fp in df.values.tolist():
+          _x = int(_fp[0])
+          _y = int(_fp[1])
+          _t = float(_fp[2])
+          _tList.append(_t)
+          _label = label_groundTruthFixationMap(gtList[i][j], _x, _y)
+          if _label == 0:
+            l0 = l0+1
+          else:
+            l1 = l1+1
+        fixCounts.append([scDir, imgDir, l0, l1, _tList])
+      fixCountList.append(fixCounts)
+    print("debug 4")
 
     response['status'] = 'success'
-    response['caches'] = cacheFileList
+    response['obFixCountList'] = fixCountList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
@@ -731,6 +789,57 @@ def multiPatchVisualization_selectDivUpdate():
     print(e)
   return json.dumps(response)
 
+@app.route('/api/horizontalBarChart/selectObserverUpdate', methods=['POST'])
+def horizontalBarChart_selectObserverUpdate():
+  print("horizontalBarChart_selectObserverUpdate")
+  print(request.form)
+  response = {}
+  try:
+    GET_OBSERVER_INFO = request.form['selectedObserver']
+    SPLIT_OBSERVER_INFO = GET_OBSERVER_INFO.split("/")
+    obID = SPLIT_OBSERVER_INFO[0]
+    obName = SPLIT_OBSERVER_INFO[1]
+    obIndex = SPLIT_OBSERVER_INFO[2]
+    
+    slectedObData = [obID, obName, obIndex]
+    makeJSON("./static/__cache__/select_ob.json", slectedObData)
+
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+
+
+
+
+##################################
+# patch clustering analysis APIs #
+##################################
+@app.route('/api/clustering/loadCacheList', methods=['POST'])
+def clustering_loadCacheList():
+  print("clustering_loadCacheList")
+  print(request.form)
+  response = {}
+  try:
+    cacheDirPath = "./static/__cache__/"
+    filesInDir = os.listdir(cacheDirPath)
+    cacheFileList = []
+    for fileName in filesInDir:
+      fileType = fileName.split("_")[0]
+      if fileType == "cache":
+        cacheFileList.append(fileName)
+
+    response['status'] = 'success'
+    response['caches'] = cacheFileList
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
 @app.route('/api/clustering/processingMulti', methods=['POST'])
 def clustering_processingMulti():
   print("clustering_processingMulti")
@@ -755,7 +864,7 @@ def clustering_processingMulti():
     stimulusName = stimulusFileName.split(".")[0]
     stimulusExe = stimulusFileName.split(".")[1]
     stimulusDirName = stimulusName +"_"+ stimulusExe
-
+    
     groundTruthPath = "./static/ground_truth/" + datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
     groundTruthFixMap = cv2.imread(groundTruthPath)
     generate_discrete_groundTruthFixationMap(groundTruthFixMap)
@@ -773,12 +882,25 @@ def clustering_processingMulti():
         cacheFilePathList.append([cacheFilePath, existsFlag])
     
     patchProcessDataLists = []
+    rawDataList = []
     if pExistsFlag == True:
       print("All cache file exists")
       for cPath in cacheFilePathList:
         p = cPath[0]
         aggDF = pd.read_csv(p)
         patchProcessDataLists.append(aggDF.values.tolist())
+        fixPath = "./static/fix/" + datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
+        fixFileList = os.listdir(fixPath)
+        for fileName in fixFileList:
+          ffPath = fixPath + fileName
+          fixDF = pd.read_csv(ffPath, header=None)
+          fixList = fixDF.values.tolist()
+          for _p in fixList:
+            _x = int(_p[0])
+            _y = int(_p[1])
+            _t = float(_p[2])
+            _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+            rawDataList.append([datasetName+"/"+semanticClassName+"/"+stimulusDirName+"/"+fileName.split(".")[0], _x, _y, _label, _t])
     else:
       print("Some cache files do not exists")
       for cPath in cacheFilePathList:
@@ -814,7 +936,9 @@ def clustering_processingMulti():
             for _fp in fixList:
               _x = int(_fp[0])
               _y = int(_fp[1])
+              _t = float(_fp[2])
               _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+              rawDataList.append([ob, _x, _y, _label, _t])
               _midStack = [ob, _x, _y, _label]
               for i in range(0, len(FEATURE_ordered)):
                 fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
@@ -856,6 +980,7 @@ def clustering_processingMulti():
     response['status'] = 'success'
     response['processingData'] = patchProcessDataLists
     response['cacheFilePath'] = cacheFilePathList
+    response['rawDataList'] = rawDataList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
@@ -884,7 +1009,8 @@ def clustering_processing():
     featureDirPath = "./static/feature/"
     groundTruthDirPath = "./static/ground_truth/"
     aggregatedDataList = []
-
+    
+    rawDataList = []
     if GET_USE_CACHE_FLAG == "use":
       print("Use cache flag on: "+cacheFilePath)
       stiInfo = GET_SELECTED_STIMULUS_INFO[0]
@@ -896,6 +1022,26 @@ def clustering_processing():
       stiExe = stiFileName.split(".")[1]
       stiNameDir = stiName +"_"+ stiExe
       cacheFilePath = "./static/__cache__/pcache/cache_"+ dataName +"-"+ className +"-"+ stiNameDir +"-"+ GET_TRANSFORMATION_METHOD +"-"+ GET_DIMEN_REDUCTION_METHOD +"-"+ str(len(PARTICIPANT)) +".csv"
+
+      gtFixMapPath = groundTruthDirPath + dataName +"/"+ className +"/"+ stiName +".jpg"
+      groundTruthFixMap = cv2.imread(gtFixMapPath)
+      generate_discrete_groundTruthFixationMap(groundTruthFixMap)
+      fmHeight, fmWidth = groundTruthFixMap.shape[:2]
+
+      
+      fixPath = fixDirPath + dataName +"/"+ className +"/"+ stiNameDir + "/"
+      fixDataNameList = os.listdir(fixPath)
+      for fileName in fixDataNameList:
+        ffPath = fixPath+fileName
+        fixDF = pd.read_csv(ffPath, header=None)
+        fixList = fixDF.values.tolist()
+        # print(fixFilePath)
+        for _fp in fixList:
+          _x = int(_fp[0])
+          _y = int(_fp[1])
+          _t = float(_fp[2])
+          _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+          rawDataList.append([dataName+"/"+className+"/"+stiNameDir+"/"+fileName.split(".")[0] ,_x, _y, _label, _t])
     else:
       for stiInfo in GET_SELECTED_STIMULUS_INFO:
         dataName = stiInfo.split("/")[0]
@@ -936,7 +1082,9 @@ def clustering_processing():
           for _fp in fixList:
             _x = int(_fp[0])
             _y = int(_fp[1])
+            _t = float(_fp[2])
             _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+            rawDataList.append([ob, _x, _y, _label, _t])
             _midStack = [ob, _x, _y, _label]
             for i in range(0, len(FEATURE_ordered)):
               fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
@@ -974,14 +1122,13 @@ def clustering_processing():
 
     dataColumns = processedDF.columns.values.tolist()
     processedDataList = processedDF.values.tolist()
-    rawDataList = aggDF.values.tolist()
     processedDF.to_csv(cacheFilePath, mode='w', index=False, header=True)
 
     response['status'] = 'success'
     response['dataColumns'] = dataColumns
     response['processingData'] = processedDataList
     response['cacheFilePath'] = cacheFilePath.split(".")[1]+".csv"
-    response['rawData'] = rawDataList
+    response['rawDataList'] = rawDataList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
