@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from 'react';
 function ScanpathVisualization(props) {
   const { width, height, stimulusURL, scanpathList, imageOpacity, colorEncoding } = props;
   const svgRef = useRef();
-  const d3 = window.d3;
+  const d3 = window.d3v4;
   // const colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   useEffect(() => {
     // console.log(colorEncoding);
