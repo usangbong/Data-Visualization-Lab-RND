@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
 function BoxPlot(props) {
   const { width, height, patchDataList, colorEncoding } = props;
   const svgRef = useRef();
-  const d3 = window.d3;
+  const d3 = window.d3v4;
   // const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   const featureNumber = 8;
 
@@ -88,7 +88,7 @@ function BoxPlot(props) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Move the left axis over 25 pixels, and the top axis over 35 pixels
-    var axisG = svg.append("g").attr("transform", "translate(25,0)");
+    var axisG = svg.append("g").attr("transform", "translate(20,0)");
     var axisTopG = svg.append("g").attr("transform", "translate(35,0)");
 
     // Setup the group the box plot elements will render in
