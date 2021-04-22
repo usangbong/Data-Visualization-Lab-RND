@@ -119,12 +119,12 @@ function PatchVisualization(props) {
       })
       .on('mousedown', function(d){
         selectPatchID = "bar"+String(d.index);
-        console.log(selectPatchID);
+        // console.log(selectPatchID);
         d3.select(svgRef.current).selectAll('.patch').on("mousemove", mousemove);
       })
       .on('mouseup', function(d){
         selectPatchID = "";
-        console.log(selectPatchID);
+        // console.log(selectPatchID);
         d3.select(svgRef.current).selectAll('.patch').on("mousemove", null);
       });
 
@@ -137,7 +137,7 @@ function PatchVisualization(props) {
             prevPos=[_x, _y];
           }
           var _trs = "translate(" + _x + "," + _y + ")";
-          console.log("move: "+m[0]+", "+m[1]);
+          // console.log("move: "+m[0]+", "+m[1]);
           for(let i=0; i<patchData.length; i++){
             if("bar"+String(patchData[i].index) == selectPatchID){
               patchData[i].x = patchData[i].x+_x-(PATCH_SIZE/2);

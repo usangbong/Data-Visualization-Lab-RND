@@ -1,18 +1,21 @@
+import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 
 function MultiPatchVisualization(props) {
-  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding } = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding, cacheFilePath, divSelectFlag, divSelectFlagUpdateFunction } = props;
   const svgRef = useRef();
   const d3 = window.d3;
   
   const PATCH_SIZE = 20;
   const PATCH_DRAW_LENGTH = 4;
-  let selectPatchID = "";
-  let prevPos = [0, 0];
+  
   useEffect(() => {
     if (patchURLs.length === 0)
       return;
     d3.select(svgRef.current).selectAll("*").remove();
+    // console.log("MultiPatchVisualization component");
+    // console.log(cacheFilePath);
+    
     
     let margin = {top: 5, right: 5, bottom: 5, left: 5};
     let drawWidth = width - (margin.left + margin.right);
@@ -51,12 +54,46 @@ function MultiPatchVisualization(props) {
     .attr("width", width)
     .attr("height", height)
     .append("svg")
-      .attr("width", drawWidth)
-      .attr("height", drawHeight)
+      .attr("width", width)
+      .attr("height", height)
       .style("font", "12px sans-serif")
       .style("text-anchor", "middle")
-      .append('g').attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+      .append('g').attr("transform", "translate(0, 0)");
+      
+    d3.select(svgRef.current).on("click", divClickEvent);
+
+    function divClickEvent(){
+      console.log("MultiPatchVisualization-divClickEvent(): "+cacheFilePath);
+      // console.log(cacheFilePath);
+      const data = new FormData();
+      data.set('cachePath', cacheFilePath);
+      axios.post(`http://${window.location.hostname}:5000/api/multiPatchVisualization/selectDivUpdate`, data)
+      .then(response => {
+        // console.log(response);
+        divSelectFlagUpdateFunction();
+      }).catch(error => {
+        alert(`Error - ${error.message}`);
+      });
+    }
+      
+    svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .attr("stroke", function(d){
+      if(divSelectFlag == false){
+        return "gray";
+      }else{
+        return "black";
+      }
+    })
+    .attr("stroke-width", function(d){
+      if(divSelectFlag == false){
+        return "1px";
+      }else{
+        return "4px";
+      }
+    });
     
     var patchFrame = svg.selectAll(".pFrame")
     .data(patchData)
@@ -64,8 +101,8 @@ function MultiPatchVisualization(props) {
     .append("g")
     .attr("class", "pFrame")
     .attr("transform", function(d) {
-      let _x = x(d.x) - PATCH_DRAW_LENGTH/2;
-      let _y = y(d.y) - PATCH_DRAW_LENGTH/2;
+      let _x = x(d.x) - PATCH_DRAW_LENGTH/2 + margin.left;
+      let _y = y(d.y) - PATCH_DRAW_LENGTH/2 + margin.right;
       return "translate(" + _x + "," + _y + ")";
     });
 
@@ -84,52 +121,10 @@ function MultiPatchVisualization(props) {
       .append("g")
       .attr("class", "patch")
       .attr("transform", function(d) {
-        let _x = x(d.x) - PATCH_DRAW_LENGTH/2;
-        let _y = y(d.y) - PATCH_DRAW_LENGTH/2;
+        let _x = x(d.x) - PATCH_DRAW_LENGTH/2 + margin.left;
+        let _y = y(d.y) - PATCH_DRAW_LENGTH/2 + margin.right;
         return "translate(" + _x + "," + _y + ")";
-      })
-      .on('mousedown', function(d){
-        selectPatchID = "bar"+String(d.index);
-        console.log(selectPatchID);
-        d3.select(svgRef.current).selectAll('.patch').on("mousemove", mousemove);
-      })
-      .on('mouseup', function(d){
-        selectPatchID = "";
-        console.log(selectPatchID);
-        d3.select(svgRef.current).selectAll('.patch').on("mousemove", null);
       });
-
-      function mousemove(){
-        if(selectPatchID !== ""){
-          var m = d3.mouse(this);
-          var _x = m[0];
-          var _y = m[1];
-          if(prevPos[0] == 0 && prevPos[1]==0){
-            prevPos=[_x, _y];
-          }
-          var _trs = "translate(" + _x + "," + _y + ")";
-          console.log("move: "+m[0]+", "+m[1]);
-          for(let i=0; i<patchData.length; i++){
-            if("bar"+String(patchData[i].index) == selectPatchID){
-              patchData[i].x = patchData[i].x+_x-(PATCH_SIZE/2);
-              patchData[i].y = patchData[i].y+_y-(PATCH_SIZE/2);
-              break;
-            }
-          }
-
-          d3.selectAll(".pFrame")
-          .attr("transform", function(d) {
-            return "translate(" + d.x + "," + d.y + ")";
-          });
-
-          d3.selectAll(".patch")
-          .attr("transform", function(d) {
-            return "translate(" + d.x + "," + d.y + ")";
-          });
-          // d3.selectAll(".patch "+selectPatchID).attr("transform", _trs);
-        }
-        prevPos=[_x, _y];
-      }
 
       patch.append('symbol')
       .attr("id", function(d){ return "bar"+String(d.index)})
@@ -154,7 +149,7 @@ function MultiPatchVisualization(props) {
     }
     
 
-  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding, props.cacheFilePath, props.divSelectFlag]);
   
   return (
     <>

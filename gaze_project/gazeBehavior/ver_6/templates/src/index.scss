@@ -120,7 +120,7 @@ ul {
     align-items: flex-start;
     justify-content: flex-start;
     box-sizing: border-box;
-    border: 1px #BFBFBF solid;
+    // border: 1px #BFBFBF solid;
     background-color: white;
     .patchView{
       width: 900px;
@@ -136,9 +136,11 @@ ul {
       margin-right: 5px;
       box-sizing: border-box;
       background-color: wihte;
-      border: 1px #BFBFBF solid;
+      // border: 1px #BFBFBF solid;
     }
     .multiPatchVisWrap{
+      // margin-left: 1px;
+      // margin-top: 1px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -153,8 +155,7 @@ ul {
         flex-direction: row;
         align-items: flex-start;
         justify-content: flex-start;
-        
-        border: 1px #BFBFBF solid;
+        // border: 1px #BFBFBF solid;
         box-sizing: border-box;
         background-color: wihte;
       }
@@ -163,7 +164,7 @@ ul {
         height: 120px;
         box-sizing: border-box;
         background-color: wihte;
-        border: 1px #BFBFBF solid;
+        // border: 1px #BFBFBF solid;
       }
     }
   }
@@ -173,22 +174,49 @@ ul {
     align-items: flex-start;
     justify-content: flex-start;
     box-sizing: border-box;
-    border: 1px #BFBFBF solid;
+    // border: 1px #BFBFBF solid;
     background-color: white;
-
     .visualizationDiv{
-      width: 900px;
-      height: 530px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      box-sizing: border-box;
       box-sizing: border-box;
       background-color: white;
-      border: 1px #BFBFBF solid;
+      // border: 1px #BFBFBF solid;
+      .pcVisView{
+        width: 900px;
+        height: 360px;
+        box-sizing: border-box;
+        background-color: white;
+        // border: 1px #BFBFBF solid;
+      }
+      .countTextDiv{
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 900px;
+        height: 30px;
+        box-sizing: border-box;
+        background-color: white;
+      }
+      .boxVisView{
+        width: 900px;
+        height: 140px;
+        box-sizing: border-box;
+        background-color: white;
+        // border: 1px #BFBFBF solid;
+      }
     }
     .subSaliencyVisDiv{
       width: 290px;
       height: 530px;
       box-sizing: border-box;
       background-color: white;
-      border: 1px #BFBFBF solid;
+      // border: 1px #BFBFBF solid;
     }
   }
   
@@ -327,6 +355,17 @@ ul {
     align-content: center;
     // background-color: #3a3a3a;
     background:linear-gradient(-45deg, transparent 20px, #525252 0);
+    color: white;
+  }
+  .section-subtitle-header {
+    margin-right: 1px;
+    display: grid;
+    width: 300px;
+    height: 25px;
+    padding-left: 10px;
+    align-content: center;
+    // background:linear-gradient(-45deg, transparent 20px, #525252 0);
+    background:#525252;
     color: white;
   }
   .page-section {
