@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 
 function MultiPatchVisualization(props) {
-  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding, cacheFilePath, divSelectFlag, divSelectFlagUpdateFunction } = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding, cacheFilePath, divSelectFlag, divSelectFlagUpdateFunction, selectedObserver } = props;
   const svgRef = useRef();
-  const d3 = window.d3;
-  
+  const d3 = window.d3v4;
+  const colores_g = ["#109618", "#ff9900", "#990099", "#dd4477", "#0099c6", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac", "#3366cc", "#dc3912"];
   const PATCH_SIZE = 20;
-  const PATCH_DRAW_LENGTH = 4;
+  const PATCH_DRAW_LENGTH = 6;
   
   useEffect(() => {
     if (patchURLs.length === 0)
@@ -21,17 +21,33 @@ function MultiPatchVisualization(props) {
     let drawWidth = width - (margin.left + margin.right);
     let drawHeight = height - (margin.top + margin.bottom);
 
+    let allObserverList = [];
+    for(let i=0; i<patchList.length; i++){
+      allObserverList.push(patchList[i][0].split("/")[3].split(".")[0]);
+    }
+    let set = new Set(allObserverList);
+    let observerList = [...set];
+
     let aggregatedPatchImageLength = 0;
     let patchData = [];
     let patchCount = 0;
     for(let i=0; i<patchList.length; i++){
+      let _id = patchList[i][0].split("/")[3].split(".")[0];
+      let _idIdx = 0;
+      for(let j=0; j<observerList.length; j++){
+        if(_id == observerList[j]){
+          _idIdx = j;
+          break;
+        }
+      }
       let patch = {
-        id: patchList[i][0],
+        id: _idIdx,
         x: patchList[i][1],
         y: patchList[i][2],
         clu: patchList[i][3],
         index: patchCount,
-        order: i
+        order: i,
+        observer: _id
       };
       patchData.push(patch);
       patchCount = patchCount+1;
@@ -109,10 +125,37 @@ function MultiPatchVisualization(props) {
     patchFrame.append('rect')
     .attr("width", PATCH_DRAW_LENGTH)
     .attr("height", PATCH_DRAW_LENGTH)
-    .style("fill", function(d){ return colorEncoding[d.clu] })
+    .style("fill", function(d){ 
+      if(patchDrawFlag == "box"){
+        return colorEncoding[d.clu];
+      }else if(patchDrawFlag == "observer"){
+        if(d.id < colores_g.length){
+          return colores_g[d.id];
+        }else{
+          let mIdx = d.id - colores_g.length;
+          return colorEncoding[mIdx];
+        }
+      }else{
+        return "white";
+      }
+    })
     .attr("stroke", function(d){ return colorEncoding[d.clu] })
-    .attr("stroke-width", "3px")
-    .attr("opacity", patchBoxOpacity);
+    .attr("stroke-width", "2px")
+    .attr("opacity", function(d){
+      if(selectedObserver.length == 0){
+        return patchBoxOpacity;
+      }else{
+        if(selectedObserver[1] == d.observer){
+          return 1;
+        }else{
+          if(patchBoxOpacity == 1){
+            return 0.3;
+          }else{
+            return patchBoxOpacity;
+          }
+        }
+      }
+    });
 
     if(patchDrawFlag == "image"){
       var patch = svg.selectAll(".patch")
@@ -149,7 +192,7 @@ function MultiPatchVisualization(props) {
     }
     
 
-  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding, props.cacheFilePath, props.divSelectFlag]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding, props.cacheFilePath, props.divSelectFlag, props.selectedObserver]);
   
   return (
     <>
