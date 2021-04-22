@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
 function Heatmap(props) {
   const {width, height, dataURL, FEATURE_DEFINE, STI_CLASS_DEFINE} = props;
   const svgRef = useRef();
-  const d3 = window.d3;
+  const d3 = window.d3v4;
   var selectedCols = [];
   var selectedRows = [];
 
