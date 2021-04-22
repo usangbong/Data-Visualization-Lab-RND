@@ -134,6 +134,9 @@ ul {
       margin-top: 5px;
       margin-left: 5px;
       margin-right: 5px;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
       box-sizing: border-box;
       background-color: wihte;
       // border: 1px #BFBFBF solid;
@@ -150,7 +153,7 @@ ul {
 
       .multiPatchView{
         width: 900px;
-        height: 120px;
+        height: 116px;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
@@ -159,13 +162,72 @@ ul {
         box-sizing: border-box;
         background-color: wihte;
       }
+      .drTitleDiv{
+        width: 900px;
+        height: 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        // border: 1px #BFBFBF solid;
+        box-sizing: border-box;
+        background-color: wihte;
+        .section-drnulltitle-header {
+          margin-left: 1px;
+          margin-right: 1px;
+          margin-top: 1px;
+          margin-bottom: 1px;
+          width: 19px;
+          height: 18px;
+          background:white;
+        }
+        .section-drtitle-header {
+          margin-right: 1px;
+          margin-top: 1px;
+          margin-bottom: 1px;
+          width: 176px;
+          height: 18px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          align-content: center;
+          background:#525252;
+          color: white;
+        }
+      }
+      .dtTitleDiv{
+        width: 20px;
+        height: 116px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background-color: wihte;
+        .section-dttitle-header {
+          margin-left: 1px;
+          margin-right: 1px;
+          margin-bottom: 1px;
+          width: 19px;
+          height: 116px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          writing-mode: vertical-rl;
+          background:#525252;
+          color: white;
+        }
+      }
       .multiPartView{
-        width: 180px;
-        height: 120px;
+        width: 176px;
+        height: 116px;
         box-sizing: border-box;
         background-color: wihte;
         // border: 1px #BFBFBF solid;
       }
+      
+      
     }
   }
   .saliencyVisualizationWrap{
@@ -368,6 +430,7 @@ ul {
     background:#525252;
     color: white;
   }
+  
   .page-section {
     margin: 0px 0px;
   }
@@ -431,4 +494,33 @@ ul {
   background-image: url("./image/logo_gray.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
+}
+
+.background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  cursor: move;
 }
