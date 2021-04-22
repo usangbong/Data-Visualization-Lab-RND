@@ -2,9 +2,9 @@
 import React, { useEffect, useRef } from 'react';
 
 function ParallelCoordinateChart(props) {
-  const { width, height, patchDataFileURL } = props;
+  const { width, height, patchDataFileURL, colorEncoding, selectedObserver, patchLineOpacity, lineOpacity_label0, lineOpacity_label1} = props;
   const svgRef = useRef();
-  const d3 = window.d3;
+  const d3 = window.d3v4;
   const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
   const featureList = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"];
     
@@ -12,7 +12,7 @@ function ParallelCoordinateChart(props) {
     if (patchDataFileURL.length === 0)
       return;
     d3.select(svgRef.current).selectAll("*").remove();
-    console.log(patchDataFileURL);
+    // console.log(patchDataFileURL);
     let margin = {top: 30, right: 50, bottom: 30, left: 50};
     let drawWidth = width - (margin.left + margin.right);
     let drawHeight = height - (margin.top + margin.bottom);
@@ -29,12 +29,23 @@ function ParallelCoordinateChart(props) {
         "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(patchDataFileURL, function(data) {
-      console.log("data");
-      console.log(data);
-      
+      // console.log("data");
+      // console.log(data);
+      var lMax = d3.max(data, (d=>parseFloat(d.label)));
+      var labelDomainRange = [];
+      for(let i=0; i<lMax+1; i++){
+        labelDomainRange.push(String(i));
+      }
+      var colorRange = [];
+      for(let i=0; i<labelDomainRange.length; i++){
+        colorRange.push(colorEncoding[i]);
+      }
+
       var color = d3.scaleOrdinal()
-      .domain(["0", "1"])
-      .range(["#e41a1c", "#377eb8"])
+      // .domain(["0", "1"])
+      .domain(labelDomainRange)
+      .range(colorRange)
+      // .range(["#e41a1c", "#377eb8"])
 
       let dimensions = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"];
       var y = {};
@@ -63,7 +74,26 @@ function ParallelCoordinateChart(props) {
         .attr("d", path)
         .style("fill", "none")
         .style("stroke", function(d){ return(color(String(d.label))) })
-        .style("opacity", 0.5);
+        .style("opacity", function(d){
+          let observer = d.id.split(".")[0].split("/")[3];
+          if(selectedObserver.length == 0){
+            if(d.label == 0){
+              return lineOpacity_label0;
+            }else{
+              return lineOpacity_label1;
+            }
+          }else{
+            if(selectedObserver[1] == observer){
+              if(d.label == 0){
+                return lineOpacity_label0;
+              }else{
+                return lineOpacity_label1;
+              }
+            }else{
+              return patchLineOpacity;
+            }
+          }
+        });
 
       
       // Draw the axis:
@@ -87,7 +117,7 @@ function ParallelCoordinateChart(props) {
 
 
 
-  }, [props.patchDataFileURL]);
+  }, [props.patchDataFileURL, props.colorEncoding, props.selectedObserver, props.patchLineOpacity, props.lineOpacity_label0, props.lineOpacity_label1]);
   
   return (
     <>
