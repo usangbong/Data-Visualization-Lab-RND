@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 function PatchVisualization(props) {
-  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding } = props;
+  const { width, height, patchURLs, patchList, patchDrawFlag, patchBoxOpacity, colorEncoding, selectedObserver } = props;
   const svgRef = useRef();
-  const d3 = window.d3;
-  
+  const d3 = window.d3v4;
+  const colores_g = ["#109618", "#ff9900", "#990099", "#dd4477", "#0099c6", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac", "#3366cc", "#dc3912"];
   const PATCH_SIZE = 20;
   const PATCH_DRAW_LENGTH = 40;
   let selectPatchID = "";
@@ -20,47 +20,38 @@ function PatchVisualization(props) {
 
     // console.log(patchURLs);
     // console.log(patchList);
+    let allObserverList = [];
+    for(let i=0; i<patchList.length; i++){
+      allObserverList.push(patchList[i][0].split("/")[3].split(".")[0]);
+    }
+    let set = new Set(allObserverList);
+    let observerList = [...set];
+    
     let aggregatedPatchImageLength = 0;
     let patchData = [];
     let patchCount = 0;
     for(let i=0; i<patchList.length; i++){
+      let _id = patchList[i][0].split("/")[3].split(".")[0];
+      let _idIdx = 0;
+      for(let j=0; j<observerList.length; j++){
+        if(_id == observerList[j]){
+          _idIdx = j;
+          break;
+        }
+      }
       let patch = {
-        id: patchList[i][0],
+        id: _idIdx,
         x: patchList[i][1],
         y: patchList[i][2],
         clu: patchList[i][3],
         index: patchCount,
-        order: i
+        order: i,
+        observer: _id
       };
       patchData.push(patch);
       patchCount = patchCount+1;
     }
     aggregatedPatchImageLength = PATCH_SIZE*patchCount;
-
-    // console.log(patchURLs);
-    // console.log(scanpathList);
-    // let aggregatedPatchImageLength = 0;
-    // let scanpathData = [];
-    // let patchCount = 0;
-    // for(let i=0; i<scanpathList.length; i++){
-    //   for(let j=0; j<scanpathList[i].scanpath.length; j++){
-    //     let patch = {
-    //       id: scanpathList[i].scanpath[j].id,
-    //       index: patchCount,
-    //       order: j,
-    //       clu: scanpathList[i].scanpath[j].clu,
-    //       x: j*(PATCH_DRAW_LENGTH+2),
-    //       y: i*(PATCH_DRAW_LENGTH+2)
-    //     };
-    //     scanpathData.push(patch);
-    //     patchCount = patchCount+1;
-    //   }
-    // }
-    // console.log('scanpathData');
-    // console.log(scanpathData);
-    // console.log('patchCount');
-    // console.log(patchCount);
-    // aggregatedPatchImageLength = PATCH_SIZE*patchCount;
     
     var xMin = d3.min(patchData, (d=>parseFloat(d.x)));
     var xMax = d3.max(patchData, (d=>parseFloat(d.x)));
@@ -87,7 +78,6 @@ function PatchVisualization(props) {
     
     var patchFrame = svg.selectAll(".pFrame")
     .data(patchData)
-    // .data(scanpathData)
     .enter()
     .append("g")
     .attr("class", "pFrame")
@@ -100,10 +90,37 @@ function PatchVisualization(props) {
     patchFrame.append('rect')
     .attr("width", PATCH_DRAW_LENGTH)
     .attr("height", PATCH_DRAW_LENGTH)
-    .style("fill", function(d){ return colorEncoding[d.clu] })
+    .style("fill", function(d){ 
+      if(patchDrawFlag == "box"){
+        return colorEncoding[d.clu];
+      }else if(patchDrawFlag == "observer"){
+        if(d.id < colores_g.length){
+          return colores_g[d.id];
+        }else{
+          let mIdx = d.id - colores_g.length;
+          return colorEncoding[mIdx];
+        }
+      }else{
+        return "white";
+      }
+    })
     .attr("stroke", function(d){ return colorEncoding[d.clu] })
     .attr("stroke-width", "3px")
-    .attr("opacity", patchBoxOpacity);
+    .attr("opacity", function(d){
+      if(selectedObserver.length == 0){
+        return patchBoxOpacity;
+      }else{
+        if(selectedObserver[1] == d.observer){
+          return 1;
+        }else{
+          if(patchBoxOpacity == 1){
+            return 0.3;
+          }else{
+            return patchBoxOpacity;
+          }
+        }
+      }
+    });
 
     if(patchDrawFlag == "image"){
       var patch = svg.selectAll(".patch")
@@ -203,7 +220,7 @@ function PatchVisualization(props) {
     }
     
 
-  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding]);
+  }, [props.patchURLs, props.patchList, props.patchDrawFlag, props.patchBoxOpacity ,props.colorEncoding, props.selectedObserver]);
   
   return (
     <>
