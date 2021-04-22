@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 function LineChart(props) {
   const { width, height, patchDataList, colorEncoding } = props;
   const svgRef = useRef();
-  const d3 = window.d3;
+  const d3 = window.d3v4;
   const FEATURE_ordered = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"];
   // const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
 
