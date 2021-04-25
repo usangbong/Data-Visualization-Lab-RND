@@ -472,6 +472,11 @@ def dr_TSNE(df, featureList):
   drDF = drm.fit_transform(df[featureList])
   return drDF
 
+def dr_TSNE_preplexity(df, iteration, perplexity, featureList):
+  drm = TSNE(n_components=2, early_exaggeration=iteration, perplexity=perplexity)
+  drDF = drm.fit_transform(df[featureList], df[["label"]])
+  return drDF
+
 def dr_PLS(df, featureList):
   drm = PLSRegression(n_components=2)
   drDF, _ = drm.fit_transform(df[featureList], df["label"])
@@ -685,6 +690,34 @@ def IQRclusteringRange(Q1, Q3, val):
 ###########################
 # interaction update APIs #
 ###########################
+@app.route('/api/brushParallelCoordinateChart/updateActives', methods=['POST'])
+def brushParallelCoordinateChart_UpdateActives():
+  print("brushParallelCoordinateChart_UpdateActives")
+  print(request.form)
+  response = {}
+  try:
+    GET_INTERACTION_ACTIVES = request.form['actives']
+    splitData = GET_INTERACTION_ACTIVES.split("/")
+    # print("splitData")
+    # print(splitData)
+    userInteractions = []
+    if splitData == ['0']:
+      userInteractions.append([False, -999, -999])
+    else:
+      for act in splitData:
+        actives = act.split("-")[0]
+        extents_s = act.split("-")[1]
+        extents_e = act.split("-")[2]
+        userInteractions.append([actives, extents_s, extents_e])
+    
+    makeJSON("./static/__cache__/pc_userInteractions.json", userInteractions)
+    response['status'] = 'success'
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
 @app.route('/api/aggregation/selectedObserverDataAggregation', methods=['POST'])
 def selectedObserverDataAggregation():
   print("selectedObserverDataAggregation")
@@ -695,7 +728,7 @@ def selectedObserverDataAggregation():
     splitData = GET_SELECTED_OBSERVER.split("/")
     datsetName = splitData[0]
     # semanticClass = splitData[1]
-    imgFileName = splitData[2]
+    # imgFileName = splitData[2]
     # stimulusName = imgFileName.split(".")[0]
     # stimulusExe = imgFileName.split(".")[1]
     # stimulusDirName = stimulusName +"_"+ stimulusExe
@@ -755,7 +788,6 @@ def selectedObserverDataAggregation():
             l1 = l1+1
         fixCounts.append([scDir, imgDir, l0, l1, _tList])
       fixCountList.append(fixCounts)
-    print("debug 4")
 
     response['status'] = 'success'
     response['obFixCountList'] = fixCountList
@@ -834,6 +866,121 @@ def clustering_loadCacheList():
 
     response['status'] = 'success'
     response['caches'] = cacheFileList
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
+
+@app.route('/api/clustering/processingMultiParms', methods=['POST'])
+def clustering_processingMultiParams():
+  print("clustering_processingMultiParams")
+  print(request.form)
+  response = {}
+  try:
+    GET_SELECTED_STIMULUS_INFO_STR = request.form['selectedStimulus']
+    dataTransformationMethod = "yeo_johonson_min_max"
+    dimensionReductionMethod = "t_SNE"
+    GET_SELECTED_STIMULUS_INFO = GET_SELECTED_STIMULUS_INFO_STR.split("-")
+    print(PARTICIPANT)
+    print(GET_SELECTED_STIMULUS_INFO)
+
+    datasetName = GET_SELECTED_STIMULUS_INFO[0].split("/")[0]
+    semanticClassName = GET_SELECTED_STIMULUS_INFO[0].split("/")[1]
+    stimulusFileName = GET_SELECTED_STIMULUS_INFO[0].split("/")[2]
+    stimulusName = stimulusFileName.split(".")[0]
+    stimulusExe = stimulusFileName.split(".")[1]
+    stimulusDirName = stimulusName +"_"+ stimulusExe
+    
+    groundTruthPath = "./static/ground_truth/" + datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
+    groundTruthFixMap = cv2.imread(groundTruthPath)
+    generate_discrete_groundTruthFixationMap(groundTruthFixMap)
+    fmHeight, fmWidth = groundTruthFixMap.shape[:2]
+
+    featureDirPath = "./static/feature/"
+    featureDFList = []
+    for _f in FEATURE_ordered:
+      featureFilePath = featureDirPath + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+      featureDF = pd.read_csv(featureFilePath)
+      featureDFList.append(featureDF)
+    
+    featureDirPath = "./static/feature/"
+    featureDFList = []
+    for _f in FEATURE_ordered:
+      featureFilePath = featureDirPath + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+      featureDF = pd.read_csv(featureFilePath)
+      featureDFList.append(featureDF)
+
+    PARTICIPANT_LIST = []
+    for obInfo in PARTICIPANT:
+      _dataName = obInfo.split("/")[0]
+      _className = obInfo.split("/")[1]
+      _stiNameDir = obInfo.split("/")[2]
+      if datasetName == _dataName and semanticClassName == _className and stimulusDirName == _stiNameDir:
+        PARTICIPANT_LIST.append(obInfo)
+
+    fixDirPath = "./static/fix/"
+    rawDataList = []
+    aggregatedDataList = []
+    for observer in PARTICIPANT_LIST:
+      userId = observer.split("/")[3]
+      fixFilePath = fixDirPath + datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ userId+".csv"
+      ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ userId
+      fixDF = pd.read_csv(fixFilePath, header=None)
+      fixList = fixDF.values.tolist()
+      for _fp in fixList:
+        _x = int(_fp[0])
+        _y = int(_fp[1])
+        _t = float(_fp[2])
+        _label = label_groundTruthFixationMap(groundTruthFixMap, _x, _y)
+        rawDataList.append([ob, _x, _y, _label, _t])
+        _midStack = [ob, _x, _y, _label]
+        for i in range(0, len(FEATURE_ordered)):
+          fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
+          _midStack.append(fMean)
+        _midStack.append(_t)
+        aggregatedDataList.append(_midStack)
+    
+    dfCols = ["id", "x", "y", "label"]
+    dfCols_full = ["id", "x", "y", "label"]
+    for featName in FEATURE_ordered:
+      dfCols.append(featName)
+      dfCols_full.append(featName)
+    dfCols_full.append("duration")
+    aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols_full)
+    
+    # data transformation
+    tfDF = dataTransformation(dataTransformationMethod, aggDF[dfCols], FEATURE_ordered)
+
+    cacheFilePathList = []
+    patchProcessDataLists = []
+    # dimension reduction
+    for iteration in [12, 15, 20, 25, 30]:
+      for perplexity in [30, 50, 70, 100, 200]:
+        dr = dr_TSNE_preplexity(tfDF, iteration, perplexity, FEATURE_ordered)
+        drDF = pd.DataFrame(dr, columns=['x', 'y'])
+        indexCount = 0
+        processedDF = pd.DataFrame(aggDF['id'].values.tolist(), columns=['id'])
+        indexCount = indexCount+1
+        processedDF.insert(indexCount, "x", drDF['x'].values.tolist(), True)
+        indexCount = indexCount+1
+        processedDF.insert(indexCount, "y", drDF['y'].values.tolist(), True)
+        indexCount = indexCount+1
+        processedDF.insert(indexCount, "label", aggDF['label'].values.tolist(), True)
+        indexCount = indexCount+1
+        for featName in FEATURE_ordered:
+          processedDF.insert(indexCount, featName, tfDF[featName].values.tolist(), True)
+          indexCount = indexCount+1
+        processedDF.insert(indexCount, "duration", aggDF['duration'].values.tolist(), True)
+        processedDataList = processedDF.values.tolist()
+        patchProcessDataLists.append(processedDataList)
+        cacheFilePath = "./static/__cache__/pcache/cache_"+ datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-"+ dataTransformationMethod +"-"+ dimensionReductionMethod +"-"+ str(len(PARTICIPANT)) +".csv"
+        cacheFilePathList.append([cacheFilePath, True])
+
+    response['status'] = 'success'
+    response['processingData'] = patchProcessDataLists
+    response['cacheFilePath'] = cacheFilePathList
+    response['rawDataList'] = rawDataList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
@@ -1089,6 +1236,7 @@ def clustering_processing():
             for i in range(0, len(FEATURE_ordered)):
               fMean = getFeatureMeanVal(featureDFList[i], _x, _y, fmWidth, fmHeight, PATCH_SIZE)
               _midStack.append(fMean)
+            _midStack.append(_t)
             aggregatedDataList.append(_midStack)
     
     aggDF = []
@@ -1098,6 +1246,7 @@ def clustering_processing():
       dfCols = ["id", "x", "y", "label"]
       for featName in FEATURE_ordered:
         dfCols.append(featName)
+      dfCols.append("duration")
       aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols)
     
 
@@ -1119,6 +1268,7 @@ def clustering_processing():
     for featName in FEATURE_ordered:
       processedDF.insert(indexCount, featName, tfDF[featName].values.tolist(), True)
       indexCount = indexCount+1
+    processedDF.insert(indexCount, "duration", aggDF['duration'].values.tolist(), True)
 
     dataColumns = processedDF.columns.values.tolist()
     processedDataList = processedDF.values.tolist()
