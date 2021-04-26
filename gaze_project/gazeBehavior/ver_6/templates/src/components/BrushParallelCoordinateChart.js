@@ -1,4 +1,5 @@
 // https://www.d3-graph-gallery.com/graph/parallel_custom.html
+import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 
 function BrushParallelCoordinateChart(props) {
@@ -39,7 +40,7 @@ function BrushParallelCoordinateChart(props) {
         "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(patchDataFileURL, function(data) {
-      console.log(data);
+      // console.log(data);
       let allObserverList = [];
       for(let i=0; i<data.length; i++){
         allObserverList.push(data[i].id.split(".")[0].split("/")[3]);
@@ -86,12 +87,36 @@ function BrushParallelCoordinateChart(props) {
               break;
             }
           }
-          return colores_g[obIdx];
+          if(selectedObserver[1] == ob){
+            return colores_g[obIdx];
+          }else{
+            return(color(String(d.label)));
+          }
         }else{
           return(color(String(d.label)));
         }
       })
-      .style("opacity", lineOpacity_label0);
+      .style("opacity", function(d){
+        // if(selectedObserver.length != 0){
+        //   let ob = d.id.split(".")[0].split("/")[3];
+        //   let obIdx = 0;
+        //   for(let i=0; i<observerList.length; i++){
+        //     if(ob == observerList[i]){
+        //       obIdx = i;
+        //       break;
+        //     }
+        //   }
+        //   if(selectedObserver[1] == ob){
+        //     return patchLineOpacity;
+        //   }else{
+        //     return lineOpacity_label0;
+        //   }
+        // }else{
+        //   return lineOpacity_label0;
+        // }
+
+        return lineOpacity_label0;
+      });
 
       // Add blue foreground lines for focus.
       foreground = svg.append("g")
@@ -110,12 +135,34 @@ function BrushParallelCoordinateChart(props) {
               break;
             }
           }
-          return colores_g[obIdx];
+          if(selectedObserver[1] == ob){
+            return colores_g[obIdx];
+          }else{
+            return(color(String(d.label)));
+          }
         }else{
           return(color(String(d.label)));
         }
       })
-      .style("opacity", lineOpacity_label1);
+      .style("opacity", function(d){
+        if(selectedObserver.length != 0){
+          let ob = d.id.split(".")[0].split("/")[3];
+          let obIdx = 0;
+          for(let i=0; i<observerList.length; i++){
+            if(ob == observerList[i]){
+              obIdx = i;
+              break;
+            }
+          }
+          if(selectedObserver[1] == ob){
+            return patchLineOpacity;
+          }else{
+            return lineOpacity_label1;
+          }
+        }else{
+          return lineOpacity_label1;
+        }
+      });
 
       // Add a group element for each dimension.
       var g = svg.selectAll(".dimension")
@@ -188,21 +235,38 @@ function BrushParallelCoordinateChart(props) {
     
     // Handles a brush event, toggling the display of foreground lines.
     function brush() {
-      var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
-          extents = actives.map(function(p) { return y[p].brush.extent(); });
+      var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); });
+      var extents = actives.map(function(p) { return y[p].brush.extent(); });
       foreground.style("display", function(d) {
         return actives.every(function(p, i) {
           return extents[i][0] <= d[p] && d[p] <= extents[i][1];
         }) ? null : "none";
       });
-      console.log("actives");
-      console.log(actives);
-      console.log("extents");
-      console.log(extents);
-      console.log("y");
-      console.log(y);
-      console.log("dragging");
-      console.log(dragging);
+
+      if(actives.length != 0 && extents.length != 0){
+        let actExt_str = "";
+        for(let i=0; i<actives.length; i++){
+          if(i==0){
+            actExt_str = actives[i]+"-"+String(extents[i][0])+"-"+String(extents[i][1]);
+          }else{
+            actExt_str = actExt_str +"/"+ actives[i]+"-"+String(extents[i][0])+"-"+String(extents[i][1]);
+          }
+        }
+        if(actExt_str == ""){
+          actExt_str = "0";
+        }
+        const postData = new FormData();
+        postData.set('actives', actExt_str);
+        axios.post(`http://${window.location.hostname}:5000/api/brushParallelCoordinateChart/updateActives`, postData);
+        // .then(response => {
+        //   // console.log(response);
+          
+        // }).catch(error => {
+        //   alert(`Error - ${error.message}`);
+        // });
+
+      }
+      
     }
 
 

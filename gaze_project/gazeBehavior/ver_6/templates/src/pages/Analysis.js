@@ -897,10 +897,10 @@ class Analysis extends React.Component {
         }
       }
       const data = new FormData();
-      data.set('transformationMethod', tMethods_str);
-      data.set('dimensionReductionMethod', drMethods_str);
+      // data.set('transformationMethod', tMethods_str);
+      // data.set('dimensionReductionMethod', drMethods_str);
       data.set('selectedStimulus', selectedStisStr);
-      axios.post(`http://${window.location.hostname}:5000/api/clustering/processingMulti`, data)
+      axios.post(`http://${window.location.hostname}:5000/api/clustering/processingMultiParms`, data)
       .then(response => {
         // console.log(response.data);
         let getProcessedDataLists = response.data.processingData;
@@ -1914,16 +1914,16 @@ class Analysis extends React.Component {
           <div className="multiPatchVisWrap">
             <div className="drTitleDiv">
               <div className="section-drnulltitle-header"></div>
-              <div className="section-drtitle-header"><h5> MDS </h5></div>
-              <div className="section-drtitle-header"><h5> PCA </h5></div>
-              <div className="section-drtitle-header"><h5> ICA </h5></div>
-              <div className="section-drtitle-header"><h5> t-SNE </h5></div>
-              <div className="section-drtitle-header"><h5> PLS </h5></div>
+              <div className="section-drtitle-header"><h5> 30 </h5></div>
+              <div className="section-drtitle-header"><h5> 50 </h5></div>
+              <div className="section-drtitle-header"><h5> 70 </h5></div>
+              <div className="section-drtitle-header"><h5> 100 </h5></div>
+              <div className="section-drtitle-header"><h5> 200 </h5></div>
               
             </div>
             <div className="multiPatchView">
               <div className="dtTitleDiv">
-                <div className="section-dttitle-header"><h5>Raw</h5></div>
+                <div className="section-dttitle-header"><h5>12</h5></div>
               </div>
               <div className="multiPartView">
                 <MultiPatchVisualization 
@@ -2003,7 +2003,7 @@ class Analysis extends React.Component {
             </div>
             <div className="multiPatchView">
               <div className="dtTitleDiv">
-                <div className="section-dttitle-header"><h5>MinMax</h5></div>
+                <div className="section-dttitle-header"><h5>15</h5></div>
               </div>
               <div className="multiPartView">
                 <MultiPatchVisualization 
@@ -2083,7 +2083,7 @@ class Analysis extends React.Component {
             </div>
             <div className="multiPatchView">
               <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>z-Score</h5></div>
+              <div className="section-dttitle-header"><h5>20</h5></div>
               </div>
               <div className="multiPartView">
                 <MultiPatchVisualization 
@@ -2163,7 +2163,7 @@ class Analysis extends React.Component {
             </div>
             <div className="multiPatchView">
               <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>YJ</h5></div>
+              <div className="section-dttitle-header"><h5>25</h5></div>
               </div>
               <div className="multiPartView">
                 <MultiPatchVisualization 
@@ -2243,7 +2243,7 @@ class Analysis extends React.Component {
             </div>
             <div className="multiPatchView">
               <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>YJ+MinMax</h5></div>
+              <div className="section-dttitle-header"><h5>100</h5></div>
               </div>
               <div className="multiPartView">
                 <MultiPatchVisualization 
