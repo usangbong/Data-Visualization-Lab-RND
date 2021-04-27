@@ -28,6 +28,8 @@ from scipy.stats import entropy
 from flask import *
 from flask_cors import CORS
 
+import pythons.models.IttiKoch1998.pySaliencyMap as pySaliencyMap
+# import pythons.models.IttiKoch1998.pySaliencyMapDefs as pySaliencyMapDefs
 
 # init dataset name, feature types, and stimulus type
 STI_DATASET = ""
@@ -44,6 +46,45 @@ if __name__ == '__main__':
   app.config['TEMPLATES_AUTO_RELOAD'] = True
   app.run(debug=True)
 CORS(app)
+
+############################
+# saliency model functions #
+############################
+def gen_saliency_map(model_name, stimulus, outPath):
+  if model_name == "IttiKoch1998":
+    saliency_IttiKoch1998(stimulus, outPath)
+  else:
+    print("ERROR: unavailable saliency model selected")
+
+def saliency_IttiKoch1998(stimulus, outPath):
+  stiHeight, stiWidth = stimulus.shape[:2]
+  sm = pySaliencyMap.pySaliencyMap(stiWidth, stiHeight)
+  saliencyMap = sm.SMgetSM(stimulus)
+  cvtedImg = cv2.convertScaleAbs(saliencyMap, alpha=(255.0))
+  cv2.imwrite(outPath, cvtedImg)
+
+def gen_difference_map(gt, sm, outPath):
+  dm = gt.copy()
+  if len(gt) == len(sm) and len(gt[0]) == len(sm[0]):
+    for i in range(0, len(dm)):
+      for j in range(0, len(dm[i])):
+        BLACK_COLOR = np.array([0, 0, 0])
+        replaceArr = np.array([0, 0, 0])
+        if np.array_equal(dm[i][j], sm[i][j]) and np.array_equal(dm[i][j], BLACK_COLOR):
+          continue
+        elif not(np.array_equal(dm[i][j], BLACK_COLOR)) and not(np.array_equal(sm[i][j], BLACK_COLOR)):
+          replaceArr = np.array([228, 26, 28])
+        elif not(np.array_equal(dm[i][j], BLACK_COLOR)) and np.array_equal(sm[i][j], BLACK_COLOR):
+          replaceArr = np.array([55, 126, 184])
+        elif np.array_equal(dm[i][j], BLACK_COLOR) and not(np.array_equal(sm[i][j], BLACK_COLOR)):
+          replaceArr = np.array([77, 175, 74])
+        else:
+          replaceArr = np.array([255, 255, 255])
+        dm[i][j] = replaceArr
+  else:
+    print("ERROR: different shape")
+  cv2.imwrite(outPath, dm)
+
 
 ########################################
 # saliency evaluation metirc fucntions #
@@ -901,7 +942,7 @@ def clustering_processingMultiParams():
     featureDFList = []
     for _f in FEATURE_ordered:
       featureFilePath = featureDirPath + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
-      featureDF = pd.read_csv(featureFilePath)
+      featureDF = pd.read_csv(featureFilePath, header=None)
       featureDFList.append(featureDF)
     
     featureDirPath = "./static/feature/"
@@ -1062,7 +1103,7 @@ def clustering_processingMulti():
           featureDFList = []
           for _f in FEATURE_ordered:
             featureFilePath = featureDirPath + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
-            featureDF = pd.read_csv(featureFilePath)
+            featureDF = pd.read_csv(featureFilePath, header=None)
             featureDFList.append(featureDF)
           PARTICIPANT_LIST = []
           
@@ -1207,7 +1248,7 @@ def clustering_processing():
         featureDFList = []
         for _f in FEATURE_ordered:
           featureFilePath = featureDirPath + _f +"/"+ dataName +"/"+ className +"/"+ stiName +".csv"
-          featureDF = pd.read_csv(featureFilePath)
+          featureDF = pd.read_csv(featureFilePath, header=None)
           featureDFList.append(featureDF)
 
         PARTICIPANT_LIST = []
@@ -1473,6 +1514,101 @@ def processing_gen_fixationDataList():
     print(e)
   return json.dumps(response)
 
+@app.route('/api/processing/loadAllFixationDataList', methods=['POST'])
+def processing_load_allFixationDataList():
+  global PARTICIPANT
+  print(request.form)
+  response = {}
+  try:
+    GET_STI_NAMES = request.form['stiList']
+    split_sti_names = GET_STI_NAMES.split("-")
+    sti_files_list = []
+    for sti in split_sti_names:
+      datasetName = sti.split("/")[0]
+      semanticClassName = sti.split("/")[1]
+      stiName = sti.split("/")[2].split(".")[0]
+      stiExt = sti.split("/")[2].split(".")[1]
+      sti_files_list.append([datasetName, semanticClassName, stiName, stiExt])
+
+    PARTICIPANT = []
+    for sti in sti_files_list:
+      _path = './static/fix/'+ sti[0] +"/"+ sti[1] +"/"+ sti[2] +"_"+ sti[3] +"/"
+      if not(os.path.exists(_path)):
+        continue
+      participantList = os.listdir(_path)
+      for _p in participantList:
+        _pdata = sti[0] +"/"+ sti[1] +"/"+ sti[2] +"_"+ sti[3] +"/" + _p.split(".")[0]
+        PARTICIPANT.append(_pdata)
+
+    # generate fixations (scanpath) data list
+    PARTICIPANT_FIX_FILE_LIST = []
+    for _participant in PARTICIPANT:
+      split_pData = _participant.split("/")
+      sDataset = split_pData[0]
+      sSemanticClass = split_pData[1]
+      sFixDirName = split_pData[2]
+      sParticipantFixFileName = split_pData[3] +".csv"
+      fixFilePath = "./static/fix/"+ sDataset +"/"+ sSemanticClass +"/"+ sFixDirName +"/"+ sParticipantFixFileName
+      if not(os.path.exists(fixFilePath)):
+        continue
+      PARTICIPANT_FIX_FILE_LIST.append([split_pData, fixFilePath])
+    FIX_DATA_LIST = []
+    for fixFilePath in PARTICIPANT_FIX_FILE_LIST:
+      _id = fixFilePath[0]
+      _path = fixFilePath[1]
+      df = pd.read_csv(_path, header=None)
+      dfList = df.values.tolist()
+      FIX_DATA_LIST.append([_id, dfList])
+
+    # generate aggregated fixation patches image
+    fixatedPatchPath = "./static/output_image_patch/"
+    patchPos = 0
+    aggregatedPatchImage = 0
+    aggregatedPatchPath = "./static/__cache__/aggregated_patch.png"
+    # patchInfo = []
+    firstFlag = True
+    for i in range(0, len(FIX_DATA_LIST)):
+      fixData = FIX_DATA_LIST[i]
+      dataName = fixData[0][0]
+      className = fixData[0][1]
+      stiName = fixData[0][2]
+      userId = fixData[0][3]
+      patchDirPath = fixatedPatchPath + dataName +"/"+ className +"/"+ stiName +"/"
+      scanpath = fixData[1]
+      _fixs = []
+      for j in range(0, len(scanpath)):
+        _fixs.append({'index': str(j).zfill(3), 'px': patchPos, 'py': 0})
+        patchPath = patchDirPath + userId +"_"+ str(j).zfill(3) +".png"
+        # print(patchPath)
+        patch = 0
+        if os.path.exists(patchPath):
+          patch = cv2.imread(patchPath)
+          if firstFlag == True:
+            aggregatedPatchImage = patch.copy()
+            patchPos = patchPos+PATCH_SIZE
+            firstFlag = False
+            continue
+        else:
+          patch = np.empty((PATCH_SIZE, PATCH_SIZE, 3), dtype=np.uint8)
+          if firstFlag == True:
+            aggregatedPatchImage = patch.copy()
+            patchPos = patchPos+PATCH_SIZE
+            firstFlag = False
+            continue
+        processAggImg = np.hstack((aggregatedPatchImage, patch))
+        aggregatedPatchImage = processAggImg.copy()
+        patchPos = patchPos+PATCH_SIZE
+      FIX_DATA_LIST[i].append(_fixs)
+    cv2.imwrite(aggregatedPatchPath, aggregatedPatchImage)
+    
+    response['status'] = 'success'
+    response['participantList'] = PARTICIPANT
+    response['fixDataList'] = FIX_DATA_LIST
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+  return json.dumps(response)
 
 @app.route('/api/processing/loadFixationDataList', methods=['POST'])
 def processing_load_fixationDataList():
@@ -1635,6 +1771,87 @@ def overview_calc():
     
     response['status'] = 'success'
     response['overview'] = OVERVIEW_COUNT_LIST
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+
+  return json.dumps(response)
+
+#######################
+# saliency model APIs #
+#######################
+@app.route('/api/saliency/updateModelSet', methods=['POST'])
+def saliency_updateModelSet():
+  print("saliency_updateModelSet")
+  print(request.form)
+  response = {}
+  try:
+    SELECTED_SALIENCY_MODEL = request.form['saliencyModel']
+    SELECTED_STIMULUS_INFO = request.form['stimulusInfo']
+    SELECTED_DATA_TRANSFORMATION_METHOD = request.form['dtMethod']
+    data_transformation_method = "raw"
+    if SELECTED_DATA_TRANSFORMATION_METHOD != "":
+      data_transformation_method = SELECTED_DATA_TRANSFORMATION_METHOD
+
+    stiInfoSplit = SELECTED_STIMULUS_INFO.split("/")
+    datasetName = stiInfoSplit[0]
+    semanticClassName = stiInfoSplit[1]
+    stimulusFileName = stiInfoSplit[2]
+    stimulusName = stiInfoSplit[2].split(".")[0]
+    stimulusExe = stiInfoSplit[2].split(".")[1]
+    stimulusDirName = stimulusName +"_"+ stimulusExe
+    
+    # load stimulus
+    stiPath = "./static/stimulus/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusFileName
+    stimulus = cv2.imread(stiPath)
+    stiHeight, stiWidth = stimulus.shape[:2]
+    # generate and load saliency map
+    smPath = "./static/models/"+ SELECTED_SALIENCY_MODEL +"/"+ datasetName +"-"+ semanticClassName +"-"+ stimulusFileName
+    gen_saliency_map(SELECTED_SALIENCY_MODEL, stimulus, smPath)
+    sm = cv2.imread(smPath)
+    # load ground truth fixation map
+    gtPath = "./static/ground_truth/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
+    gt = cv2.imread(gtPath)
+    # generate difference map
+    dmPath = "./static/__cache__/difference_map.png"
+    gen_difference_map(gt, sm, dmPath)
+    # load feature data
+    featureDFList = []
+    featureDir = "./static/feature/"
+    for _f in FEATURE_ordered:
+      featurePath = featureDir + _f + datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+      featureDF = pd.read_csv(featurePath, header=None)
+      featureDFList.append(featureDF)
+    # load fixation data on stimulus
+    fixDir = "./static/fix/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
+    observerList = os.listdir(fixDir)
+    fixationDfList = []
+    for obFileName in observerList:
+      _path = fixDir + obFileName
+      ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ obFileName
+      fixDF = pd.read_csv(_path, header=None)
+      fixationDfList.append(fixDF)
+      
+    fixationDataList = []
+    for i in range(0, len(fixationDfList)):
+      for _fp in fixationDfList[i].values.tolist():
+        _x = int(_fp[0])
+        _y = int(_fp[1])
+        _t = float(_fp[2])
+        _label_gt = label_groundTruthFixationMap(gt, _x, _y)
+        _label_sm = label_groundTruthFixationMap(sm, _x, _y)
+        obFixList = [ob, _x, _y, _t, _label_gt, _label_sm]
+        for j in range(0, len(FEATURE_ordered)):
+          fMean = getFeatureMeanVal(featureDFList[j], _x, _y, stiWidth, stiHeight, PATCH_SIZE)
+          obFixList.append(fMean)
+        fixationDataList.append(obFixList)
+    
+    response['status'] = 'success'
+    response['smPath'] = smPath.split(".")[1]+"."+smPath.split(".")[2]
+    response['gtPath'] = gtPath.split(".")[1]+"."+gtPath.split(".")[2]
+    response['dmPath'] = dmPath.split(".")[1]+"."+dmPath.split(".")[2]
+    response['patchDataList'] = fixationDataList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
