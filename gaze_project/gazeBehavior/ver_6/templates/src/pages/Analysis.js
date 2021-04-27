@@ -8,8 +8,8 @@ import { AlphaPicker, SketchPicker } from 'react-color';
 // https://casesandberg.github.io/react-color/#api
 
 import Heatmap from 'components/Heatmap';
-import PatchVisualization from 'components/PatchVisualization';
-import MultiPatchVisualization from 'components/MultiPatchVisualization';
+// import PatchVisualization from 'components/PatchVisualization';
+// import MultiPatchVisualization from 'components/MultiPatchVisualization';
 import ScanpathVisualization from 'components/ScanpathVisualization';
 import BoxPlot from 'components/BoxPlot';
 // import LineChart from 'components/LineChart';
@@ -51,18 +51,26 @@ const select_option_scanpathSimilarity = [
 
 const select_option_analysisStyle = [
   { value:'scanpath', label: 'Scanpath Analysis' },
-  { value:'patch', label: 'Patch Analysis' }
+  { value:'patch', label: 'Patch Analysis' },
+  { value:'model', label: 'Computational Model Analysis' },
 ];
 
-const select_option_patchView = [
-  { value:'multi', label: 'Multi View' },
-  { value:'single', label: 'Single View' }
+const select_option_saliencyModels = [
+  { value:'IttiKoch1998', label: 'IttiKoch 1998' },
+  { value:'add1', label: 'ADD1' },
+  { value:'add2', label: 'ADD2' },
+  { value:'add3', label: 'ADD3' }
 ];
 
-const select_option_useCache = [
-  { value:'use', label: 'Use cache file' },
-  { value:'not', label: 'Do not use cache file' }
-];
+// const select_option_patchView = [
+//   { value:'multi', label: 'Multi View' },
+//   { value:'single', label: 'Single View' }
+// ];
+
+// const select_option_useCache = [
+//   { value:'use', label: 'Use cache file' },
+//   { value:'not', label: 'Do not use cache file' }
+// ];
 
 const select_option_dataTransformation = [
   { value:'raw', label: 'Raw data' },
@@ -103,6 +111,7 @@ class Analysis extends React.Component {
       select_participant: [],
       select_patchView: null,
       select_useCache: null,
+      select_saliencyModel: null,
       // select_cacheFile: null,
       select_scanpathSimilarityMetohd: null,
       select_main_scanpath: null,
@@ -119,6 +128,7 @@ class Analysis extends React.Component {
       select_isDisabled_dataTransformation: true,
       select_isDisabled_dimensionReduction: true,
       select_isDisabled_useCache: true,
+      select_isDisabled_saliencyModel: true,
       // select_isDisabled_cacheFile: true,
       select_option_participant: [],
       select_option_stiClass: [],
@@ -182,6 +192,8 @@ class Analysis extends React.Component {
       ],
       selectedObserverFlag: false,
       selectedObserver: [],
+      saliencyMapURL: [],
+      differenceMapURL: [],
     };
   }
 
@@ -456,8 +468,9 @@ class Analysis extends React.Component {
 
       const data = new FormData();
       data.set('stiList', stiList_str);
-      axios.post(`http://${window.location.hostname}:5000/api/processing/loadFixationDataList`, data)
+      axios.post(`http://${window.location.hostname}:5000/api/processing/loadAllFixationDataList`, data)
       .then(response => {
+        // console.log("response.data.participantList");
         // console.log(response.data.participantList);
         let getParticipantList = response.data.participantList;
         // console.log(getParticipantList);
@@ -493,6 +506,36 @@ class Analysis extends React.Component {
           select_isDisabled_participant: false
         });
         
+        // console.log("response.data.fixDataList");
+        // console.log(response.data.fixDataList);
+        let getFixDataList = response.data.fixDataList;
+        let scanpathDataList = [];
+        for(let i=0; i<getFixDataList.length; i++){
+          let _fixs = getFixDataList[i][1];
+          let _id = getFixDataList[i][0][0]+"/"+getFixDataList[i][0][1]+"/"+getFixDataList[i][0][2]+"/"+getFixDataList[i][0][3];
+          let _cFixs = [];
+          for(let j=0; j<_fixs.length; j++){
+            var _f = {
+              id: _id+"/"+j,
+              clu: 0,
+              x: _fixs[j][0],
+              y: _fixs[j][1]
+            };
+            _cFixs.push(_f);
+          }
+          let _fixData = {
+            rId: _id,
+            rClu: 0,
+            scanpath: _cFixs
+          };
+          scanpathDataList.push(_fixData);
+        }
+        this.setState({
+          scanpathList: scanpathDataList
+        });
+        this.setState({
+          select_isDisabled_useCache: false
+        });
       }).catch(error => {
         alert(`Error - ${error.message}`);
       });
@@ -730,44 +773,12 @@ class Analysis extends React.Component {
     console.log("select_onChange_useCache");
     this.setState({select_useCache});
     if(select_useCache !== null && select_useCache !== undefined){
-      // let _cacheFlag = true;
-      // if(select_useCache.value == 'use'){
-      //   _cacheFlag = true;
-      //   axios.post(`http://${window.location.hostname}:5000/api/clustering/loadCacheList`)
-      //   .then(response => {
-      //     // console.log(response.data);
-      //     let getCacheFileList = response.data.caches;
-      //     let loadedCacheList = [];
-      //     for(let i=0; i<getCacheFileList.length; i++){
-      //       let _c ={
-      //         value: getCacheFileList[i],
-      //         label: getCacheFileList[i]
-      //       };
-      //       loadedCacheList.push(_c);
-      //     }
-      //     this.setState({
-      //       select_option_cacheFile: loadedCacheList
-      //     });
-      //     this.setState({
-      //       select_isDisabled_cacheFile: false
-      //     });
-          
-      //   }).catch(error => {
-      //     alert(`Error - ${error.message}`);
-      //   });
-      // }else{
-      //   _cacheFlag = false;
-      // }
-      // _cacheFlag = false;
       this.setState({
         select_isDisabled_dataTransformation: false
       });
       this.setState({
         select_isDisabled_dimensionReduction: false
       });
-      // this.setState({
-      //   select_isDisabled_cacheFile: true
-      // });
     }
   }
 
@@ -786,20 +797,6 @@ class Analysis extends React.Component {
     });
   }
 
-  // select_onChange_cacheFile = select_cacheFile =>{
-  //   console.log("select_onChange_cacheFile");
-  //   this.setState({select_cacheFile});
-  //   let _cacheFilePath = `http://${window.location.hostname}:5000`+"/static/__cache__/pcache/"+select_cacheFile.value+"?"+Math.random();
-  //   this.setState({
-  //     cacheFilePath: _cacheFilePath
-  //   });
-  //   axios.post(_cacheFilePath)
-  //   .then(response => {
-  //     console.log(response.data);
-  //   }).catch(error => {
-  //     alert(`Error - ${error.message}`);
-  //   });
-  // }
 
   run_patch_processing = (pView, tMethod, drMethod) =>{
     console.log("run_patch_processing")
@@ -1127,6 +1124,78 @@ class Analysis extends React.Component {
   select_onChanged_analysisStyle = select_analysisStyle =>{
     console.log("select_onChanged_analysisStyle");
     this.setState({select_analysisStyle});
+    if(select_analysisStyle.value == "model"){
+      this.setState({
+        select_isDisabled_saliencyModel: false
+      });
+    }else{
+      this.setState({
+        select_isDisabled_saliencyModel: true
+      });
+    }
+  }
+
+  select_onChanged_saliencyModel = select_saliencyModel =>{
+    console.log("select_onChanged_saliencyModel");
+    this.setState({select_saliencyModel});
+    const data = new FormData();
+    data.set('saliencyModel', select_saliencyModel.value);
+    data.set('stimulusInfo', this.state.select_stiName[0].value);
+    data.set('dtMethod', "");
+    axios.post(`http://${window.location.hostname}:5000/api/saliency/updateModelSet`, data)
+    .then(response => {
+      console.log(response.data);
+      this.setState({
+        patchDataList: response.data.patchDataList
+      });
+      let _smUrl = `http://${window.location.hostname}:5000/`+ response.data.smPath +"?"+ Math.random();
+      let stiWidth = this.state.select_stiName[0].value.split("/")[3].split("_")[0];
+      let stiHeight = this.state.select_stiName[0].value.split("/")[3].split("_")[1];
+      let smList = [];
+      smList.push({
+        url: _smUrl,
+        width: stiWidth,
+        height: stiHeight
+      });
+      this.setState({
+        saliencyMapURL: smList
+      });
+      let _gtUrl = `http://${window.location.hostname}:5000/`+ response.data.gtPath +"?"+ Math.random();
+      let gtList = [];
+      gtList.push({
+        url: _gtUrl,
+        width: stiWidth,
+        height: stiHeight
+      });
+      this.setState({
+        humanFixationMapURL: gtList
+      });
+      let datasetName = this.state.select_stiName[0].value.split("/")[0];
+      let semanticClassName = this.state.select_stiName[0].value.split("/")[1];
+      let stiFileName = this.state.select_stiName[0].value.split("/")[2];
+      let _stiUrl = `http://${window.location.hostname}:5000/static/stimulus`+ datasetName+"/"+semanticClassName+"/"+stiFileName +"?"+ Math.random();
+      let stiList = [];
+      stiList.push({
+        url: _stiUrl,
+        width: stiWidth,
+        height: stiHeight
+      });
+      this.setState({
+        stiURL: stiList
+      });
+      let _dmUrl = `http://${window.location.hostname}:5000/`+ response.data.dmPath +"?"+ Math.random();
+      let dmList = [];
+      dmList.push({
+        url: _dmUrl,
+        width: stiWidth,
+        height: stiHeight
+      });
+      this.setState({
+        differenceMapURL: dmList
+      });
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
   }
 
   select_onChanged_humanFixationMapStyle = select_humanFixationMapStyle =>{
@@ -1190,9 +1259,6 @@ class Analysis extends React.Component {
       alphapicker_parallelAlpha_label1: color.rgb.a
     });
   }
-  // tempFunction = (color) =>{
-  //   this.setState({tempColor:color.rgb});
-  // }
 
   rgbToHex = (red, green, blue) =>{
     const rgb = (red << 16) | (green << 8) | (blue << 0);
@@ -1218,13 +1284,6 @@ class Analysis extends React.Component {
     });
   }
 
-  // colorEncodingFlagChange = (_flag, _idx) =>{
-  //   let _dcp = this.state.displayColorPickers;
-  //   _dcp[_idx] = _flag;
-  //   this.setState({
-  //     displayColorPickers: _dcp
-  //   });
-  // }
 
   colorEncodingRGBChange = (_rgb, _idx) =>{
     let _ce = [];
@@ -1334,27 +1393,35 @@ class Analysis extends React.Component {
     // overview
     const { select_overview, overviewCountDataList, onFlag_overview_asv, onFlag_overview_scanpath, onFlag_overview_patch_total, onFlag_overview_patch_on, onFlag_overview_patch_out } = this.state;
     // data filter select
-    const { select_stiDataset, select_participant, select_semanticClass, select_stiName } = this.state;
-    const { select_option_participant, select_option_stiClass, select_option_stiName } = this.state;
-    const { select_isDisabled_participant, select_isDisabled_semanticClass, select_isDisabled_stiName } = this.state;
+    const { select_stiDataset, select_semanticClass, select_stiName } = this.state;
+    const { select_option_stiClass, select_option_stiName } = this.state;
+    const { select_isDisabled_semanticClass, select_isDisabled_stiName } = this.state;
+    // const { select_participant, select_option_participant, select_isDisabled_participant } = this.state;
+
     // sp heatmap
     const { spDataURL, FEATURE_LIST, STI_CLASS_LIST} = this.state;
+
     // analysis style setting
     const { select_analysisStyle, selectedObserver } = this.state;
     const { colorEncodings, alphaPicker_stimulusColor, alphaPicker_stimulusAlpha, alphapicker_patchBoxAlpha, alphapicker_patchBoxColor } = this.state;
     const { displayColorPicker_0, displayColorPicker_1, displayColorPicker_2, displayColorPicker_3, displayColorPicker_4, displayColorPicker_5, displayColorPicker_6, displayColorPicker_7 } = this.state;
     const { colorEncoding_0, colorEncoding_1, colorEncoding_2, colorEncoding_3, colorEncoding_4, colorEncoding_5, colorEncoding_6, colorEncoding_7 } = this.state;
+    
     // scanpath visualization
     const { stiURL, scanpathList } = this.state;
-    // scanpath similarity
     const { select_main_scanpath, select_isDisabled_mainScanpath, select_option_mainScanpath, select_scanpathSimilarityMetohd, select_isDisabled_scanpathSimilarity } = this.state;
+    const { select_patchView, select_humanFixationMapStyle } = this.state;
+    
     // patch clustering
-    const { select_patchView, patchDataList_multi, multiPatchViewSelectedFlag, cacheFileList, select_useCache, select_dataTransformation, select_dimensionReduction } = this.state;
-    // const { select_cacheFile, select_option_cacheFile, select_isDisabled_cacheFile } = this.state;
-    const { select_humanFixationMapStyle, selectedObserverFlag } = this.state;
-    // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
-    const { select_isDisabled_useCache, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
     const { patchDataList, select_patchImageFlag, humanFixationMapURL, rawDataList } = this.state;
+    // const { patchDataList_multi, multiPatchViewSelectedFlag, cacheFileList, select_useCache, select_dataTransformation, select_dimensionReduction, selectedObserverFlag } = this.state;
+    // const { select_cacheFile, select_option_cacheFile, select_isDisabled_cacheFile } = this.state;
+    // const { select_isDisabled_useCache, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
+    // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
+    
+    // saliency model
+    const { select_saliencyModel, select_isDisabled_saliencyModel } = this.state;
+
     // saliency features visualization
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
     const { alphapicker_parallelColor, alphapicker_parallelColor_label0, alphapicker_parallelColor_label1, alphapicker_parallelAlpha, alphapicker_parallelAlpha_label0, alphapicker_parallelAlpha_label1 } = this.state;
@@ -1666,22 +1733,21 @@ class Analysis extends React.Component {
           classNamePrefix="select"
           placeholder="Visual stimulus"
         />
-        <Select 
-          value={select_participant}
-          isDisabled={select_isDisabled_participant}
-          isMulti
-          options={select_option_participant}
-          onChange={this.select_onChanged_participant}
-          className="basic-multi-select"
-          classNamePrefix="select"
-          placeholder="Observer ID"
-        />
         <Select
           value={select_analysisStyle}
           options={select_option_analysisStyle}
           onChange={this.select_onChanged_analysisStyle}
           placeholder="Analysis mode"
         />
+        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "model" &&
+        <Select
+          value={select_saliencyModel}
+          options={select_option_saliencyModels}
+          isDisabled={select_isDisabled_saliencyModel}
+          onChange={this.select_onChanged_saliencyModel}
+          placeholder="Saliency model"
+        />
+        }
         { onFlag_overview_asv == true && select_stiDataset !== null && select_stiDataset !== undefined && select_stiDataset.length !=0 && 
         <div className="section-header">
           <h4> Analysis of Spatial Variance </h4>
@@ -1841,7 +1907,7 @@ class Analysis extends React.Component {
         </div>
         }
       </div>
-      
+
 
       {/* col 2 */}
       <div className="dataVisualizationWrap">
@@ -1889,648 +1955,150 @@ class Analysis extends React.Component {
           </div>
         </div>
         }
+
         { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
         <div className="section-header">
           <h4> Patch Visualization View </h4>
         </div>
         }
-        { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
         <div className="patchVisualizationViewWrap">
-          { patchDataList.length != 0 && select_patchView != null && select_patchView != undefined && select_patchView.value == "single" &&
           <div className="patchView">
-            <PatchVisualization 
-              width={900}
-              height={600}
-              patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-              patchList={patchDataList}
-              patchDrawFlag={select_patchImageFlag.value}
-              patchBoxOpacity={alphapicker_patchBoxAlpha}
-              colorEncoding={colorEncodings}
-              selectedObserver={selectedObserver}
-            />
+
           </div>
-          }
-          { patchDataList_multi.length == 25 && cacheFileList.length == 25 && select_patchView != null && select_patchView != undefined && select_patchView.value == "multi" &&
-          <div className="multiPatchVisWrap">
-            <div className="drTitleDiv">
-              <div className="section-drnulltitle-header"></div>
-              <div className="section-drtitle-header"><h5> 30 </h5></div>
-              <div className="section-drtitle-header"><h5> 50 </h5></div>
-              <div className="section-drtitle-header"><h5> 70 </h5></div>
-              <div className="section-drtitle-header"><h5> 100 </h5></div>
-              <div className="section-drtitle-header"><h5> 200 </h5></div>
-              
-            </div>
-            <div className="multiPatchView">
-              <div className="dtTitleDiv">
-                <div className="section-dttitle-header"><h5>12</h5></div>
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[0]}
-                  cacheFilePath={cacheFileList[0]}
-                  divSelectFlag={multiPatchViewSelectedFlag[0]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[1]}
-                  cacheFilePath={cacheFileList[1]}
-                  divSelectFlag={multiPatchViewSelectedFlag[1]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[2]}
-                  cacheFilePath={cacheFileList[2]}
-                  divSelectFlag={multiPatchViewSelectedFlag[2]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[3]}
-                  cacheFilePath={cacheFileList[3]}
-                  divSelectFlag={multiPatchViewSelectedFlag[3]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[4]}
-                  cacheFilePath={cacheFileList[4]}
-                  divSelectFlag={multiPatchViewSelectedFlag[4]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-            </div>
-            <div className="multiPatchView">
-              <div className="dtTitleDiv">
-                <div className="section-dttitle-header"><h5>15</h5></div>
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[5]}
-                  cacheFilePath={cacheFileList[5]}
-                  divSelectFlag={multiPatchViewSelectedFlag[5]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[6]}
-                  cacheFilePath={cacheFileList[6]}
-                  divSelectFlag={multiPatchViewSelectedFlag[6]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[7]}
-                  cacheFilePath={cacheFileList[7]}
-                  divSelectFlag={multiPatchViewSelectedFlag[7]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[8]}
-                  cacheFilePath={cacheFileList[8]}
-                  divSelectFlag={multiPatchViewSelectedFlag[8]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-              <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[9]}
-                  cacheFilePath={cacheFileList[9]}
-                  divSelectFlag={multiPatchViewSelectedFlag[9]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-            </div>
-            <div className="multiPatchView">
-              <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>20</h5></div>
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[10]}
-                  cacheFilePath={cacheFileList[10]}
-                  divSelectFlag={multiPatchViewSelectedFlag[10]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[11]}
-                  cacheFilePath={cacheFileList[11]}
-                  divSelectFlag={multiPatchViewSelectedFlag[11]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[12]}
-                  cacheFilePath={cacheFileList[12]}
-                  divSelectFlag={multiPatchViewSelectedFlag[12]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[13]}
-                  cacheFilePath={cacheFileList[13]}
-                  divSelectFlag={multiPatchViewSelectedFlag[13]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[14]}
-                  cacheFilePath={cacheFileList[14]}
-                  divSelectFlag={multiPatchViewSelectedFlag[14]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-            </div>
-            <div className="multiPatchView">
-              <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>25</h5></div>
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[15]}
-                  cacheFilePath={cacheFileList[15]}
-                  divSelectFlag={multiPatchViewSelectedFlag[15]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[16]}
-                  cacheFilePath={cacheFileList[16]}
-                  divSelectFlag={multiPatchViewSelectedFlag[16]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[17]}
-                  cacheFilePath={cacheFileList[17]}
-                  divSelectFlag={multiPatchViewSelectedFlag[17]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[18]}
-                  cacheFilePath={cacheFileList[18]}
-                  divSelectFlag={multiPatchViewSelectedFlag[18]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[19]}
-                  cacheFilePath={cacheFileList[19]}
-                  divSelectFlag={multiPatchViewSelectedFlag[19]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-            </div>
-            <div className="multiPatchView">
-              <div className="dtTitleDiv">
-              <div className="section-dttitle-header"><h5>100</h5></div>
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[20]}
-                  cacheFilePath={cacheFileList[20]}
-                  divSelectFlag={multiPatchViewSelectedFlag[20]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[21]}
-                  cacheFilePath={cacheFileList[21]}
-                  divSelectFlag={multiPatchViewSelectedFlag[21]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[22]}
-                  cacheFilePath={cacheFileList[22]}
-                  divSelectFlag={multiPatchViewSelectedFlag[22]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[23]}
-                  cacheFilePath={cacheFileList[23]}
-                  divSelectFlag={multiPatchViewSelectedFlag[23]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-              <div className="multiPartView">
-                <MultiPatchVisualization 
-                  width={176}
-                  height={116}
-                  patchURLs={`http://${window.location.hostname}:5000/static/__cache__/aggregated_patch.png?`+Math.random()}
-                  patchList={patchDataList_multi[24]}
-                  cacheFilePath={cacheFileList[24]}
-                  divSelectFlag={multiPatchViewSelectedFlag[24]}
-                  patchDrawFlag={select_patchImageFlag.value}
-                  patchBoxOpacity={alphapicker_patchBoxAlpha}
-                  colorEncoding={colorEncodings}
-                  divSelectFlagUpdateFunction={this.multiPatch_divSelectUpdate}
-                  selectedObserver={selectedObserver}
-                />
-              </div>
-            </div>
-          </div>
-          }
           <div className="patchViewControl">
-          { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && 
-            <Select
-              value={select_patchView}
-              options={select_option_patchView}
-              onChange={this.select_onChange_patchView}
-              placeholder="Patch view style"
-            />
-          }
-          { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && select_patchView != null && select_patchView != undefined && select_patchView.value == "single" &&
-            <Select
-              value={select_useCache}
-              isDisabled={select_isDisabled_useCache}
-              options={select_option_useCache}
-              onChange={this.select_onChange_useCache}
-              placeholder="Use cache file or not"
-            />
-          }
-          
-          { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "patch" && select_patchView != null && select_patchView != undefined &&
-          <div>
-          <Select
-            value={select_dataTransformation}
-            isDisabled={select_isDisabled_dataTransformation}
-            options={select_option_dataTransformation}
-            onChange={this.select_onChanged_dataTransformation}
-            placeholder="Transformation method"
-          />
-          <Select
-            value={select_dimensionReduction}
-            isDisabled={select_isDisabled_dimensionReduction}
-            options={select_option_dimensionReduction}
-            onChange={this.select_onChanged_dimensionReduction}
-            placeholder="Dimension reduction method"
-          />
-          </div>
-          }
-          { select_patchView != null && select_patchView != undefined &&
-          <div>
-            <Select
-              value={select_patchImageFlag}
-              options={select_option_patchImageFlag}
-              onChange={this.select_onChanged_patchImageFlag}
-              placeholder="Fixated image patch style"
-            />
-            <AlphaPicker
-              width={280}
-              color={alphapicker_patchBoxColor}
-              onChange={this.alphaPicker_onChange_patchBoxAlpha}
-            />
-            </div>
-          }
-          { humanFixationMapURL.length != 0 && rawDataList.length != 0 &&
-          <div>
-            <Select
-              value={select_humanFixationMapStyle}
-              options={select_option_humanFixationMapStyle}
-              onChange={this.select_onChanged_humanFixationMapStyle}
-            />
-            <HumanFixationMap
-              width={280}
-              height={160}
-              humanFixationMapURL={humanFixationMapURL}
-              patchDataList={rawDataList}
-              colorEncoding={colorEncodings}
-              patchDrawFlag={select_patchImageFlag.value}
-              patchBoxOpacity={alphapicker_patchBoxAlpha}
-              selectedObserver={selectedObserver}
-            />
-          </div>
-          }
-          {patchesOutsideHumanFixationMap.length != 0 &&
-          <HorizontalBarChart
-            width={280}
-            height={220}
-            patchOutsideData={patchesOutsideHumanFixationMap}
-            colorEncoding={colorEncodings}
-            selectedObserver={selectedObserver}
-            observerSelectFunction={this.observerSelectFunction}
-          />
-          }
-          </div>
-        </div>
-        }
-        <div className="section-header">
-          <h4> Saliency Feature Visualization View </h4>
-        </div>
-        <div className="saliencyVisualizationWrap">
-          { cacheFilePath !== "" && patchDataList.length != 0 &&
-          <div className="visualizationDiv">
-            <div className="pcVisView">
-              <BrushParallelCoordinateChart
-                width={900}
-                height={360}
-                patchDataFileURL={cacheFilePath}
+            { select_patchView != null && select_patchView != undefined &&
+            <div>
+              <Select
+                value={select_patchImageFlag}
+                options={select_option_patchImageFlag}
+                onChange={this.select_onChanged_patchImageFlag}
+                placeholder="Fixated image patch style"
+              />
+              <AlphaPicker
+                width={280}
+                color={alphapicker_patchBoxColor}
+                onChange={this.alphaPicker_onChange_patchBoxAlpha}
+              />
+              </div>
+            }
+            { humanFixationMapURL.length != 0 && rawDataList.length != 0 &&
+            <div>
+              <Select
+                value={select_humanFixationMapStyle}
+                options={select_option_humanFixationMapStyle}
+                onChange={this.select_onChanged_humanFixationMapStyle}
+              />
+              <HumanFixationMap
+                width={280}
+                height={160}
+                humanFixationMapURL={humanFixationMapURL}
+                patchDataList={rawDataList}
                 colorEncoding={colorEncodings}
-                patchLineOpacity={alphapicker_parallelAlpha}
-                lineOpacity_label0={alphapicker_parallelAlpha_label0}
-                lineOpacity_label1={alphapicker_parallelAlpha_label1}
+                patchDrawFlag={select_patchImageFlag.value}
+                patchBoxOpacity={alphapicker_patchBoxAlpha}
                 selectedObserver={selectedObserver}
               />
             </div>
-            <div className="countTextDiv">
-              <div className="section-subtitle-header">
-                <h5> All patches: - {patchDataList.length} </h5>
-              </div>
-              <div className="section-subtitle-header">
-                <h5> Patches on HFM: {patchesOnHumanFixationMap.length} </h5>
-              </div>
-              <div className="section-subtitle-header">
-                <h5> Patches outside on HFM: {patchesOutsideHumanFixationMap.length} </h5>
-              </div>
-            </div>
-            <div className="boxVisView">
-              <BoxPlot
-                width={300}
-                height={140}
-                patchDataList={patchDataList}
-                colorEncoding={colorEncodings}
-              />
-              <BoxPlot
-                width={300}
-                height={140}
-                patchDataList={patchesOnHumanFixationMap}
-                colorEncoding={colorEncodings}
-              />
-              <BoxPlot
-                width={300}
-                height={140}
-                patchDataList={patchesOutsideHumanFixationMap}
-                colorEncoding={colorEncodings}
-              />
-            </div>
-          </div>
-          }
-          { cacheFilePath !== "" && patchDataList.length != 0 &&
-          <div className="subSaliencyVisDiv">
-            { selectedObserver.length == 0 &&
-            <div><h6> Line opacity: {patchDataList.length} lines </h6></div>
             }
-            { selectedObserver.length != 0 &&
-            <div><h6> Line opacity: {selectedObserver[1]} </h6></div>
+            {patchesOutsideHumanFixationMap.length != 0 &&
+            <HorizontalBarChart
+              width={280}
+              height={220}
+              patchOutsideData={patchesOutsideHumanFixationMap}
+              colorEncoding={colorEncodings}
+              selectedObserver={selectedObserver}
+              observerSelectFunction={this.observerSelectFunction}
+            />
             }
-            <AlphaPicker
-              width={280}
-              color={alphapicker_parallelColor}
-              onChange={this.alphaPicker_onChange_parallelAlpha}
-            />
-            <div><h6>Line opacity: outside HFM </h6></div>
-            <AlphaPicker
-              width={280}
-              color={alphapicker_parallelColor_label0}
-              onChange={this.alphaPicker_onChange_parallelAlpha_label0}
-            />
-            <div><h6>Line opacity: on HFM </h6></div>
-            <AlphaPicker
-              width={280}
-              color={alphapicker_parallelColor_label1}
-              onChange={this.alphaPicker_onChange_parallelAlpha_label1}
-            />
           </div>
-          }
-
         </div>
-        
       </div>
 
+      
+      <div className="section-header">
+        <h4> Saliency Feature Visualization View </h4>
+      </div>
+      <div className="saliencyVisualizationWrap">
+        { cacheFilePath !== "" && patchDataList.length != 0 &&
+        <div className="visualizationDiv">
+          <div className="pcVisView">
+            <BrushParallelCoordinateChart
+              width={900}
+              height={360}
+              patchDataFileURL={cacheFilePath}
+              colorEncoding={colorEncodings}
+              patchLineOpacity={alphapicker_parallelAlpha}
+              lineOpacity_label0={alphapicker_parallelAlpha_label0}
+              lineOpacity_label1={alphapicker_parallelAlpha_label1}
+              selectedObserver={selectedObserver}
+            />
+          </div>
+          <div className="countTextDiv">
+            <div className="section-subtitle-header">
+              <h5> All patches: - {patchDataList.length} </h5>
+            </div>
+            <div className="section-subtitle-header">
+              <h5> Patches on HFM: {patchesOnHumanFixationMap.length} </h5>
+            </div>
+            <div className="section-subtitle-header">
+              <h5> Patches outside on HFM: {patchesOutsideHumanFixationMap.length} </h5>
+            </div>
+          </div>
+          <div className="boxVisView">
+            <BoxPlot
+              width={300}
+              height={140}
+              patchDataList={patchDataList}
+              colorEncoding={colorEncodings}
+            />
+            <BoxPlot
+              width={300}
+              height={140}
+              patchDataList={patchesOnHumanFixationMap}
+              colorEncoding={colorEncodings}
+            />
+            <BoxPlot
+              width={300}
+              height={140}
+              patchDataList={patchesOutsideHumanFixationMap}
+              colorEncoding={colorEncodings}
+            />
+          </div>
+        </div>
+        }
+        { cacheFilePath !== "" && patchDataList.length != 0 &&
+        <div className="subSaliencyVisDiv">
+          { selectedObserver.length == 0 &&
+          <div><h6> Line opacity: {patchDataList.length} lines </h6></div>
+          }
+          { selectedObserver.length != 0 &&
+          <div><h6> Line opacity: {selectedObserver[1]} </h6></div>
+          }
+          <AlphaPicker
+            width={280}
+            color={alphapicker_parallelColor}
+            onChange={this.alphaPicker_onChange_parallelAlpha}
+          />
+          <div><h6>Line opacity: outside HFM </h6></div>
+          <AlphaPicker
+            width={280}
+            color={alphapicker_parallelColor_label0}
+            onChange={this.alphaPicker_onChange_parallelAlpha_label0}
+          />
+          <div><h6>Line opacity: on HFM </h6></div>
+          <AlphaPicker
+            width={280}
+            color={alphapicker_parallelColor_label1}
+            onChange={this.alphaPicker_onChange_parallelAlpha_label1}
+          />
+        </div>
+        }
+      </div>
+      
+        
+
       {/* col 3 */}
-      <div className="featureVisualizationViewWrap">
-        {/* <div className="colorEncodeLabelDescriptionBox">
-          Salinecy feature color encode description
-        </div> */}
-        
-        
-        {/* { patchDataList.length != 0 && 
-        <div className="saliencyView_linechart">
-          <LineChart
-            width={390}
-            height={200}
-            patchDataList={patchDataList}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        } */}
-        
-        
-        {/* { patchDataList.length != 0 && 
-        <div className="saliencyView_linechart">
-          <LineChart
-            width={390}
-            height={200}
-            patchDataList={patchesOnHumanFixationMap}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        } */}
-        
-        
-        {/* { patchDataList.length != 0 && 
-        <div className="saliencyView_linechart">
-          <LineChart
-            width={390}
-            height={200}
-            patchDataList={patchesOutsideHumanFixationMap}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        } */}
+      <div className="evaluationViewWrap">
       </div>
     </>
     );
