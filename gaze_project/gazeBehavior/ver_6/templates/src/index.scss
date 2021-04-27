@@ -51,15 +51,6 @@ ul {
     // border: 1px white solid;
     background-color: white;
   }
-  .dataAbstractWrap{
-    width: 450px;
-    height: 100%;
-    margin-right: 2px;
-    box-sizing: border-box;
-    // border: 1px #BFBFBF solid;
-    // border: 1px white solid;
-    background-color: white;
-  }
   .colorSelectBox{
     display: flex;
     flex-direction: row;
@@ -141,94 +132,6 @@ ul {
       background-color: wihte;
       // border: 1px #BFBFBF solid;
     }
-    .multiPatchVisWrap{
-      // margin-left: 1px;
-      // margin-top: 1px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      box-sizing: border-box;
-      background-color: wihte;
-
-      .multiPatchView{
-        width: 900px;
-        height: 116px;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        // border: 1px #BFBFBF solid;
-        box-sizing: border-box;
-        background-color: wihte;
-      }
-      .drTitleDiv{
-        width: 900px;
-        height: 20px;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        // border: 1px #BFBFBF solid;
-        box-sizing: border-box;
-        background-color: wihte;
-        .section-drnulltitle-header {
-          margin-left: 1px;
-          margin-right: 1px;
-          margin-top: 1px;
-          margin-bottom: 1px;
-          width: 19px;
-          height: 18px;
-          background:white;
-        }
-        .section-drtitle-header {
-          margin-right: 1px;
-          margin-top: 1px;
-          margin-bottom: 1px;
-          width: 176px;
-          height: 18px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          align-content: center;
-          background:#525252;
-          color: white;
-        }
-      }
-      .dtTitleDiv{
-        width: 20px;
-        height: 116px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-        background-color: wihte;
-        .section-dttitle-header {
-          margin-left: 1px;
-          margin-right: 1px;
-          margin-bottom: 1px;
-          width: 19px;
-          height: 116px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          writing-mode: vertical-rl;
-          background:#525252;
-          color: white;
-        }
-      }
-      .multiPartView{
-        width: 176px;
-        height: 116px;
-        box-sizing: border-box;
-        background-color: wihte;
-        // border: 1px #BFBFBF solid;
-      }
-      
-      
-    }
   }
   .saliencyVisualizationWrap{
     display: flex;
@@ -284,115 +187,15 @@ ul {
   
   
 
-  .featureVisualizationViewWrap{
+  .evaluationViewWrap{
     width: 390px;
     height: 100%;
     box-sizing: border-box;
     // border: 1px #BFBFBF solid;
     background-color: white;
-    .colorEncodeLabelDescriptionBox{
-      margin: 5px;
-      width: 380px;
-      height: 40px;
-      box-sizing: border-box;
-      border: 1px #BFBFBF solid;
-      background-color: gray;
-      text-align: center;
-      color: white;
-    }
-    .saliencyView_boxplot{
-      width: 390px;
-      height: 150px;
-      box-sizing: border-box;
-      background-color: white;
-    }
-    .saliencyView_linechart{
-      width: 390px;
-      height: 200px;
-      box-sizing: border-box;
-      background-color: white;
-    }
   }
 
   
-  
-  .visControlClass{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    background-color: white;
-    .visSelect{
-      width: 300px;
-      height: 50px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-    .nodeSelect{
-      width: 300px;
-      height: 50px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-    .nodeSizeSpinner{
-      width: 100px;
-      height: 50px;
-      box-sizing: border-box;
-    }
-    .featureSelect{
-      width: 200px;
-      height: 50px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-  }
-  
-  .stimulusDivsWrap{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    // border: 1px #BFBFBF solid;
-    background-color: white;
-    
-    .stimulusClass{
-      width: 400px;
-      height: 340px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-    .patchClass{
-      width: 235px;
-      height: 340px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-    .functionClass{
-      width: 265px;
-      height: 340px;
-      box-sizing: border-box;
-      // border: 1px #BFBFBF solid;
-    }
-  }
-  .dataResultWrap{
-    width:450px;
-    height: 100%;
-    box-sizing: border-box;
-    // border: 1px #BFBFBF solid;
-    // border: 1px white solid;
-    background-color: white;
-  }
-  
-  .visWarp{
-    width:970px;
-    height: 100%;
-    box-sizing: border-box;
-    // border: 1px #BFBFBF solid;
-    // border: 1px white solid;
-    background-color: white;
-  }
 
   .page-header {
     display: flex;
