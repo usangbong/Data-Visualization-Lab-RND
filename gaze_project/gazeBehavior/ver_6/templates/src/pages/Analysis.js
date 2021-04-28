@@ -8,19 +8,19 @@ import { AlphaPicker, SketchPicker } from 'react-color';
 // https://casesandberg.github.io/react-color/#api
 
 import Heatmap from 'components/Heatmap';
-// import PatchVisualization from 'components/PatchVisualization';
-// import MultiPatchVisualization from 'components/MultiPatchVisualization';
+import BarChart from '../components/BarChart';
+import GTMapWithPoints from '../components/GTMapWithPoints';
+import SMMapWithPoints from '../components/SMMapWithPoints';
+
 import ScanpathVisualization from 'components/ScanpathVisualization';
 import BoxPlot from 'components/BoxPlot';
-// import LineChart from 'components/LineChart';
 import HumanFixationMap from '../components/HumanFixationMap';
 import ParallelCoordinateChart from '../components/ParallelCoordinateChart';
 import BrushParallelCoordinateChart from '../components/BrushParallelCoordinateChart';
-import BarChart from '../components/BarChart';
 import HorizontalBarChart from '../components/HorizontalBarChart';
 
-// import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
+// import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 // import '../../node_modules/ag-grid-enterprise';
 // import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
 // import '../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -94,6 +94,10 @@ const select_option_patchImageFlag = [
   { value:'observer', label: 'Identify observer'}
 ];
 
+const select_option_mapStyle = [
+  { value:'original', label: 'Use original' },
+  { value:'discrete', label: 'Use discrete' }
+];
 
 const select_option_humanFixationMapStyle = [
   { value:'original', label: 'Use original' },
@@ -119,6 +123,7 @@ class Analysis extends React.Component {
       select_dimensionReduction: null,
       select_patchImageFlag: {value:'box', label: 'Draw only label box' },
       select_humanFixationMapStyle : { value:'original', label: 'Use original' },
+      select_mapStyle : { value:'original', label: 'Use original' },
       select_analysisStyle: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
@@ -433,18 +438,18 @@ class Analysis extends React.Component {
       let stiList_str = "";
       let hfmURLList = [];
       for(let i=0; i<select_stiName.length; i++){
-        // console.log(select_stiName[i].value);
+        console.log(select_stiName[i].value);
         let splitValue = select_stiName[i].value.split("/");
         let pathString = splitValue[0] +"/"+ splitValue[1] +"/"+ splitValue[2];
         let stiWidth = parseInt(splitValue[3].split("_")[0]);
         let stiHeight = parseInt(splitValue[3].split("_")[1]);
         let _sURL = {
-          url: `http://${window.location.hostname}:5000/static/stimulus/`+pathString,
+          url: `http://${window.location.hostname}:5000/static/stimulus/`+pathString+"?"+Math.random(),
           width: stiWidth,
           height: stiHeight
         };
         let _hfmURL = {
-          url: `http://${window.location.hostname}:5000/static/ground_truth/`+pathString.replace(".jpeg", ".jpg"),
+          url: `http://${window.location.hostname}:5000/static/ground_truth/`+pathString.replace(".jpeg", ".jpg")+"?"+Math.random(),
           width: stiWidth,
           height: stiHeight
         }
@@ -1135,13 +1140,11 @@ class Analysis extends React.Component {
     }
   }
 
-  select_onChanged_saliencyModel = select_saliencyModel =>{
-    console.log("select_onChanged_saliencyModel");
-    this.setState({select_saliencyModel});
+  run_saliencyModel_analysis_processing =(selectedSM, selectedSti, selectedDT)=>{
     const data = new FormData();
-    data.set('saliencyModel', select_saliencyModel.value);
-    data.set('stimulusInfo', this.state.select_stiName[0].value);
-    data.set('dtMethod', "");
+    data.set('saliencyModel', selectedSM.value);
+    data.set('stimulusInfo', selectedSti);
+    data.set('dtMethod', selectedDT);
     axios.post(`http://${window.location.hostname}:5000/api/saliency/updateModelSet`, data)
     .then(response => {
       console.log(response.data);
@@ -1149,8 +1152,8 @@ class Analysis extends React.Component {
         patchDataList: response.data.patchDataList
       });
       let _smUrl = `http://${window.location.hostname}:5000/`+ response.data.smPath +"?"+ Math.random();
-      let stiWidth = this.state.select_stiName[0].value.split("/")[3].split("_")[0];
-      let stiHeight = this.state.select_stiName[0].value.split("/")[3].split("_")[1];
+      let stiWidth = selectedSti.split("/")[3].split("_")[0];
+      let stiHeight = selectedSti.split("/")[3].split("_")[1];
       let smList = [];
       smList.push({
         url: _smUrl,
@@ -1170,9 +1173,9 @@ class Analysis extends React.Component {
       this.setState({
         humanFixationMapURL: gtList
       });
-      let datasetName = this.state.select_stiName[0].value.split("/")[0];
-      let semanticClassName = this.state.select_stiName[0].value.split("/")[1];
-      let stiFileName = this.state.select_stiName[0].value.split("/")[2];
+      let datasetName = selectedSti.split("/")[0];
+      let semanticClassName = selectedSti.split("/")[1];
+      let stiFileName = selectedSti.split("/")[2];
       let _stiUrl = `http://${window.location.hostname}:5000/static/stimulus`+ datasetName+"/"+semanticClassName+"/"+stiFileName +"?"+ Math.random();
       let stiList = [];
       stiList.push({
@@ -1198,6 +1201,67 @@ class Analysis extends React.Component {
     });
   }
 
+  select_onChanged_saliencyModel = select_saliencyModel =>{
+    console.log("select_onChanged_saliencyModel");
+    this.setState({select_saliencyModel});
+    let selectedDTMethod = "";
+    if(this.state.select_dataTransformation !== null && this.state.select_dataTransformation !== undefined ){
+      selectedDTMethod = this.state.select_dataTransformation.value;
+    }
+    this.run_saliencyModel_analysis_processing(select_saliencyModel, this.state.select_stiName[0].value, selectedDTMethod);
+    this.setState({
+      select_isDisabled_dataTransformation: false
+    })
+  }
+
+  select_onChanged_dataTransformation_sma = select_dataTransformation =>{
+    console.log("select_onChanged_dataTransformation_sma");
+    this.setState({select_dataTransformation});
+    this.run_saliencyModel_analysis_processing(this.state.select_saliencyModel, this.state.select_stiName[0].value, select_dataTransformation.value);
+  }
+
+  select_onChanged_mapStyle = select_mapStyle =>{
+    console.log("select_onChanged_mapStyle");
+    this.setState({select_mapStyle});
+    let selectedSMModel = this.state.select_saliencyModel.value;
+    let selectedSti = this.state.select_stiName[0].value;
+    let splitStiData = selectedSti.split("/");
+    let gtURL = "";
+    let smURL = "";
+    let width = splitStiData[3].split("_")[0];
+    let height = splitStiData[3].split("_")[1];
+    if(select_mapStyle.value == "original"){
+      let datasetName = splitStiData[0];
+      let semanticClassName = splitStiData[1];
+      let stimulusName = splitStiData[2].split(".")[0];
+      gtURL = `http://${window.location.hostname}:5000/static/ground_truth/`+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg?"+ Math.random();
+      smURL = `http://${window.location.hostname}:5000/static/models/`+ selectedSMModel +"/"+ datasetName +"-"+ semanticClassName +"-"+ stimulusName +".jpg?"+ Math.random();
+    }else if(select_mapStyle.value == "discrete"){
+      gtURL = `http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png?`+ Math.random();
+      smURL = `http://${window.location.hostname}:5000/static/__cache__/discrete_saliency_map.png?`+ Math.random();
+    }else{
+      console.log("ERROR: unavailable map style selected")
+    }
+    let gtList = [];
+    gtList.push({
+      url: gtURL,
+      width: width,
+      height: height
+    });
+    this.setState({
+      humanFixationMapURL: gtList
+    });
+    let smList = [];
+    smList.push({
+      url: smURL,
+      width: width,
+      height: height
+    });
+    this.setState({
+      saliencyMapURL: smList
+    });
+  }
+
   select_onChanged_humanFixationMapStyle = select_humanFixationMapStyle =>{
     console.log("select_onChanged_humanFixationMapStyle");
     this.setState({select_humanFixationMapStyle});
@@ -1214,7 +1278,7 @@ class Analysis extends React.Component {
     }else{
       // console.log(`http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,);
       hfmURL.push({
-        url: `http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`,
+        url: `http://${window.location.hostname}:5000/static/__cache__/discrete_ground_truth_fixation_map.png`+"?"+Math.random(),
         width: getStiURL.width,
         height: getStiURL.height
       });
@@ -1413,14 +1477,15 @@ class Analysis extends React.Component {
     const { select_patchView, select_humanFixationMapStyle } = this.state;
     
     // patch clustering
-    const { patchDataList, select_patchImageFlag, humanFixationMapURL, rawDataList } = this.state;
-    // const { patchDataList_multi, multiPatchViewSelectedFlag, cacheFileList, select_useCache, select_dataTransformation, select_dimensionReduction, selectedObserverFlag } = this.state;
+    const { patchDataList, humanFixationMapURL, select_patchImageFlag, rawDataList } = this.state;
+    // const { patchDataList_multi, multiPatchViewSelectedFlag, cacheFileList, select_useCache, select_dimensionReduction, selectedObserverFlag } = this.state;
     // const { select_cacheFile, select_option_cacheFile, select_isDisabled_cacheFile } = this.state;
-    // const { select_isDisabled_useCache, select_isDisabled_dataTransformation, select_isDisabled_dimensionReduction } = this.state;
+    // const { select_isDisabled_useCache, select_isDisabled_dimensionReduction } = this.state;
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
     
     // saliency model
-    const { select_saliencyModel, select_isDisabled_saliencyModel } = this.state;
+    const { select_saliencyModel, select_isDisabled_saliencyModel, saliencyMapURL } = this.state;
+    const { select_mapStyle, select_dataTransformation, select_isDisabled_dataTransformation } = this.state;
 
     // saliency features visualization
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
@@ -1911,6 +1976,84 @@ class Analysis extends React.Component {
 
       {/* col 2 */}
       <div className="dataVisualizationWrap">
+        <div className="analysisViewWrap">
+          <div className="section-header">
+            <h4> Data Visualization View </h4>
+          </div>
+          <div className="lrWarpDiv">
+            <div className="leftDiv">
+              <div className="halfHeightDiv">
+                <div className="mapBoxWrap">
+                  <div className="titleDiv"> <h5>Ground-Truth Fixation Map</h5> </div>
+                  <div className="mapDiv">
+                    <GTMapWithPoints 
+                      width={300}
+                      height={260}
+                      mapURL={humanFixationMapURL}
+                      pointDataList={patchDataList}
+                    />
+                  </div>
+                </div>
+                <div className="mapBoxWrap">
+                  {/* <div className="titleDiv"> <h5>{select_saliencyModel.value}</h5> </div> */}
+                  <div className="titleDiv"> <h5>Model Saliency Map</h5> </div>
+                  <div className="mapDiv">
+                    <SMMapWithPoints
+                      width={300}
+                      height={260}
+                      mapURL={saliencyMapURL}
+                      pointDataList={patchDataList}
+                    />
+                  </div>
+                </div>
+                <div className="mapBoxWrap">
+                  <div className="titleDiv"> <h5>Different Map</h5> </div>
+                  <div className="mapDiv">
+                    TEMP
+                  </div>
+                </div>
+              </div>
+              <div className="halfHeightDiv">
+                <div className="starChartWrap">
+                  <div className="titleDiv"> <h5>Salincy Features of Ground-Truth</h5> </div>
+                  <div className="chartDiv">
+
+                  </div>
+                </div>
+                <div className="starChartWrap">
+                  {/* <div className="titleDiv"> <h5>Saliency Features of {select_saliencyModel.value}</h5> </div> */}
+                  <div className="titleDiv"> <h5>Saliency Features of Model</h5> </div>
+                  <div className="chartDiv">
+                    
+                  </div>
+                </div>
+                <div className="starChartWrap">
+                  <div className="titleDiv"> <h5>Saliency Features of Visual Stimulus</h5> </div>
+                  <div className="chartDiv">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="rightDiv">
+              <Select
+                value={select_mapStyle}
+                options={select_option_mapStyle}
+                onChange={this.select_onChanged_mapStyle}
+              />
+              <Select
+                value={select_dataTransformation}
+                options={select_option_dataTransformation}
+                isDisabled={select_isDisabled_dataTransformation}
+                onChange={this.select_onChanged_dataTransformation_sma}
+                placeholder="Data transformation"
+              />
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      {/* <div className="dataVisualizationWrap">
         { select_analysisStyle !== null && select_analysisStyle !== undefined && select_analysisStyle.value == "scanpath" && 
         <div className="section-header">
           <h4> Scanpath Visualization </h4>
@@ -2093,7 +2236,7 @@ class Analysis extends React.Component {
           />
         </div>
         }
-      </div>
+      </div> */}
       
         
 
