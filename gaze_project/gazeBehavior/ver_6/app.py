@@ -39,6 +39,7 @@ FEATURE = []
 FEATURE_ordered = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"]
 COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"]
 PATCH_SIZE = 20
+THRESHOLD_SM = 50
 
 app = Flask(__name__)
 if __name__ == '__main__':
@@ -59,25 +60,37 @@ def gen_saliency_map(model_name, stimulus, outPath):
 def saliency_IttiKoch1998(stimulus, outPath):
   stiHeight, stiWidth = stimulus.shape[:2]
   sm = pySaliencyMap.pySaliencyMap(stiWidth, stiHeight)
-  saliencyMap = sm.SMgetSM(stimulus)
+  saliencyMap = sm.SMGetSM(stimulus)
   cvtedImg = cv2.convertScaleAbs(saliencyMap, alpha=(255.0))
   cv2.imwrite(outPath, cvtedImg)
 
 def gen_difference_map(gt, sm, outPath):
-  dm = gt.copy()
+  diff = gt - sm
+  cv2.imwrite("./static/__cache__/gt-sm.png", diff)
+  diff2 = sm - gt
+  cv2.imwrite("./static/__cache__/sm-gt.png", diff2)
+  dm = sm.copy()
+  BLACK_COLOR = np.array([0, 0, 0])
+  thr = 10
   if len(gt) == len(sm) and len(gt[0]) == len(sm[0]):
-    for i in range(0, len(dm)):
-      for j in range(0, len(dm[i])):
-        BLACK_COLOR = np.array([0, 0, 0])
+    for i in range(0, len(gt)):
+      for j in range(0, len(gt[i])):
         replaceArr = np.array([0, 0, 0])
-        if np.array_equal(dm[i][j], sm[i][j]) and np.array_equal(dm[i][j], BLACK_COLOR):
-          continue
-        elif not(np.array_equal(dm[i][j], BLACK_COLOR)) and not(np.array_equal(sm[i][j], BLACK_COLOR)):
-          replaceArr = np.array([228, 26, 28])
-        elif not(np.array_equal(dm[i][j], BLACK_COLOR)) and np.array_equal(sm[i][j], BLACK_COLOR):
-          replaceArr = np.array([55, 126, 184])
-        elif np.array_equal(dm[i][j], BLACK_COLOR) and not(np.array_equal(sm[i][j], BLACK_COLOR)):
-          replaceArr = np.array([77, 175, 74])
+        if dm[i][j][0] <= thr or dm[i][j][1] <=  thr or dm[i][j][2] <= thr:
+          if dm[i][j][0] == dm[i][j][1] and dm[i][j][0] == dm[i][j][2]:
+            dm[i][j] = np.array([0, 0, 0])
+        if np.array_equal(gt[i][j], BLACK_COLOR) and np.array_equal(dm[i][j], BLACK_COLOR):
+          replaceArr = np.array([0, 0, 0])
+        elif not(np.array_equal(gt[i][j], BLACK_COLOR)) and not(np.array_equal(dm[i][j], BLACK_COLOR)):
+          # Red color
+          # replaceArr = np.array([228, 26, 28])
+          replaceArr = np.array([255, 0, 0])
+        elif not(np.array_equal(gt[i][j], BLACK_COLOR)) and np.array_equal(dm[i][j], BLACK_COLOR):
+          # Blue color
+          replaceArr = np.array([0, 0, 255])
+        elif np.array_equal(gt[i][j], BLACK_COLOR) and not(np.array_equal(dm[i][j], BLACK_COLOR)):
+          # Green color
+          replaceArr = np.array([0, 255, 0])
         else:
           replaceArr = np.array([255, 255, 255])
         dm[i][j] = replaceArr
@@ -85,6 +98,15 @@ def gen_difference_map(gt, sm, outPath):
     print("ERROR: different shape")
   cv2.imwrite(outPath, dm)
 
+def gen_discrete_saliency_map(sm, threshold):
+  dis_sm = sm.copy()
+  for i in range(0, len(dis_sm)):
+    for j in range(0, len(dis_sm[i])):
+      if dis_sm[i][j][0] < threshold:
+        dis_sm[i][j] = np.array([0, 0, 0])
+      else:
+        dis_sm[i][j] = np.array([255, 255, 255])
+  cv2.imwrite("./static/__cache__/discrete_saliency_map.png", dis_sm)
 
 ########################################
 # saliency evaluation metirc fucntions #
@@ -360,6 +382,12 @@ def label_groundTruthFixationMap(_gt, _x, _y):
   else:
     return 1
 
+def label_saliencyMap(_sm, _x, _y, threshold):
+  if _sm[_y][_x][0] < threshold:
+    return 0
+  else:
+    return 1
+
 def generate_discrete_groundTruthFixationMap(_gt):
   _dgtfmPath = "./static/__cache__/discrete_ground_truth_fixation_map.png"
   gtCopy = _gt.copy()
@@ -392,26 +420,25 @@ def getFeatureMeanVal(_featDF, _x, _y, _stiWidth, _stiHeight, _patchSize):
   meanVal = patch.mean()
   return meanVal
 
-def dataTransformation(tMethod, df, featureList):
+def dataTransformation(tMethod, df, featureList, frontCols):
   print("Data transformation method: "+tMethod)
   if tMethod == "raw":
     return df
   elif tMethod == "min_max":
-    return dt_minMax(df, featureList)
+    return dt_minMax(df, featureList, frontCols)
   elif tMethod == "z_score":
-    return dt_zScore(df, featureList)
+    return dt_zScore(df, featureList, frontCols)
   elif tMethod == "yeo_johonson":
-    return dt_yeoJohnson(df, featureList)
+    return dt_yeoJohnson(df, featureList, frontCols)
   elif tMethod == "yeo_johonson_min_max":
-    return dt_yeoJohnson_minMax(df, featureList)
+    return dt_yeoJohnson_minMax(df, featureList, frontCols)
   else:
     print("ERROR: unavailable data transformation method selected")
     return df
 
-def dt_minMax(df, featureList):
-  getColNames = df.columns
-  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
-  colCount = 3
+def dt_minMax(df, featureList, frontCols):
+  tfDF = df[frontCols]
+  colCount = len(frontCols)-1
   for featureName in featureList:
     colCount = colCount+1
     colFeatDF = df[featureName]
@@ -421,10 +448,9 @@ def dt_minMax(df, featureList):
     # tfDF[featureName] = _tf
   return tfDF
 
-def dt_zScore(df, featureList):
-  getColNames = df.columns
-  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
-  colCount = 3
+def dt_zScore(df, featureList, frontCols):
+  tfDF = df[frontCols]
+  colCount = len(frontCols)-1
   for featureName in featureList:
     colCount = colCount+1
     colFeatDF = df[featureName]
@@ -434,10 +460,9 @@ def dt_zScore(df, featureList):
     # tfDF[featureName] = _tf
   return tfDF
 
-def dt_yeoJohnson(df, featureList):
-  getColNames = df.columns
-  tfDF = df[[getColNames[0], getColNames[1], getColNames[2], getColNames[3]]]
-  colCount = 3
+def dt_yeoJohnson(df, featureList, frontCols):
+  tfDF = df[frontCols]
+  colCount = len(frontCols)-1
   for featureName in featureList:
     colCount = colCount+1
     colFeatDF = df[featureName]
@@ -447,9 +472,9 @@ def dt_yeoJohnson(df, featureList):
     # tfDF[featureName] = _tf
   return tfDF
 
-def dt_yeoJohnson_minMax(df, featureList):
-  _df_1 = dt_yeoJohnson(df, featureList)
-  _df_2 = dt_minMax(_df_1, featureList)
+def dt_yeoJohnson_minMax(df, featureList, frontCols):
+  _df_1 = dt_yeoJohnson(df, featureList, frontCols)
+  _df_2 = dt_minMax(_df_1, featureList, frontCols)
   return _df_2
 
 def dataClustering(cMethod):
@@ -991,7 +1016,8 @@ def clustering_processingMultiParams():
     aggDF = pd.DataFrame(aggregatedDataList, columns=dfCols_full)
     
     # data transformation
-    tfDF = dataTransformation(dataTransformationMethod, aggDF[dfCols], FEATURE_ordered)
+    dfFrontCols = ["id", "x", "y", "label"]
+    tfDF = dataTransformation(dataTransformationMethod, aggDF[dfCols], FEATURE_ordered, dfFrontCols)
 
     cacheFilePathList = []
     patchProcessDataLists = []
@@ -1141,7 +1167,8 @@ def clustering_processingMulti():
           # data transformation
           dtm = p.split("-")[3]
           drm = p.split("-")[4]
-          tfDF = dataTransformation(dtm, aggDF, FEATURE_ordered)
+          dfFrontCols = ["id", "x", "y", "label"]
+          tfDF = dataTransformation(dtm, aggDF, FEATURE_ordered, dfFrontCols)
           # dimension reduction
           dr = dimensionReduction(drm, tfDF, FEATURE_ordered)
           drDF = pd.DataFrame(dr, columns=['x', 'y'])
@@ -1292,7 +1319,8 @@ def clustering_processing():
     
 
     # data transformation
-    tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered)
+    dfFrontCols = ["id", "x", "y", "label"]
+    tfDF = dataTransformation(GET_TRANSFORMATION_METHOD, aggDF, FEATURE_ordered, dfFrontCols)
     # dimension reduction
     dr = dimensionReduction(GET_DIMEN_REDUCTION_METHOD, tfDF, FEATURE_ordered)
     drDF = pd.DataFrame(dr, columns=['x', 'y'])
@@ -1793,6 +1821,10 @@ def saliency_updateModelSet():
     data_transformation_method = "raw"
     if SELECTED_DATA_TRANSFORMATION_METHOD != "":
       data_transformation_method = SELECTED_DATA_TRANSFORMATION_METHOD
+    # print(SELECTED_SALIENCY_MODEL)
+    # print(SELECTED_STIMULUS_INFO)
+    # print(SELECTED_DATA_TRANSFORMATION_METHOD)
+    # print(data_transformation_method)
 
     stiInfoSplit = SELECTED_STIMULUS_INFO.split("/")
     datasetName = stiInfoSplit[0]
@@ -1810,9 +1842,11 @@ def saliency_updateModelSet():
     smPath = "./static/models/"+ SELECTED_SALIENCY_MODEL +"/"+ datasetName +"-"+ semanticClassName +"-"+ stimulusFileName
     gen_saliency_map(SELECTED_SALIENCY_MODEL, stimulus, smPath)
     sm = cv2.imread(smPath)
+    gen_discrete_saliency_map(sm, THRESHOLD_SM)
     # load ground truth fixation map
     gtPath = "./static/ground_truth/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
     gt = cv2.imread(gtPath)
+    generate_discrete_groundTruthFixationMap(gt)
     # generate difference map
     dmPath = "./static/__cache__/difference_map.png"
     gen_difference_map(gt, sm, dmPath)
@@ -1820,7 +1854,7 @@ def saliency_updateModelSet():
     featureDFList = []
     featureDir = "./static/feature/"
     for _f in FEATURE_ordered:
-      featurePath = featureDir + _f + datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+      featurePath = featureDir + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
       featureDF = pd.read_csv(featurePath, header=None)
       featureDFList.append(featureDF)
     # load fixation data on stimulus
@@ -1832,7 +1866,6 @@ def saliency_updateModelSet():
       ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ obFileName
       fixDF = pd.read_csv(_path, header=None)
       fixationDfList.append(fixDF)
-      
     fixationDataList = []
     for i in range(0, len(fixationDfList)):
       for _fp in fixationDfList[i].values.tolist():
@@ -1840,16 +1873,28 @@ def saliency_updateModelSet():
         _y = int(_fp[1])
         _t = float(_fp[2])
         _label_gt = label_groundTruthFixationMap(gt, _x, _y)
-        _label_sm = label_groundTruthFixationMap(sm, _x, _y)
+        _label_sm = label_saliencyMap(sm, _x, _y, THRESHOLD_SM)
         obFixList = [ob, _x, _y, _t, _label_gt, _label_sm]
         for j in range(0, len(FEATURE_ordered)):
           fMean = getFeatureMeanVal(featureDFList[j], _x, _y, stiWidth, stiHeight, PATCH_SIZE)
           obFixList.append(fMean)
         fixationDataList.append(obFixList)
-    
+    # data transformation
+    if data_transformation_method != "raw":
+      dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+      for featureName in FEATURE_ordered:
+        dfCols.append(featureName)
+      fixationsDF = pd.DataFrame(fixationDataList, columns=dfCols)
+      dfFrontCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+      tfDF = dataTransformation(data_transformation_method, fixationsDF, FEATURE_ordered, dfFrontCols)
+      trasnformedFixationList = tfDF.values.tolist()
+      fixationDataList = trasnformedFixationList
+
     response['status'] = 'success'
     response['smPath'] = smPath.split(".")[1]+"."+smPath.split(".")[2]
+    # response['smPath'] = "/static/__cache__/discrete_saliency_map.png"
     response['gtPath'] = gtPath.split(".")[1]+"."+gtPath.split(".")[2]
+    # response['gtPath'] = "/static/__cache__/discrete_ground_truth_fixation_map.png"
     response['dmPath'] = dmPath.split(".")[1]+"."+dmPath.split(".")[2]
     response['patchDataList'] = fixationDataList
   except Exception as e:
