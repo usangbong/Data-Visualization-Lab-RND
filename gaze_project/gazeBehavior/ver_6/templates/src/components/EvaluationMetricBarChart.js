@@ -19,7 +19,6 @@ function EvaluationMetricBarChart(props) {
       scores.push(s);
     }
 
-    
     var margin = {top: 10, right: 15, bottom: 50, left: 30},
       drawWidth = width - margin.left - margin.right,
       drawHeight = height - margin.top - margin.bottom;
@@ -62,7 +61,29 @@ function EvaluationMetricBarChart(props) {
     .attr("y", function(d){ return y(d.value); })
     .attr("width", x.bandwidth())
     .attr("height", function(d) { return drawHeight-y(d.value) })
-    .attr("fill", "gray");
+    .attr("fill", function(d){
+      if(d.value == -999){
+        return "none";
+      }else{
+        return "gray";
+      }
+    });
+
+    svg.selectAll("text_score")
+    .data(scores)
+    .enter()
+    .append("text")
+    .attr("x", function(d){
+      return x(d.metric)+x.bandwidth()/2;
+    })
+    .attr("y", function(d){
+      return y(d.value)-2;
+    })
+    .text(function(d){
+      return parseFloat(d.value).toFixed(4);
+    })
+    .attr("font-family", "Roboto, sans-serif")
+    .style("font-size", "10px");
     
   }, [,props.evaluationMetrics]);
 
