@@ -3,6 +3,7 @@ import os
 import csv
 import math
 import json
+import random
 from datetime import datetime
 
 import numpy as np
@@ -111,6 +112,26 @@ def gen_discrete_saliency_map(sm, threshold):
 ########################################
 # saliency evaluation metirc fucntions #
 ########################################
+def calculate_evaluation_metric(em, gt, sm):
+  s_map_norm = normalize_map(sm)
+  if em == "IG":
+    return IG(s_map_norm, gt, gt)
+  elif em == "AUC":
+    return AUC(s_map_norm, gt)
+  elif em == "sAUC":
+    return SAUC(s_map_norm, gt, gt)
+  elif em == "NSS":
+    return NSS(sm, gt)
+  elif em == "CC":
+    return CC(sm, gt) 
+  elif em == "KLDiv":
+    return KLdiv(sm, gt)
+  elif em == "SIM":
+    return SIM(s_map_norm, gt)
+  else:
+    print("ERROR: unavailable evaluation metric selected")
+    return -999
+
 def NSS(saliency_map, ground_truth_map):
   """"
   normalized scanpath saliency between two different
@@ -167,33 +188,39 @@ def CC(saliency_map, ground_truth_map):
   score = np.corrcoef(saliency_map.flatten(),ground_truth_map.flatten())[0][1]
   return score
 
-def KLdiv(saliency_map, ground_truth_map):
-  """
-  This finds the KL-divergence between two different saliency maps when
-  viewed as distributions: it is a non-symmetric measure of the information
-  lost when saliencyMap is used to estimate fixationMap.
-    Computer KL-divergence.
-    :param saliency_map : predicted saliency map
-    :param fixation_map : ground truth saliency map.
-    :return score: float : score
-  """
-  if saliency_map.size != ground_truth_map.size:
-    saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
+# def KLdiv(saliency_map, ground_truth_map):
+#   """
+#   This finds the KL-divergence between two different saliency maps when
+#   viewed as distributions: it is a non-symmetric measure of the information
+#   lost when saliencyMap is used to estimate fixationMap.
+#     Computer KL-divergence.
+#     :param saliency_map : predicted saliency map
+#     :param fixation_map : ground truth saliency map.
+#     :return score: float : score
+#   """
+#   if saliency_map.size != ground_truth_map.size:
+#     saliency_map = cv2.resize(saliency_map, dsize=(ground_truth_map.shape[1], ground_truth_map.shape[0]))
 
-  if not isinstance(saliency_map, np.ndarray):
-    saliency_map = np.array(saliency_map, dtype=np.float32)
-  elif saliency_map.dtype != np.float32:
-    saliency_map = saliency_map.astype(np.float32)
+#   if not isinstance(saliency_map, np.ndarray):
+#     saliency_map = np.array(saliency_map, dtype=np.float32)
+#   elif saliency_map.dtype != np.float32:
+#     saliency_map = saliency_map.astype(np.float32)
 
-  if not isinstance(ground_truth_map, np.ndarray):
-    ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
-  elif ground_truth_map.dtype != np.float32:
-    ground_truth_map = ground_truth_map.astype(np.float32)
+#   if not isinstance(ground_truth_map, np.ndarray):
+#     ground_truth_map = np.array(ground_truth_map, dtype=np.float32)
+#   elif ground_truth_map.dtype != np.float32:
+#     ground_truth_map = ground_truth_map.astype(np.float32)
 
-  EPS = np.finfo(np.float32).eps
-  # the function will normalize maps before computing Kld
-  score = entropy(saliency_map.flatten() + EPS, ground_truth_map.flatten() + EPS)
-  return score
+#   EPS = np.finfo(np.float32).eps
+#   # the function will normalize maps before computing Kld
+#   score = entropy(saliency_map.flatten() + EPS, ground_truth_map.flatten() + EPS)
+#   return score
+
+def KLdiv(s_map,gt):
+  s_map = s_map/(np.sum(s_map)*1.0)
+  gt = gt/(np.sum(gt)*1.0)
+  eps = 2.2204e-16
+  return np.sum(gt * np.log(eps + gt/(s_map + eps)))
 
 def AUC(saliency_map, ground_truth_map):
   """Computes AUC for given saliency map 'saliency_map' and given
@@ -237,7 +264,6 @@ def SAUC(saliency_map, ground_truth_map, shuf_map=np.zeros((480,640)), step_size
     :param fixation_map : ground truth saliency map.
     :return score: int : score
   """
-  
   saliency_map -= np.min(saliency_map)
   ground_truth_map = np.vstack(np.where(ground_truth_map!=0)).T
   
@@ -1818,7 +1844,7 @@ def saliency_updateModelSet():
     SELECTED_SALIENCY_MODEL = request.form['saliencyModel']
     SELECTED_STIMULUS_INFO = request.form['stimulusInfo']
     SELECTED_DATA_TRANSFORMATION_METHOD = request.form['dtMethod']
-    data_transformation_method = "raw"
+    data_transformation_method = "min_max"
     if SELECTED_DATA_TRANSFORMATION_METHOD != "":
       data_transformation_method = SELECTED_DATA_TRANSFORMATION_METHOD
     # print(SELECTED_SALIENCY_MODEL)
@@ -1836,67 +1862,93 @@ def saliency_updateModelSet():
     
     # load stimulus
     stiPath = "./static/stimulus/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusFileName
+    print(stiPath)
     stimulus = cv2.imread(stiPath)
     stiHeight, stiWidth = stimulus.shape[:2]
     # generate and load saliency map
     smPath = "./static/models/"+ SELECTED_SALIENCY_MODEL +"/"+ datasetName +"-"+ semanticClassName +"-"+ stimulusFileName
+    print(smPath)
     gen_saliency_map(SELECTED_SALIENCY_MODEL, stimulus, smPath)
     sm = cv2.imread(smPath)
     gen_discrete_saliency_map(sm, THRESHOLD_SM)
     # load ground truth fixation map
     gtPath = "./static/ground_truth/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".jpg"
+    print(gtPath)
     gt = cv2.imread(gtPath)
     generate_discrete_groundTruthFixationMap(gt)
     # generate difference map
     dmPath = "./static/__cache__/difference_map.png"
+    print(dmPath)
     gen_difference_map(gt, sm, dmPath)
-    # load feature data
-    featureDFList = []
-    featureDir = "./static/feature/"
-    for _f in FEATURE_ordered:
-      featurePath = featureDir + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
-      featureDF = pd.read_csv(featurePath, header=None)
-      featureDFList.append(featureDF)
-    # load fixation data on stimulus
-    fixDir = "./static/fix/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
-    observerList = os.listdir(fixDir)
-    fixationDfList = []
-    for obFileName in observerList:
-      _path = fixDir + obFileName
-      ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ obFileName
-      fixDF = pd.read_csv(_path, header=None)
-      fixationDfList.append(fixDF)
+
     fixationDataList = []
-    for i in range(0, len(fixationDfList)):
-      for _fp in fixationDfList[i].values.tolist():
-        _x = int(_fp[0])
-        _y = int(_fp[1])
-        _t = float(_fp[2])
-        _label_gt = label_groundTruthFixationMap(gt, _x, _y)
-        _label_sm = label_saliencyMap(sm, _x, _y, THRESHOLD_SM)
-        obFixList = [ob, _x, _y, _t, _label_gt, _label_sm]
-        for j in range(0, len(FEATURE_ordered)):
-          fMean = getFeatureMeanVal(featureDFList[j], _x, _y, stiWidth, stiHeight, PATCH_SIZE)
-          obFixList.append(fMean)
-        fixationDataList.append(obFixList)
-    # data transformation
-    if data_transformation_method != "raw":
+    cachePath = "./static/__cache__/sCache/" + datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-"+ data_transformation_method +".csv"
+    if not(os.path.exists(cachePath)):
+      print("Generate cache file: "+cachePath)
+      # load feature data
+      featureDFList = []
+      featureDir = "./static/feature/"
+      for _f in FEATURE_ordered:
+        featurePath = featureDir + _f +"/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusName +".csv"
+        featureDF = pd.read_csv(featurePath, header=None)
+        featureDFList.append(featureDF)
+      # load fixation data on stimulus
+      fixDir = "./static/fix/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
+      observerList = os.listdir(fixDir)
+      fixationDfList = []
+      for obFileName in observerList:
+        _path = fixDir + obFileName
+        ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ obFileName
+        fixDF = pd.read_csv(_path, header=None)
+        fixationDfList.append(fixDF)
+      for i in range(0, len(fixationDfList)):
+        for _fp in fixationDfList[i].values.tolist():
+          _x = int(_fp[0])
+          _y = int(_fp[1])
+          _t = float(_fp[2])
+          _label_gt = label_groundTruthFixationMap(gt, _x, _y)
+          _label_sm = label_saliencyMap(sm, _x, _y, THRESHOLD_SM)
+          obFixList = [ob, _x, _y, _t, _label_gt, _label_sm]
+          for j in range(0, len(FEATURE_ordered)):
+            fMean = getFeatureMeanVal(featureDFList[j], _x, _y, stiWidth, stiHeight, PATCH_SIZE)
+            obFixList.append(fMean)
+          fixationDataList.append(obFixList)
+      # data transformation
+      if data_transformation_method != "raw":
+        dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+        for featureName in FEATURE_ordered:
+          dfCols.append(featureName)
+        fixationsDF = pd.DataFrame(fixationDataList, columns=dfCols)
+        dfFrontCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+        tfDF = dataTransformation(data_transformation_method, fixationsDF, FEATURE_ordered, dfFrontCols)
+        trasnformedFixationList = tfDF.values.tolist()
+        fixationDataList = trasnformedFixationList
+
       dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
       for featureName in FEATURE_ordered:
         dfCols.append(featureName)
-      fixationsDF = pd.DataFrame(fixationDataList, columns=dfCols)
-      dfFrontCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
-      tfDF = dataTransformation(data_transformation_method, fixationsDF, FEATURE_ordered, dfFrontCols)
-      trasnformedFixationList = tfDF.values.tolist()
-      fixationDataList = trasnformedFixationList
+      saveDF = pd.DataFrame(fixationDataList, columns=dfCols)
+      saveDF.to_csv(cachePath, mode='w', index=False, header=True)
+    else:
+      print("Use cache file: "+cachePath)
+      cacheDF = pd.read_csv(cachePath)
+      fixationDataList = cacheDF.values.tolist()
+
+    # calcuate evaluation metrics
+    evaluation_metrics = ["IG", "AUC", "sAUC", "NSS", "CC", "KLDiv", "SIM"]
+    metricList = []
+    gt_gray = cv2.imread(gtPath, 0)
+    sm_gray = cv2.imread(smPath, 0)
+    for em in evaluation_metrics:
+      emres = calculate_evaluation_metric(em, gt_gray, sm_gray)
+      metricList.append(str(emres))
 
     response['status'] = 'success'
     response['smPath'] = smPath.split(".")[1]+"."+smPath.split(".")[2]
-    # response['smPath'] = "/static/__cache__/discrete_saliency_map.png"
     response['gtPath'] = gtPath.split(".")[1]+"."+gtPath.split(".")[2]
-    # response['gtPath'] = "/static/__cache__/discrete_ground_truth_fixation_map.png"
     response['dmPath'] = dmPath.split(".")[1]+"."+dmPath.split(".")[2]
     response['patchDataList'] = fixationDataList
+    response['evaluationMetrics'] = metricList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
