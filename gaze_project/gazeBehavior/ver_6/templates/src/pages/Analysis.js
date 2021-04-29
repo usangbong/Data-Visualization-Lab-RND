@@ -11,6 +11,9 @@ import Heatmap from 'components/Heatmap';
 import BarChart from '../components/BarChart';
 import GTMapWithPoints from '../components/GTMapWithPoints';
 import SMMapWithPoints from '../components/SMMapWithPoints';
+import GTRadarChart from '../components/GTRadarChart';
+import SMRadarChart from '../components/SMRadarChart';
+import EvaluationMetricBarChart from '../components/EvaluationMetricBarChart';
 
 import ScanpathVisualization from 'components/ScanpathVisualization';
 import BoxPlot from 'components/BoxPlot';
@@ -199,6 +202,7 @@ class Analysis extends React.Component {
       selectedObserver: [],
       saliencyMapURL: [],
       differenceMapURL: [],
+      evaluationMericScores: [],
     };
   }
 
@@ -1196,6 +1200,9 @@ class Analysis extends React.Component {
       this.setState({
         differenceMapURL: dmList
       });
+      this.setState({
+        evaluationMericScores: response.data.evaluationMetrics
+      })
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
@@ -1491,6 +1498,9 @@ class Analysis extends React.Component {
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
     const { alphapicker_parallelColor, alphapicker_parallelColor_label0, alphapicker_parallelColor_label1, alphapicker_parallelAlpha, alphapicker_parallelAlpha_label0, alphapicker_parallelAlpha_label1 } = this.state;
     
+    // evaluation metrics
+    const { evaluationMericScores } = this.state;
+
     // color encoding reactCSS styles
     let colorEncodingStyles = [];
     // colorEncoding_0
@@ -2017,14 +2027,23 @@ class Analysis extends React.Component {
                 <div className="starChartWrap">
                   <div className="titleDiv"> <h5>Salincy Features of Ground-Truth</h5> </div>
                   <div className="chartDiv">
-
+                    <GTRadarChart
+                      width={300}
+                      height={260}
+                      patchDataList={patchDataList}
+                    />
                   </div>
                 </div>
+                
                 <div className="starChartWrap">
                   {/* <div className="titleDiv"> <h5>Saliency Features of {select_saliencyModel.value}</h5> </div> */}
                   <div className="titleDiv"> <h5>Saliency Features of Model</h5> </div>
                   <div className="chartDiv">
-                    
+                    <SMRadarChart
+                      width={300}
+                      height={260}
+                      patchDataList={patchDataList}
+                    />
                   </div>
                 </div>
                 <div className="starChartWrap">
@@ -2242,6 +2261,16 @@ class Analysis extends React.Component {
 
       {/* col 3 */}
       <div className="evaluationViewWrap">
+        <div className="section-header">
+          <h4> Evaluation </h4>
+        </div>
+        <div className="evaluationScoreDiv">
+          <EvaluationMetricBarChart
+            width={390}
+            height={150}
+            evaluationMetrics={evaluationMericScores}
+          />
+        </div>
       </div>
     </>
     );
