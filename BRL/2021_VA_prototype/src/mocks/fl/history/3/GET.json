@@ -1,0 +1,22 @@
+{
+    "img_file": "test_3.png",
+    "board_param": {
+        "date": "2021-02-05",
+        "Hour": "15:00",
+        "sensor_data": "Tension",
+        "state_anal": "Anomaly Score",
+        "graph_type": "Line",
+        "data_pre": "Raw",
+        "wind_dir": false,
+        "wind_speed": false,
+        "tempr": true,
+        "humidity": false,
+        "preci": true,
+        "atmos": false,
+        "vehicle_speed": false,
+        "vehicle_loc": false
+    },
+    "id": 3,
+    "datetime": "2021-04-12 10:52:05",
+    "img_path": "images/test_3.png"
+}
