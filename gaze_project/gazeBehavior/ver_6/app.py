@@ -1949,6 +1949,7 @@ def saliency_updateModelSet():
     response['dmPath'] = dmPath.split(".")[1]+"."+dmPath.split(".")[2]
     response['patchDataList'] = fixationDataList
     response['evaluationMetrics'] = metricList
+    # response['evaluationMetricsColumns'] = evaluation_metrics
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
