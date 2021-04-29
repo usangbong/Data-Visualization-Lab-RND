@@ -23,12 +23,6 @@ import BrushParallelCoordinateChart from '../components/BrushParallelCoordinateC
 import HorizontalBarChart from '../components/HorizontalBarChart';
 
 
-// import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-// import '../../node_modules/ag-grid-enterprise';
-// import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-// import '../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
-// import { stringToArray } from 'ag-grid-community';
-
 const select_option_dataset = [
   { value:'all', label: 'All Stimulus Dataset' },
   { value:'CAT2000', label: 'CAT2000' },
@@ -202,7 +196,7 @@ class Analysis extends React.Component {
       selectedObserver: [],
       saliencyMapURL: [],
       differenceMapURL: [],
-      evaluationMericScores: [],
+      evaluationMetricScores: [],
     };
   }
 
@@ -1201,8 +1195,25 @@ class Analysis extends React.Component {
         differenceMapURL: dmList
       });
       this.setState({
-        evaluationMericScores: response.data.evaluationMetrics
-      })
+        evaluationMetricScores: response.data.evaluationMetrics
+      });
+      
+      // let evalMetricTableData = [];
+      // let _row = {
+      //   Model: this.state.select_saliencyModel.value,
+      //   IG: parseFloat(response.data.evaluationMetrics[0]).toFixed(4),
+      //   AUC: parseFloat(response.data.evaluationMetrics[1]).toFixed(4),
+      //   sAUC: parseFloat(response.data.evaluationMetrics[2]).toFixed(4),
+      //   NSS: parseFloat(response.data.evaluationMetrics[3]).toFixed(4),
+      //   CC: parseFloat(response.data.evaluationMetrics[4]).toFixed(4),
+      //   KLDiv: parseFloat(response.data.evaluationMetrics[5]).toFixed(4),
+      //   SIM: parseFloat(response.data.evaluationMetrics[6]).toFixed(4)
+      // };
+      // evalMetricTableData.push(_row);
+      // this.setState({
+      //   evaluationMetricTable: evalMetricTableData
+      // });
+
     }).catch(error => {
       alert(`Error - ${error.message}`);
     });
@@ -1369,94 +1380,94 @@ class Analysis extends React.Component {
       colorEncodings: _ce
     });
   }
-  // 0
-  handleClick_0 = () => {
-    this.setState({ displayColorPicker_0: !this.state.displayColorPicker_0 });
-  };
-  handleClose_0 = () => {
-    this.setState({ displayColorPicker_0: false });
-  };
-  handleChange_0 = (color) => {
-    this.setState({ colorEncoding_0: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 0);
-  };
-  // 1
-  handleClick_1 = () => {
-    this.setState({ displayColorPicker_1: !this.state.displayColorPicker_1 });
-  };
-  handleClose_1 = () => {
-    this.setState({ displayColorPicker_1: false });
-  };
-  handleChange_1 = (color) => {
-    this.setState({ colorEncoding_1: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 1);
-  };
-  // 2
-  handleClick_2 = () => {
-    this.setState({ displayColorPicker_2: !this.state.displayColorPicker_2 });
-  };
-  handleClose_2 = () => {
-    this.setState({ displayColorPicker_2: false });
-  };
-  handleChange_2 = (color) => {
-    this.setState({ colorEncoding_2: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 2);
-  };
-  // 3
-  handleClick_3 = () => {
-    this.setState({ displayColorPicker_3: !this.state.displayColorPicker_3 });
-  };
-  handleClose_3 = () => {
-    this.setState({ displayColorPicker_3: false });
-  };
-  handleChange_3 = (color) => {
-    this.setState({ colorEncoding_3: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 3);
-  };
-  // 4
-  handleClick_4 = () => {
-    this.setState({ displayColorPicker_4: !this.state.displayColorPicker_4 });
-  };
-  handleClose_4 = () => {
-    this.setState({ displayColorPicker_4: false });
-  };
-  handleChange_4 = (color) => {
-    this.setState({ colorEncoding_4: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 4);
-  };
-  // 5
-  handleClick_5 = () => {
-    this.setState({ displayColorPicker_5: !this.state.displayColorPicker_5 });
-  };
-  handleClose_5 = () => {
-    this.setState({ displayColorPicker_5: false });
-  };
-  handleChange_5 = (color) => {
-    this.setState({ colorEncoding_5: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 5);
-  };
-  // 6
-  handleClick_6 = () => {
-    this.setState({ displayColorPicker_6: !this.state.displayColorPicker_6 });
-  };
-  handleClose_6 = () => {
-    this.setState({ displayColorPicker_6: false });
-  };
-  handleChange_6 = (color) => {
-    this.setState({ colorEncoding_6: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 6);
-  };
-  // 7
-  handleClick_7 = () => {
-    this.setState({ displayColorPicker_7: !this.state.displayColorPicker_7 });
-  };
-  handleClose_7 = () => {
-    this.setState({ displayColorPicker_7: false });
-  };
-  handleChange_7 = (color) => {
-    this.setState({ colorEncoding_7: color.rgb });
-    this.colorEncodingRGBChange(color.rgb, 7);
-  };
+  // // 0
+  // handleClick_0 = () => {
+  //   this.setState({ displayColorPicker_0: !this.state.displayColorPicker_0 });
+  // };
+  // handleClose_0 = () => {
+  //   this.setState({ displayColorPicker_0: false });
+  // };
+  // handleChange_0 = (color) => {
+  //   this.setState({ colorEncoding_0: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 0);
+  // };
+  // // 1
+  // handleClick_1 = () => {
+  //   this.setState({ displayColorPicker_1: !this.state.displayColorPicker_1 });
+  // };
+  // handleClose_1 = () => {
+  //   this.setState({ displayColorPicker_1: false });
+  // };
+  // handleChange_1 = (color) => {
+  //   this.setState({ colorEncoding_1: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 1);
+  // };
+  // // 2
+  // handleClick_2 = () => {
+  //   this.setState({ displayColorPicker_2: !this.state.displayColorPicker_2 });
+  // };
+  // handleClose_2 = () => {
+  //   this.setState({ displayColorPicker_2: false });
+  // };
+  // handleChange_2 = (color) => {
+  //   this.setState({ colorEncoding_2: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 2);
+  // };
+  // // 3
+  // handleClick_3 = () => {
+  //   this.setState({ displayColorPicker_3: !this.state.displayColorPicker_3 });
+  // };
+  // handleClose_3 = () => {
+  //   this.setState({ displayColorPicker_3: false });
+  // };
+  // handleChange_3 = (color) => {
+  //   this.setState({ colorEncoding_3: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 3);
+  // };
+  // // 4
+  // handleClick_4 = () => {
+  //   this.setState({ displayColorPicker_4: !this.state.displayColorPicker_4 });
+  // };
+  // handleClose_4 = () => {
+  //   this.setState({ displayColorPicker_4: false });
+  // };
+  // handleChange_4 = (color) => {
+  //   this.setState({ colorEncoding_4: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 4);
+  // };
+  // // 5
+  // handleClick_5 = () => {
+  //   this.setState({ displayColorPicker_5: !this.state.displayColorPicker_5 });
+  // };
+  // handleClose_5 = () => {
+  //   this.setState({ displayColorPicker_5: false });
+  // };
+  // handleChange_5 = (color) => {
+  //   this.setState({ colorEncoding_5: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 5);
+  // };
+  // // 6
+  // handleClick_6 = () => {
+  //   this.setState({ displayColorPicker_6: !this.state.displayColorPicker_6 });
+  // };
+  // handleClose_6 = () => {
+  //   this.setState({ displayColorPicker_6: false });
+  // };
+  // handleChange_6 = (color) => {
+  //   this.setState({ colorEncoding_6: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 6);
+  // };
+  // // 7
+  // handleClick_7 = () => {
+  //   this.setState({ displayColorPicker_7: !this.state.displayColorPicker_7 });
+  // };
+  // handleClose_7 = () => {
+  //   this.setState({ displayColorPicker_7: false });
+  // };
+  // handleChange_7 = (color) => {
+  //   this.setState({ colorEncoding_7: color.rgb });
+  //   this.colorEncodingRGBChange(color.rgb, 7);
+  // };
 
 
 
@@ -1499,266 +1510,267 @@ class Analysis extends React.Component {
     const { alphapicker_parallelColor, alphapicker_parallelColor_label0, alphapicker_parallelColor_label1, alphapicker_parallelAlpha, alphapicker_parallelAlpha_label0, alphapicker_parallelAlpha_label1 } = this.state;
     
     // evaluation metrics
-    const { evaluationMericScores } = this.state;
+    const { evaluationMetricScores } = this.state;
 
     // color encoding reactCSS styles
-    let colorEncodingStyles = [];
-    // colorEncoding_0
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_0.r }, ${ colorEncoding_0.g }, ${ colorEncoding_0.b }, ${ colorEncoding_0.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_1
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_1.r }, ${ colorEncoding_1.g }, ${ colorEncoding_1.b }, ${ colorEncoding_1.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_2
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_2.r }, ${ colorEncoding_2.g }, ${ colorEncoding_2.b }, ${ colorEncoding_2.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_3
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_3.r }, ${ colorEncoding_3.g }, ${ colorEncoding_3.b }, ${ colorEncoding_3.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_4
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_4.r }, ${ colorEncoding_4.g }, ${ colorEncoding_4.b }, ${ colorEncoding_4.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_5
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_5.r }, ${ colorEncoding_5.g }, ${ colorEncoding_5.b }, ${ colorEncoding_5.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_6
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_6.r }, ${ colorEncoding_6.g }, ${ colorEncoding_6.b }, ${ colorEncoding_6.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
-    // colorEncoding_7
-    colorEncodingStyles.push(
-      reactCSS({
-        'default': {
-          color: {
-            width: '36px',
-            height: '14px',
-            borderRadius: '2px',
-            background: `rgba(${ colorEncoding_7.r }, ${ colorEncoding_7.g }, ${ colorEncoding_7.b }, ${ colorEncoding_7.a })`,
-          },
-          swatch: {
-            padding: '5px',
-            background: '#fff',
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          },
-        },
-      })
-    );
+    // let colorEncodingStyles = [];
+    // // colorEncoding_0
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_0.r }, ${ colorEncoding_0.g }, ${ colorEncoding_0.b }, ${ colorEncoding_0.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_1
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_1.r }, ${ colorEncoding_1.g }, ${ colorEncoding_1.b }, ${ colorEncoding_1.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_2
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_2.r }, ${ colorEncoding_2.g }, ${ colorEncoding_2.b }, ${ colorEncoding_2.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_3
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_3.r }, ${ colorEncoding_3.g }, ${ colorEncoding_3.b }, ${ colorEncoding_3.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_4
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_4.r }, ${ colorEncoding_4.g }, ${ colorEncoding_4.b }, ${ colorEncoding_4.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_5
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_5.r }, ${ colorEncoding_5.g }, ${ colorEncoding_5.b }, ${ colorEncoding_5.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_6
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_6.r }, ${ colorEncoding_6.g }, ${ colorEncoding_6.b }, ${ colorEncoding_6.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+    // // colorEncoding_7
+    // colorEncodingStyles.push(
+    //   reactCSS({
+    //     'default': {
+    //       color: {
+    //         width: '36px',
+    //         height: '14px',
+    //         borderRadius: '2px',
+    //         background: `rgba(${ colorEncoding_7.r }, ${ colorEncoding_7.g }, ${ colorEncoding_7.b }, ${ colorEncoding_7.a })`,
+    //       },
+    //       swatch: {
+    //         padding: '5px',
+    //         background: '#fff',
+    //         borderRadius: '1px',
+    //         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+    //         display: 'inline-block',
+    //         cursor: 'pointer',
+    //       },
+    //       popover: {
+    //         position: 'absolute',
+    //         zIndex: '2',
+    //       },
+    //       cover: {
+    //         position: 'fixed',
+    //         top: '0px',
+    //         right: '0px',
+    //         bottom: '0px',
+    //         left: '0px',
+    //       },
+    //     },
+    //   })
+    // );
+
 
     return (
     <>
@@ -1767,9 +1779,9 @@ class Analysis extends React.Component {
         <div className="page-header">
           <div id="logo"></div><div><h3>Visual Attention Analysis System</h3></div>
         </div>
-        <div className="section-header">
+        {/* <div className="section-header">
           <h4> Data Filter </h4>
-        </div>
+        </div> */}
         <Select 
           value={select_stiDataset}
           isMulti
@@ -1903,7 +1915,7 @@ class Analysis extends React.Component {
           />
         </div>
         }
-        
+{/*         
         <br></br>
         { colorEncodings.length != 0 &&
         <div className="colorSelectBox">
@@ -1980,7 +1992,7 @@ class Analysis extends React.Component {
             </div> : null }
           </div>
         </div>
-        }
+        } */}
       </div>
 
 
@@ -2268,9 +2280,10 @@ class Analysis extends React.Component {
           <EvaluationMetricBarChart
             width={390}
             height={150}
-            evaluationMetrics={evaluationMericScores}
+            evaluationMetrics={evaluationMetricScores}
           />
         </div>
+        
       </div>
     </>
     );
