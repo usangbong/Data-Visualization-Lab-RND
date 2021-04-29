@@ -1,4 +1,3 @@
-// https://www.d3-graph-gallery.com/graph/parallel_custom.html
 import React, { useEffect, useRef } from 'react';
 
 function SMRadarChart(props) {
