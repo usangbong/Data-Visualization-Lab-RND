@@ -1,0 +1,92 @@
+.TimeLine {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  
+}
+.CompTitle{
+  position: absolute;
+  top: 10px;
+  left: 24px;
+}
+
+.DatePickerWrap {
+  position: relative;
+  width:21%;
+  height:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.DatePickerS{
+  width: 70%;
+}
+
+.SilderWrap {
+  position: relative;
+  width:76%;
+  height:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SilderRobot{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.SilderRobotBtn{
+  position: absolute;
+  top: 4px;
+  right: 0%;
+  width: 100px;
+  height: 24px;
+  border: 4px #629ED8 solid;
+  color: #629ED8;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+}
+.SilderRobotRail{
+  width: 100%;
+
+  display: flex;
+}
+.SilderRobotHandle{
+  width: 52px;
+  height: 26px;
+  background-color: #629ED8;
+  border-radius: 10px;
+  transform: translate(-50%);
+  position: relative;
+  z-index: 20;
+  left: 0px;
+  top:-1px;
+  box-shadow: 4px 4px 6px 0px rgba(136, 136, 136, 0.75);
+}
+
+.SilderRobotHHMMSS{
+  position: absolute;
+  top: -1.8rem;
+  width: 100px;
+  left: -25px;
+  padding:4px;
+  background-color: antiquewhite;
+  border-radius: 4px;
+  text-align: center;
+  z-index: 5;
+}
+

@@ -1,0 +1,25 @@
+.WindGraph {
+  width: 300px;
+  height: 300px;
+  background: white;
+  color: black;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 6px 6px 8px 0px rgba(136, 136, 136, 0.75);
+}
+.WGC{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+.bangImg{
+  position: absolute;
+  bottom: 55px;
+  left: 50px;
+  width:200px;
+  height:200px;
+  z-index: 0;
+}

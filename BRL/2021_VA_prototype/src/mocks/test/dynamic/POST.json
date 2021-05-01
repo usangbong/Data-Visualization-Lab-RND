@@ -1,0 +1,601 @@
+[{
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:00",
+        "hour": "11",
+        "min": "06",
+        "sec": "00",
+        "sensor_val": -0.0046465092603414915
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:01",
+        "hour": "11",
+        "min": "06",
+        "sec": "01",
+        "sensor_val": -0.43276767074308053
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:02",
+        "hour": "11",
+        "min": "06",
+        "sec": "02",
+        "sensor_val": 0.05355447149825243
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:03",
+        "hour": "11",
+        "min": "06",
+        "sec": "03",
+        "sensor_val": 0.14359610556298308
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:04",
+        "hour": "11",
+        "min": "06",
+        "sec": "04",
+        "sensor_val": -0.07039094169935545
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:05",
+        "hour": "11",
+        "min": "06",
+        "sec": "05",
+        "sensor_val": 0.3670932732853244
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:06",
+        "hour": "11",
+        "min": "06",
+        "sec": "06",
+        "sensor_val": 0.21988945427546414
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:07",
+        "hour": "11",
+        "min": "06",
+        "sec": "07",
+        "sensor_val": 0.05343446568126842
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:08",
+        "hour": "11",
+        "min": "06",
+        "sec": "08",
+        "sensor_val": 0.3537151775937233
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:09",
+        "hour": "11",
+        "min": "06",
+        "sec": "09",
+        "sensor_val": -0.07466451138648034
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:10",
+        "hour": "11",
+        "min": "06",
+        "sec": "10",
+        "sensor_val": -0.39883478170941267
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:11",
+        "hour": "11",
+        "min": "06",
+        "sec": "11",
+        "sensor_val": 0.014677526017797926
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:12",
+        "hour": "11",
+        "min": "06",
+        "sec": "12",
+        "sensor_val": -0.05807256154877283
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:13",
+        "hour": "11",
+        "min": "06",
+        "sec": "13",
+        "sensor_val": 0.013958796583538269
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:14",
+        "hour": "11",
+        "min": "06",
+        "sec": "14",
+        "sensor_val": 0.3832725243297407
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:15",
+        "hour": "11",
+        "min": "06",
+        "sec": "15",
+        "sensor_val": 0.32482465680997274
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:16",
+        "hour": "11",
+        "min": "06",
+        "sec": "16",
+        "sensor_val": -0.10759053540484775
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:17",
+        "hour": "11",
+        "min": "06",
+        "sec": "17",
+        "sensor_val": 0.24233272749539125
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:18",
+        "hour": "11",
+        "min": "06",
+        "sec": "18",
+        "sensor_val": 0.13808840903235875
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:19",
+        "hour": "11",
+        "min": "06",
+        "sec": "19",
+        "sensor_val": -0.3577357207489169
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:20",
+        "hour": "11",
+        "min": "06",
+        "sec": "20",
+        "sensor_val": 0.1617659026881093
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:21",
+        "hour": "11",
+        "min": "06",
+        "sec": "21",
+        "sensor_val": -0.09246633672747495
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:22",
+        "hour": "11",
+        "min": "06",
+        "sec": "22",
+        "sensor_val": -0.041501843968966834
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:23",
+        "hour": "11",
+        "min": "06",
+        "sec": "23",
+        "sensor_val": 0.061490901418008614
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:24",
+        "hour": "11",
+        "min": "06",
+        "sec": "24",
+        "sensor_val": -0.1074747156459489
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:25",
+        "hour": "11",
+        "min": "06",
+        "sec": "25",
+        "sensor_val": -0.12491523458935772
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:26",
+        "hour": "11",
+        "min": "06",
+        "sec": "26",
+        "sensor_val": -0.01901191809420677
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:27",
+        "hour": "11",
+        "min": "06",
+        "sec": "27",
+        "sensor_val": 0.2545465916350108
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:28",
+        "hour": "11",
+        "min": "06",
+        "sec": "28",
+        "sensor_val": -0.2030678695186482
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:29",
+        "hour": "11",
+        "min": "06",
+        "sec": "29",
+        "sensor_val": -0.2783973720887374
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:30",
+        "hour": "11",
+        "min": "06",
+        "sec": "30",
+        "sensor_val": 0.13340159033521526
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:31",
+        "hour": "11",
+        "min": "06",
+        "sec": "31",
+        "sensor_val": 0.3197129497837088
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:32",
+        "hour": "11",
+        "min": "06",
+        "sec": "32",
+        "sensor_val": -0.29923221703834824
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:33",
+        "hour": "11",
+        "min": "06",
+        "sec": "33",
+        "sensor_val": 0.28229805840340527
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:34",
+        "hour": "11",
+        "min": "06",
+        "sec": "34",
+        "sensor_val": -0.3198653621068891
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:35",
+        "hour": "11",
+        "min": "06",
+        "sec": "35",
+        "sensor_val": 0.3297383585998591
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:36",
+        "hour": "11",
+        "min": "06",
+        "sec": "36",
+        "sensor_val": -0.4543952375998169
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:37",
+        "hour": "11",
+        "min": "06",
+        "sec": "37",
+        "sensor_val": 0.15970763357519224
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:38",
+        "hour": "11",
+        "min": "06",
+        "sec": "38",
+        "sensor_val": 0.42075578058607765
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:39",
+        "hour": "11",
+        "min": "06",
+        "sec": "39",
+        "sensor_val": 0.10135686729643145
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:40",
+        "hour": "11",
+        "min": "06",
+        "sec": "40",
+        "sensor_val": -0.0666078818265311
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:41",
+        "hour": "11",
+        "min": "06",
+        "sec": "41",
+        "sensor_val": -0.09174194537898828
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:42",
+        "hour": "11",
+        "min": "06",
+        "sec": "42",
+        "sensor_val": 0.47321450210505966
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:43",
+        "hour": "11",
+        "min": "06",
+        "sec": "43",
+        "sensor_val": 0.08379279533064543
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:44",
+        "hour": "11",
+        "min": "06",
+        "sec": "44",
+        "sensor_val": 0.36906858219068095
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:45",
+        "hour": "11",
+        "min": "06",
+        "sec": "45",
+        "sensor_val": -0.2573039615843844
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:46",
+        "hour": "11",
+        "min": "06",
+        "sec": "46",
+        "sensor_val": 0.4846533358564783
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:47",
+        "hour": "11",
+        "min": "06",
+        "sec": "47",
+        "sensor_val": -0.2990381287998609
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:48",
+        "hour": "11",
+        "min": "06",
+        "sec": "48",
+        "sensor_val": -0.44743310094477406
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:49",
+        "hour": "11",
+        "min": "06",
+        "sec": "49",
+        "sensor_val": -0.14759486209244388
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:50",
+        "hour": "11",
+        "min": "06",
+        "sec": "50",
+        "sensor_val": 0.49302165861125236
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:51",
+        "hour": "11",
+        "min": "06",
+        "sec": "51",
+        "sensor_val": -0.06650433674629597
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:52",
+        "hour": "11",
+        "min": "06",
+        "sec": "52",
+        "sensor_val": -0.29243552548264873
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:53",
+        "hour": "11",
+        "min": "06",
+        "sec": "53",
+        "sensor_val": -0.10528050860429305
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:54",
+        "hour": "11",
+        "min": "06",
+        "sec": "54",
+        "sensor_val": 0.2289259785476313
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:55",
+        "hour": "11",
+        "min": "06",
+        "sec": "55",
+        "sensor_val": 0.021839850966017704
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:56",
+        "hour": "11",
+        "min": "06",
+        "sec": "56",
+        "sensor_val": -0.13975715896719088
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:57",
+        "hour": "11",
+        "min": "06",
+        "sec": "57",
+        "sensor_val": -0.18891474256433083
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:58",
+        "hour": "11",
+        "min": "06",
+        "sec": "58",
+        "sensor_val": 0.4582798754237023
+    },
+    {
+        "date": "2021-04-12",
+        "sensor_name": "ACC001_X",
+        "sensor_type": "Tension",
+        "datetime": "2021-04-12 11:06:59",
+        "hour": "11",
+        "min": "06",
+        "sec": "59",
+        "sensor_val": 0.4002284453428361
+    }
+]
