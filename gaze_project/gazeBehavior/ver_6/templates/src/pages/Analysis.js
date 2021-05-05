@@ -1,11 +1,12 @@
 import React from 'react';
 import reactCSS from 'reactcss';
 import axios from 'axios';
-import Select from 'react-select';
-
 // https://react-select.com/home
-import { AlphaPicker, SketchPicker } from 'react-color';
+import Select from 'react-select';
+import { useTable } from 'react-table';
 // https://casesandberg.github.io/react-color/#api
+import { AlphaPicker, SketchPicker } from 'react-color';
+
 
 import Heatmap from 'components/Heatmap';
 import BarChart from '../components/BarChart';
@@ -13,6 +14,7 @@ import GTMapWithPoints from '../components/GTMapWithPoints';
 import SMMapWithPoints from '../components/SMMapWithPoints';
 import GTRadarChart from '../components/GTRadarChart';
 import SMRadarChart from '../components/SMRadarChart';
+import StiRadarChart from '../components/StiRadarChart';
 import EvaluationMetricBarChart from '../components/EvaluationMetricBarChart';
 
 import ScanpathVisualization from 'components/ScanpathVisualization';
@@ -101,6 +103,56 @@ const select_option_humanFixationMapStyle = [
   { value:'discrete', label: 'Use discrete' }
 ];
 
+const select_option_normalization = [
+  { value:'raw', label: 'raw' },
+  { value:'min_max', label: 'Min-Max' },
+  { value:'z_score', label: 'z-score' },
+  { value:'yeo_johonson', label: 'Yeo-Johonson' },
+  { value:'yeo_johonson_min_max', label: 'Yeo-Johonson + Min-max' }
+];
+
+// const select_option_normalization_f1 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f2 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f3 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f4 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f5 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f6 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
+// const select_option_normalization_f7 = [
+//   { value:'raw', label: 'raw' },
+//   { value:'min_max', label: 'Min-Max' },
+//   { value:'z_score', label: 'z-score' }
+// ];
+
 class Analysis extends React.Component {
   constructor(props) {
     super(props);
@@ -122,6 +174,14 @@ class Analysis extends React.Component {
       select_humanFixationMapStyle : { value:'original', label: 'Use original' },
       select_mapStyle : { value:'original', label: 'Use original' },
       select_analysisStyle: null,
+      select_normalization_f0: null,
+      select_normalization_f1: null,
+      select_normalization_f2: null,
+      select_normalization_f3: null,
+      select_normalization_f4: null,
+      select_normalization_f5: null,
+      select_normalization_f6: null,
+      select_normalization_f7: null,
       select_isDisabled_participant: true,
       select_isDisabled_semanticClass: true,
       select_isDisabled_stiName: true,
@@ -185,6 +245,7 @@ class Analysis extends React.Component {
       cacheFilePath: "",
       cacheFileList: [],
       overviewCountDataList: [],
+      overviewCountDataListSM: [], 
       multiPatchViewSelectedFlag: [
         false, false, false, false, false, 
         false, false, false, false, false, 
@@ -197,6 +258,9 @@ class Analysis extends React.Component {
       saliencyMapURL: [],
       differenceMapURL: [],
       evaluationMetricScores: [],
+      stimulusIQR: [],
+      observerList: [],
+      featuresNormalizationMethods:[null, null, null, null, null, null, null, null],
     };
   }
 
@@ -237,6 +301,15 @@ class Analysis extends React.Component {
             alert(`Error - ${error.message}`);
           });
 
+          axios.post(`http://${window.location.hostname}:5000/api/overviewSM`, data)
+          .then(response => {
+            // console.log(response.data.overview);
+            this.setState({
+              overviewCountDataListSM: response.data.overviewSM
+            });
+          }).catch(error => {
+            alert(`Error - ${error.message}`);
+          });
         }
       }
       this.setState({
@@ -473,6 +546,7 @@ class Analysis extends React.Component {
       data.set('stiList', stiList_str);
       axios.post(`http://${window.location.hostname}:5000/api/processing/loadAllFixationDataList`, data)
       .then(response => {
+        // console.log(response.data);
         // console.log("response.data.participantList");
         // console.log(response.data.participantList);
         let getParticipantList = response.data.participantList;
@@ -538,6 +612,10 @@ class Analysis extends React.Component {
         });
         this.setState({
           select_isDisabled_useCache: false
+        });
+
+        this.setState({
+          stimulusIQR: response.data.stimulusIQR
         });
       }).catch(error => {
         alert(`Error - ${error.message}`);
@@ -1145,7 +1223,7 @@ class Analysis extends React.Component {
     data.set('dtMethod', selectedDT);
     axios.post(`http://${window.location.hostname}:5000/api/saliency/updateModelSet`, data)
     .then(response => {
-      console.log(response.data);
+      // console.log(response.data);
       this.setState({
         patchDataList: response.data.patchDataList
       });
@@ -1184,7 +1262,7 @@ class Analysis extends React.Component {
       this.setState({
         stiURL: stiList
       });
-      let _dmUrl = `http://${window.location.hostname}:5000/`+ response.data.dmPath +"?"+ Math.random();
+      let _dmUrl = `http://${window.location.hostname}:5000/static/__cache__/sm-gt.png`+"?"+ Math.random();
       let dmList = [];
       dmList.push({
         url: _dmUrl,
@@ -1197,22 +1275,22 @@ class Analysis extends React.Component {
       this.setState({
         evaluationMetricScores: response.data.evaluationMetrics
       });
+
+      let allObserverList = [];
+      for(let i=0; i<response.data.patchDataList.length; i++){
+        allObserverList.push(response.data.patchDataList[i][0].split(".")[0].split("/")[3]);
+      }
+      let set = new Set(allObserverList);
+      // console.log("allObserverList");
+      // console.log(allObserverList);
+      // console.log(response.data.patchDataList);
+      let _observerList = [...set];
       
-      // let evalMetricTableData = [];
-      // let _row = {
-      //   Model: this.state.select_saliencyModel.value,
-      //   IG: parseFloat(response.data.evaluationMetrics[0]).toFixed(4),
-      //   AUC: parseFloat(response.data.evaluationMetrics[1]).toFixed(4),
-      //   sAUC: parseFloat(response.data.evaluationMetrics[2]).toFixed(4),
-      //   NSS: parseFloat(response.data.evaluationMetrics[3]).toFixed(4),
-      //   CC: parseFloat(response.data.evaluationMetrics[4]).toFixed(4),
-      //   KLDiv: parseFloat(response.data.evaluationMetrics[5]).toFixed(4),
-      //   SIM: parseFloat(response.data.evaluationMetrics[6]).toFixed(4)
-      // };
-      // evalMetricTableData.push(_row);
-      // this.setState({
-      //   evaluationMetricTable: evalMetricTableData
-      // });
+      this.setState({
+        observerList: _observerList
+      });
+      console.log("_observerList");
+      console.log(_observerList);
 
     }).catch(error => {
       alert(`Error - ${error.message}`);
@@ -1304,6 +1382,96 @@ class Analysis extends React.Component {
     this.setState({
       humanFixationMapURL: hfmURL
     });
+  }
+
+  run_individual_feature_normalization =()=>{
+    let methods = this.state.featuresNormalizationMethods;
+    let methods_str = "";
+    for(let i=0; i<methods.length; i++){
+      if(i==0){
+        methods_str = methods[i];
+      }else{
+        methods_str = methods_str+ "/"+ methods[i];
+      }
+    }
+    const data = new FormData();
+    data.set("methods", methods_str);
+    data.set("stimulusInfo", this.state.select_stiName[0].value);
+    axios.post(`http://${window.location.hostname}:5000/api/saliency/individualNormalization`, data)
+    .then(response => {
+      console.log(response.data);
+      this.setState({
+        patchDataList: response.data.individualNormalizeFixations
+      })
+    }).catch(error => {
+      alert(`Error - ${error.message}`);
+    });
+  }
+
+  update_feature_normalizationMethod = (method, featureIdx) =>{
+    console.log("update_feature_normalizationMethod");
+    let _featNormMethods = [];
+    for(let i=0; i<this.state.featuresNormalizationMethods.length; i++){
+      if(i==featureIdx){
+        _featNormMethods.push(method.value);
+      }else{
+        _featNormMethods.push(this.state.featuresNormalizationMethods[i]);
+      }
+    }
+    this.setState({
+      featuresNormalizationMethods: _featNormMethods
+    });
+    let allMethodSelectedFlag = true;
+    for(let i=0; i<_featNormMethods.length; i++){
+      if(_featNormMethods[i] == null || _featNormMethods[i] == undefined){
+        allMethodSelectedFlag = false;
+        break;
+      }
+    }
+    if(allMethodSelectedFlag == true){
+      this.run_individual_feature_normalization();
+    }
+  }
+  
+  select_onChanged_normalization_f0 = select_normalization_f0 =>{
+    console.log("select_onChanged_normalization_f0");
+    this.setState({select_normalization_f0});
+    this.update_feature_normalizationMethod(select_normalization_f0, 0);
+  }
+  select_onChanged_normalization_f1 = select_normalization_f1 =>{
+    console.log("select_onChanged_normalization_f1");
+    this.setState({select_normalization_f1});
+    this.update_feature_normalizationMethod(select_normalization_f1, 1);
+  }
+  select_onChanged_normalization_f2 = select_normalization_f2 =>{
+    console.log("select_onChanged_normalization_f2");
+    this.setState({select_normalization_f2});
+    this.update_feature_normalizationMethod(select_normalization_f2, 2);
+  }
+  select_onChanged_normalization_f3 = select_normalization_f3 =>{
+    console.log("select_onChanged_normalization_f3");
+    this.setState({select_normalization_f3});
+    this.update_feature_normalizationMethod(select_normalization_f3, 3);
+  }
+  select_onChanged_normalization_f4 = select_normalization_f4 =>{
+    console.log("select_onChanged_normalization_f4");
+    this.setState({select_normalization_f4});
+    this.update_feature_normalizationMethod(select_normalization_f4, 4);
+  }
+  select_onChanged_normalization_f5 = select_normalization_f5 =>{
+    console.log("select_onChanged_normalization_f5");
+    this.setState({select_normalization_f5});
+    this.update_feature_normalizationMethod(select_normalization_f5, 5);
+  }
+  select_onChanged_normalization_f6 = select_normalization_f6 =>{
+    console.log("select_onChanged_normalization_f6");
+    this.setState({select_normalization_f6});
+    this.update_feature_normalizationMethod(select_normalization_f6, 6);
+  }
+  select_onChanged_normalization_f7 = select_normalization_f7 =>{
+    console.log("select_onChanged_normalization_f7");
+    this.setState({select_normalization_f7});
+    this.update_feature_normalizationMethod(select_normalization_f7, 7);
   }
 
   
@@ -1471,9 +1639,10 @@ class Analysis extends React.Component {
 
 
 
+
   render() {
     // overview
-    const { select_overview, overviewCountDataList, onFlag_overview_asv, onFlag_overview_scanpath, onFlag_overview_patch_total, onFlag_overview_patch_on, onFlag_overview_patch_out } = this.state;
+    const { select_overview, overviewCountDataList, overviewCountDataListSM, onFlag_overview_asv, onFlag_overview_scanpath, onFlag_overview_patch_total, onFlag_overview_patch_on, onFlag_overview_patch_out } = this.state;
     // data filter select
     const { select_stiDataset, select_semanticClass, select_stiName } = this.state;
     const { select_option_stiClass, select_option_stiName } = this.state;
@@ -1502,8 +1671,9 @@ class Analysis extends React.Component {
     // const { select_dataClustering, select_isDisabled_dataClustering } = this.state;
     
     // saliency model
-    const { select_saliencyModel, select_isDisabled_saliencyModel, saliencyMapURL } = this.state;
-    const { select_mapStyle, select_dataTransformation, select_isDisabled_dataTransformation } = this.state;
+    const { select_saliencyModel, select_isDisabled_saliencyModel, saliencyMapURL, differenceMapURL } = this.state;
+    const { select_mapStyle, select_dataTransformation, select_isDisabled_dataTransformation, stimulusIQR } = this.state;
+    const { select_normalization_f0, select_normalization_f1, select_normalization_f2, select_normalization_f3, select_normalization_f4, select_normalization_f5, select_normalization_f6, select_normalization_f7 } = this.state;
 
     // saliency features visualization
     const { patchesOnHumanFixationMap, patchesOutsideHumanFixationMap, cacheFilePath } = this.state;
@@ -1511,6 +1681,8 @@ class Analysis extends React.Component {
     
     // evaluation metrics
     const { evaluationMetricScores } = this.state;
+
+
 
     // color encoding reactCSS styles
     // let colorEncodingStyles = [];
@@ -1771,6 +1943,7 @@ class Analysis extends React.Component {
     //   })
     // );
 
+    
 
     return (
     <>
@@ -1835,86 +2008,113 @@ class Analysis extends React.Component {
           placeholder="Saliency model"
         />
         }
-        { onFlag_overview_asv == true && select_stiDataset !== null && select_stiDataset !== undefined && select_stiDataset.length !=0 && 
-        <div className="section-header">
-          <h4> Analysis of Spatial Variance </h4>
-        </div>
-        }
         { onFlag_overview_asv == true && select_stiDataset !== null && select_stiDataset !== undefined && spDataURL.length != 0 &&
-        <div id="heat" className="page-section heatmap">
-          <Heatmap 
-            width={400}
-            height={400}
-            dataURL={spDataURL}
-            FEATURE_DEFINE={FEATURE_LIST}
-            STI_CLASS_DEFINE={STI_CLASS_LIST}
-          />
-        </div>
-        }
-        { onFlag_overview_scanpath == true &&
-        <div className="section-header">
-          <h4> Overview: #Scanpaths  </h4>
+        <div>
+          <div className="section-header">
+            <h4> Analysis of Spatial Variance </h4>
+          </div>
+          <div id="heat" className="page-section heatmap">
+            <Heatmap 
+              width={400}
+              height={400}
+              dataURL={spDataURL}
+              FEATURE_DEFINE={FEATURE_LIST}
+              STI_CLASS_DEFINE={STI_CLASS_LIST}
+            />
+          </div>
         </div>
         }
         { onFlag_overview_scanpath == true &&
         <div>
-          <BarChart
-            width={400}
-            height={400}
-            overviewSytle={"scanpath"}
-            countDataList={overviewCountDataList}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        }
-        { onFlag_overview_patch_total == true &&
-        <div className="section-header">
-          <h4> Overview: #Total Patches  </h4>
+          <div className="section-header">
+            <h4> Overview: #Scanpaths  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"scanpath"}
+              countDataList={overviewCountDataList}
+            />
+          </div>
         </div>
         }
         { onFlag_overview_patch_total == true &&
         <div>
-          <BarChart
-            width={400}
-            height={400}
-            overviewSytle={"patch_total"}
-            countDataList={overviewCountDataList}
-            colorEncoding={colorEncodings}
-          />
-        </div>
-        }
-        { onFlag_overview_patch_on == true &&
-        <div className="section-header">
-          <h4> Overview: #Patches on HFM  </h4>
+          <div className="section-header">
+            <h4> Overview: #Total Patches  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"patch_total"}
+              countDataList={overviewCountDataList}
+            />
+          </div>
         </div>
         }
         { onFlag_overview_patch_on == true &&
         <div>
-          <BarChart
-            width={400}
-            height={400}
-            overviewSytle={"patch_on"}
-            countDataList={overviewCountDataList}
-            colorEncoding={colorEncodings}
-          />
+          <div className="section-header">
+            <h4> Overview: #Patches on HFM  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"patch_on"}
+              countDataList={overviewCountDataList}
+            />
+          </div>
         </div>
         }
-        { onFlag_overview_patch_out == true &&
-        <div className="section-header">
-          <h4> Overview: #Patches outside on HFM  </h4>
+        { onFlag_overview_patch_on == true &&
+        <div>
+          <div className="section-header">
+            <h4> Overview: #Patches on SM  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"patch_on"}
+              countDataList={overviewCountDataListSM}
+            />
+          </div>
         </div>
         }
         { onFlag_overview_patch_out == true &&
         <div>
-          <BarChart
-            width={400}
-            height={400}
-            overviewSytle={"patch_out"}
-            countDataList={overviewCountDataList}
-            colorEncoding={colorEncodings}
-          />
+          <div className="section-header">
+            <h4> Overview: #Patches outside on HFM  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"patch_out"}
+              countDataList={overviewCountDataList}
+            />
+          </div>
         </div>
         }
+        { onFlag_overview_patch_out == true &&
+        <div>
+          <div className="section-header">
+            <h4> Overview: #Patches outside on SM  </h4>
+          </div>
+          <div>
+            <BarChart
+              width={400}
+              height={400}
+              overviewSytle={"patch_out"}
+              countDataList={overviewCountDataListSM}
+            />
+          </div>
+        </div>
+        }
+
 {/*         
         <br></br>
         { colorEncodings.length != 0 &&
@@ -2013,6 +2213,7 @@ class Analysis extends React.Component {
                       height={260}
                       mapURL={humanFixationMapURL}
                       pointDataList={patchDataList}
+                      pointOpacity={alphaPicker_stimulusAlpha}
                     />
                   </div>
                 </div>
@@ -2025,13 +2226,20 @@ class Analysis extends React.Component {
                       height={260}
                       mapURL={saliencyMapURL}
                       pointDataList={patchDataList}
+                      pointOpacity={alphaPicker_stimulusAlpha}
                     />
                   </div>
                 </div>
                 <div className="mapBoxWrap">
                   <div className="titleDiv"> <h5>Different Map</h5> </div>
                   <div className="mapDiv">
-                    TEMP
+                    <SMMapWithPoints
+                      width={300}
+                      height={260}
+                      mapURL={differenceMapURL}
+                      pointDataList={patchDataList}
+                      pointOpacity={alphaPicker_stimulusAlpha}
+                    />
                   </div>
                 </div>
               </div>
@@ -2061,7 +2269,11 @@ class Analysis extends React.Component {
                 <div className="starChartWrap">
                   <div className="titleDiv"> <h5>Saliency Features of Visual Stimulus</h5> </div>
                   <div className="chartDiv">
-                    
+                    <StiRadarChart
+                      width={300}
+                      height={260}
+                      iqrData={stimulusIQR}
+                    />
                   </div>
                 </div>
               </div>
@@ -2072,12 +2284,65 @@ class Analysis extends React.Component {
                 options={select_option_mapStyle}
                 onChange={this.select_onChanged_mapStyle}
               />
+              <AlphaPicker
+                width={280}
+                color={alphaPicker_stimulusColor}
+                onChange={this.alphaPicker_onChange_stimulusAlpha}
+              />
               <Select
                 value={select_dataTransformation}
                 options={select_option_dataTransformation}
                 isDisabled={select_isDisabled_dataTransformation}
                 onChange={this.select_onChanged_dataTransformation_sma}
                 placeholder="Data transformation"
+              />
+              <Select
+                value={select_normalization_f0}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f0}
+                placeholder="Intensity"
+              />
+              <Select
+                value={select_normalization_f1}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f1}
+                placeholder="Color"
+              />
+              <Select
+                value={select_normalization_f2}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f2}
+                placeholder="Orientation"
+              />
+              <Select
+                value={select_normalization_f3}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f3}
+                placeholder="Curvature"
+              />
+              <Select
+                value={select_normalization_f4}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f4}
+                placeholder="Center-bias"
+              />
+              <Select
+                value={select_normalization_f5}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f5}
+                placeholder="Entropy rate"
+              />
+              <Select
+                value={select_normalization_f6}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f6}
+                placeholder="Log spectrum"
+              />
+              <Select
+                value={select_normalization_f7}
+                options={select_option_normalization}
+                onChange={this.select_onChanged_normalization_f7}
+                placeholder="HOG"
               />
             </div>
           </div>
@@ -2276,6 +2541,9 @@ class Analysis extends React.Component {
         <div className="section-header">
           <h4> Evaluation </h4>
         </div>
+        { select_saliencyModel !== null && select_saliencyModel !== undefined &&
+        <div><h5>{select_saliencyModel.value}</h5></div>
+        }
         <div className="evaluationScoreDiv">
           <EvaluationMetricBarChart
             width={390}
