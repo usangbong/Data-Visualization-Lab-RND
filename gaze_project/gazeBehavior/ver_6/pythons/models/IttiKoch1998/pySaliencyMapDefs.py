@@ -22,9 +22,9 @@ farne_flags = 0
 default_step_local = 16
 
 # feature weights
-weight_intensity   = 0.30
-weight_color       = 0.30
-weight_orientation = 0.20
+weight_intensity   = 0.60
+weight_color       = 0.50
+weight_orientation = 0.01
 weight_motion      = 0.20
 
 # coefficients of Gabor filters
