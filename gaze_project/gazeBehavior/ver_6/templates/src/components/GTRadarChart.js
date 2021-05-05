@@ -107,6 +107,17 @@ function GTRadarChart(props) {
     let radialScale = d3.scaleLinear()
     .domain([0, 1])
     .range([0, drawHeight-120]);
+    let radialScales = [];
+    for(let i=0; i<features.length; i++){
+      let valueMin = d3.min(labelAll, (d=>d[features[i]]));
+      let valueMax = d3.max(labelAll, (d=>d[features[i]]));
+      let _rs = d3.scaleLinear()
+      .domain([valueMin, valueMax])
+      .range([0, drawHeight-120]);
+
+      radialScales.push(_rs);
+    }
+    
 
     let ticks = [0.2, 0.4, 0.6, 0.8, 1];
 
@@ -119,26 +130,30 @@ function GTRadarChart(props) {
       .attr("r", radialScale(t))
     );
 
-    ticks.forEach(t =>
-      svg.append("text")
-      .attr("x", (drawWidth/2)+margin.left)
-      .attr("y", (drawHeight/2)+margin.top - radialScale(t))
-      .attr("font-family", "Roboto, sans-serif")
-      .style("font-size", "10px")
-      .text(t.toString())
-    );
+    // ticks.forEach(t =>
+    //   svg.append("text")
+    //   .attr("x", (drawWidth/2)+margin.left)
+    //   .attr("y", (drawHeight/2)+margin.top - radialScale(t))
+    //   .attr("font-family", "Roboto, sans-serif")
+    //   .style("font-size", "6px")
+    //   .text(t.toString())
+    // );
 
-    function angleToCoordinate(angle, value){
-      let x = Math.cos(angle)*radialScale(value);
-      let y = Math.sin(angle)*radialScale(value);
+    function angleToCoordinate(angle, value, featIdx){
+      let x = Math.cos(angle)*radialScales[featIdx](value);
+      let y = Math.sin(angle)*radialScales[featIdx](value);
+      if(featIdx==0){
+        x = Math.cos(angle)*radialScale(value);
+        y = Math.sin(angle)*radialScale(value);
+      }
       return {"x": (drawWidth/2)+margin.left+x, "y": (drawHeight/2)+margin.top-y};
     }
 
     for(let i = 0; i < features.length; i++) {
       let ft_name = features[i];
       let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-      let line_coordinate = angleToCoordinate(angle, 1);
-      let label_coordinate = angleToCoordinate(angle, 1.2);
+      let line_coordinate = angleToCoordinate(angle, 1, i);
+      let label_coordinate = angleToCoordinate(angle, 1.2, i);
   
       //draw axis line
       svg.append("line")
@@ -153,7 +168,7 @@ function GTRadarChart(props) {
       .attr("x", label_coordinate.x)
       .attr("y", label_coordinate.y)
       .attr("font-family", "Roboto, sans-serif")
-      .style("font-size", "10px")
+      .style("font-size", "6px")
       .text(ft_name);
     }
 
@@ -237,7 +252,7 @@ function GTRadarChart(props) {
       for (var i = 0; i < features.length; i++){
           let ft_name = features[i];
           let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-          coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
+          coordinates.push(angleToCoordinate(angle, data_point[ft_name], 0));
       }
       return coordinates;
     }
