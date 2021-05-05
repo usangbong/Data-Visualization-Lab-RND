@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 function GTMapWithPoints(props) {
-  const { width, height, mapURL, pointDataList } = props;
+  const { width, height, mapURL, pointDataList, pointOpacity } = props;
   const svgRef = useRef();
   const d3 = window.d3v4;
   const PATCH_SIZE = 20;
@@ -103,9 +103,10 @@ function GTMapWithPoints(props) {
       }else{
         return "green";
       }
-    });
+    })
+    .style("opacity", pointOpacity);
     
-  }, [, props.mapURL, props.pointDataList ]);
+  }, [, props.mapURL, props.pointDataList, props.pointOpacity ]);
 
   return (
     <>
