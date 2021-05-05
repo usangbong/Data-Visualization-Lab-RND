@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
 function BarChart(props) {
-  const { width, height, overviewSytle, countDataList, colorEncoding } = props;
+  const { width, height, overviewSytle, countDataList } = props;
   const svgRef = useRef();
   const d3 = window.d3v4;
-  const FEATURE_ordered = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"];
-  // const COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
 
   useEffect(() => {
     if ( countDataList.length === 0)
@@ -53,7 +51,7 @@ function BarChart(props) {
       }
       countData.push(_d);
     }
-    // console.log(countData);
+    console.log(countData);
 
     // var xMin = d3.min(countData, (d=>d.value));
     var xMax = d3.max(countData, (d=>d.value));
@@ -86,7 +84,7 @@ function BarChart(props) {
     .attr("fill", "gray")
     
     
-  }, [,props.countDataList, props.colorEncoding]);
+  }, [,props.countDataList]);
 
   return (
     <>
