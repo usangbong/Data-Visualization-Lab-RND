@@ -39,6 +39,7 @@ PARTICIPANT = []
 FEATURE = []
 FEATURE_ordered = ["intensity", "color", "orientation", "curvature", "center_bias", "entropy_rate", "log_spectrum", "HOG"]
 COLORS = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"]
+RAW_DATA_LIST = []
 PATCH_SIZE = 20
 THRESHOLD_SM = 50
 
@@ -390,6 +391,37 @@ def overview_count(stimulusNames, datasetName, semanticClass):
     countList.append([stiFileFullName, len(fixFileList), len(patchList), len(patchList_on), len(patchList_out)])
   return countList
 
+def overview_count_sm(stimulusNames, datasetName, semanticClass, sm_model):
+  fixDirPath = "./static/fix/"+ datasetName +"/"+ semanticClass +"/"
+  countList = []
+  for stiFileFullName in stimulusNames:
+    stiName = stiFileFullName.split(".")[0]
+    stiExe = stiFileFullName.split(".")[1]
+    smPath = "./static/models/" + sm_model +"/"+ datasetName +"-"+ semanticClass +"-"+ stiName +".jpg"
+    stiPath = "./static/stimulus/" + datasetName +"/"+ semanticClass +"/"+ stiFileFullName
+    stimulus = cv2.imread(stiPath)
+    if not(os.path.exists(smPath)):
+      gen_saliency_map(sm_model, stimulus, smPath)
+    saliencyMap = cv2.imread(smPath)
+    
+    fixFileDirPath = fixDirPath + stiName +"_"+ stiExe +"/"
+    fixFileList = os.listdir(fixFileDirPath)
+    patchList = []
+    patchList_on = []
+    patchList_out = []
+    for fixFileName in fixFileList:
+      path = fixFileDirPath + fixFileName
+      pDF = pd.read_csv(path, header=None)
+      pList = pDF.values.tolist()
+      for _p in pList:
+        patchList.append([_p[0], _p[1]])
+        labelVal = label_saliencyMap(saliencyMap, int(_p[0]), int(_p[1]), THRESHOLD_SM)
+        if labelVal == 0:
+          patchList_out.append([_p[0], _p[1]])
+        else:
+          patchList_on.append([_p[0], _p[1]])
+    countList.append([stiFileFullName, len(fixFileList), len(patchList), len(patchList_on), len(patchList_out)])
+  return countList
 
 ######################
 # general funcations #
@@ -445,6 +477,58 @@ def getFeatureMeanVal(_featDF, _x, _y, _stiWidth, _stiHeight, _patchSize):
   # print(patch.shape)
   meanVal = patch.mean()
   return meanVal
+
+def featureIndividualNormalizations(nMethods, df, featureList, frontCols):
+  # print("Feature Normalization methods: "+nMethods)
+  tdf = df[frontCols]
+  dfIndex = len(frontCols)
+  for i in range(0, len(nMethods)):
+    cCount = dfIndex + i
+    nm = nMethods[i]
+    featureName = featureList[i]
+    print("Normalization: "+featureName+"::"+nm)
+    cDF = df[featureName]
+    if nm == "min_max":
+      _ndf = nm_minMax(cDF)
+      tdf.insert(cCount, featureName, _ndf, True)
+    elif nm == "z_score":
+      _ndf = nm_zScore(cDF)
+      tdf.insert(cCount, featureName, _ndf, True)
+    elif nm == "yeo_johonson":
+      _ndf = nm_yeoJohnson(cDF)
+      tdf.insert(cCount, featureName, _ndf, True)
+    elif nm == "yeo_johonson_min_max":
+      _ndf = nm_yeoJohnson_minMax(cDF)
+      tdf.insert(cCount, featureName, _ndf, True)
+    elif nm == "raw":
+      tdf.insert(cCount, featureName, cDF, True)
+    else:
+      print("ERROR: unavailavle normalization method selected: "+featureName)
+      tdf.insert(cCount, featureName, cDF, True)
+  return tdf
+
+def nm_minMax(cDF):
+  scaler = MinMaxScaler()
+  _tf = scaler.fit_transform(cDF.values.reshape(-1, 1))
+  return _tf
+
+def nm_zScore(cDF):
+  scaler = StandardScaler()
+  _tf = scaler.fit_transform(cDF.values.reshape(-1, 1))
+  return _tf
+
+def nm_yeoJohnson(cDF):
+  scaler = PowerTransformer(method='yeo-johnson')
+  _tf = scaler.fit_transform(cDF.values.reshape(-1, 1))
+  return _tf
+
+def nm_yeoJohnson_minMax(cDF):
+  print("debug point 1")
+  _np = nm_yeoJohnson(cDF)
+  _df = pd.DataFrame(_np)
+  _tf = nm_minMax(_df)
+  return _tf
+
 
 def dataTransformation(tMethod, df, featureList, frontCols):
   print("Data transformation method: "+tMethod)
@@ -1593,6 +1677,8 @@ def processing_load_allFixationDataList():
       for _p in participantList:
         _pdata = sti[0] +"/"+ sti[1] +"/"+ sti[2] +"_"+ sti[3] +"/" + _p.split(".")[0]
         PARTICIPANT.append(_pdata)
+    print("PARTICIPANT")
+    print(PARTICIPANT)
 
     # generate fixations (scanpath) data list
     PARTICIPANT_FIX_FILE_LIST = []
@@ -1655,9 +1741,31 @@ def processing_load_allFixationDataList():
       FIX_DATA_LIST[i].append(_fixs)
     cv2.imwrite(aggregatedPatchPath, aggregatedPatchImage)
     
+
+    # load selected stimulus IQR of saliency featuers
+    featNPList = []
+    for sti in sti_files_list:
+      for featName in FEATURE_ordered:
+        featureFilePath = "./static/feature/"+ featName +"/"+ sti[0] +"/"+ sti[1] +"/"+ sti[2] +".csv"
+        featureDF = pd.read_csv(featureFilePath, header=None)
+        featNPList.append(featureDF.to_numpy())
+    scaler = MinMaxScaler()
+    stiIQRList = []
+    for i in range(0, len(featNPList)):
+      featNP = featNPList[i]
+      norNp = scaler.fit_transform(featNP)
+      q1 = np.quantile(norNp, 0.25)
+      m = np.quantile(norNp, 0.5)
+      q3 = np.quantile(norNp, 0.75)
+      stiIQRList.append([FEATURE_ordered[i], str(q1), str(m), str(q3)])
+
+    # load all stimulus IQR of saliency faetuers
+    ######################################################################ssssssss
+
     response['status'] = 'success'
     response['participantList'] = PARTICIPANT
     response['fixDataList'] = FIX_DATA_LIST
+    response['stimulusIQR'] = stiIQRList
   except Exception as e:
     response['status'] = 'failed'
     response['reason'] = e
@@ -1832,11 +1940,39 @@ def overview_calc():
 
   return json.dumps(response)
 
+@app.route('/api/overviewSM', methods=['POST'])
+def overviewSM_calc():
+  print("overviewSM_calc")
+  print(request.form)
+  response = {}
+  try:
+    GET_SELECTED_DATAINFO = request.form['semanticClass']
+    GET_DATASET = GET_SELECTED_DATAINFO.split("/")[0]
+    GET_SEMANTIC_CLASS = GET_SELECTED_DATAINFO.split("/")[1]
+    
+    stimulusPath = "./static/stimulus/"+ GET_DATASET +"/"+ GET_SEMANTIC_CLASS +"/"
+    stimulusList = os.listdir(stimulusPath)
+    
+    # saliency model overview count: initial model is "IttiKoch1998"
+    SELECTED_SALIENCY_MODEL = "IttiKoch1998"
+    OVERVIEW_COUNT_LIST_SM = []
+    OVERVIEW_COUNT_LIST_SM = overview_count_sm(stimulusList, GET_DATASET, GET_SEMANTIC_CLASS, SELECTED_SALIENCY_MODEL)
+    
+    response['status'] = 'success'
+    response['overviewSM'] = OVERVIEW_COUNT_LIST_SM
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
+
+  return json.dumps(response)
+
 #######################
 # saliency model APIs #
 #######################
 @app.route('/api/saliency/updateModelSet', methods=['POST'])
 def saliency_updateModelSet():
+  global RAW_DATA_LIST
   print("saliency_updateModelSet")
   print(request.form)
   response = {}
@@ -1883,7 +2019,8 @@ def saliency_updateModelSet():
 
     fixationDataList = []
     cachePath = "./static/__cache__/sCache/" + datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-"+ data_transformation_method +".csv"
-    if not(os.path.exists(cachePath)):
+    rawPath = "./static/__cache__/sCache/" + datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-raw"+".csv"
+    if not(os.path.exists(cachePath)) or not(os.path.exists(rawPath)):
       print("Generate cache file: "+cachePath)
       # load feature data
       featureDFList = []
@@ -1896,13 +2033,17 @@ def saliency_updateModelSet():
       fixDir = "./static/fix/"+ datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"
       observerList = os.listdir(fixDir)
       fixationDfList = []
+      print("observerList")
+      print(observerList)
       for obFileName in observerList:
         _path = fixDir + obFileName
         ob = datasetName +"/"+ semanticClassName +"/"+ stimulusDirName +"/"+ obFileName
         fixDF = pd.read_csv(_path, header=None)
-        fixationDfList.append(fixDF)
+        fixationDfList.append([ob, fixDF])
+
       for i in range(0, len(fixationDfList)):
-        for _fp in fixationDfList[i].values.tolist():
+        ob = fixationDfList[i][0]
+        for _fp in fixationDfList[i][1].values.tolist():
           _x = int(_fp[0])
           _y = int(_fp[1])
           _t = float(_fp[2])
@@ -1913,6 +2054,17 @@ def saliency_updateModelSet():
             fMean = getFeatureMeanVal(featureDFList[j], _x, _y, stiWidth, stiHeight, PATCH_SIZE)
             obFixList.append(fMean)
           fixationDataList.append(obFixList)
+      
+      if os.path.exists(rawPath):
+        rawDF = pd.read_csv(rawPath)
+        RAW_DATA_LIST = rawDF.values.tolist()
+      else:
+        RAW_DATA_LIST = fixationDataList
+        dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+        for featureName in FEATURE_ordered:
+          dfCols.append(featureName)
+        rawDF = pd.DataFrame(fixationDataList, columns=dfCols)
+        rawDF.to_csv(rawPath, mode='w', index=False, header=True)
       # data transformation
       if data_transformation_method != "raw":
         dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
@@ -1954,5 +2106,43 @@ def saliency_updateModelSet():
     response['status'] = 'failed'
     response['reason'] = e
     print(e)
+  return json.dumps(response)
 
+@app.route('/api/saliency/individualNormalization', methods=['POST'])
+def saliency_individualNormalization():
+  global RAW_DATA_LIST
+  print("saliency_individualNormalization")
+  print(request.form)
+  response = {}
+  try:
+    NORMALIZATION_METHODS = request.form['methods']
+    SELECTED_STIMULUS_INFO = request.form['stimulusInfo']
+    METHODS_LIST = NORMALIZATION_METHODS.split("/")
+    stiInfoSplit = SELECTED_STIMULUS_INFO.split("/")
+    datasetName = stiInfoSplit[0]
+    semanticClassName = stiInfoSplit[1]
+    stimulusFileName = stiInfoSplit[2]
+    stimulusName = stiInfoSplit[2].split(".")[0]
+    stimulusExe = stiInfoSplit[2].split(".")[1]
+    stimulusDirName = stimulusName +"_"+ stimulusExe
+
+    if len(RAW_DATA_LIST) == 0:
+      rawPath = "./static/__cache__/sCache/" + datasetName +"-"+ semanticClassName +"-"+ stimulusDirName +"-raw"+".csv"
+      rawDF = pd.read_csv(rawPath)
+      RAW_DATA_LIST = rawDF.values.tolist()
+    
+    dfCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+    for featureName in FEATURE_ordered:
+      dfCols.append(featureName)
+    fixationsDF = pd.DataFrame(RAW_DATA_LIST, columns=dfCols)
+    dfFrontCols = ["id", "x", "y", "duration", "label_gt", "label_sm"]
+    tfDF = featureIndividualNormalizations(METHODS_LIST, fixationsDF, FEATURE_ordered, dfFrontCols)
+    individualNormalizeFixations = tfDF.values.tolist()
+    
+    response['status'] = 'success'
+    response['individualNormalizeFixations'] = individualNormalizeFixations
+  except Exception as e:
+    response['status'] = 'failed'
+    response['reason'] = e
+    print(e)
   return json.dumps(response)
