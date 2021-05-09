@@ -1,0 +1,48 @@
+{
+    "id": "MAP",
+    "name": "MAP",
+    "models": [
+        {
+            "id": "MAPPointCloud",
+            "name": "Point Cloud Scan",
+            "rotation": [
+                0,
+                90,
+                0
+            ],
+            "saoEnabled": false
+        }
+    ],
+    "viewerConfigs": {
+        "cameraNear": "0.05",
+        "cameraFar": "3000.0"
+    },
+    "viewerContent": {
+        "modelsLoaded": [
+            "MAPPointCloud"
+        ]
+    },
+    "viewerState": {
+        "tabOpen": "objects",
+        "expandObjectsTree": 3,
+        "expandClassesTree": 1,
+        "expandStoreysTree": 1,
+        "setCamera": {
+            "eye": [
+                33.87,
+                25.24,
+                39.81
+            ],
+            "look": [
+                24.38,
+                4.06,
+                -4.31
+            ],
+            "up": [
+                -0.08,
+                0.9,
+                -0.41
+            ]
+        }
+    }
+}
