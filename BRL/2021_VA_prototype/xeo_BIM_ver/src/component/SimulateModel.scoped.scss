@@ -1,0 +1,22 @@
+.SimulateModel {
+  width: 92%;
+  height: 14%;
+  background: #5A5A5A;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 6px 6px 8px 0px rgba(136, 136, 136, 0.75);
+}
+
+.Title{
+  width: 100%;
+  height: 1.5rem;
+  background: #2C2C2C;
+}
+
+.SimulateImg{
+  width: 95%;
+  height: 100%;
+}
