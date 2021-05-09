@@ -1,0 +1,57 @@
+{
+    "id": "ManyModels",
+    "name": "Many Models",
+    "models": [
+        {
+            "id": "Schependomlaan",
+            "name": "Schependomlaan",
+            "position": [
+                -100,
+                0,
+                0
+            ],
+            "saoEnabled": true
+        },
+        {
+            "id": "Schependomlaan_invalid",
+            "name": "Schependomlaan Invalid",
+            "position": [
+                -100,
+                0,
+                0
+            ],
+            "saoEnabled": true
+        },
+        {
+            "id": "OTCConferenceCenter",
+            "name": "OTC Conference Center",
+            "position": [
+                100,
+                0,
+                0
+            ],
+            "saoEnabled": false
+        },
+        {
+            "id": "MAPFullPrecision",
+            "name": "Model with Full Precision",
+            "position": [
+                0,
+                0,
+                0
+            ],
+            "saoEnabled": false
+        }
+    ],
+    "viewerConfigs": {
+        "cameraNear": "0.05",
+        "cameraFar": "3000.0",
+        "saoEnabled": "true"
+    },
+    "viewerContent": {
+        "modelsLoaded": [
+            "Schependomlaan",
+            "OTCConferenceCenter"
+        ]
+    }
+}
