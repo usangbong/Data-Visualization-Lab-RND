@@ -1,0 +1,55 @@
+{
+    "id": "WestRiversideHospital",
+    "name": "West Riverside Hospital",
+    "models": [
+        {
+            "id": "architectural",
+            "name": "Hospital Architecture",
+            "saoEnabled": true
+        },
+        {
+            "id": "structure",
+            "name": "Hospital Structure"
+        },
+        {
+            "id": "electrical",
+            "name": "Hospital Electrical"
+        },
+        {
+            "id": "sprinklers",
+            "name": "Hospital Sprinklers"
+        },
+        {
+            "id": "plumbing",
+            "name": "Hospital Plumbing"
+        },
+        {
+            "id": "fireAlarms",
+            "name": "Hospital Fire Alarms"
+        },
+        {
+            "id": "mechanical",
+            "name": "Hospital Mechanical"
+        }
+    ],
+    "viewerConfigs": {
+        "backgroundColor": [0.9, 0.9, 1.0],
+        "cameraNear": 0.05,
+        "cameraFar": 3000.0,
+        "saoEnabled": true,
+        "saoNumSamples": 60,
+        "edgesEnabled": "true",
+        "objectColorSource": "model"
+    },
+    "viewerContent": {
+        "modelsLoaded": [
+            "structure",
+            "architectural"
+        ]
+    },
+    "viewerState": {
+        "viewCubeEnabled": true,
+        "threeDEnabled": true,
+        "tabOpen": "models"
+    }
+}
