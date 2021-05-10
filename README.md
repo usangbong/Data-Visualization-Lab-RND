@@ -20,9 +20,9 @@ vis.sejong.ac.kr
   - Hyein Hong
   - Giwoong Park
 - Undergraduate
-  - Changyoung Yonn
-  - Seongbum Seo
-  - Soobin Yim
+  - Changyoung Yoon
+  - Moon
+  - Changyoung Jeong
 - Alumni
   - (Ph.D) Hanbyul Yeon
   - (Master) Daekyo Jeong
