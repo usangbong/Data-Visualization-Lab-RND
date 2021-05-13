@@ -56,20 +56,30 @@ def raw2input(state_h, n_candidates, r_boxes,  num_max_remain, num_selected, loa
     loading_mat_c = loading_mat_c.transpose((0,2,3,1))
     return state_h_c, r_mat_c, loading_mat_c
 
-def get_loaded_h(state):
-    env_l, env_b, env_h = state.shape
-    idx = np.where(state == 1)
-    h = pd.DataFrame(np.transpose(idx, (1,0)))
-    h.columns = ['0','1','2']
-    h = h.groupby(['0','1']).agg({'0':'first','1':'first','2':'max'}).values
-    state_h = np.zeros((env_l, env_b))
-    state_h[h[:,0],h[:,1]] = h[:,2]+1
-    return state_h
+# def get_loaded_h(state):
+#     env_l, env_b, env_h = state.shape
+#     idx = np.where(state == 1)
+#     h = pd.DataFrame(np.transpose(idx, (1,0)))
+#     h.columns = ['0','1','2']
+#     h = h.groupby(['0','1']).agg({'0':'first','1':'first','2':'max'}).values
+#     state_h = np.zeros((env_l, env_b))
+#     state_h[h[:,0],h[:,1]] = h[:,2]+1
+#     return state_h
+# def get_loaded_mh(s_loc, env_l, env_b, env_h):
+#     loaded_m = np.mean(s_loc, axis = -1)
+#     idx = np.where(s_loc == 1)
+#     h = pd.DataFrame(np.transpose(idx, (1,0)))
+#     h.columns = ['0','1','2']
+#     h = h.groupby(['0','1']).agg({'0':'first','1':'first','2':'max'}).values
+#     loaded_h = np.zeros(( env_l, env_b ))
+#     loaded_h[h[:,0],h[:,1]] = h[:,2]+1
+#     loaded_h = loaded_h/env_h # scaling
+#     loaded_mh = np.stack([loaded_m, loaded_h], axis = -1)
+#     loaded_mh = loaded_mh.astype(np.float32)
+#     return loaded_mh
 
-def get_fixed_xyz(box, state):
-    env_l, env_b, env_h = state.shape
-    state_h = get_loaded_h(state)
-    next_state = state.copy()
+def get_fixed_loc(box, state_h, env_h):
+    env_l, env_b = state_h.shape
     bxl, bxb, bxh = box[0], box[1], box[2]
     f_loc = np.where(state_h + bxh <= env_h) # 환경의 높이보다 state 작은 위치
     f_upleft = np.stack([f_loc[0], f_loc[1]], axis=-1) # array 형태로 변환
@@ -83,26 +93,29 @@ def get_fixed_xyz(box, state):
         f_upleft = f_upleft[area+ bxh <= env_h] # 높이 넘으면 삭제
         area = area[area+ bxh <= env_h]
     if len(f_upleft) > 0 and len(area)>0:
-        f_upleft = f_upleft[area == np.min(area)] #가장 낮게 적입할 수 있는 위치
-        z =  state_h[f_upleft[:,0], f_upleft[:, 1]] # z 좌표
-        loc_xyz = np.concatenate([f_upleft, z[:, np.newaxis]], axis = -1) #xyz 좌표
-        fixed_xyz = loc_xyz[np.lexsort((loc_xyz[:,1],loc_xyz[:,0],loc_xyz[:,2]))] #하나 선택
+        #f_upleft = f_upleft[area == np.min(area)] #가장 낮게 적입할 수 있는 위치
+        #z =  state_h[f_upleft[:,0], f_upleft[:, 1]] # z 좌표
+        loc_xyz = np.concatenate([f_upleft, area[:, np.newaxis]], axis = -1) #xyz 좌표
+        loc_xyz = loc_xyz[np.lexsort((loc_xyz[:,1],loc_xyz[:,0],loc_xyz[:,2]))] #하나 선택
         loc_xyz = loc_xyz[0].astype('int')
         
-        next_state = get_next_state(state, loc_xyz[:2], bxl,bxb,bxh)
-        
-    return loc_xyz, next_state  
+    return loc_xyz
 
-
-def get_next_state(state, upleft,bxl,bxb,bxh):
-    state_h = get_loaded_h(state)
+# def get_next_state(state, upleft,bxl,bxb,bxh):
+#     state_h = get_loaded_h(state)
+#     loading_area_h =state_h[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb]
+#     max_h = np.max(loading_area_h).astype('int')
+#     next_state = state.copy()
+#     next_state[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb, max_h:bxh + max_h] = 1
+#     return next_state 
+def get_next_state(state, state_h, upleft,bxl,bxb,bxh):
+    next_state = state.copy()
+    next_state_h = state_h.copy()
+    next_state[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb] += bxh
     loading_area_h =state_h[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb]
     max_h = np.max(loading_area_h).astype('int')
-    
-    next_state = state.copy()
-    next_state[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb, max_h:bxh + max_h] = 1
-
-    return next_state 
+    next_state_h[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb] = max_h+bxh
+    return next_state, next_state_h 
 
 def get_selected_order(selected, k):
     selected_order = []
@@ -115,90 +128,80 @@ def get_selected_order(selected, k):
     selected_order = np.unique(selected_order, axis=0)
     return selected_order 
 
-def get_loaded_mh(s_loc, env_l, env_b, env_h):
-    loaded_m = np.mean(s_loc, axis = -1)
-    idx = np.where(s_loc == 1)
-    h = pd.DataFrame(np.transpose(idx, (1,0)))
-    h.columns = ['0','1','2']
-    h = h.groupby(['0','1']).agg({'0':'first','1':'first','2':'max'}).values
-    loaded_h = np.zeros(( env_l, env_b ))
-    loaded_h[h[:,0],h[:,1]] = h[:,2]+1
-    loaded_h = loaded_h/env_h # scaling
-    
-    loaded_mh = np.stack([loaded_m, loaded_h], axis = -1)
-    loaded_mh = loaded_mh.astype(np.float32)
-    return loaded_mh
-
-def get_selected_location(s_order, state_org):
-    e_l, e_b, e_h = state_org.shape
+def get_selected_location(s_order, state_org, state_h_org, e_h):
+    e_l, e_b = state_org.shape
     # 정해진 순서에 따라 하나씩 적재
-    s_locs, loading_pos_c, loading_size_c, next_state_c, num_loaded_c  = [],[],[],[],[]
-    next_state, next_h_c = [], []
+    loading_pos_c, loading_size_c, num_loaded_c  = [],[],[]
+    next_state_c, next_state_h_c = [], []
+    loaded_mh_c = []
     
     for boxes in s_order:
         #초기화
         state = state_org.copy()
-        state_h = get_loaded_h(state)
+        state_h = state_h_org.copy()
         next_state = state.copy()
-        next_h = state_h.copy()
+        next_state_h = state_h.copy()
         loading_size, loading_pos = [],[]
+        box_m = np.zeros((e_l, e_b))
+        box_h = np.zeros((e_l, e_b))
         num_loaded = 0
-        s_loc = np.zeros((e_l,e_b,e_h))
         for box in boxes:
             if np.sum(box)==0:
                 fixed_xyz = []
             else:
-                fixed_xyz, next_state = get_fixed_xyz(box, state) #박스의 좌표와 next_state
+                fixed_xyz = get_fixed_loc(box, state_h, e_h) #박스의 좌표와 next_state
             if len(fixed_xyz) == 0:
                 continue
-            state = next_state.copy() # state 업데이트 
-            next_h = get_loaded_h(next_state) #next_h 업데이트            
+            # next
+            next_state, next_state_h = get_next_state(state, state_h, fixed_xyz[:2], box[0], box[1], box[2])
+            box_m = (next_state - state_org)
+            box_h[fixed_xyz[0]:fixed_xyz[0]+box[0], fixed_xyz[1]:fixed_xyz[1]+box[1]] = \
+                next_state_h[fixed_xyz[0]:fixed_xyz[0]+box[0], fixed_xyz[1]:fixed_xyz[1]+box[1]]
+            # state 업데이트
+            state = next_state.copy() 
+            state_h = next_state_h.copy()            
             num_loaded += 1 # 카운트            
             loading_size.append(box)
             loading_pos.append(fixed_xyz)
-            # location
-            x,y,z = fixed_xyz.astype('int')
-            l,b,h = box
-            s_loc[x:x+l, y:y+b, z:z+h] = 1
-        
+            
         if len(loading_size)==0:
             loading_size.append(np.zeros_like(box))
             loading_pos.append(np.zeros_like(box))
+        loaded_mh = np.stack([box_m, box_h], axis = -1)/e_h
         
-        s_locs.append(s_loc)
+        # 중복 제외: loaded_mh, loading_size가 동일하면 append 제외
+        if len(loaded_mh_c) > 0:
+            idx1 = [i for i, x in enumerate(loaded_mh_c) if (x==loaded_mh).all()]
+            idx2 = [i for i, x in enumerate(loading_size_c) if np.array((np.array(x)==loading_size)).all()]
+            num_inter = list(set(idx1) & set(idx2))
+            if len(num_inter) > 0:
+                continue
+        
         num_loaded_c.append(num_loaded)
         loading_size_c.append(loading_size)
         loading_pos_c.append(loading_pos)
         next_state_c.append(next_state)
-        next_h_c.append(next_h)
-        
-    s_locs = np.stack(s_locs) #(N, L, B, H)
-    return s_locs, num_loaded_c, loading_size_c, loading_pos_c, next_state_c, next_h_c
+        next_state_h_c.append(next_state_h)
+        loaded_mh_c.append(loaded_mh)
+    return num_loaded_c, loading_size_c, loading_pos_c, next_state_c, next_state_h_c, loaded_mh_c
 
-def get_unique(s_order, s_loc_c, num_loaded_box_c, loading_size_c, loading_pos_c, next_cube_c , next_state_c, loaded_mh_c, in_state, in_r_boxes, in_loading):
-    loaded_mh_c_u, idx1 = np.unique(loaded_mh_c, return_index=True, axis=0)
-    in_r_boxes_u, idx2 = np.unique(in_r_boxes, return_index=True, axis=0)
-    idx = np.union1d(idx1, idx2)
-    if len(loaded_mh_c) != len(idx):
-        #print('reduced',len(loaded_mh_c), len(idx), idx)
-        #print(loading_size_c)
-        #for i in range(len(loaded_mh_c)):
-        #    plt.imshow(loaded_mh_c[i,:,:,0])
-        #    plt.show()
-        #    plt.imshow(loaded_mh_c[i,:,:,1])
-        #    plt.show()
-        loaded_mh_c = loaded_mh_c[idx]
-        in_r_boxes = in_r_boxes[idx]
-        s_order = s_order[idx]
-        s_loc_c= s_loc_c[idx]
-        num_loaded_box_c= [num_loaded_box_c[i] for i in idx]
-        loading_size_c = [loading_size_c[i] for i in idx]
-        loading_pos_c = [loading_pos_c[i] for i in idx]
-        next_cube_c = [next_cube_c[i] for i in idx]
-        next_state_c = [next_state_c[i] for i in idx]
-        in_state = in_state[idx]
-        in_loading = in_loading[idx]
-    return s_order, s_loc_c, num_loaded_box_c, loading_size_c, loading_pos_c, next_cube_c , next_state_c, loaded_mh_c, in_state, in_r_boxes, in_loading
+# def get_unique(s_order, num_loaded_box_c, loading_size_c, loading_pos_c, next_cube_c , next_state_c, loaded_mh_c, in_state, in_r_boxes, in_loading):
+#     # mh와 in_r_boxes가 동일하면 제외
+#     loaded_mh_c_u, idx1 = np.unique(loaded_mh_c, return_index=True, axis=0)
+#     in_r_boxes_u, idx2 = np.unique(in_r_boxes, return_index=True, axis=0)
+#     idx = np.union1d(idx1, idx2)
+#     if len(loaded_mh_c) != len(idx):
+#         loaded_mh_c = loaded_mh_c[idx]
+#         in_r_boxes = in_r_boxes[idx]
+#         s_order = s_order[idx]
+#         num_loaded_box_c= [num_loaded_box_c[i] for i in idx]
+#         loading_size_c = [loading_size_c[i] for i in idx]
+#         loading_pos_c = [loading_pos_c[i] for i in idx]
+#         next_cube_c = [next_cube_c[i] for i in idx]
+#         next_state_c = [next_state_c[i] for i in idx]
+#         in_state = in_state[idx]
+#         in_loading = in_loading[idx]
+#     return s_order, num_loaded_box_c, loading_size_c, loading_pos_c, next_cube_c , next_state_c, loaded_mh_c, in_state, in_r_boxes, in_loading
 
 
 ################################################################visualization 
@@ -259,56 +262,25 @@ def plot_voxel(t):
 class Bpp3DEnv():#(gym.Env):
     #metadata = {'render.modes': ['human']}
     #
-    def __init__(self,length = 20, breadth = 20, height = 20, bbox = np.zeros((20, 20, 20))):
+    def __init__(self,length = 20, breadth = 20, height = 20, bbox = np.zeros((20, 20))):
         super(Bpp3DEnv, self).__init__()
         self.length=length
         self.breadth=breadth
         self.height=height
         self.bbox = bbox
-        self.container_h = np.zeros((self.length,self.breadth))
-        self.container = self.bbox.copy()
-        self.update_h()
-    
-    def update_h(self):
-        idx = np.where(self.container == 1)
-        h = pd.DataFrame(np.transpose(idx, (1,0)))
-        h.columns = ['0','1','2']
-        h = h.groupby(['0','1']).agg({'0':'first','1':'first','2':'max'}).values
-        self.zero_h()
-        self.container_h[h[:,0],h[:,1]] = h[:,2]+1
-        return self.container_h
-    
-    def convert_state(self, new_container):
-        self.container = new_container
-        self.update_h()
-    
-    def next_state(self, upleft,bxl,bxb,bxh):
-        next_container_h = self.container_h.copy()
-        loading_area_h = self.container_h[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb]
-        max_h = np.max(loading_area_h).astype('int')
-        next_container_h[upleft[0]:upleft[0]+bxl,upleft[1]:upleft[1]+bxb] = bxh + max_h
+        self.container_h = self.bbox.copy() #(L,B)
+        self.container_s = self.bbox.copy() #(L,B)
         
-        next_container = self.container.copy()
-        next_container[upleft[0]:upleft[0]+bxl, upleft[1]:upleft[1]+bxb, max_h:bxh + max_h] = 1
-        
-        return next_container, next_container_h
-    
-    def step(self, upleft,bxl,bxb,bxh):
-        n_s, n_h = self.next_state(upleft,bxl,bxb,bxh)
-        self.convert_state(n_s)
-        return n_s
+    def step(self, next_container_s, next_container_h):
+        self.container_s = next_container_s
+        self.container_h = next_container_h
     
     def reset(self):
-        #self.container = np.zeros((self.length,self.breadth, self.height))
-        #self.container_h = np.zeros((self.length,self.breadth))
-        self.container = self.bbox.copy()#np.zeros((self.length, self.breadth, self.height))
-        self.update_h()
-        
-    def zero_h(self):
-        self.container_h = np.zeros((self.length,self.breadth))
+        self.container_s = self.bbox.copy()
+        self.container_h = self.bbox.copy()
         
     def terminal_reward(self):
-        fill = np.sum(self.container) - np.sum(self.bbox)
+        fill = np.sum(self.container_s) - np.sum(self.bbox)
         valid = self.length*self.breadth*self.height - np.sum(self.bbox)
         #return np.sum(self.container)/(self.length*self.breadth*self.height)
         return fill/valid
