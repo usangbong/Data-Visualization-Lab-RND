@@ -122,10 +122,16 @@ def generation_3dbox(case_size=[[20,20,20],[25,20,15]], N_mdd=20, min_s = 3, is_
         #gt_upleft=np.array(gt_upleft)[list(reversed(s_idx))]
 
         #순서 -> 아래부터 정렬
-        idx = np.argsort(np.array(gt_upleft)[:,2])
-        gt_upleft = np.array(gt_upleft)[idx]
+        #idx = np.argsort(np.array(gt_upleft)[:,2])
+        #gt_upleft = np.array(gt_upleft)[idx]
+        #X_input = np.array(X_input)[idx]
+        
+        #순서 -> 1.아래 2.안쪽 3.왼쪽
+        gt_upleft = np.array(gt_upleft)
+        idx = np.lexsort((gt_upleft[:,1],gt_upleft[:,0],gt_upleft[:,2]))
+        gt_upleft = gt_upleft[idx]
         X_input = np.array(X_input)[idx]
-
+        
         case_input.append(X_input)
         case_gt_upleft.append(gt_upleft)
     return case_input,case_gt_upleft
@@ -190,10 +196,15 @@ def generation_3dbox_random(case_size=[[20,20,20],[25,20,15]],min_s = 3, is_pred
         #gt_upleft=np.array(gt_upleft)[list(reversed(s_idx))]
         
         #순서 -> 아래부터 정렬
-        idx = np.argsort(np.array(gt_upleft)[:,2])
-        gt_upleft = np.array(gt_upleft)[idx]
-        X_input = np.array(X_input)[idx]
+        #idx = np.argsort(np.array(gt_upleft)[:,2])
+        #gt_upleft = np.array(gt_upleft)[idx]
+        #X_input = np.array(X_input)[idx]
         
+        #순서 -> 1.아래 2.안쪽 3.왼쪽
+        gt_upleft = np.array(gt_upleft)
+        idx = np.lexsort((gt_upleft[:,1],gt_upleft[:,0],gt_upleft[:,2]))
+        gt_upleft = gt_upleft[idx]
+        X_input = np.array(X_input)[idx]
         
         case_input.append(X_input)
         case_gt_upleft.append(gt_upleft)
