@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/mystyle.css')}}">
+</head>
+
+<body>
+  <div id="container" class="mx-auto mt-3 bod border-c-light">
+    <div class="row h-100">
+      <div class="col-8  h-100">
+        <div id="canv" class="h-100 b-white"> <!-- canvas를 위한 위치 1000x900 제한하는것을 추천 -->
+          <canvas id="drawVis" width=900 height=900>
+</canvas>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="row">
+
+          <div id="selection" class="col-12 mx-auto mt-3">
+              <div class="form-group row">
+
+                <label for="imageselector" class="col-3 text-right mt-2">Image</label>
+                <select id="imageselector" class="form-control col-9 mt-2">
+                  <option>
+                    -
+                  </option>
+                  {% for item in experimental_image_list %}
+                    <option>
+                      {{item}}
+                    </option>
+                    <img class="" src="static/data/experimental_image/{{item}}.png"/>
+                  {% endfor %}
+                </select><!-- 한번 수정 필요 이미지는 스태틱이라면 P1 선택시 고정값으로 변경되어야함-->
+                  {% for item in experimental_image_list %}
+                    <img id="image_{{item}}"class="hide" src="static/data/experimental_image/{{item}}.png"/>
+                  {% endfor %}
+
+
+                <label for="experimental" class="col-3 text-right mt-2">Data</label>
+                <select id="experimental" class="form-control col-9 mt-2">
+                  <option>
+                    -
+                  </option>
+                  <!--
+                  {% for item in experimental_list %}
+                    <option>
+                      {{item}}
+                    </option>
+                  {% endfor %}
+                -->
+                </select>
+
+
+                <label for="visualization" class="col-3 text-right mt-2">Vis</label>
+                <select id="visualization" class="form-control col-9 mt-2">
+                  <option>
+                    -
+                  </option>
+                  {% for item in visualization_list %}
+                    <option>
+                      {{item}}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+          <label>Params</label>
+          <div class="col-12 mx-auto bod border-c-light">
+            <form id="parameters" class="parameters overflow-auto">
+
+
+
+            </form>
+          </div>
+
+          <div id="toolgroup" class="col-12 row mx-auto px-0 mt-3">
+
+            <!-- 이미지를 좋은걸로 바꿔야할듯-->
+            <button id="drawbutton" type="button" class="col-2 mx-auto px-0 b-white"><img class="buttonimg" src="{{url_for('static', filename='image/playbutton.png')}}"></button>
+            <button id="imgbutton" type="bytton" class="col-2 mx-auto px-0 b-white"><img class="buttonimg" src="{{url_for('static', filename='image/pausebutton.png')}}"></button>
+
+            <!-- 시간 기능에 대해 다시 확인하고 input을 정하자.-->
+            <button id="downloadbut" type="bytton" class="col-2 mx-auto px-0 b-white"><img class="buttonimg" src="{{url_for('static', filename='image/pausebutton.png')}}"></button>
+            <button type="bytton" class="col-2 mx-auto px-0 b-white"><img class="buttonimg" src="{{url_for('static', filename='image/pausebutton.png')}}"></button>
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+<a id="download" download="Image.png" href="" onclick="download_img(this);">Download to Image.png</a>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="{{url_for('static', filename='js/dist/bundle.js')}}"></script>
+  <script src="{{url_for('static', filename='js/dist/interactions.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/consume.js')}}"></script>
+  <script src="{{url_for('static', filename='js/dist/tdbscan.js')}}"></script>
+
+  <script src="{{url_for('static', filename='js/viscore/smudge.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/smudge_stack.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/smudge_stack_etc.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/smudge_stack_saccade.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/heat_layers.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/ev2020.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/ETRA2020_etvis.js')}}"></script>
+  <script src="{{url_for('static', filename='js/viscore/eurovis_2020_Short.js')}}"></script>
+
+  <script src="{{url_for('static', filename='js/dist/heatmap.min.js')}}"></script>
+
+  <script src="{{url_for('static', filename='js/dist/draw.js')}}"></script>
+  
+  
+
+  <script>
+    var params_list = {{params_list|safe}};
+    var patient_list={{patient_list|safe}};
+    var sb_back = true;
+    const mxvis=850;
+    const myvis=850;
+    var heatmapInstance;
+    var HI_stack=[];
+
+    var c = document.getElementById("drawVis");
+    var ctx = c.getContext("2d");
+    var data_res = "{{url_for('data_res')}}";
+    var clusted_data = "{{url_for('clusted_data_res')}}";
+    var draw_data;
+    var draw_clusted_data=[];
+    var draw_clusted_center=[];
+    var draw_clusted_std=[];
+    /*
+    //var vs_intensity_data = "/{/{/u/r/l/_/f/o/r/(/'/v/s/_/i/n/t/e/n/s/i/t/y/_/r/e/s/'/)/}/}/"/;
+    //var vs_color_data = "/{/{/u/r/l/_/f/o/r/(/'/v/s/_/c/o/l/o/r/_/r//e/s/'/)/}/}/";
+    //var vs_orientation_data = "/{/{/u/r/l/_/f/o/r/(/'/v/s/_/o/r/i/e/n/t/a/t/i/o/n/_/r/e/s/'/)/}/}/";
+    //var vs_saliency_data = "/{/{/u/r/l/_/f/o/r/(/'/v/s/_/s/a/l/i/e/n/c/y/_/r/e/s/'/)/}/}";
+    //var vs_intensity_feature=[];
+    //var vs_color_feature=[];
+    //var vs_orientation_feature=[];
+    //var vs_saliency_feature=[];
+    //var vs_width = 0;
+    //var vs_height = 0;
+    */
+    var heat_colors = [
+    {'.5': 'rgb(86,151,217)','.95': 'rgb(248,132,46)'},
+    {'.5': 'rgb(254,178,76)','.95': 'rgb(128,0,38)'},
+    {'.5': 'rgb(33,102,172)','.95': 'rgb(178,24,43)'},
+    {'.5': 'rgb(35,139,69)','.95': 'rgb(248,132,46)'},
+    {'.5': 'rgb(0,0,0)','.95': 'rgb(248,50,46)'},
+    {'.5': 'rgb(27,120,55)','.95': 'rgb(118,42,131)'}
+    ];
+
+    var cals="a";
+    function imageC(){
+     sb_back=!sb_back ;
+    }
+  </script>
+
+</body>
