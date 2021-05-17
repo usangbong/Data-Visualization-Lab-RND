@@ -1,0 +1,10 @@
+val,tag
+minIdx,text
+maxIdx,text
+maxFixationTime,text
+fixationRadius,text
+fixationWidth,text
+fixationTimeRadius,text
+fixationTimeWidth,text
+saccadeWidth,text
+saccadeGradient,text

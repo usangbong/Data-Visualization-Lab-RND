@@ -1,0 +1,9 @@
+val,tag
+Radius,text
+Outer_line_width,text
+Point_color,text
+Outer_line_color,text
+link_width,text
+link_color,text
+Alpha,text
+Saccade_flag,text

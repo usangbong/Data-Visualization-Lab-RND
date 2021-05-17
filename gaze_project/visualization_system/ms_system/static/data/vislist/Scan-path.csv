@@ -1,0 +1,12 @@
+val,tag
+DBSCAN_epsilon,text
+DBSCAN_min_points,text
+DBSCAN_cluster_size,text
+DBSCAN_time_weight,text
+Fixation_size_weight,text
+Link_width,text
+Fixation_color,text
+Fixation_outer-line_color,text
+Link_color,text
+Link_halo_color,text
+Alpha,text
