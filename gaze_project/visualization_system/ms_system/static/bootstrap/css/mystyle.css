@@ -1,0 +1,323 @@
+
+#drawVis {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    
+}
+
+
+#container{
+  height: 900px;
+  width: 1600px;
+}
+
+.hide{
+  display: none;
+}
+.parameters{
+  height: 450px;
+}
+.buttonimg{
+  width: 100%;
+  height: auto;
+
+}
+.f-toon{
+  font-family: 'Toonish';
+}
+.border-c-red{
+  border-color: rgb(237,103,40)!important;
+}
+.border-c-gray{
+  border-color: rgb(120,120,120)!important;
+}
+.border-c-light{
+  border-color: rgb(180,180,180)!important;
+}
+.border-c-ygreen{
+  border-color: rgb(183,211,51)!important;
+}
+.border-c-org{
+  border-color: rgb(248,178,67)!important;
+}
+.border-c-yellow{
+  border-color: rgb(240,233,38)!important;
+}
+.border-c-sky{
+  border-color: rgb(57,198,244)!important;
+}
+.border-c-white{
+  border-color: rgb(255,255,255)!important;
+}
+.overflow-auto
+{
+  overflow: auto;
+}
+.bod{
+  border: 2px solid;
+  border-radius: 10px;
+}
+.b-blackblur{
+  background-color: rgba(0,0,0,0.9)!important;
+}
+.b-black{
+  background-color: rgb(0,0,0)!important;
+}
+.b-blur{
+  background-color: rgba(0,0,0,0.3)!important;
+}
+.b-white{
+  background-color: white!important;
+}
+.b-dgray{
+  background-color: rgb(90,90,90)!important;
+}
+.b-red{
+  background-color: rgb(237,103,40)!important;
+}
+.b-redish{
+  background-color: rgb(255,0,0)!important;
+}
+.b-sky{
+  background-color: rgb(57,198,244)!important;
+}
+.b-blue{
+  background-color: rgb(79,129,189)!important;
+}
+.b-org{
+  background-color: rgb(248,178,67)!important;
+}
+.b-ex{
+  background: rgba(0,0,0,0)!important;
+}
+.b-x{
+  background: rgba(0,0,0,0)!important;
+}
+.b-gray{
+  background: rgb(128,128,128)!important;
+}
+
+.b-green{
+  background: rgb(0,176,76)!important;
+}
+.b-bgreen{
+  background: rgb(159,223,209)!important;
+}
+.b-ygreen{
+  background: rgb(183,211,51)!important;
+}
+.f-ygreen{
+  color: rgb(183,211,51)!important;
+}
+.f-white{
+  color: white!important;
+}
+.f-yellow{
+  color: rgb(240,233,38)!important;
+}
+.f-sky{
+  color: rgb(57,198,244)!important;
+}
+.f-perl{
+  color: rgb(0,171,235)!important;
+}
+.f-blue{
+  color: rgb(79,129,189)!important;
+}
+.f-darkblue{
+  color: rgb(16,47,147)!important;
+}
+.f-red{
+  color: rgb(237,103,40)!important;
+}
+.f-darkgreen{
+  color:rgb(33,76,99)!important;
+}
+
+.f-green{
+  color:rgb(0,176,76)!important;
+}
+.f-gray{
+  color: rgb(128,128,128)!important;
+}
+.f-dgray{
+  color: rgb(90,90,90);
+}
+.f-lgray{
+  color: rgb(220,220,220)!important;
+}
+.f-org{
+  color: rgb(248,178,67)!important;
+}
+.f-pink{
+  color: rgb(233,77,151)!important;
+}
+.f-purple{
+  color: rgb(200,28,110)!important;
+}
+.f-bur{
+  color: rgb(249,99,28)!important;
+}
+.f-x{
+  color: rgba(0,0,0,0)!important;
+}
+
+.fw400{
+  font-weight: 400!important;
+}
+
+.fw500{
+  font-weight: 500!important;
+}
+.fw600{
+  font-weight: 600!important;
+}
+.fw650{
+  font-weight: 650!important;
+}
+
+.fw700{
+  font-weight: 700!important;
+}
+.fw800{
+  font-weight: 800!important;
+}
+
+.f30
+{
+  font-size: 3.0rem !important;
+}
+.f29
+{
+  font-size: 2.9rem !important;
+}
+.f28
+{
+  font-size: 2.8rem !important;
+}
+.f27
+{
+  font-size: 2.7rem !important;
+}
+.f26
+{
+  font-size: 2.6rem !important;
+}
+.f25
+{
+  font-size: 2.5rem !important;
+}
+.f24
+{
+  font-size: 2.4rem !important;
+}
+.f23
+{
+  font-size: 2.3rem !important;
+}
+.f22
+{
+  font-size: 2.2rem !important;
+}
+.f21
+{
+  font-size: 2.1rem !important;
+}
+
+.fth
+{
+  font-size: 0.35rem !important;
+  word-break:break-word;
+}
+
+.f20
+{
+  font-size: 2.0rem !important;
+}
+.f19
+{
+  font-size: 1.9rem !important;
+}
+.f18
+{
+  font-size: 1.8rem !important;
+}
+.f17
+{
+  font-size: 1.7rem !important;
+}
+
+.f16
+{
+  font-size: 1.6rem !important;
+}
+
+.f15
+{
+  font-size: 1.5rem !important;
+}
+
+.f14
+{
+  font-size: 1.4rem !important;
+}
+
+.f13
+{
+  font-size: 1.3rem !important;
+}
+
+.f12
+{
+  font-size: 1.2rem !important;
+}
+
+.f11
+  {
+    font-size: 1.1rem !important;
+  }
+.f10
+{
+  font-size: 0.65rem !important;
+}
+.f9
+{
+  font-size: .9rem !important;
+}
+
+.f8
+{
+  font-size: .6rem !important;
+}
+
+.f7
+{
+  font-size: .7rem !important;
+}
+.f6
+{
+  font-size: .6rem !important;
+}
+
+.f5
+{
+  font-size: .5rem !important;
+}
+
+.f4
+{
+  font-size: .4rem !important;
+}
+.f3
+{
+  font-size: .3rem !important;
+}
+
+
+
+.sel_f{
+  font-size: 0.5rem !important;
+}
