@@ -88,19 +88,19 @@ def generation_3dbox(case_size=[[20,20,20],[25,20,15]], N_mdd=20, min_s = 3, is_
             pop_gt_upleft=gt_upleft.pop(idx)
             axis_idx = np.random.choice([0,1,2],1)[0]
             factors = find_factor(pop_item[axis_idx])
-            factors = list(compress(factors, pop_item[axis_idx]/np.array(factors) >=3))
+            factors = list(compress(factors, pop_item[axis_idx]/np.array(factors) >= min_s))
             if pop_item[axis_idx] < min_s*2 or len(factors)==0:
                 X_input.append(pop_item)
                 gt_upleft.append(pop_gt_upleft)
             else:
                 n_div = np.random.choice(factors,1)[0]
-                if False:
-                    axis_idx_list = []
-                    for i in range(3):
-                        if pop_item[idx]==pop_item[i]: axis_idx_list.append(i)
-                    axis_idx_list = powerset(axis_idx_list)
-                    axis_idx_list =list(compress(axis_idx_list, [idx in i for i in axis_idx_list]))
-                    axis_idx_list = axis_idx_list[np.random.choice(len(axis_idx_list),1)[0]]
+                #if False:
+                #    axis_idx_list = []
+                #    for i in range(3):
+                #        if pop_item[idx]==pop_item[i]: axis_idx_list.append(i)
+                #    axis_idx_list = powerset(axis_idx_list)
+                #    axis_idx_list =list(compress(axis_idx_list, [idx in i for i in axis_idx_list]))
+                #    axis_idx_list = axis_idx_list[np.random.choice(len(axis_idx_list),1)[0]]
                 axis_idx_list = [axis_idx]
                 #sizes, positions = divide_uniform_multi_axis(pop_item, pop_gt_upleft, axis_idx_list, n_div)
                 #sizes, positions = divide_uniform(pop_item, pop_gt_upleft, idx, n_div)
