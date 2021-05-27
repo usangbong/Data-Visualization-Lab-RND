@@ -23,8 +23,7 @@ using namespace glm;
 
 int main( void )
 {
-  
-  // Initialise GLFW
+	// Initialise GLFW
 	if( !glfwInit() )
 	{
 		fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -46,11 +45,11 @@ int main( void )
 	}
 	glfwMakeContextCurrent(window);
     
-    // We would expect width and height to be 1024 and 768
-    int windowWidth = 1024;
-    int windowHeight = 768;
-    // But on MacOS X with a retina screen it'll be 1024*2 and 768*2, so we get the actual framebuffer size:
-    glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+	// We would expect width and height to be 1024 and 768
+	int windowWidth = 1024;
+	int windowHeight = 768;
+	// But on MacOS X with a retina screen it'll be 1024*2 and 768*2, so we get the actual framebuffer size:
+	glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
 	// Initialize GLEW
 	if (glewInit() != GLEW_OK) {
@@ -62,12 +61,12 @@ int main( void )
 
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-    // Hide the mouse and enable unlimited mouvement
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	// Hide the mouse and enable unlimited mouvement
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
-    // Set the mouse at the center of the screen
-    glfwPollEvents();
-    glfwSetCursorPos(window, 1024/2, 768/2);
+	// Set the mouse at the center of the screen
+	glfwPollEvents();
+	glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -80,5 +79,23 @@ int main( void )
 
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
+
+	// Create and compile our GLSL program from the shaders
+	GLuint depthProgramID = LoadShaders( "DepthRTT.vertexshader", "DepthRTT.fragmentshader" );
+
+	// Get a handle for our "MVP" uniform
+	GLuint depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
+
+	// Get a handle for our buffers
+	GLuint depth_vertexPosition_modelspaceID = glGetAttribLocation(depthProgramID, "vertexPosition_modelspace");
+
+	// Load the texture
+	GLuint Texture = loadDDS("uvmap.DDS");
+	
+	// Read our .obj file
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> normals;
+	bool res = loadOBJ("room_thickwalls.obj", vertices, uvs, normals);
 
 }
