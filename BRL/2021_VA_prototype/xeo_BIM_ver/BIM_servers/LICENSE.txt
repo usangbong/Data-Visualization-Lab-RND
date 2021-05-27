@@ -1,0 +1,6 @@
+-------------------------------------------------------------------------
+xeokit is licensed under the GPL V3 license with the option to buy
+a license for commercial use. For more information:
+
+https://github.com/xeokit/xeokit-sdk/wiki/License
+-------------------------------------------------------------------------
