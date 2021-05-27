@@ -6,6 +6,7 @@ import pandas as pd
 import os
 import openpyxl
 import fnmatch
+import time
 import tensorflow as tf
 import random
 import datetime
@@ -19,7 +20,7 @@ from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.metrics import mean_squared_error
 from keras.models import Sequential
 from keras.layers import Dense, RepeatVector, LSTM, Input, TimeDistributed, Activation, Dropout
-from keras.optimizers import SGD
+#from keras.optimizers import SGD
 from pandas import read_csv
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import PowerTransformer 
@@ -28,11 +29,13 @@ from scipy.stats import yeojohnson
 
 np.set_printoptions(suppress=True)
 
-EPOCHS       = 500
-BATCH_SIZE   = 64
+start = time.time() 
+
+EPOCHS       = 10
+BATCH_SIZE   = 128
 
 SHIFT_DAYS   = 3
-PRED_STEPS   = 48 #48hr * 10분단위 예측
+PRED_STEPS   = 48*6 #48hr * 10분단위 예측
 TIME_STEPS   = SHIFT_DAYS*PRED_STEPS #hours step
 DIMENSION    = 15
 MODEL_NUM    = 10
@@ -57,16 +60,17 @@ print("SAVE_NAME : ", SAVE_NAME)
 #############################################
 def getData():
     # power
-    power_file  = './data/power_20210129_20210429_preprocess_1hour'
+    power_file  = './data/power_20210129_20210429_preprocess_10mins'
     power_df = read_csv(power_file+'.csv', encoding='CP949', converters={'date':int})
     print(power_df.shape)
         
     # sensor    
-    sensor_file = 'data/sensor_20210129_20210429_preprocess_1hour'
+    sensor_file = 'data/sensor_20210129_20210429_preprocess_10mins'#sensor_20210129_20210429_preprocess_1hour'
     sensor_df = read_csv(sensor_file+'.csv', encoding='CP949', converters={'date':int})
     #sensor_df['date'] = sensor_df['date'].astype('int')
     sensor_df = sensor_df.sort_values('date')
     print(sensor_df.shape)
+    sensor_df.drop(['dailyrainin','monthlyrainin','yearlyrainin','weeklyrainin','uv','feelslike','temp','windgust','maxdailygust','outside_status'], axis=1, inplace=True)
 
     ''' JOIN TEST '''
     join_test = sensor_df.copy()
@@ -243,8 +247,72 @@ histList_df.to_csv(SAVE_PATH+"histList_"+SAVE_NAME+".csv",mode='w',index=False, 
 resultList_df = pd.DataFrame(resultList).transpose()
 resultList_df.to_csv(SAVE_PATH+"resultList_"+SAVE_NAME+".csv",mode='w',index=False, encoding='CP949')
 
-print("SAVE_NAME : ", SAVE_NAME)
 
+
+####################################################### TEST
+n_dataset   = testY.shape[0]
+acc_list    = []
+acc_model   = []
+predictModel = []
+predList=[]
+predErrRate_list=[]
+yList=[]
+print(n_dataset)
+
+print("[ model ]")
+for m in range(MODEL_NUM):
+    errRate=[]
+    print("-"*70,"[ model {} ]".format(m))
+#for m in range(2):
+    plot_target=[]
+    plot_predict=[]
+    for i in range(n_dataset):
+        #print("(dataset {}) : ".format(i), end='')
+    #for i in range(5):
+    #if(i in [2,3,4,5,6,7,8]): continue;
+        y = pow_scaler.inverse_transform(testY[i:i+1,:,0])
+        yList = y.reshape(-1,1)
+
+        pred = modelList[m].predict([testX[i:i+1]])
+        pred[pred<0] = 0
+        pred = pred[:,:,0]
+        pred = pow_scaler.inverse_transform(pred)
+        predSum = np.sum(pred)
+        predList = pred.reshape(-1,1)
+
+        target_list=[]
+        for i in range(0, yList.shape[0], PRED_STEPS):
+            for hr in range(0, PRED_STEPS):
+                pred   = predList[i+hr]
+                target = yList[i+hr]
+                difference = np.abs(target-pred)
+                errRate.append(np.round(difference/CAPACITY*100, 2))
+                target_list.append(target)
+
+        target      = round(np.sum(y), 2)
+        error       = round(np.abs(target-predSum), 2)
+        error_rate  = np.min([round(error/target, 2),1])
+        acc_rate    = round((1.0-error_rate)*100, 2)
+        acc_list.append(acc_rate)
+        #print("acc rate: ",np.mean(acc_list[-n_model:]),sep='')
+        #predErrRateTest_AllModel.append(predErrRateTest)
+        print(np.round(np.mean(acc_list[-MODEL_NUM:]),2), " / ",sep='',end='')
+        
+    predErrRate_list.append(errRate)
+    print(" \tErr Rate avg;",np.round(sum(predErrRate_list[m])/len(predErrRate_list[m]),2),end='')
+    print(" \t max;",np.max(predErrRate_list[m]))
+
+print("\npredErrRate_list:{}".format(np.shape(predErrRate_list)))
+predErrRate_df = pd.DataFrame(predErrRate_list).transpose()
+predErrRate_df.to_csv(SAVE_PATH+"predErrRate_"+SAVE_NAME+"_TEST333.csv",mode='w',index=False, encoding='CP949')
+print("----------------------------------------------")
+print("mean(acc rate): ",np.mean(acc_list),sep='')
+print("----------------------------------------------")
+print("[ model ]")
+#for m in range(MODEL_NUM):
+    #print(predErrRateTest_AllModel[m])
+    #acc_model[i] = round(acc_model[i]/(n_dataset),2)
+    #print(acc_model[i])
 
 # print Err Rate
 listsize = len(predErrRate_list[0])
@@ -266,5 +334,8 @@ for m in range(MODEL_NUM):
 countArr = np.array(count).reshape(10,-1)
 countDf = pd.DataFrame(countArr, columns = column_names)
 print(countDf)
+print("0 < x < 10 (%) : AVG {} \t MIN {} \t MAX {}".format(np.mean(countDf.iloc[:,-1]), np.min(countDf.iloc[:,-1]), np.max(countDf.iloc[:,-1])))
 #acc_list.append(acc_rate)
 #print("   pred: ",pred," | target: ",target," | error: ",error," | err rate: ",error_rate," | acc: ",acc_rate,sep="")
+print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간
+print("SAVE_NAME : ", SAVE_NAME)
