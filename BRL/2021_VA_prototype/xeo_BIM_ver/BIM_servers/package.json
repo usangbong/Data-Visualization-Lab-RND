@@ -1,0 +1,45 @@
+{
+  "name": "xeokit-bimserver-utils",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "node-http-xhr": "^1.3.4",
+    "nodejs-websocket": "^1.7.2",
+    "pug": "2.0.0-beta11",
+    "ws": "^6.1.2"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  },
+  "description": "Boilerplate utilities for working with BIMServer when developing with xeokit",
+  "main": "start.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xeokit/xeokit-bimserver-utils.git"
+  },
+  "keywords": [
+    "WebGL",
+    "xeokit",
+    "BIMServer",
+    "BIM",
+    "IFC"
+  ],
+  "author": "Lindsay Kay",
+  "license": "SEE LICENSE IN https://github.com/xeokit/xeokit-sdk/blob/master/LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/xeokit/xeokit-bimserver-utils/issues"
+  },
+  "homepage": "https://github.com/xeokit/xeokit-bimserver-utils#readme"
+}
