@@ -10,6 +10,9 @@ import PageHeader from './page/PageHeader';
 import {Server, BIMViewer} from '@xeokit/xeokit-bim-viewer';
 import tippy from 'tippy.js';
 
+let colormap = require('colormap')
+
+
 //import CHART from './component/CHART';
 
 const unityContext = new UnityContext({
@@ -29,7 +32,8 @@ function App() {
   const [PlayHook, PlayHook_on] = useState(false)
   const [dynamic_graphs, dynamic_graphs_change] = useState([]);
   const [checked_types, checked_types_change] = useState('');
-  const [check_yeol, check_yeol_on] = useState(false)
+  const [check_yeol, check_yeol_on] = useState(false);
+  const [picked_list, picked_list_change] = useState([]);
   
   const historyRef = useRef();
   const renderRef = useRef();
@@ -55,7 +59,13 @@ function App() {
 
 
   useEffect(()=>{
-
+    window.picked_list = [];
+    window.picked_colormap = colormap({
+        colormap: 'blackbody',
+        nshades: 100,
+        format: 'float',
+        alpha: 1
+    });
     const requestParams = getRequestParams();
 
         // Project to load into the viewer
@@ -185,6 +195,7 @@ function App() {
             }
             for (var i = 0, len = actions.length; i < len; i++) {
                 const action = actions[i];
+                console.log(action);
                 switch (action) {
                     case "focusObject":
                         const objectId = params.objectId;
@@ -255,6 +266,37 @@ function App() {
                 toggle.checked = explorerOpen;
             }
         }
+
+        var lastEntity = null;
+
+        bimViewer.viewer.scene.input.on("dblclick", (coords) =>{
+    
+            let hit = bimViewer.viewer.scene.pick({
+                canvasPos: coords
+            });
+    
+            if (hit) {
+                    hit.entity.picked = true;
+                    hit.entity.colorize = [0.3,0.7,0.5];
+                    window.picked_list.push(
+                        {
+                            oid:hit.entity.id,
+                            val:Math.floor(Math.random() * 100),
+                            a:window.picked_list.length%2==1?true:false,
+                        });
+                    console.log(hit.entity.id)
+                    console.log(window.picked_list)
+            } 
+            /*
+            else {
+    
+                if (lastEntity) {
+                    lastEntity.selected = false;
+                    lastEntity = null;
+                }
+            }
+            */
+        });
 
         window.bimViewer = bimViewer; // For debugging
   },[]);
