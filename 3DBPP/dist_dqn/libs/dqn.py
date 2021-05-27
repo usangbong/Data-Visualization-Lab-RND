@@ -239,8 +239,8 @@ class DQNAgent:
         
         batch = random.sample(self.memory, self.batch_size)
         
-        history = np.array([sample[0] for sample in batch])# (B, 20,20,1)
-        load = np.array([sample[1] for sample in batch])# (B, 20,20,2)
+        history = np.array([sample[0] for sample in batch])# (B, 20,20,2)
+        load = np.array([sample[1] for sample in batch])# (B, 20,20,1)
         remain_size = np.array([sample[2] for sample in batch]) # (B, 20,20, max_num_remain)
         load_size = np.array([sample[3] for sample in batch]) # (B, 20, 20, K)
         reward = np.array([sample[4] for sample in batch]) # (B,)
