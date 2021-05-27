@@ -62,11 +62,24 @@ function TimeLine(props) {
             let tmp = slider_value+DELTA_TIME;
             if(tmp<WINDOW_SIZE)
             {
-              slider_valueChange(tmp)
+              slider_valueChange(tmp);
+              
             }
             else{
               play_hookChange(false)
             }
+            for(let i = 0;i<window.picked_list.length;i++)
+              {
+                
+                if(window.picked_list[i].val==0)
+                  window.picked_list[i].a = true;
+                else if (window.picked_list[i].val==99)
+                  window.picked_list[i].a = false;
+                
+                window.picked_list[i].val += window.picked_list[i].a?1:-1;
+                window.bimViewer.viewer.scene.setObjectsColorized([window.picked_list[i].oid],window.picked_colormap[window.picked_list[i].val])
+              }
+              console.log(window.picked_list);
             }} />
 
       <div className="DatePickerWrap">
