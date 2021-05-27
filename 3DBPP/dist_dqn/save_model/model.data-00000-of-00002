@@ -1,87 +1,154 @@
-îÏ/Í
-p
+½n6}ß
+Æ
 	case_cnn1
-	case_dnn1
-sel_cnn1
-sel_dnn1
+	case_cnn2
+	case_dnn1
+sel_cnn1
+sel_cnn2
+sel_dnn1
 
-r_cnn1
+r_cnn1
 
-r_dnn1
-fc1
-fc2
+r_cnn2
 
-	fc_out
-
+	r_dnn1
 
 
-kernel
-bias
+l_cnn1
+
+l_cnn2
+
+l_dnn1
+fc1
+fc2
+fc3
+
+fc_out
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+bias
 
 
-kernel
-bias
+kernel
+ bias
+
+
+!kernel
+"bias
+
+
+#kernel
+$bias
+
+
+%kernel
+&bias
+
+
+'kernel
+(bias
+
+
+)kernel
+*bias
+
+
++kernel
+,bias
+
+
+-kernel
+.bias
+
+
+/kernel
+0bias
 YW
 VARIABLE_VALUEdqn_cnndnn/conv2d/kernel+case_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 US
 VARIABLE_VALUEdqn_cnndnn/conv2d/bias)case_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+[Y
+VARIABLE_VALUEdqn_cnndnn/conv2d_1/kernel+case_cnn2/kernel/.ATTRIBUTES/VARIABLE_VALUE
+WU
+VARIABLE_VALUEdqn_cnndnn/conv2d_1/bias)case_cnn2/bias/.ATTRIBUTES/VARIABLE_VALUE
 XV
 VARIABLE_VALUEdqn_cnndnn/dense/kernel+case_dnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 TR
 VARIABLE_VALUEdqn_cnndnn/dense/bias)case_dnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
 ZX
-VARIABLE_VALUEdqn_cnndnn/conv2d_1/kernel*sel_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_2/kernel*sel_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 VT
-VARIABLE_VALUEdqn_cnndnn/conv2d_1/bias(sel_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_2/bias(sel_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+ZX
+VARIABLE_VALUEdqn_cnndnn/conv2d_3/kernel*sel_cnn2/kernel/.ATTRIBUTES/VARIABLE_VALUE
+VT
+VARIABLE_VALUEdqn_cnndnn/conv2d_3/bias(sel_cnn2/bias/.ATTRIBUTES/VARIABLE_VALUE
 YW
 VARIABLE_VALUEdqn_cnndnn/dense_1/kernel*sel_dnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 US
 VARIABLE_VALUEdqn_cnndnn/dense_1/bias(sel_dnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
 XV
-VARIABLE_VALUEdqn_cnndnn/conv2d_2/kernel(r_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_4/kernel(r_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 TR
-VARIABLE_VALUEdqn_cnndnn/conv2d_2/bias&r_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_4/bias&r_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+XV
+VARIABLE_VALUEdqn_cnndnn/conv2d_5/kernel(r_cnn2/kernel/.ATTRIBUTES/VARIABLE_VALUE
+TR
+VARIABLE_VALUEdqn_cnndnn/conv2d_5/bias&r_cnn2/bias/.ATTRIBUTES/VARIABLE_VALUE
 WU
 VARIABLE_VALUEdqn_cnndnn/dense_2/kernel(r_dnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 SQ
 VARIABLE_VALUEdqn_cnndnn/dense_2/bias&r_dnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+XV
+VARIABLE_VALUEdqn_cnndnn/conv2d_6/kernel(l_cnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 TR
-VARIABLE_VALUEdqn_cnndnn/dense_3/kernel%fc1/kernel/.ATTRIBUTES/VARIABLE_VALUE
-PN
-VARIABLE_VALUEdqn_cnndnn/dense_3/bias#fc1/bias/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_6/bias&l_cnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+XV
+VARIABLE_VALUEdqn_cnndnn/conv2d_7/kernel(l_cnn2/kernel/.ATTRIBUTES/VARIABLE_VALUE
 TR
-VARIABLE_VALUEdqn_cnndnn/dense_4/kernel%fc2/kernel/.ATTRIBUTES/VARIABLE_VALUE
-PN
-VARIABLE_VALUEdqn_cnndnn/dense_4/bias#fc2/bias/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/conv2d_7/bias&l_cnn2/bias/.ATTRIBUTES/VARIABLE_VALUE
 WU
-VARIABLE_VALUEdqn_cnndnn/dense_5/kernel(fc_out/kernel/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/dense_3/kernel(l_dnn1/kernel/.ATTRIBUTES/VARIABLE_VALUE
 SQ
-VARIABLE_VALUEdqn_cnndnn/dense_5/bias&fc_out/bias/.ATTRIBUTES/VARIABLE_VALUE
+VARIABLE_VALUEdqn_cnndnn/dense_3/bias&l_dnn1/bias/.ATTRIBUTES/VARIABLE_VALUE
+TR
+VARIABLE_VALUEdqn_cnndnn/dense_4/kernel%fc1/kernel/.ATTRIBUTES/VARIABLE_VALUE
+PN
+VARIABLE_VALUEdqn_cnndnn/dense_4/bias#fc1/bias/.ATTRIBUTES/VARIABLE_VALUE
+TR
+VARIABLE_VALUEdqn_cnndnn/dense_5/kernel%fc2/kernel/.ATTRIBUTES/VARIABLE_VALUE
+PN
+VARIABLE_VALUEdqn_cnndnn/dense_5/bias#fc2/bias/.ATTRIBUTES/VARIABLE_VALUE
+TR
+VARIABLE_VALUEdqn_cnndnn/dense_6/kernel%fc3/kernel/.ATTRIBUTES/VARIABLE_VALUE
+PN
+VARIABLE_VALUEdqn_cnndnn/dense_6/bias#fc3/bias/.ATTRIBUTES/VARIABLE_VALUE
+WU
+VARIABLE_VALUEdqn_cnndnn/dense_7/kernel(fc_out/kernel/.ATTRIBUTES/VARIABLE_VALUE
+SQ
+VARIABLE_VALUEdqn_cnndnn/dense_7/bias&fc_out/bias/.ATTRIBUTES/VARIABLE_VALUE
