@@ -98,7 +98,6 @@ int main( void )
 	std::vector<glm::vec3> normals;
 	bool res = loadOBJ("room_thickwalls.obj", vertices, uvs, normals);
 
-}
 
 	std::vector<unsigned short> indices;
 	std::vector<glm::vec3> indexed_vertices;
@@ -265,3 +264,5 @@ int main( void )
 		);
 
 		glDisableVertexAttribArray(depth_vertexPosition_modelspaceID);
+
+}
