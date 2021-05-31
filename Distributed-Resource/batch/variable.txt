@@ -1,0 +1,60 @@
+#SENSOR
+
+id
+loc_oid
+TIME
+solarradiation
+uv
+temp
+humidity
+winddir
+windspeed
+windgust
+dewpoint
+maxdailygust
+feelslike
+hourlyrainin
+dailyrainin
+weeklyrainin
+monthlyrainin
+yearlyrainin
+
+
+df['id'] = id
+df['loc_oid'] = loc_oid
+df['TIME'] = TIME
+df['solarradiation'] = solarradiation
+df['uv'] = uv
+df['temp'] = temp
+df['humidity'] = humidity
+df['winddir'] = winddir
+df['windspeed'] = windspeed
+df['windgust'] = windgust
+df['dewpoint'] = dewpoint
+df['maxdailygust'] = maxdailygust
+df['feelslike'] = feelslike
+df['hourlyrainin'] = hourlyrainin
+df['dailyrainin'] = dailyrainin
+df['weeklyrainin'] = weeklyrainin
+df['monthlyrainin'] = monthlyrainin
+df['yearlyrainin'] = yearlyrainin
+
+
+_id.append(dataline['id'])
+loc_oid.append(dataline['loc_oid'])
+TIME.append(dataline['TIME'])
+solarradiation.append(dataline['solarradiation'])
+uv.append(dataline['uv'])
+temp.append(dataline['temp'])
+humidity.append(dataline['humidity'])
+winddir.append(dataline['winddir'])
+windspeed.append(dataline['windspeed'])
+windgust.append(dataline['windgust'])
+dewpoint.append(dataline['dewpoint'])
+maxdailygust.append(dataline['maxdailygust'])
+feelslike.append(dataline['feelslike'])
+hourlyrainin.append(dataline['hourlyrainin'])
+dailyrainin.append(dataline['dailyrainin'])
+weeklyrainin.append(dataline['weeklyrainin'])
+monthlyrainin.append(dataline['monthlyrainin'])
+yearlyrainin.append(dataline['yearlyrainin'])
