@@ -265,4 +265,36 @@ int main( void )
 
 		glDisableVertexAttribArray(depth_vertexPosition_modelspaceID);
 
+		
+		
+		
+		
+		
+		
+		// Swap buffers
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+
+	} // Check if the ESC key was pressed or the window was closed
+	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+		   glfwWindowShouldClose(window) == 0 );
+
+	// Cleanup VBO and shader
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteBuffers(1, &uvbuffer);
+	glDeleteBuffers(1, &normalbuffer);
+	glDeleteBuffers(1, &elementbuffer);
+	glDeleteProgram(programID);
+	glDeleteProgram(depthProgramID);
+	glDeleteProgram(quad_programID);
+	glDeleteTextures(1, &Texture);
+
+	glDeleteFramebuffers(1, &FramebufferName);
+	glDeleteTextures(1, &depthTexture);
+	glDeleteBuffers(1, &quad_vertexbuffer);
+
+
+	// Close OpenGL window and terminate GLFW
+	glfwTerminate();
+
 }
