@@ -205,3 +205,38 @@ int main( void )
 
 	// Get a handle for our "LightPosition" uniform
 	GLuint lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
+
+	do{
+
+		// Render to our framebuffer
+		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+		glViewport(0,0,1024,1024); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+
+		// We don't use bias in the shader, but instead we draw back faces, 
+		// which are already separated from the front faces by a small distance 
+		// (if your geometry is made this way)
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
+
+		// Clear the screen
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Use our shader
+		glUseProgram(depthProgramID);
+
+		glm::vec3 lightInvDir = glm::vec3(0.5f,2,2);
+
+		// Compute the MVP matrix from the light's point of view
+		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
+		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+		// or, for spot light :
+		//glm::vec3 lightPos(5, 20, 20);
+		//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
+		//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
+
+		glm::mat4 depthModelMatrix = glm::mat4(1.0);
+		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+
+		// Send our transformation to the currently bound shader, 
+		// in the "MVP" uniform
+		glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
