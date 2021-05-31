@@ -160,3 +160,48 @@ int main( void )
 	GLuint error = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		return false;
+
+	static const GLfloat g_quad_vertex_buffer_data[] = { 
+		-1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		-1.0f,  1.0f, 0.0f,
+		-1.0f,  1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f,
+	};
+
+	GLuint quad_vertexbuffer;
+	glGenBuffers(1, &quad_vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
+
+	// Create and compile our GLSL program from the shaders
+	GLuint quad_programID = LoadShaders( "Passthrough.vertexshader", "SimpleTexture.fragmentshader" );
+	GLuint texID = glGetUniformLocation(quad_programID, "texture");
+
+	// Get a handle for our buffers
+	GLuint quad_vertexPosition_modelspaceID = glGetAttribLocation(quad_programID, "vertexPosition_modelspace");
+
+
+
+
+	// Create and compile our GLSL program from the shaders
+	GLuint programID = LoadShaders( "ShadowMapping.vertexshader", "ShadowMapping.fragmentshader" );
+
+	// Get a handle for our "myTextureSampler" uniform
+	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+
+	// Get a handle for our "MVP" uniform
+	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+	GLuint ViewMatrixID = glGetUniformLocation(programID, "V");
+	GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
+	GLuint DepthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
+	GLuint ShadowMapID = glGetUniformLocation(programID, "shadowMap");
+	
+	// Get a handle for our buffers
+	GLuint vertexPosition_modelspaceID = glGetAttribLocation(programID, "vertexPosition_modelspace");
+	GLuint vertexUVID = glGetAttribLocation(programID, "vertexUV");
+	GLuint vertexNormal_modelspaceID = glGetAttribLocation(programID, "vertexNormal_modelspace");
+
+	// Get a handle for our "LightPosition" uniform
+	GLuint lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
