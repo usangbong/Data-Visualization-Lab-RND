@@ -269,6 +269,37 @@ int main( void )
 		
 		
 		
+		// Optionally render the shadowmap (for debug only)
+
+		// Render only on a corner of the window (or we we won't see the real rendering...)
+		glViewport(0,0,512,512);
+
+		// Use our shader
+		glUseProgram(quad_programID);
+
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+		// Set our "renderedTexture" sampler to user Texture Unit 0
+		glUniform1i(texID, 0);
+
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(quad_vertexPosition_modelspaceID);
+		glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+		glVertexAttribPointer(
+			quad_vertexPosition_modelspaceID, // attribute
+			3,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+
+		// Draw the triangles !
+		// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
+		glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+		glDisableVertexAttribArray(quad_vertexPosition_modelspaceID);
+		
 		
 		
 		// Swap buffers
