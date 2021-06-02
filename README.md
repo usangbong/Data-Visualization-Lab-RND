@@ -26,6 +26,6 @@ vis.sejong.ac.kr
 - Alumni
   - (Ph.D) Hanbyul Yeon
   - (Master) Daekyo Jeong
-  - Hewon Baek
-  - Hyunjin Kang
+  - (BS) Hewon Baek
+  - (BS) Hyunjin Kang
   
