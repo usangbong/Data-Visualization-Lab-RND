@@ -21,7 +21,7 @@ vis.sejong.ac.kr
   - Giwoong Park
 - Undergraduate
   - Changyoung Yoon
-  - Moon
+  - Yewan Moon
   - Changyoung Jeong
 - Alumni
   - (Ph.D) Hanbyul Yeon
