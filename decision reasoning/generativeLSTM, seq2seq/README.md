@@ -57,7 +57,3 @@ Once created the environment you can perform each one of the tasks, specifying t
 
 Models examples and experimental results can be found at <a href="http://kodu.ut.ee/~chavez85/bpm2019/" target="_blank">examples</a>
 ## Authors
-
-* **Manuel Camargo**
-* **Marlon Dumas**
-* **Oscar Gonzalez-Rojas**
