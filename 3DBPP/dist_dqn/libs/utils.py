@@ -11,16 +11,6 @@ def padding_boxes(box, max_boxes):
     padded = np.concatenate([box,np.zeros((max_boxes-len(box),3))])
     return padded
 
-# def random_action_idx(f_upleft):
-#     if len(f_upleft) == 0: return -1
-#     else: return np.random.choice(range(len(f_upleft)),1)[0]
-
-# def idx_to_order(idx, K):
-#     order_list = list(itertools.permutations(range(K)))
-#     order = order_list[idx]
-#     order = list(order)
-#     return order
-
 def cbn_select_boxes(boxes, box_idx, k):
     s_boxes = np.array(list(itertools.combinations(boxes , k)))
     s_boxes, unique_idx = np.unique(s_boxes, axis=0, return_index=True)
@@ -58,11 +48,11 @@ def size2matrix(box, e_l, e_b):
     padded = np.pad(box, ((0, e_l-l), (0, e_b - b)), mode='constant', constant_values=0)
     return padded
 
-def raw2input(state_s, state_h, r_boxes,  num_max_remain, num_selected, loading_size_c, e_h=20):
+def raw2input(state_s, state_h, bbox, r_boxes,  num_max_remain, num_selected, loading_size_c, e_h=20):
     n_combs = len(loading_size_c)
     e_l, e_b = state_h.shape
-    state = np.stack([state_s, state_h],axis = -1)
-    state_c = np.array([state]*n_combs).reshape((-1, e_l,e_b,2))
+    state = np.stack([state_s, state_h, bbox],axis = -1)
+    state_c = np.array([state]*n_combs).reshape((-1, e_l,e_b,3))
     r_boxes_c = np.array([padding_boxes(get_remain(l, r_boxes), num_max_remain) for l in loading_size_c]).astype('int')
     loading_c = np.array([padding_boxes(l, num_selected) for l in loading_size_c]).astype('int')
     r_mat_c = np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in r_boxes_c  ]))
@@ -253,8 +243,41 @@ class Bpp3DEnv():#(gym.Env):
         valid = self.length*self.breadth*self.height - np.sum(self.bbox)
         #return np.sum(self.container)/(self.length*self.breadth*self.height)
         return fill/valid
-
-
 ##################################################################################
-
+class Bpp3DEnvMS():
+    def __init__(self,length = 20, breadth = 20, height = 20, bbox_type = np.zeros((1,20,20))):
+        super(Bpp3DEnvMS, self).__init__()
+        self.length=length
+        self.breadth=breadth
+        self.height=height
+        self.bbox_type = bbox_type
+        #self.bbox_sizes = bbox_sizes
+        #self.bbox_size = None
+        self.bbox_idx = None
+        self.bbox = None
+        self.container_h = None
+        self.container_s = None
+        self.score = {}
+       
+    def reset(self, bbox_idx):
+        self.bbox_idx = bbox_idx
+        self.bbox = self.bbox_type[self.bbox_idx].copy()
+        #self.bbox_size = self.bbox_sizes[self.bbox_idx].copy()
+        self.container_h = self.bbox.copy()
+        self.container_s = self.bbox.copy()
+        
+    def step(self, next_container_s, next_container_h):
+        self.container_s = next_container_s
+        self.container_h = next_container_h
+    
+    def vol_bbox(self):
+        vol_bbox = self.length*self.breadth*self.height - np.sum(self.bbox)
+        return vol_bbox
+    
+    def terminal_reward(self):
+        fill = np.sum(self.container_s) - np.sum(self.bbox)
+        vol_ratio = fill/self.vol_bbox()
+        self.score[self.bbox_idx] = vol_ratio
+        return vol_ratio
+##################################################################################
 
