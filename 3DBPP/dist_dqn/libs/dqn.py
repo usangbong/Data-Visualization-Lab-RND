@@ -16,25 +16,20 @@ from tensorflow.keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, concat
 class DQN_CNNDNN(tf.keras.Model):
     def __init__(self, state_size, selected_size, remain_size, loading_size, output_size):
         super(DQN_CNNDNN, self).__init__()
-        self.case_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = state_size)
-        self.case_dnn1 = Dense(32, activation='relu')
+        self.case_cnn1 = Conv2D(filters=8, kernel_size=5, activation='relu', padding="valid", input_shape = state_size)
+        self.case_dnn1 = Dense(64, activation='relu')
         # location - selected boxes
-        self.sel_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = selected_size)
-        self.sel_dnn1 = Dense(32, activation='relu')
+        self.sel_cnn1 = Conv2D(filters=8, kernel_size=5, activation='relu', padding="valid", input_shape = selected_size)
+        self.sel_dnn1 = Dense(64, activation='relu')
         # remain boxes
-        self.r_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = remain_size )
+        self.r_cnn1 = Conv2D(filters=8, kernel_size=5, activation='relu', padding="valid", input_shape = remain_size )
         self.r_dnn1 = Dense(64, activation='relu')
         # size - selected boxes
-        self.l_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = loading_size )
-        self.l_dnn1 = Dense(32, activation='relu')
-        # all
-        #n_ch = state_size[-1] + selected_size[-1] + remain_size[-1] + loading_size[-1] 
-        #self.a_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = state_size[:-1]+(n_ch,))
-        #self.a_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid")
-        #self.a_dnn1 = Dense(32, activation='relu')
+        self.l_cnn1 = Conv2D(filters=8, kernel_size=5, activation='relu', padding="valid", input_shape = loading_size )
+        self.l_dnn1 = Dense(64, activation='relu')
         # merge 
         self.fc1 = Dense(256, activation='relu')
-        self.fc2 = Dense(128, activation='relu')
+        self.fc2 = Dense(256, activation='relu')
         if output_size > 1: #DDQN
             self.fc_out = Dense(output_size, activation='softmax')
         else:
@@ -63,18 +58,75 @@ class DQN_CNNDNN(tf.keras.Model):
         l = MaxPooling2D(pool_size=(2, 2))(l)
         l = Flatten()(l)
         l = self.l_dnn1(l)
-        ### all
-        #a =  tf.concat([c, r, l], -1)
-        #a = self.a_cnn1(a)
-        #a = MaxPooling2D(pool_size=(2, 2))(a)
-        #a = Flatten()(a)
-        #a = self.a_dnn1(a)
         ### merge
         x = concatenate([c,s,r,l])
         x = self.fc1(x)
         x = self.fc2(x)
         q = self.fc_out(x)
-        return q    
+        return q
+    
+# class DQN_CNNDNN(tf.keras.Model):
+#     def __init__(self, state_size, selected_size, remain_size, loading_size, output_size):
+#         super(DQN_CNNDNN, self).__init__()
+#         self.case_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = state_size)
+#         self.case_dnn1 = Dense(32, activation='relu')
+#         # location - selected boxes
+#         self.sel_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = selected_size)
+#         self.sel_dnn1 = Dense(32, activation='relu')
+#         # remain boxes
+#         self.r_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = remain_size )
+#         self.r_dnn1 = Dense(64, activation='relu')
+#         # size - selected boxes
+#         self.l_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = loading_size )
+#         self.l_dnn1 = Dense(32, activation='relu')
+#         # all
+#         #n_ch = state_size[-1] + selected_size[-1] + remain_size[-1] + loading_size[-1] 
+#         #self.a_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = state_size[:-1]+(n_ch,))
+#         #self.a_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid")
+#         #self.a_dnn1 = Dense(32, activation='relu')
+#         # merge 
+#         self.fc1 = Dense(256, activation='relu')
+#         self.fc2 = Dense(128, activation='relu')
+#         if output_size > 1: #DDQN
+#             self.fc_out = Dense(output_size, activation='softmax')
+#         else:
+#             self.fc_out = Dense(output_size)
+
+#     def call(self, cb_list):
+#         c, s, r,l = cb_list[0], cb_list[1], cb_list[2], cb_list[3]
+#         #c, s, r = cb_list[0], cb_list[1], cb_list[2]
+#         ### case
+#         c = self.case_cnn1(c)
+#         c = MaxPooling2D(pool_size=(2, 2))(c)
+#         c = Flatten()(c)
+#         c = self.case_dnn1(c)
+#         ### location - selected boxes
+#         s = self.sel_cnn1(s)
+#         s = MaxPooling2D(pool_size=(2, 2))(s)
+#         s = Flatten()(s)
+#         s = self.sel_dnn1(s)
+#         ### remain boxes
+#         r = self.r_cnn1(r)
+#         r = MaxPooling2D(pool_size=(2, 2))(r)
+#         r = Flatten()(r)
+#         r = self.r_dnn1(r)
+#         ### size - selected boxes
+#         l = self.l_cnn1(l)
+#         l = MaxPooling2D(pool_size=(2, 2))(l)
+#         l = Flatten()(l)
+#         l = self.l_dnn1(l)
+#         ### all
+#         #a =  tf.concat([c, r, l], -1)
+#         #a = self.a_cnn1(a)
+#         #a = MaxPooling2D(pool_size=(2, 2))(a)
+#         #a = Flatten()(a)
+#         #a = self.a_dnn1(a)
+#         ### merge
+#         x = concatenate([c,s,r,l])
+#         x = self.fc1(x)
+#         x = self.fc2(x)
+#         q = self.fc_out(x)
+#         return q    
 
 class DQN_DNN(tf.keras.Model):
     def __init__(self, state_size, selected_size, remain_size, loading_size, output_size):
@@ -82,8 +134,8 @@ class DQN_DNN(tf.keras.Model):
         # case network
         l1,b1,k1 = state_size # 배치 사이즈 제외된 사이즈
         self.state_size = (l1*b1*k1,)
-        self.case_dnn1 = Dense(64, activation='relu',input_shape = self.state_size)
-        self.case_dnn2 = Dense(64, activation='relu')#
+        self.case_dnn1 = Dense(128, activation='relu',input_shape = self.state_size)
+        self.case_dnn2 = Dense(128, activation='relu')#
         # location - selected boxes
         l2,b2,k2 = selected_size
         self.selected_size = (l2*b2*k2,)
@@ -92,20 +144,20 @@ class DQN_DNN(tf.keras.Model):
         # remain boxes
         l3,b3,k3 = remain_size
         self.remain_size = (l3*b3*k3, )
-        self.r_dnn1 = Dense(128, activation='relu', input_shape = self.remain_size  )
-        self.r_dnn2 = Dense(128, activation='relu')
+        self.r_dnn1 = Dense(256, activation='relu', input_shape = self.remain_size  )
+        self.r_dnn2 = Dense(256, activation='relu')
         # loading boxes - selected boxes
         l4,b4,k4 = loading_size
         self.loading_size = (l4*b4*k4, )
-        self.l_dnn1 = Dense(128, activation='relu', input_shape = self.loading_size  )
-        self.l_dnn2 = Dense(128, activation='relu')
+        self.l_dnn1 = Dense(64, activation='relu', input_shape = self.loading_size  )
+        self.l_dnn2 = Dense(64, activation='relu')
         # all
         #self.all_size = (self.state_size[0]+self.selected_size[0]+self.remain_size[0]+self.loading_size[0], )
         #self.a_dnn1 = Dense(128, activation='relu', input_shape = self.all_size  )
         # merge 
-        self.fc1 = Dense(256, activation='relu')
+        self.fc1 = Dense(512, activation='relu')
+        self.fc2 = Dense(512, activation='relu')
         self.fc2 = Dense(256, activation='relu')
-        self.fc2 = Dense(128, activation='relu')
         self.fc_out = Dense(output_size, activation='softmax')
         if output_size > 1: #DDQN
             self.fc_out = Dense(output_size, activation='softmax')
