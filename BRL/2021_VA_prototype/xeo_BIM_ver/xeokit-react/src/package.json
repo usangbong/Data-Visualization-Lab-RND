@@ -1,0 +1,49 @@
+{
+  "name": "xeokit-react",
+  "version": "0.1.0",
+  "description": "",
+  "main": "build/xeokit-react.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint *.js",
+    "lint-fix": "./node_modules/.bin/eslint *.js --fix",
+    "dev": "./node_modules/.bin/webpack --watch --mode=production",
+    "build": "./node_modules/.bin/webpack --mode=production"
+  },
+  "keywords": [
+    "xeokit",
+    "xeokit-sdk",
+    "reactjs",
+    "react",
+    "bim",
+    "gltf"
+  ],
+  "author": "BIM SPOT GmbH",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^5.1.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-jest": "^22.7.1",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "xeokit-sdk": "github:xeokit/xeokit-sdk"
+  },
+  "dependencies": {
+    "lodash.difference": "^4.5.0",
+    "prop-types": "^15.7.2"
+  },
+  "files": [
+    "/build"
+  ]
+}

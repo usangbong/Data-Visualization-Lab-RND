@@ -56,7 +56,7 @@ def divide_uniform_multi_axis(item_size, item_pos, axis_idx_list,n_div,is_factor
         item_pos = positions.copy()
     return sizes, positions
 
-def generation_3dbox(case_size=[[20,20,20],[25,20,15]], N_mdd=20, min_s = 3, is_prediv=0):
+def generation_3dbox(case_size=[[20,20,20],[25,20,15]], N_mdd=20, min_s = 3, is_prediv=0, sort='low_in_left'):
     #c_l, c_b, c_h: length, breadth, height
     case_input=[]
     case_gt_upleft=[]
@@ -122,15 +122,17 @@ def generation_3dbox(case_size=[[20,20,20],[25,20,15]], N_mdd=20, min_s = 3, is_
         #gt_upleft=np.array(gt_upleft)[list(reversed(s_idx))]
 
         #순서 -> 아래부터 정렬
-        #idx = np.argsort(np.array(gt_upleft)[:,2])
-        #gt_upleft = np.array(gt_upleft)[idx]
-        #X_input = np.array(X_input)[idx]
+        if sort == 'low':
+            idx = np.argsort(np.array(gt_upleft)[:,2])
+            gt_upleft = np.array(gt_upleft)[idx]
+            X_input = np.array(X_input)[idx]
         
         #순서 -> 1.아래 2.안쪽 3.왼쪽
-        gt_upleft = np.array(gt_upleft)
-        idx = np.lexsort((gt_upleft[:,1],gt_upleft[:,0],gt_upleft[:,2]))
-        gt_upleft = gt_upleft[idx]
-        X_input = np.array(X_input)[idx]
+        elif sort == 'low_in_left':
+            gt_upleft = np.array(gt_upleft)
+            idx = np.lexsort((gt_upleft[:,1],gt_upleft[:,0],gt_upleft[:,2]))
+            gt_upleft = gt_upleft[idx]
+            X_input = np.array(X_input)[idx]
         
         case_input.append(X_input)
         case_gt_upleft.append(gt_upleft)

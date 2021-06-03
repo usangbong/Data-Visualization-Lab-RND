@@ -145,7 +145,7 @@ class DQN_DNN(tf.keras.Model):
 class DQNAgent:
     def __init__(self, L=20, B=20, H=20, n_remains = 5, n_loading=3, 
                  lr=1e-8, exp_steps=500, train_st = 200, memory_len=500, update_target_rate = 30, net='DNN' ):
-        self.state_size = (L, B, 2)
+        self.state_size = (L, B, 3)
         self.selected_size = (L, B, 1)
         self.remain_size = (L, B, n_remains)
         self.loading_size = (L, B, n_loading)
@@ -164,9 +164,9 @@ class DQNAgent:
         self.beta = 0.2
         self.memory = deque(maxlen=memory_len) # replay memory
         self.net = net
-        self.vmin = 0
+        self.vmin = 0#-0.02
         self.vmax = 1
-        self.nsup = 51
+        self.nsup = 51#52
         self.dz = (self.vmax - self.vmin)/(self.nsup - 1.)
         self.z = np.linspace(self.vmin,self.vmax,self.nsup)
         self.gamma = 0.9
@@ -306,24 +306,7 @@ class DQNAgent:
                     t_q = self.target_model([t_history[i], t_load[i], t_remain_size[i], t_load_size[i]]) # target q value
                     t_max_q = tf.math.reduce_max(t_q)
                     targets.append([(1- 0.75)*reward[i] + (1 - dones[i]) *0.75*t_max_q])
-                #t_q = []
-                #for i in range(len(t_history)):
-                #    st = (self.batch_size)*(i)
-                #    ed = min((self.batch_size)*(i+1), len(t_history) )
-                #    if ed >= len(t_history):
-                #        t_q.append( self.target_model([t_history[st:], t_s_boxes[st:], t_remains[st:]]) )
-                #        break
-                #    t_q.append( self.target_model([t_history[st:ed], t_s_boxes[st:ed], t_remains[st:ed]]) )
-                #t_q = tf.concat(t_q, 0)
-                ##t_q = self.target_model([t_history, t_s_boxes, t_remains]) # target q value
-                #st = 0
-                #for i,l in enumerate(t_len):
-                #    t_max_q = tf.math.reduce_max(t_q[st:st+l])
-                #    targets.append([(1- 0.75)*reward[i] + (1 - dones[i]) *0.75*t_max_q])
-                #    st = st+l
-
                 targets=np.array(targets) #(B, 1)
-
                 # loss 계산
                 #loss = tf.reduce_mean(tf.square(targets - predicts))
                 error = tf.abs(targets - predicts)
