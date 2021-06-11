@@ -1,0 +1,30 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Demo client
+# dependencies
+demo/node_modules
+demo/.pnp
+demo/.pnp.js
+
+# testing
+demo/coverage
+
+# production
+demo/build
+
+# misc
+demo/.DS_Store
+demo/.env.local
+demo/.env.development.local
+demo/.env.test.local
+demo/.env.production.local
+
+demo/npm-debug.log*
+demo/yarn-debug.log*
+demo/yarn-error.log*
+
+
+# Src package
+src/node_modules
+src/build
+src/package-lock.json
