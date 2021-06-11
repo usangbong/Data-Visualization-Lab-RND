@@ -21,11 +21,11 @@ class DQN_CNNDNN(tf.keras.Model):
         # location - selected boxes
         self.sel_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = selected_size)
         self.sel_dnn1 = Dense(32, activation='relu')
-        # remain boxes
+        # size - remain boxes
         self.r_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = remain_size )
         self.r_dnn1 = Dense(64, activation='relu')
         # size - selected boxes
-        self.l_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = loading_size )
+        self.l_cnn1 = Conv2D(filters=5, kernel_size=(1,3), activation='relu', padding="valid", input_shape = loading_size )
         self.l_dnn1 = Dense(32, activation='relu')
         # all
         #n_ch = state_size[-1] + selected_size[-1] + remain_size[-1] + loading_size[-1] 
@@ -53,14 +53,14 @@ class DQN_CNNDNN(tf.keras.Model):
         s = MaxPooling2D(pool_size=(2, 2))(s)
         s = Flatten()(s)
         s = self.sel_dnn1(s)
-        ### remain boxes
+        ### size - remain boxes
         r = self.r_cnn1(r)
         r = MaxPooling2D(pool_size=(2, 2))(r)
         r = Flatten()(r)
         r = self.r_dnn1(r)
         ### size - selected boxes
-        l = self.l_cnn1(l)
-        l = MaxPooling2D(pool_size=(2, 2))(l)
+        l = self.l_cnn1(l) #(32, 1, 60, 5)
+        l = MaxPooling2D(pool_size=(1, 2))(l)#l = MaxPooling2D(pool_size=(2, 2))(l)
         l = Flatten()(l)
         l = self.l_dnn1(l)
         ### all
@@ -143,12 +143,12 @@ class DQN_DNN(tf.keras.Model):
 
 
 class DQNAgent:
-    def __init__(self, L=20, B=20, H=20, n_remains = 5, n_loading=3, 
+    def __init__(self, L=20, B=20, H=20, n_remains = 5, n_loading=3, max_size = 64,
                  lr=1e-8, exp_steps=500, train_st = 200, memory_len=500, update_target_rate = 30, net='DNN' ):
         self.state_size = (L, B, 3)
-        self.selected_size = (L, B, 1)
-        self.remain_size = (L, B, n_remains)
-        self.loading_size = (L, B, n_loading)
+        self.selected_size = (L, B, n_loading)
+        self.remain_size = (n_remains, max_size ,8) #(L, B, n_remains)
+        self.loading_size = (n_loading, max_size ,8) # (L, B, n_loading)
         self.output_size = 1 #math.factorial(c_boxes_size)
         # hyperparameters
         self.discount_factor = 0.99
@@ -250,6 +250,7 @@ class DQNAgent:
         t_load = np.concatenate([sample[7] for sample in batch])
         t_remain_size = np.concatenate([sample[8] for sample in batch] )
         t_load_size = np.concatenate([sample[9] for sample in batch] )
+        #print(history.shape,load.shape,remain_size.shape, load_size.shape, reward.shape, dones.shape,  t_history.shape, t_load.shape, t_remain_size.shape, t_load_size.shape)
         
         model_params = self.model.trainable_variables
         with tf.GradientTape() as tape:
@@ -294,9 +295,7 @@ class DQNAgent:
                             j += 1
                         m /= m.sum() #(51,)
                         targets.append(m)
-                        
                 loss = self.criterion(targets, predicts)
-                
             else: 
                 # 예측
                 predicts = self.model([history, load, remain_size, load_size]) #(B, 1)
