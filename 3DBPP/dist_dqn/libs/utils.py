@@ -32,7 +32,16 @@ def get_selected_order(selected, comb_idx, k):
     selected_order, unique_idx = np.unique(selected_order, axis=0, return_index=True)
     order_idx = np.stack(order_idx)
     order_idx = order_idx[unique_idx]
-    return selected_order, order_idx 
+    return selected_order, order_idx
+
+def rot_one_order(s_order, s_order_idx):
+    s_order_rot = s_order.copy()
+    s_order_rot[:,:,0] = s_order[:,:,1]
+    s_order_rot[:,:,1] = s_order[:,:,0]
+    s_order_rot_idx = s_order_idx.copy() 
+    s_order = np.concatenate([s_order, s_order_rot])
+    s_order_idx = np.concatenate([s_order_idx, s_order_rot_idx])
+    return s_order, s_order_idx
 
 def get_remain(s_boxes, r_boxes):
     for i in s_boxes:
@@ -41,29 +50,82 @@ def get_remain(s_boxes, r_boxes):
             r_boxes = np.delete(r_boxes, (drop_idx), axis=0)
     return r_boxes
 
-def size2matrix(box, e_l, e_b):
-    # box (3,)
-    l, b = box[:2]
-    box = np.ones((l,b)) * box[2]
-    padded = np.pad(box, ((0, e_l-l), (0, e_b - b)), mode='constant', constant_values=0)
-    return padded
+# def drop_remain(m_mat, idx):
+#     len_row, len_col, len_chan = m_mat.shape
+#     len_chan = len_chan//2
+#     m_mat_ = m_mat[:,:,:len_chan].copy()
+#     m_mat_ = np.delete(m_mat_, (idx), axis=0)
+#     m_mat_ = np.concatenate([m_mat_, np.zeros((len_row-len(m_mat_) , len_col, len_chan))])
+#     m_mat_ = np.concatenate([m_mat_, m_mat[:,:,len_chan:]], axis = -1 )
+#     return m_mat_
+def drop_remain(m_mat, idx):
+    len_row, len_col, len_chan = m_mat.shape
+    len_chan = len_chan//2
+    m_mat_ = m_mat.copy()
+    m_mat_[idx,:,:len_chan] = 0
+    return m_mat_
 
-def raw2input(state_s, state_h, bbox, r_boxes,  num_max_remain, num_selected, loading_size_c, e_h=20):
-    n_combs = len(loading_size_c)
+def add_loading(m_mat, loaded_idx, loading_idx):
+    len_row, len_col, len_chan = m_mat.shape
+    len_chan = len_chan//2
+    m_mat_ = m_mat.copy()
+    m_mat_[len(loaded_idx):len(loaded_idx)+len(loading_idx): , :, len_chan:] = m_mat[loading_idx, :, :len_chan]
+    return m_mat_
+
+def update_mbox(m_mat, loaded_idx, loading_idx):
+    m_mat_ = add_loading(m_mat, loaded_idx, loading_idx)
+    m_mat_ = drop_remain(m_mat_, loading_idx)
+    return m_mat_
+
+# def size2matrix(box, e_l, e_b):
+#     # box (3,)
+#     l, b = box[:2]
+#     box = np.ones((l,b)) * box[2]
+#     padded = np.pad(box, ((0, e_l-l), (0, e_b - b)), mode='constant', constant_values=0)
+#     return padded
+def size2mat(group_size, num_max_remain, max_box_size):
+    size_l = np.zeros((num_max_remain, max_box_size))
+    size_b = np.zeros((num_max_remain, max_box_size))
+    cbm_l = np.zeros((num_max_remain, max_box_size))
+    cbm_b = np.zeros((num_max_remain, max_box_size))
+    i = 0
+    for l,b,h,w, c, n in group_size:
+        size_l[i:i + int(n), :int(l)] = h
+        size_b[i:i + int(n), :int(b)] = h
+        cbm_l[i:i + int(n), :int(l)] = c
+        cbm_b[i:i + int(n), :int(b)] = c
+        i += int(n)
+    size_mat = np.stack([size_l, size_b, cbm_l, cbm_b], axis=-1)
+    return size_mat
+# def cbm2mat(group_size, num_max_remain, max_box_size):
+#     cbm_mat = np.zeros((num_max_remain, max_box_size))
+#     i = 0
+#     for c, n in group_size:
+#         cbm_mat[i:i+n, :l] = c
+#         i += n
+#     return cbm_mat
+
+def raw2input(state_s, state_h, bbox, r_mat, num_max_remain, num_selected, loading_idx_c, max_size, e_h=20):
+    n_combs = len(loading_idx_c)
     e_l, e_b = state_h.shape
     state = np.stack([state_s, state_h, bbox],axis = -1)
     state_c = np.array([state]*n_combs).reshape((-1, e_l,e_b,3))
-    r_boxes_c = np.array([padding_boxes(get_remain(l, r_boxes), num_max_remain) for l in loading_size_c]).astype('int')
-    loading_c = np.array([padding_boxes(l, num_selected) for l in loading_size_c]).astype('int')
-    r_mat_c = np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in r_boxes_c  ]))
-    loading_mat_c =  np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in loading_c  ]))
+    r_mat_c = np.array([r_mat]*n_combs) #적입할 중박스의 사이즈도 포함
+    #r_boxes_c = np.array([padding_boxes(get_remain(l, r_boxes), num_max_remain) for l in loading_size_c]).astype('int')
+    #loading_c = np.array([padding_boxes(l, num_selected) for l in loading_size_c]).astype('int')
+    #r_mat_c = np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in r_boxes_c  ]))
+    #loading_mat_c =  np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in loading_c  ]))
+    # loading_size_c -> (C, K, 3) #(경우의 수, 적입할 중박스 수, [l,b,h])
+    #loading_size_c = np.concatenate([loading_size_c, np.ones((loading_size_c.shape[:2] +(1,) ))], axis=-1) #(C, K, 4)
+    #loading_mat_c = [size2mat( i.astype('int') , num_selected, max_size ) for i in loading_size_c] #(1, 3, 62, 2)
+    loading_mat_c = np.stack([ r_mat[[x]] for x in loading_idx_c ])
     # scaling
     state_c = (np.array(state_c)/e_h).astype(np.float32)
-    r_mat_c = (np.array(r_mat_c)/e_h).astype(np.float32)
-    loading_mat_c = (np.array(loading_mat_c)/e_h).astype(np.float32)
+    #r_mat_c = (np.array(r_mat_c)/e_h).astype(np.float32)
+    #loading_mat_c = (np.array(loading_mat_c)/e_h).astype(np.float32)
     # transpose
-    r_mat_c = r_mat_c.transpose((0,2,3,1))
-    loading_mat_c = loading_mat_c.transpose((0,2,3,1))
+    #r_mat_c = r_mat_c.transpose((0,2,3,1))
+    #loading_mat_c = loading_mat_c.transpose((0,2,3,1))
     return state_c, r_mat_c, loading_mat_c
 
 def get_fixed_loc(box, state_h, env_h):
@@ -99,7 +161,7 @@ def get_next_state(state, state_h, upleft,bxl,bxb,bxh):
     return next_state, next_state_h 
 
 
-def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k):
+def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k, cbm_reward ,cbm_all, add_skip = True):
     # 초기화
     e_l, e_b = state_org.shape
     order_idx_c = []
@@ -115,8 +177,12 @@ def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k):
         loading_size, loading_idx, loading_xyz = [],[],[]
         loading_loc = np.zeros((e_l,e_b,k))
         num_loading = 0
+        cbm = cbm_reward
         # 적재 시작
         for i, (box,idx) in enumerate(zip(boxes, element_idx)): #boxes의 길이는 k
+            cbm += cbm_all[idx]
+            if cbm >1:
+                continue
             fixed_xyz = get_fixed_loc(box, state_h, e_h) #박스의 좌표와 next_state
             ### 해당 중박스를 적재하지 못한 경우에 스킵
             if len(fixed_xyz) == 0: 
@@ -133,31 +199,32 @@ def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k):
             num_loading += 1 # 카운트
             loading_idx.append(idx)
             loading_size.append(box)
-            loading_xyz.append(fixed_xyz)            
+            loading_xyz.append(fixed_xyz)
+            
         
         ########################################
-        #if num_loading != 0: #하나 이상의 중박스를 적재했을 경우 -> append
         # append (중박스를 하나도 적재하지 않은 경우 포함, 중복 데이터만 제외)
-        
-        # scaling
-        loading_loc = loading_loc/e_h 
-        # 중복 제외: loading_loc, loading_size가 동일하면 append 제외
-        if len(loading_loc_c) > 0:
-            idx1 = [i for i, x in enumerate(loading_loc_c) if (x==loading_loc).all()]
-            idx2 = [i for i, x in enumerate(loading_size_c) if np.array((np.array(x)==loading_size)).all()]
-            num_inter = list(set(idx1) & set(idx2))
-            if len(num_inter) > 0:
-                #print('duplicate',set(idx1) & set(idx2), loading_size_c, loading_size, fixed_xyz)
-                continue
-        # append
-        order_idx_c.append(order_idx)
-        num_loading_c.append(num_loading)
-        loading_idx_c.append(loading_idx)
-        loading_size_c.append(loading_size)
-        loading_xyz_c.append(loading_xyz)
-        loading_loc_c.append(loading_loc)
-        next_state_c.append(next_state)
-        next_state_h_c.append(next_state_h)
+        #if num_loading != 0: #하나 이상의 중박스를 적재했을 경우 -> append
+        if add_skip or num_loading != 0:
+            # scaling
+            loading_loc = loading_loc/e_h 
+            # 중복 제외: loading_loc, loading_size가 동일하면 append 제외
+            if len(loading_loc_c) > 0:
+                idx1 = [i for i, x in enumerate(loading_loc_c) if (x==loading_loc).all()]
+                idx2 = [i for i, x in enumerate(loading_size_c) if np.array((np.array(x)==loading_size)).all()]
+                num_inter = list(set(idx1) & set(idx2))
+                if len(num_inter) > 0:
+                    #print('duplicate',set(idx1) & set(idx2), loading_size_c, loading_size, fixed_xyz)
+                    continue
+            # append
+            order_idx_c.append(order_idx)
+            num_loading_c.append(num_loading)
+            loading_idx_c.append(loading_idx)
+            loading_size_c.append(loading_size)
+            loading_xyz_c.append(loading_xyz)
+            loading_loc_c.append(loading_loc)
+            next_state_c.append(next_state)
+            next_state_h_c.append(next_state_h)
         
     return order_idx_c, num_loading_c, loading_idx_c, loading_size_c, loading_xyz_c, loading_loc_c, next_state_c, next_state_h_c
 
