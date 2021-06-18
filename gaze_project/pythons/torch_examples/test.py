@@ -1,3 +1,4 @@
+# ㄷㅍ미ㅕㅁ샤ㅐㅜ ㅡㄷㅅ걏ㄴ
 import pysaliency
 dataset_location = 'datasets'
 model_location = 'models'
