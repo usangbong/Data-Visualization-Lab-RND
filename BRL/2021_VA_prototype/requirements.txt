@@ -12,4 +12,4 @@ pyrsistent==0.17.3
 pytz==2021.1
 six==1.15.0
 Werkzeug==1.0.1
-wincertstore==0.2
+wincertstore
