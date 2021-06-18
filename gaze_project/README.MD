@@ -9,4 +9,5 @@ memo
 add list
 - saliency evaluation metrics
 - saliency models
-- fixation/saccade identification models (parameter thresholing)
+- fixation/saccade identification models (parameter thresholing): I-VT, I-DT, DBSCAN
+- fixation/saccade identification models (machine learning): ...
