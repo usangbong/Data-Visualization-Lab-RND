@@ -1,5 +1,4 @@
 import pysaliency
-
 dataset_location = 'datasets'
 model_location = 'models'
 
