@@ -1,4 +1,4 @@
-# ㄷㅍ미ㅕㅁ샤ㅐㅜ ㅡㄷㅅ걏ㄴ
+# saliency evaluation metrics
 import pysaliency
 dataset_location = 'datasets'
 model_location = 'models'
