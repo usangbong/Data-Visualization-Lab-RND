@@ -14,7 +14,7 @@ from tensorflow.keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, concat
 # CUDA_VISIBLE_DEVICES=""
 
 class DQN_CNNDNN(tf.keras.Model):
-    def __init__(self, state_size, selected_size, remain_size, loading_size, output_size):
+    def __init__(self, state_size, selected_size, remain_size, loading_size, cbm_size,  output_size):
         super(DQN_CNNDNN, self).__init__()
         self.case_cnn1 = Conv2D(filters=5, kernel_size=3, activation='relu', padding="valid", input_shape = state_size)
         self.case_dnn1 = Dense(32, activation='relu')
@@ -25,8 +25,11 @@ class DQN_CNNDNN(tf.keras.Model):
         self.r_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = remain_size )
         self.r_dnn1 = Dense(64, activation='relu')
         # size - selected boxes
-        self.l_cnn1 = Conv2D(filters=5, kernel_size=(1,3), activation='relu', padding="valid", input_shape = loading_size )
+        self.l_cnn1 = Conv2D(filters=3, kernel_size=(1,3), activation='relu', padding="valid", input_shape = loading_size )
         self.l_dnn1 = Dense(32, activation='relu')
+        # cbm
+        self.cbm_dnn1 = Dense(128, activation='relu', input_shape = cbm_size )
+        self.cbm_dnn2 = Dense(32, activation='relu')
         # all
         #n_ch = state_size[-1] + selected_size[-1] + remain_size[-1] + loading_size[-1] 
         #self.a_cnn1 = Conv2D(filters=8, kernel_size=3, activation='relu', padding="valid", input_shape = state_size[:-1]+(n_ch,))
@@ -41,7 +44,7 @@ class DQN_CNNDNN(tf.keras.Model):
             self.fc_out = Dense(output_size)
 
     def call(self, cb_list):
-        c, s, r,l = cb_list[0], cb_list[1], cb_list[2], cb_list[3]
+        c, s, r,l, cbm = cb_list[0], cb_list[1], cb_list[2], cb_list[3], cb_list[4]
         #c, s, r = cb_list[0], cb_list[1], cb_list[2]
         ### case
         c = self.case_cnn1(c)
@@ -63,6 +66,9 @@ class DQN_CNNDNN(tf.keras.Model):
         l = MaxPooling2D(pool_size=(1, 2))(l)#l = MaxPooling2D(pool_size=(2, 2))(l)
         l = Flatten()(l)
         l = self.l_dnn1(l)
+        ### cbm
+        cbm = self.cbm_dnn1(cbm)
+        cbm = self.cbm_dnn2(cbm)
         ### all
         #a =  tf.concat([c, r, l], -1)
         #a = self.a_cnn1(a)
@@ -70,14 +76,14 @@ class DQN_CNNDNN(tf.keras.Model):
         #a = Flatten()(a)
         #a = self.a_dnn1(a)
         ### merge
-        x = concatenate([c,s,r,l])
+        x = concatenate([c,s,r,l, cbm])
         x = self.fc1(x)
         x = self.fc2(x)
         q = self.fc_out(x)
         return q    
 
 class DQN_DNN(tf.keras.Model):
-    def __init__(self, state_size, selected_size, remain_size, loading_size, output_size):
+    def __init__(self, state_size, selected_size, remain_size, loading_size, cbm_size, output_size):
         super(DQN_DNN, self).__init__()
         # case network
         l1,b1,k1 = state_size # 배치 사이즈 제외된 사이즈
@@ -99,6 +105,9 @@ class DQN_DNN(tf.keras.Model):
         self.loading_size = (l4*b4*k4, )
         self.l_dnn1 = Dense(128, activation='relu', input_shape = self.loading_size  )
         self.l_dnn2 = Dense(128, activation='relu')
+        # CBM - bboxcbm + selected cbm + remain cbm
+        self.cbm_dnn1 = Dense(128, activation='relu', input_shape = cbm_size  )
+        self.cbm_dnn2 = Dense(128, activation='relu')
         # all
         #self.all_size = (self.state_size[0]+self.selected_size[0]+self.remain_size[0]+self.loading_size[0], )
         #self.a_dnn1 = Dense(128, activation='relu', input_shape = self.all_size  )
@@ -113,7 +122,7 @@ class DQN_DNN(tf.keras.Model):
             self.fc_out = Dense(output_size)
 
     def call(self, cb_list):
-        c, s, r, l = cb_list[0], cb_list[1], cb_list[2], cb_list[3]
+        c, s, r, l,cbm = cb_list[0], cb_list[1], cb_list[2], cb_list[3], cb_list[4]
         c = tf.reshape(c, [-1, self.state_size[0]])
         s = tf.reshape(s, [-1, self.selected_size[0]])
         r = tf.reshape(r, [-1, self.remain_size[0]])
@@ -131,10 +140,13 @@ class DQN_DNN(tf.keras.Model):
         ### loading boxes
         l = self.l_dnn1(l)
         l = self.l_dnn2(l)
+        ### cbm
+        cbm = self.cbm_dnn1(cbm)
+        cbm = self.cbm_dnn2(cbm)
         ### all
         #a = self.a_dnn1(a)
         ### merge
-        x = concatenate([c,s,r,l])#x = concatenate([c,s,r,l,a])
+        x = concatenate([c,s,r,l, cbm])#x = concatenate([c,s,r,l,a])
         x = self.fc1(x)
         x = self.fc2(x)
         q = self.fc_out(x)
@@ -143,12 +155,13 @@ class DQN_DNN(tf.keras.Model):
 
 
 class DQNAgent:
-    def __init__(self, L=20, B=20, H=20, n_remains = 5, n_loading=3, max_size = 64,
-                 lr=1e-8, exp_steps=500, train_st = 200, memory_len=500, update_target_rate = 30, net='DNN' ):
+    def __init__(self, L=20, B=20, H=20, n_remains = 5, n_loading=3, n_channel = 6, max_size = 64,
+                 lr=1e-8, batch_size = 32, exp_steps=500, train_st = 200, memory_len=500, update_target_rate = 30, net='DNN' ):
         self.state_size = (L, B, 3)
         self.selected_size = (L, B, n_loading)
-        self.remain_size = (n_remains, max_size ,8) #(L, B, n_remains)
-        self.loading_size = (n_loading, max_size ,8) # (L, B, n_loading)
+        self.remain_size = (n_remains, max_size ,n_channel) #(L, B, n_remains)
+        self.loading_size = (n_loading, max_size ,n_channel//2) # (L, B, n_loading)
+        self.cbm_size = (1 + n_remains*2 + n_loading,)
         self.output_size = 1 #math.factorial(c_boxes_size)
         # hyperparameters
         self.discount_factor = 0.99
@@ -158,7 +171,7 @@ class DQNAgent:
         self.exploration_steps = exp_steps
         self.epsilon_decay_step = self.epsilon_start - self.epsilon_end
         self.epsilon_decay_step /= self.exploration_steps
-        self.batch_size = 32
+        self.batch_size = batch_size
         self.train_start = train_st
         self.update_target_rate = update_target_rate
         self.beta = 0.2
@@ -184,11 +197,11 @@ class DQNAgent:
             self.target_model = DQN_CNNDNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.output_size)
         # distributed q learning
         elif net == 'DDQN_DNN':
-            self.model = DQN_DNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.nsup)
-            self.target_model = DQN_DNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.nsup)
+            self.model = DQN_DNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.cbm_size, self.nsup)
+            self.target_model = DQN_DNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.cbm_size, self.nsup)
         elif net == 'DDQN_CNNDNN':
-            self.model = DQN_CNNDNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.nsup)
-            self.target_model = DQN_CNNDNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.nsup)
+            self.model = DQN_CNNDNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.cbm_size, self.nsup)
+            self.target_model = DQN_CNNDNN(self.state_size, self.selected_size, self.remain_size, self.loading_size, self.cbm_size, self.nsup)
         
         if net in ['DDQN_DNN', 'DDQN_CNNDNN']:
             print('distribution', net)
@@ -198,42 +211,42 @@ class DQNAgent:
         # target model (init)
         self.update_target_model()
         self.avg_q_max, self.avg_loss = 0, 0
-        self.writer = tf.summary.create_file_writer('summary/bpp')
+#         self.writer = tf.summary.create_file_writer('summary/bpp')
         self.model_path = os.path.join(os.getcwd(), 'save_model', 'model_3d')
 
     def update_target_model(self):
         self.target_model.set_weights(self.model.get_weights())
 
-    def get_action(self, state, loaded_mh_c, r_boxes, loading):
+    def get_action(self, state, loaded_mh_c, r_boxes, loading, cbm):
         if np.random.rand() <= self.epsilon:
             random_action = random.randrange(len(state))
             return random_action
         else:
             if self.dist:
-                z = self.model.predict([state, loaded_mh_c, r_boxes, loading]) #(C,51)
+                z = self.model.predict([state, loaded_mh_c, r_boxes, loading, cbm]) #(C,51)
                 z_concat = np.vstack(z) #action output이 여러개 일때
                 #q = np.sum(np.multiply(z_concat[:,45:], np.array(self.z)[45:]), axis=1) #(C,)
                 q = np.sum(np.multiply(z_concat, np.array(self.z)), axis=1) #(C,)
                 self.avg_q_max += np.amax(q)
                 return np.argmax(q)
             else:
-                q_values=self.model([state, loaded_mh_c, r_boxes, loading])
+                q_values=self.model([state, loaded_mh_c, r_boxes, loading, cbm])
                 armax_idx = np.where( q_values == tf.math.reduce_max(q_values))
                 action_idx = armax_idx[0][0]
                 return action_idx
     
    
-    def append_sample(self, history, load, remain_size, load_size, reward, last, t_history, t_load, t_remain_size, t_load_size):
-        self.memory.append(( history, load, remain_size, load_size, reward, last, t_history, t_load, t_remain_size, t_load_size))
+    def append_sample(self, history, load, remain_size, load_size, reward, last, t_history, t_load, t_remain_size, t_load_size, cbm,  t_cbm):
+        self.memory.append(( history, load, remain_size, load_size, reward, last, t_history, t_load, t_remain_size, t_load_size, cbm, t_cbm))
         
         
-    def draw_tensorboard(self, reward, fill, step, episode):
-        with self.writer.as_default():
-            tf.summary.scalar('Total Reward/Episode', reward, step=episode)
-            tf.summary.scalar('Total Fill/Episode', fill, step=episode)
-            tf.summary.scalar('Average Max Q/Episode', self.avg_q_max / float(step), step=episode)
-            tf.summary.scalar('Duration/Episode', step, step=episode)
-            tf.summary.scalar('Average Loss/Episode', self.avg_loss / float(step), step=episode)
+#     def draw_tensorboard(self, reward, fill, step, episode):
+#         with self.writer.as_default():
+#             tf.summary.scalar('Total Reward/Episode', reward, step=episode)
+#             tf.summary.scalar('Total Fill/Episode', fill, step=episode)
+#             tf.summary.scalar('Average Max Q/Episode', self.avg_q_max / float(step), step=episode)
+#             tf.summary.scalar('Duration/Episode', step, step=episode)
+#             tf.summary.scalar('Average Loss/Episode', self.avg_loss / float(step), step=episode)
     
     def train_model(self):
         
@@ -250,26 +263,32 @@ class DQNAgent:
         t_load = np.concatenate([sample[7] for sample in batch])
         t_remain_size = np.concatenate([sample[8] for sample in batch] )
         t_load_size = np.concatenate([sample[9] for sample in batch] )
+        cbm = np.array([sample[10] for sample in batch] )
+        t_cbm = np.concatenate([sample[11] for sample in batch] )
         #print(history.shape,load.shape,remain_size.shape, load_size.shape, reward.shape, dones.shape,  t_history.shape, t_load.shape, t_remain_size.shape, t_load_size.shape)
         
         model_params = self.model.trainable_variables
         with tf.GradientTape() as tape:
             if self.dist:
                 # 예측
-                predicts = self.model([history, load, remain_size, load_size]) # B,51
+                predicts = self.model([history, load, remain_size, load_size, cbm]) # B,51
                 # 타겟
-                z_b = []
-                for i in range(0,len(t_history), self.batch_size ):
-                    e_idx = min( i + self.batch_size, len(t_history) )
-                    z = self.target_model([t_history[i:e_idx], t_load[i:e_idx], t_remain_size[i:e_idx], t_load_size[i:e_idx]]) #(C, 51)
-                    z_b.append(z)
-                z_concat = np.vstack(z_b) #(B*c, 51)
+#                 z_b = []
+#                 for i in range(0,len(t_history), self.batch_size):
+#                     e_idx = min( i + self.batch_size, len(t_history) )
+#                     z = self.target_model([t_history[i:e_idx], t_load[i:e_idx], t_remain_size[i:e_idx], t_load_size[i:e_idx]]) #(C, 51)
+#                     z_b.append(z)
+#                 z_concat = np.vstack(z_b) #(B*c, 51)
+                z_concat = self.target_model([t_history, t_load, t_remain_size, t_load_size, t_cbm])
                 t_q = np.sum(np.multiply(z_concat, np.array(self.z)), axis=1) #(B*c, )
                 # 가장 기댓값이 높은 action 선택
                 next_actions, probs = [],[]
                 for i in range(len(len_t_comb)):
                     s_idx = np.sum(len_t_comb[:i]).astype('int')
-                    n_a = np.argmax(t_q[s_idx: s_idx + len_t_comb[i]])
+                    if len_t_comb[i] ==1:
+                        n_a = 0
+                    else:                        
+                        n_a = np.argmax(t_q[s_idx: s_idx + len_t_comb[i]])
                     next_actions.append(n_a) #[32]
                     probs.append((z_concat[s_idx: s_idx + len_t_comb[i]])[n_a])
                 probs = np.stack(probs) #(B, 51)
@@ -302,7 +321,7 @@ class DQNAgent:
                 # 타겟
                 targets = []
                 for i in range(self.batch_size):
-                    t_q = self.target_model([t_history[i], t_load[i], t_remain_size[i], t_load_size[i]]) # target q value
+                    t_q = self.target_model([t_history[i], t_load[i], t_remain_size[i], t_load_size[i], t_cbm[i]]) # target q value
                     t_max_q = tf.math.reduce_max(t_q)
                     targets.append([(1- 0.75)*reward[i] + (1 - dones[i]) *0.75*t_max_q])
                 targets=np.array(targets) #(B, 1)
