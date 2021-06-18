@@ -43,6 +43,28 @@ def rot_one_order(s_order, s_order_idx):
     s_order_idx = np.concatenate([s_order_idx, s_order_rot_idx])
     return s_order, s_order_idx
 
+def get_rep_order(selected, r_boxes,boxes_idx, max_k):
+    s_rep, s_rep_idx = [], []
+    for x in selected.reshape((-1, 3)):
+        i = np.where(np.all(r_boxes==x,axis=1))[0]
+        n = min(max_k, len(i))
+#         for j in range(1,n):
+#             s_rep.append([x]*(j+1))
+#             s_rep.append([x[[1,0,2]]]*(j+1))
+#             s_rep_idx.append(boxes_idx[i[:j+1]])
+#             s_rep_idx.append(boxes_idx[i[:j+1]])
+        s_rep.append([x]*n)
+        s_rep.append([x[[1,0,2]]]*n)
+        s_rep_idx.append(boxes_idx[i[:n]])
+        s_rep_idx.append(boxes_idx[i[:n]])
+    return s_rep, s_rep_idx
+
+def merge_order_rep(s_order, s_order_idx, selected, r_boxes ,boxes_idx, max_k):
+    s_rep, s_rep_idx = get_rep_order(selected, r_boxes ,boxes_idx, max_k)
+    s_order_ = s_order.tolist() + s_rep
+    s_order_idx_ = s_order_idx.tolist() + s_rep_idx
+    return s_order_, s_order_idx_
+
 def get_remain(s_boxes, r_boxes):
     for i in s_boxes:
         if i in r_boxes:
@@ -50,32 +72,39 @@ def get_remain(s_boxes, r_boxes):
             r_boxes = np.delete(r_boxes, (drop_idx), axis=0)
     return r_boxes
 
-# def drop_remain(m_mat, idx):
-#     len_row, len_col, len_chan = m_mat.shape
-#     len_chan = len_chan//2
-#     m_mat_ = m_mat[:,:,:len_chan].copy()
-#     m_mat_ = np.delete(m_mat_, (idx), axis=0)
-#     m_mat_ = np.concatenate([m_mat_, np.zeros((len_row-len(m_mat_) , len_col, len_chan))])
-#     m_mat_ = np.concatenate([m_mat_, m_mat[:,:,len_chan:]], axis = -1 )
-#     return m_mat_
 def drop_remain(m_mat, idx):
     len_row, len_col, len_chan = m_mat.shape
     len_chan = len_chan//2
-    m_mat_ = m_mat.copy()
-    m_mat_[idx,:,:len_chan] = 0
+    m_mat_ = m_mat[:,:,:len_chan].copy()
+    m_mat_ = np.delete(m_mat_, (idx), axis=0)
+    m_mat_ = np.concatenate([m_mat_, np.zeros((len_row-len(m_mat_) , len_col, len_chan))])
+    m_mat_ = np.concatenate([m_mat_, m_mat[:,:,len_chan:]], axis = -1 )
     return m_mat_
+# def drop_remain(m_ma
+# def drop_remain(m_mat, idx):
+#     len_row, len_col, len_chan = m_mat.shape
+#     m_mat_ = m_mat.copy()
+#     m_mat_ = np.delete(m_mat_, (idx), axis=0)
+#     m_mat_ = np.concatenate([m_mat_, np.zeros((len_row-len(m_mat_) , len_col, len_chan))])
+#     return m_mat_t, idx):
+#     len_row, len_col, len_chan = m_mat.shape
+#     len_chan = len_chan//2
+#     m_mat_ = m_mat.copy()
+#     m_mat_[idx,:,:len_chan] = 0
+#     return m_mat_
 
-def add_loading(m_mat, loaded_idx, loading_idx):
+def add_loading(m_mat, loaded_idx, len_group):
     len_row, len_col, len_chan = m_mat.shape
     len_chan = len_chan//2
     m_mat_ = m_mat.copy()
-    m_mat_[len(loaded_idx):len(loaded_idx)+len(loading_idx): , :, len_chan:] = m_mat[loading_idx, :, :len_chan]
+    loaded_idx_ = loaded_idx[-len_group:]
+    m_mat_[:len_group, :, len_chan:] = m_mat[loaded_idx[-len_group:], :, :len_chan]
     return m_mat_
-
-def update_mbox(m_mat, loaded_idx, loading_idx):
-    m_mat_ = add_loading(m_mat, loaded_idx, loading_idx)
-    m_mat_ = drop_remain(m_mat_, loading_idx)
-    return m_mat_
+# def add_loading(m_mat, loaded_idx, loading_idx):
+#     len_row, len_col, len_chan = m_mat.shape
+#     m_mat_ = m_mat.copy()
+#     m_mat_[len(loaded_idx):len(loaded_idx)+len(loading_idx): ] = m_mat[loading_idx]
+#     return m_mat_
 
 # def size2matrix(box, e_l, e_b):
 #     # box (3,)
@@ -86,46 +115,71 @@ def update_mbox(m_mat, loaded_idx, loading_idx):
 def size2mat(group_size, num_max_remain, max_box_size):
     size_l = np.zeros((num_max_remain, max_box_size))
     size_b = np.zeros((num_max_remain, max_box_size))
-    cbm_l = np.zeros((num_max_remain, max_box_size))
-    cbm_b = np.zeros((num_max_remain, max_box_size))
+    #cbm_r = np.zeros((num_max_remain, max_box_size))
+    #cbm_b = np.zeros((num_max_remain, max_box_size))
     i = 0
     for l,b,h,w, c, n in group_size:
         size_l[i:i + int(n), :int(l)] = h
         size_b[i:i + int(n), :int(b)] = h
-        cbm_l[i:i + int(n), :int(l)] = c
-        cbm_b[i:i + int(n), :int(b)] = c
+        #cbm_r[i:i + int(n), :] = c
+        #cbm_b[i:i + int(n), :int(b)] = c
         i += int(n)
-    size_mat = np.stack([size_l, size_b, cbm_l, cbm_b], axis=-1)
+    #size_mat = np.stack([size_l, size_b, cbm_r], axis=-1)
+    size_mat = np.stack([size_l, size_b], axis=-1)
     return size_mat
-# def cbm2mat(group_size, num_max_remain, max_box_size):
-#     cbm_mat = np.zeros((num_max_remain, max_box_size))
+# def size2mat(group_size, num_max_remain, max_mbox_l, max_mbox_b):
+#     size_l = np.zeros((num_max_remain, max_mbox_l))
+#     size_b = np.zeros((num_max_remain, max_mbox_b))
 #     i = 0
-#     for c, n in group_size:
-#         cbm_mat[i:i+n, :l] = c
-#         i += n
-#     return cbm_mat
+#     for l,b,h,w, c, n in group_size:
+#         size_l[i:i + int(n), :int(l)] = h
+#         size_b[i:i + int(n), :int(b)] = h
+#         i += int(n)
+#     size_mat = np.stack([size_l, size_b], axis=-1)
+#     return size_mat
 
-def raw2input(state_s, state_h, bbox, r_mat, num_max_remain, num_selected, loading_idx_c, max_size, e_h=20):
+def init_cbm(bbox_cbm_all, bbox_cbm_mx, cbm_mbox, boxes_idx, num_max_remain, K):
+    # 대박스 CBM (1), 남은 중박스 CBM(num_max_remain), 적입된 중박스 CBM(num_max_remain), 적입할 중박스 CBM(K)
+    # 0 / 1~num_max_remain+1 / num_max_remain+1~num_max_remain*2+1, -K:
+    dim_in_cbm = num_max_remain*2 + 1 + K
+    cbm_ = np.zeros((len(bbox_cbm_all), dim_in_cbm))
+    cbm_[:, 0] = bbox_cbm_all/bbox_cbm_mx
+    cbm_[:, 1:len(boxes_idx)+1] = cbm_mbox[boxes_idx] 
+    #cbm_[:, num_max_remain+1:num_max_remain+1+len(loaded_idx) ] = cbm_mbox[loaded_idx]
+    #cbm_[:, num_max_remain+1:num_max_remain+1+len_group] = cbm_mbox[loaded_idx[-len_group:]]
+    return cbm_
+
+def get_in_cbm(s_bbox_cbm, bbox_cbm_mx,  cbm_mbox, boxes_idx, loaded_idx, len_group, idx_c, num_max_remain, K):
+    dim_in_cbm = num_max_remain*2 + 1 + K
+    if len(idx_c)==0:
+        in_cbm = np.zeros((1, dim_in_cbm))
+    else: 
+        in_cbm = np.zeros((len(idx_c), dim_in_cbm))
+    in_cbm[:,0] = s_bbox_cbm/bbox_cbm_mx #대박스 CBM
+    in_cbm[:, 1:len(boxes_idx)+1] = cbm_mbox[boxes_idx] # 남은 중박스 CBM
+    if len_group!=0: in_cbm[:, num_max_remain+1:num_max_remain+1+ len_group ] = cbm_mbox[loaded_idx[-len_group:]] # 적입된 중박스 CBM
+    for i,c in enumerate(idx_c):
+        t = dim_in_cbm if len(c)==K else -K+len(c)
+        if len(c)!=0: in_cbm[i, -K:t ] = cbm_mbox[c] # 적입할 중박스 CBM
+    return in_cbm
+
+def raw2input(state_s, state_h, bbox, r_mat, r_mat_all, bbox_cbm, loading_idx_c, k, e_h): #num_max_remain, num_selected, max_size, 
     n_combs = len(loading_idx_c)
+    if len(loading_idx_c)==0: n_combs = 1
     e_l, e_b = state_h.shape
     state = np.stack([state_s, state_h, bbox],axis = -1)
     state_c = np.array([state]*n_combs).reshape((-1, e_l,e_b,3))
-    r_mat_c = np.array([r_mat]*n_combs) #적입할 중박스의 사이즈도 포함
-    #r_boxes_c = np.array([padding_boxes(get_remain(l, r_boxes), num_max_remain) for l in loading_size_c]).astype('int')
-    #loading_c = np.array([padding_boxes(l, num_selected) for l in loading_size_c]).astype('int')
-    #r_mat_c = np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in r_boxes_c  ]))
-    #loading_mat_c =  np.array(([ [size2matrix(j, e_l, e_b) for j in i] for i in loading_c  ]))
-    # loading_size_c -> (C, K, 3) #(경우의 수, 적입할 중박스 수, [l,b,h])
-    #loading_size_c = np.concatenate([loading_size_c, np.ones((loading_size_c.shape[:2] +(1,) ))], axis=-1) #(C, K, 4)
-    #loading_mat_c = [size2mat( i.astype('int') , num_selected, max_size ) for i in loading_size_c] #(1, 3, 62, 2)
-    loading_mat_c = np.stack([ r_mat[[x]] for x in loading_idx_c ])
+    r_mat_c = np.array([r_mat]*n_combs)#/bbox_cbm #적입할 중박스의 사이즈도 포함
+    #r_mat_c[...,[2,5]] = r_mat_c[...,[2,5]]/bbox_cbm #(C, 최대 중박스 수, 최대 길이, 6)
+    #if len(loading_idx_c) != 0: loading_mat_c = np.stack([ r_mat_all[(x)] for x in loading_idx_c ])
+    #else: loading_mat_c = np.zeros_like(( r_mat_c[:,:k,:,:] ))
+    loading_mat_c = np.zeros((n_combs, k, r_mat_c.shape[-2], r_mat_c.shape[-1]//2) ) #C, 적입되는 박스 수, 최대 길이, (가로,세로)
+    if len(loading_idx_c) != 0:
+        for i, x in enumerate(loading_idx_c):
+            if len(x)!=0: loading_mat_c[i, :len(x)] = r_mat_all[(x)][...,:r_mat_c.shape[-1]//2]
+            
     # scaling
     state_c = (np.array(state_c)/e_h).astype(np.float32)
-    #r_mat_c = (np.array(r_mat_c)/e_h).astype(np.float32)
-    #loading_mat_c = (np.array(loading_mat_c)/e_h).astype(np.float32)
-    # transpose
-    #r_mat_c = r_mat_c.transpose((0,2,3,1))
-    #loading_mat_c = loading_mat_c.transpose((0,2,3,1))
     return state_c, r_mat_c, loading_mat_c
 
 def get_fixed_loc(box, state_h, env_h):
@@ -181,7 +235,7 @@ def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k, 
         # 적재 시작
         for i, (box,idx) in enumerate(zip(boxes, element_idx)): #boxes의 길이는 k
             cbm += cbm_all[idx]
-            if cbm >1:
+            if round(cbm,2) >1:
                 continue
             fixed_xyz = get_fixed_loc(box, state_h, e_h) #박스의 좌표와 next_state
             ### 해당 중박스를 적재하지 못한 경우에 스킵
@@ -200,12 +254,11 @@ def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k, 
             loading_idx.append(idx)
             loading_size.append(box)
             loading_xyz.append(fixed_xyz)
-            
         
         ########################################
         # append (중박스를 하나도 적재하지 않은 경우 포함, 중복 데이터만 제외)
         #if num_loading != 0: #하나 이상의 중박스를 적재했을 경우 -> append
-        if add_skip or num_loading != 0:
+        if num_loading != 0:#add_skip or num_loading != 0:
             # scaling
             loading_loc = loading_loc/e_h 
             # 중복 제외: loading_loc, loading_size가 동일하면 append 제외
@@ -225,6 +278,16 @@ def get_selected_location(s_order, s_order_idx, state_org, state_h_org, e_h, k, 
             loading_loc_c.append(loading_loc)
             next_state_c.append(next_state)
             next_state_h_c.append(next_state_h)
+            
+    if add_skip and cbm_reward >= 0.85: # 중박스를 적입하지 않는 action (-> 마지막 action)
+        order_idx_c.append([])
+        num_loading_c.append(0)
+        loading_idx_c.append([])
+        loading_size_c.append([])
+        loading_xyz_c.append([])
+        loading_loc_c.append(np.zeros((e_l,e_b,k)))
+        next_state_c.append(state)
+        next_state_h_c.append(state_h)
         
     return order_idx_c, num_loading_c, loading_idx_c, loading_size_c, loading_xyz_c, loading_loc_c, next_state_c, next_state_h_c
 
@@ -270,6 +333,31 @@ def vis_box(sizes,positions,fs=(3,3),mn=-5, mx=25):
     ax.set_zlim([mn,mx])
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     plt.show()
+
+from mpl_toolkits.mplot3d.art3d import Line3DCollection
+
+def plotCubeAt2_edge(positions,sizes, **kwargs):
+    g = []
+    for p,s in zip(positions, sizes):
+        g.append( cuboid_data2(p, size=s) )
+        print(p,s)
+    return Line3DCollection(np.concatenate(g), colors='k', linewidths=1.2)
+
+def vis_pack(sizes, positions, bbox_sizes, bbox_positions, fs=(3,3),mn=-5, mx=25):
+    colors = get_colors(len(positions))
+    fig = plt.figure(figsize=fs)
+    ax = fig.gca(projection='3d')
+    ax.set_aspect('auto')
+    pc = plotCubeAt2(positions,sizes,colors=colors, edgecolor="w")
+    ax.add_collection3d(pc) 
+    pc = plotCubeAt2_edge(bbox_positions, bbox_sizes)
+    ax.add_collection3d(pc)    
+    ax.set_xlim([mn,mx])
+    ax.set_ylim([mx,mn])#ax.set_ylim([-5,25])
+    ax.set_zlim([mn,mx])
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    plt.show()   
+    
     
 def make_ax(grid=False):
     fig = plt.figure()
