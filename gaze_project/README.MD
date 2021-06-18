@@ -9,3 +9,4 @@ memo
 add list
 - saliency evaluation metrics
 - saliency models
+- fixation/saccade identification models (parameter thresholing)
