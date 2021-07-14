@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[ ]:
-
-
 import sys
 import os
 import cv2
@@ -61,10 +55,6 @@ class App(QDialog):
         self.modelFileName = ""
         self.initUI()
         ImgProc.Init()
-
-
-        #test learning.py
-        #Learning()
 
 
 
@@ -557,27 +547,6 @@ class App(QDialog):
 
         # img predict process
         start = time.time()
-        '''
-        if self.semiAutoBox.isChecked() :
-            if self.modelFileName == "" :
-                _model = load_model('pyTest_model.h5')
-            else :
-                _model = load_model(self.modelFileName)
-            print('read model for predict')
-
-            # classnum 할당
-            for i in self.subImglist :
-                #self.classNum.append(random.randint(0, 5))
-                _classnum = Predict.predict_classnum(i, _model)
-                self.classNum.append(_classnum)
-
-            print("img predict time: ", (time.time() - start), 'sec')
-            print("img predict time: ", int(int((time.time() - start)/60)/60), ':',
-                  int((time.time() - start)/60)%60, ':', int(time.time() - start)%60)
-        else :
-            for i in self.subImglist :
-                self.classNum.append(0)
-        '''
         for i in self.subImglist :
             self.classNum.append(0)
 
