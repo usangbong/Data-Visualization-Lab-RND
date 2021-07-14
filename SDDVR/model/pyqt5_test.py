@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[ ]:
-
-
 import sys
 import os
 import cv2
@@ -98,7 +92,6 @@ class App(QDialog):
         self.MainLayout.addLayout(self.ClassLayout,0,2,1,1)
         self.setLayout(self.MainLayout)
 
-        #self.setFixedWidth(1000)
         self.show()
 
     def _get_line(self, vertical=True):
