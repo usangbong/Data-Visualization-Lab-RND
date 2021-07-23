@@ -207,3 +207,6 @@ if __name__ == "__main__":
     targetImageFullPath = targetImageBasePath + 'bonsai1.jpg'
     
     ViewGuide.mainLoop(renderImageBasePath, targetImageFullPath)
+
+    
+   
