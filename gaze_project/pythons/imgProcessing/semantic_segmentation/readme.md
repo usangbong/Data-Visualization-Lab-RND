@@ -1,1 +1,1 @@
-se
+semantic segmentation
