@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+      .point {
+        fill: steelblue;
+        stroke: #000;
+      }  
+      .node {
+        cursor: pointer;
+      }
+      .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+      .node text {
+        font: 12px sans-serif;
+      }
+      .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+      }
+
+      #wrap {
+        display: flex;
+        height: 100vh;
+      }
+      #left {
+        width: 25%;
+        padding-right: 20px;
+      }
+      #bottom_div {
+        height: 200px;
+      }
+      #right {
+        padding-left: 20px;
+        width: 75%;
+      }
+      #input_query {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .input_form {
+        display: flex;
+        justify-content: space-between;
+      }
+      .input_box {
+        width: 100%;
+      }
+      .input_button {
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <!-- load the d3.js library -->   
+
+  <script src="https://d3js.org/d3.v3.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <body>
+    <div id="wrap">
+      <div id="left">
+        <div id="tree"></div>
+        <div id="bottom_div">
+          {% if True %}
+          <img src="{{ url_for('static', filename=fig) }}" height = 200px>
+          {% endif %}    
+        </div>
+      </div>
+
+      <div id="right">
+        <div id="input_query">
+          <form method="post" action="/input_query" class="input_form">
+            <input type="text" name="input_query" class="input_box">
+            <input type="submit" value="submit" class="input_button">
+          </form>
+        </div>
+        {{create_div|safe}}
+      </div>
+    </div>
+  </body>
+
+  <!-- ************** Generate the tree diagram ************** -->
+  <script>
+    var treeData = [
+      {
+        "file": "root", 
+        "name": "50",
+        "parent": "null",
+        "children": [
+          {
+            "file": "1.1",
+            "name": "26",
+            "children": [
+              {"file": "2.1", "name": "12"},
+              {
+                "file": "2.2",
+                "name": "12",
+                "children": [
+                  {"file": "3.1", "name": "0"},
+                  {"file": "3.2", "name": "0"},
+                  {"file": "3.3", "name": "0"}  
+                ]
+              },
+              {
+                "file": "2.3",
+                "name": "12"
+              }
+            ]
+          },
+          {
+            "file": "1.2",
+            "name": "38",
+          },
+          {
+            "file": "1.3",
+            "name": "38",
+          }      
+        ]
+      }
+    ];
+
+    var margin = {top: 30, right: 30, bottom: 30, left: 30},
+      width = 500 - margin.right - margin.left,
+      height = 500 - margin.top - margin.bottom;
+      
+    var i = 0,
+      duration = 750,
+      root;
+
+    var tree = d3.layout.tree()
+      .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.x, d.y]; });
+
+    var svg = d3.select("#tree").append("svg")
+      .attr("width", width + margin.right + margin.left)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    root = treeData[0];
+    root.x0 = height / 2;
+    root.y0 = 0;
+      
+    update(root);
+
+    function update(source) {
+      // Compute the new tree layout.
+      var nodes = tree.nodes(root).reverse(),
+        links = tree.links(nodes);
+
+      // Normalize for fixed-depth.
+      nodes.forEach(function(d) { d.y = d.depth * 130; });
+
+      // Update the nodes…
+      var node = svg.selectAll("g.node")
+        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+      // Enter any new nodes at the parent's previous position.
+      var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
+        .on("click", click);
+
+      nodeEnter.append("circle")
+        .attr("r", 20)
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+      nodeEnter.append("text")
+        .attr("x", function(d) { return 0; })
+        .attr("dy", ".35em")
+        .attr("text-anchor", function(d) { return "middle"; })
+        .text(function(d) { return d.name; })
+        .style("fill-opacity", 20);
+
+      // Transition nodes to their new position.
+      var nodeUpdate = node.transition()
+        .duration(duration)
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+      nodeUpdate.select("circle")
+        .attr("r", 20)
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+
+      nodeUpdate.select("text")
+        .style("fill-opacity", 1);
+
+      // Transition exiting nodes to the parent's new position.
+      var nodeExit = node.exit().transition()
+        .duration(duration)
+        .attr("transform", function(d) { return "translate(" + source.x + "," + source.y + ")"; })
+        .remove();
+
+      nodeExit.select("circle")
+        .attr("r", 20);
+
+      nodeExit.select("text")
+        .style("fill-opacity", 20);
+
+      // Update the links…
+      var link = svg.selectAll("path.link")
+        .data(links, function(d) { return d.target.id; });
+
+      // Enter any new links at the parent's previous position.
+      link.enter().insert("path", "g")
+        .attr("class", "link")
+        .attr("d", function(d) {
+          var o = {x: source.x0, y: source.y0};
+          return diagonal({source: o, target: o});
+        });
+
+      // Transition links to their new position.
+      link.transition()
+        .duration(duration)
+        .attr("d", diagonal);
+
+      // Transition exiting nodes to the parent's new position.
+      link.exit().transition()
+        .duration(duration)
+        .attr("d", function(d) {
+          var o = {x: source.x, y: source.y};
+          return diagonal({source: o, target: o});
+        })
+        .remove();
+
+      // Stash the old positions for transition.
+      nodes.forEach(function(d) {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
+    }
+
+    // Toggle children on click.
+    function click(d) {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+      node_overview(d);
+    }
+
+    function node_overview(d){
+      var file = "static/" + d.file + ".csv";
+
+      $.ajax({
+        url: '/node_overview',
+        type: 'POST',
+        data: file,
+        dataType: "text"
+      }).done(function(){
+        window.location.href = '/';
+      })
+    }
+  </script>
+
+  <!-- ************** Generate the Vega-Lite ************** -->
+  <script>
+    {{create_vlSpec|safe}}
+  </script>  
+  </body>
+</html>
