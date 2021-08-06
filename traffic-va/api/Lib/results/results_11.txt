@@ -1,0 +1,11670 @@
+0 frame changed
+
+2 car [1817, 915]
+1 car [1827, 903]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+4 car [568, 400]
+3 car [732, 408]
+0 frame changed
+
+3 car [730, 407]
+0 frame changed
+
+3 car [731, 408]
+0 frame changed
+
+3 car [730, 408]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [730, 406]
+0 frame changed
+
+3 car [730, 406]
+0 frame changed
+
+4 car [570, 399]
+3 car [730, 406]
+0 frame changed
+
+4 car [570, 400]
+3 car [729, 406]
+0 frame changed
+
+4 car [570, 401]
+0 frame changed
+
+4 car [569, 401]
+0 frame changed
+
+4 car [569, 401]
+3 car [734, 406]
+0 frame changed
+
+4 car [570, 401]
+3 car [735, 406]
+0 frame changed
+
+4 car [568, 401]
+3 car [735, 407]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [735, 408]
+0 frame changed
+
+3 car [735, 408]
+0 frame changed
+
+3 car [733, 407]
+0 frame changed
+
+3 car [731, 406]
+0 frame changed
+
+3 car [733, 408]
+0 frame changed
+
+3 car [734, 407]
+0 frame changed
+
+29 car [627, 203]
+20 bicycle [318, 444]
+3 car [731, 407]
+0 frame changed
+
+20 bicycle [318, 444]
+3 car [734, 408]
+0 frame changed
+
+22 car [1290, 448]
+20 bicycle [317, 445]
+3 car [735, 408]
+0 frame changed
+
+3 car [735, 408]
+0 frame changed
+
+28 car [1326, 577]
+3 car [735, 408]
+0 frame changed
+
+3 car [732, 407]
+0 frame changed
+
+3 car [732, 407]
+0 frame changed
+
+3 car [734, 408]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [735, 408]
+0 frame changed
+
+3 car [731, 407]
+0 frame changed
+
+0 frame changed
+
+28 car [1310, 581]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+35 car [1310, 457]
+3 car [730, 408]
+0 frame changed
+
+3 car [732, 409]
+0 frame changed
+
+44 car [481, 298]
+36 car [574, 417]
+32 car [422, 195]
+28 car [1277, 588]
+3 car [733, 409]
+0 frame changed
+
+44 car [510, 306]
+36 car [575, 420]
+3 car [731, 408]
+0 frame changed
+
+44 car [531, 315]
+22 car [1159, 386]
+0 frame changed
+
+44 car [553, 319]
+0 frame changed
+
+44 car [572, 326]
+3 car [729, 407]
+0 frame changed
+
+44 car [586, 336]
+43 car [466, 218]
+3 car [733, 408]
+0 frame changed
+
+44 car [602, 342]
+43 car [458, 220]
+0 frame changed
+
+49 car [1153, 387]
+44 car [612, 346]
+0 frame changed
+
+44 car [621, 348]
+3 car [728, 408]
+0 frame changed
+
+44 car [625, 349]
+3 car [732, 408]
+0 frame changed
+
+44 car [625, 349]
+35 car [1221, 413]
+3 car [731, 409]
+0 frame changed
+
+44 car [620, 348]
+35 car [1183, 395]
+32 car [423, 195]
+3 car [729, 408]
+0 frame changed
+
+44 car [626, 349]
+32 car [423, 196]
+0 frame changed
+
+44 car [625, 349]
+0 frame changed
+
+44 car [625, 349]
+43 car [451, 219]
+3 car [727, 407]
+0 frame changed
+
+48 car [1028, 337]
+44 car [624, 348]
+3 car [727, 409]
+0 frame changed
+
+54 car [460, 287]
+44 car [623, 347]
+3 car [726, 409]
+0 frame changed
+
+57 car [483, 223]
+56 car [636, 205]
+54 car [480, 294]
+44 car [622, 348]
+0 frame changed
+
+54 car [495, 299]
+44 car [622, 348]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+54 car [533, 308]
+44 car [620, 346]
+0 frame changed
+
+54 car [541, 308]
+44 car [621, 346]
+0 frame changed
+
+59 car [90, 929]
+44 car [624, 346]
+0 frame changed
+
+44 car [626, 346]
+0 frame changed
+
+65 car [1048, 950]
+44 car [627, 346]
+0 frame changed
+
+80 car [632, 202]
+68 car [1618, 947]
+44 car [628, 347]
+3 car [726, 407]
+0 frame changed
+
+3 car [726, 406]
+0 frame changed
+
+85 car [575, 420]
+3 car [729, 409]
+0 frame changed
+
+83 car [573, 407]
+3 car [730, 409]
+0 frame changed
+
+86 car [645, 359]
+76 car [1809, 577]
+3 car [729, 406]
+0 frame changed
+
+86 car [648, 359]
+76 car [1815, 567]
+3 car [730, 408]
+0 frame changed
+
+86 car [649, 361]
+83 car [570, 403]
+78 car [471, 284]
+3 car [730, 409]
+0 frame changed
+
+86 car [653, 361]
+83 car [572, 403]
+3 car [729, 408]
+0 frame changed
+
+89 car [449, 956]
+86 car [650, 361]
+85 car [579, 422]
+83 car [573, 402]
+76 car [1807, 563]
+54 car [570, 319]
+3 car [729, 408]
+0 frame changed
+
+89 car [811, 962]
+86 car [651, 361]
+85 car [580, 422]
+83 car [573, 404]
+76 car [1808, 566]
+54 car [571, 320]
+3 car [728, 409]
+0 frame changed
+
+86 car [651, 362]
+85 car [579, 421]
+83 car [573, 403]
+76 car [1806, 567]
+54 car [575, 323]
+3 car [728, 408]
+0 frame changed
+
+86 car [650, 362]
+85 car [579, 420]
+83 car [573, 402]
+76 car [1806, 566]
+3 car [725, 406]
+0 frame changed
+
+83 car [574, 403]
+76 car [1806, 567]
+3 car [724, 406]
+0 frame changed
+
+3 car [724, 406]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [730, 406]
+0 frame changed
+
+3 car [727, 405]
+0 frame changed
+
+86 car [649, 364]
+83 car [572, 403]
+76 car [1778, 566]
+3 car [730, 407]
+0 frame changed
+
+109 car [435, 267]
+86 car [650, 364]
+83 car [572, 404]
+76 car [1798, 566]
+32 car [421, 195]
+3 car [728, 407]
+0 frame changed
+
+109 car [436, 267]
+85 car [579, 419]
+83 car [572, 404]
+76 car [1777, 563]
+32 car [421, 195]
+3 car [727, 406]
+0 frame changed
+
+109 car [436, 268]
+83 car [573, 405]
+76 car [1751, 560]
+32 car [420, 196]
+3 car [730, 406]
+0 frame changed
+
+109 car [436, 268]
+83 car [571, 404]
+76 car [1716, 558]
+3 car [732, 405]
+0 frame changed
+
+109 car [436, 267]
+85 car [579, 419]
+83 car [570, 405]
+76 car [1670, 552]
+3 car [728, 405]
+0 frame changed
+
+109 car [436, 267]
+86 car [652, 363]
+83 car [570, 405]
+76 car [1618, 537]
+3 car [725, 404]
+0 frame changed
+
+109 car [436, 267]
+86 car [652, 364]
+83 car [570, 405]
+76 car [1568, 528]
+3 car [725, 405]
+0 frame changed
+
+109 car [436, 268]
+86 car [652, 364]
+83 car [571, 405]
+76 car [1504, 515]
+32 car [420, 195]
+3 car [725, 404]
+0 frame changed
+
+109 car [437, 267]
+86 car [652, 364]
+83 car [571, 405]
+76 car [1450, 497]
+32 car [420, 194]
+3 car [725, 405]
+0 frame changed
+
+109 car [436, 264]
+97 car [1849, 571]
+86 car [652, 364]
+85 car [579, 419]
+83 car [570, 405]
+76 car [1401, 481]
+3 car [725, 405]
+0 frame changed
+
+109 car [436, 266]
+97 car [1812, 573]
+86 car [649, 364]
+85 car [579, 419]
+83 car [570, 404]
+76 car [1354, 465]
+3 car [728, 405]
+0 frame changed
+
+109 car [437, 264]
+97 car [1755, 561]
+86 car [650, 364]
+85 car [579, 419]
+83 car [571, 404]
+76 car [1304, 452]
+32 car [420, 195]
+3 car [726, 408]
+0 frame changed
+
+109 car [437, 266]
+86 car [650, 364]
+85 car [579, 419]
+83 car [572, 404]
+76 car [1261, 434]
+32 car [420, 195]
+3 car [731, 406]
+0 frame changed
+
+114 car [1709, 691]
+109 car [436, 267]
+86 car [649, 364]
+85 car [580, 419]
+83 car [572, 405]
+76 car [1213, 417]
+32 car [420, 195]
+3 car [728, 405]
+0 frame changed
+
+125 car [1475, 504]
+109 car [437, 267]
+102 car [1339, 683]
+86 car [651, 364]
+83 car [572, 404]
+76 car [1165, 398]
+32 car [420, 194]
+3 car [729, 407]
+0 frame changed
+
+125 car [1407, 483]
+109 car [436, 267]
+95 car [930, 677]
+86 car [650, 364]
+83 car [572, 404]
+32 car [421, 195]
+3 car [730, 407]
+0 frame changed
+
+125 car [1357, 464]
+109 car [437, 267]
+86 car [650, 364]
+83 car [572, 405]
+32 car [422, 194]
+3 car [728, 406]
+0 frame changed
+
+125 car [1303, 450]
+109 car [437, 267]
+86 car [650, 364]
+83 car [572, 405]
+76 car [1039, 347]
+3 car [729, 408]
+0 frame changed
+
+125 car [1251, 429]
+109 car [436, 269]
+86 car [650, 365]
+83 car [572, 404]
+3 car [730, 409]
+0 frame changed
+
+125 car [1194, 412]
+109 car [436, 269]
+86 car [650, 365]
+3 car [727, 407]
+0 frame changed
+
+129 car [577, 325]
+125 car [1143, 393]
+109 car [437, 266]
+86 car [650, 365]
+3 car [729, 406]
+0 frame changed
+
+129 car [577, 325]
+125 car [1097, 378]
+109 car [436, 265]
+86 car [649, 365]
+83 car [573, 405]
+3 car [730, 408]
+0 frame changed
+
+125 car [1055, 357]
+3 car [728, 410]
+0 frame changed
+
+125 car [1022, 340]
+3 car [726, 408]
+0 frame changed
+
+109 car [437, 264]
+90 car [1790, 661]
+86 car [650, 364]
+83 car [571, 403]
+3 car [726, 405]
+0 frame changed
+
+109 car [437, 266]
+86 car [650, 364]
+85 car [577, 420]
+83 car [572, 402]
+3 car [726, 405]
+0 frame changed
+
+109 car [436, 265]
+86 car [650, 364]
+85 car [578, 420]
+83 car [571, 403]
+3 car [726, 404]
+0 frame changed
+
+109 car [438, 264]
+85 car [579, 420]
+83 car [571, 403]
+3 car [725, 403]
+0 frame changed
+
+109 car [437, 263]
+85 car [578, 420]
+83 car [571, 404]
+3 car [726, 403]
+0 frame changed
+
+109 car [437, 263]
+85 car [578, 420]
+83 car [571, 404]
+3 car [726, 405]
+0 frame changed
+
+109 car [437, 265]
+85 car [578, 420]
+83 car [570, 405]
+32 car [421, 195]
+3 car [726, 404]
+0 frame changed
+
+109 car [437, 266]
+83 car [573, 404]
+32 car [422, 195]
+3 car [727, 405]
+0 frame changed
+
+109 car [437, 266]
+83 car [572, 405]
+32 car [421, 196]
+3 car [730, 407]
+0 frame changed
+
+109 car [436, 264]
+83 car [573, 405]
+3 car [728, 405]
+0 frame changed
+
+109 car [436, 266]
+83 car [572, 405]
+3 car [727, 405]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [728, 405]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [730, 406]
+0 frame changed
+
+155 car [447, 319]
+3 car [732, 405]
+0 frame changed
+
+155 car [446, 319]
+83 car [570, 402]
+3 car [732, 408]
+0 frame changed
+
+155 car [446, 319]
+83 car [570, 403]
+3 car [729, 405]
+0 frame changed
+
+3 car [727, 405]
+0 frame changed
+
+3 car [726, 405]
+0 frame changed
+
+158 car [578, 420]
+155 car [445, 318]
+83 car [570, 402]
+3 car [725, 404]
+0 frame changed
+
+155 car [444, 319]
+83 car [568, 401]
+3 car [724, 404]
+0 frame changed
+
+155 car [445, 319]
+83 car [568, 404]
+3 car [726, 405]
+0 frame changed
+
+158 car [578, 419]
+155 car [446, 319]
+83 car [569, 404]
+3 car [728, 407]
+0 frame changed
+
+155 car [446, 319]
+121 car [528, 659]
+83 car [569, 404]
+3 car [730, 408]
+0 frame changed
+
+155 car [446, 318]
+145 car [114, 647]
+83 car [569, 404]
+3 car [732, 406]
+0 frame changed
+
+155 car [446, 319]
+90 car [1855, 661]
+83 car [570, 405]
+3 car [730, 406]
+0 frame changed
+
+161 car [1609, 659]
+155 car [446, 318]
+83 car [569, 404]
+3 car [732, 405]
+0 frame changed
+
+166 car [421, 195]
+155 car [446, 318]
+126 car [1209, 661]
+83 car [569, 404]
+3 car [731, 405]
+0 frame changed
+
+158 car [578, 419]
+155 car [446, 318]
+83 car [570, 404]
+3 car [731, 408]
+0 frame changed
+
+158 car [578, 420]
+155 car [447, 318]
+83 car [568, 403]
+3 car [732, 405]
+0 frame changed
+
+158 car [577, 420]
+155 car [447, 319]
+83 car [568, 404]
+3 car [727, 404]
+0 frame changed
+
+155 car [447, 319]
+83 car [569, 404]
+3 car [729, 405]
+0 frame changed
+
+166 car [420, 195]
+155 car [447, 318]
+83 car [568, 404]
+3 car [730, 404]
+0 frame changed
+
+166 car [420, 195]
+155 car [447, 318]
+83 car [569, 403]
+3 car [730, 405]
+0 frame changed
+
+170 car [653, 364]
+155 car [447, 318]
+83 car [569, 403]
+3 car [730, 405]
+0 frame changed
+
+170 car [653, 364]
+158 car [575, 419]
+155 car [446, 317]
+83 car [569, 402]
+3 car [732, 405]
+0 frame changed
+
+158 car [577, 419]
+155 car [446, 318]
+83 car [568, 401]
+3 car [728, 404]
+0 frame changed
+
+155 car [446, 317]
+83 car [567, 402]
+3 car [726, 404]
+0 frame changed
+
+170 car [650, 364]
+155 car [446, 317]
+83 car [568, 401]
+3 car [729, 405]
+0 frame changed
+
+170 car [650, 364]
+155 car [446, 317]
+83 car [568, 400]
+3 car [730, 404]
+0 frame changed
+
+170 car [651, 364]
+155 car [446, 317]
+83 car [568, 400]
+3 car [731, 404]
+0 frame changed
+
+170 car [650, 364]
+155 car [446, 317]
+83 car [568, 401]
+3 car [727, 404]
+0 frame changed
+
+155 car [446, 317]
+83 car [567, 400]
+3 car [730, 404]
+0 frame changed
+
+155 car [446, 317]
+83 car [568, 401]
+3 car [728, 405]
+0 frame changed
+
+155 car [446, 318]
+83 car [568, 402]
+3 car [727, 405]
+0 frame changed
+
+171 car [581, 325]
+170 car [651, 363]
+155 car [446, 318]
+83 car [567, 402]
+3 car [727, 408]
+0 frame changed
+
+171 car [581, 325]
+158 car [575, 419]
+155 car [446, 318]
+83 car [567, 402]
+3 car [726, 407]
+0 frame changed
+
+158 car [576, 420]
+155 car [446, 318]
+83 car [568, 402]
+3 car [726, 406]
+0 frame changed
+
+170 car [650, 363]
+158 car [575, 420]
+155 car [446, 318]
+83 car [569, 402]
+3 car [729, 406]
+0 frame changed
+
+158 car [577, 419]
+155 car [446, 317]
+83 car [569, 402]
+3 car [726, 406]
+0 frame changed
+
+155 car [444, 318]
+83 car [569, 404]
+3 car [726, 406]
+0 frame changed
+
+171 car [579, 325]
+155 car [443, 319]
+83 car [570, 403]
+3 car [726, 405]
+0 frame changed
+
+171 car [579, 324]
+158 car [577, 418]
+155 car [443, 319]
+83 car [570, 403]
+3 car [725, 405]
+0 frame changed
+
+171 car [577, 324]
+155 car [443, 319]
+83 car [571, 402]
+3 car [729, 405]
+0 frame changed
+
+171 car [578, 325]
+170 car [651, 363]
+155 car [443, 319]
+83 car [570, 401]
+3 car [731, 406]
+0 frame changed
+
+171 car [578, 325]
+170 car [651, 363]
+155 car [443, 319]
+83 car [571, 403]
+3 car [731, 406]
+0 frame changed
+
+171 car [578, 325]
+170 car [652, 362]
+155 car [443, 319]
+83 car [571, 404]
+3 car [731, 408]
+0 frame changed
+
+155 car [445, 319]
+83 car [568, 402]
+3 car [732, 406]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+155 car [445, 319]
+83 car [567, 402]
+3 car [732, 406]
+0 frame changed
+
+155 car [446, 319]
+83 car [568, 402]
+3 car [732, 406]
+0 frame changed
+
+171 car [580, 324]
+155 car [444, 319]
+83 car [568, 403]
+3 car [728, 405]
+0 frame changed
+
+158 car [577, 419]
+155 car [445, 318]
+83 car [568, 402]
+3 car [727, 405]
+0 frame changed
+
+155 car [446, 318]
+83 car [569, 403]
+3 car [726, 404]
+0 frame changed
+
+155 car [446, 318]
+83 car [569, 403]
+3 car [726, 405]
+0 frame changed
+
+170 car [650, 365]
+158 car [576, 419]
+155 car [446, 318]
+83 car [568, 402]
+3 car [730, 405]
+0 frame changed
+
+170 car [651, 365]
+158 car [578, 419]
+155 car [446, 319]
+83 car [571, 402]
+3 car [728, 404]
+0 frame changed
+
+171 car [579, 324]
+158 car [578, 419]
+155 car [446, 318]
+83 car [569, 402]
+3 car [727, 405]
+0 frame changed
+
+155 car [446, 319]
+83 car [569, 401]
+3 car [728, 408]
+0 frame changed
+
+155 car [447, 320]
+83 car [569, 402]
+3 car [729, 408]
+0 frame changed
+
+170 car [653, 362]
+155 car [447, 319]
+83 car [569, 403]
+3 car [729, 408]
+0 frame changed
+
+170 car [652, 363]
+155 car [447, 319]
+83 car [569, 403]
+3 car [730, 409]
+0 frame changed
+
+170 car [653, 363]
+155 car [448, 319]
+83 car [569, 403]
+3 car [731, 407]
+0 frame changed
+
+170 car [653, 363]
+155 car [446, 319]
+83 car [569, 403]
+3 car [730, 409]
+0 frame changed
+
+170 car [653, 362]
+155 car [446, 319]
+83 car [569, 403]
+3 car [732, 407]
+0 frame changed
+
+170 car [653, 362]
+155 car [446, 318]
+83 car [569, 403]
+3 car [730, 406]
+0 frame changed
+
+171 car [581, 326]
+170 car [652, 362]
+155 car [446, 318]
+83 car [569, 403]
+3 car [731, 406]
+0 frame changed
+
+155 car [447, 318]
+83 car [569, 403]
+3 car [730, 406]
+0 frame changed
+
+155 car [446, 318]
+83 car [568, 402]
+3 car [731, 406]
+0 frame changed
+
+158 car [574, 419]
+155 car [447, 318]
+83 car [568, 401]
+3 car [732, 406]
+0 frame changed
+
+170 car [651, 364]
+155 car [447, 318]
+83 car [569, 402]
+3 car [730, 406]
+0 frame changed
+
+155 car [447, 318]
+83 car [568, 401]
+3 car [730, 406]
+0 frame changed
+
+155 car [447, 318]
+83 car [569, 403]
+3 car [730, 406]
+0 frame changed
+
+155 car [446, 319]
+83 car [571, 403]
+3 car [730, 408]
+0 frame changed
+
+155 car [446, 318]
+83 car [571, 403]
+3 car [729, 409]
+0 frame changed
+
+155 car [444, 319]
+83 car [570, 403]
+3 car [727, 410]
+0 frame changed
+
+171 car [580, 325]
+155 car [445, 318]
+83 car [569, 403]
+3 car [729, 409]
+0 frame changed
+
+155 car [446, 318]
+83 car [569, 403]
+3 car [729, 409]
+0 frame changed
+
+155 car [444, 318]
+83 car [570, 403]
+3 car [729, 410]
+0 frame changed
+
+171 car [579, 325]
+170 car [651, 362]
+155 car [445, 318]
+83 car [570, 404]
+3 car [730, 410]
+0 frame changed
+
+171 car [580, 325]
+155 car [446, 318]
+83 car [570, 404]
+3 car [729, 407]
+0 frame changed
+
+155 car [444, 319]
+83 car [569, 404]
+3 car [729, 406]
+0 frame changed
+
+155 car [445, 319]
+83 car [569, 404]
+3 car [729, 405]
+0 frame changed
+
+155 car [444, 319]
+83 car [569, 404]
+3 car [730, 406]
+0 frame changed
+
+182 car [1332, 951]
+170 car [651, 363]
+155 car [443, 320]
+83 car [570, 404]
+3 car [726, 404]
+0 frame changed
+
+155 car [443, 319]
+83 car [570, 403]
+3 car [730, 405]
+0 frame changed
+
+155 car [445, 319]
+83 car [570, 404]
+3 car [731, 406]
+0 frame changed
+
+155 car [445, 318]
+83 car [570, 404]
+3 car [730, 406]
+0 frame changed
+
+155 car [446, 318]
+83 car [570, 404]
+3 car [727, 405]
+0 frame changed
+
+155 car [446, 318]
+83 car [571, 402]
+3 car [729, 405]
+0 frame changed
+
+155 car [446, 318]
+83 car [570, 403]
+3 car [730, 405]
+0 frame changed
+
+155 car [446, 319]
+83 car [570, 404]
+3 car [731, 405]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+3 car [726, 405]
+0 frame changed
+
+191 car [1798, 1008]
+3 car [729, 405]
+0 frame changed
+
+187 car [423, 195]
+170 car [651, 364]
+155 car [443, 319]
+83 car [569, 402]
+3 car [731, 405]
+0 frame changed
+
+187 car [424, 196]
+170 car [651, 364]
+155 car [443, 319]
+83 car [568, 402]
+3 car [725, 404]
+0 frame changed
+
+193 car [579, 325]
+182 car [1157, 996]
+170 car [652, 364]
+155 car [443, 319]
+83 car [569, 401]
+3 car [729, 405]
+0 frame changed
+
+193 car [580, 325]
+190 car [576, 417]
+170 car [651, 364]
+155 car [443, 319]
+83 car [569, 401]
+3 car [731, 405]
+0 frame changed
+
+155 car [443, 320]
+83 car [569, 402]
+3 car [731, 405]
+0 frame changed
+
+155 car [443, 321]
+83 car [571, 404]
+3 car [733, 405]
+0 frame changed
+
+155 car [445, 320]
+3 car [731, 406]
+0 frame changed
+
+155 car [447, 319]
+3 car [730, 406]
+0 frame changed
+
+190 car [604, 440]
+182 car [999, 996]
+155 car [446, 319]
+3 car [727, 405]
+0 frame changed
+
+190 car [619, 457]
+155 car [449, 320]
+3 car [725, 405]
+0 frame changed
+
+190 car [630, 472]
+83 car [566, 388]
+3 car [732, 409]
+0 frame changed
+
+196 car [455, 330]
+195 car [438, 261]
+190 car [648, 496]
+170 car [666, 371]
+83 car [568, 391]
+3 car [745, 413]
+0 frame changed
+
+196 car [458, 334]
+195 car [438, 262]
+190 car [662, 529]
+170 car [676, 377]
+83 car [567, 394]
+3 car [767, 426]
+0 frame changed
+
+196 car [460, 338]
+190 car [681, 563]
+170 car [689, 382]
+83 car [571, 398]
+3 car [799, 442]
+0 frame changed
+
+196 car [466, 340]
+190 car [704, 601]
+83 car [582, 410]
+0 frame changed
+
+199 car [733, 405]
+198 car [621, 351]
+196 car [471, 342]
+190 car [733, 651]
+83 car [595, 425]
+0 frame changed
+
+200 car [558, 306]
+199 car [761, 421]
+198 car [630, 354]
+196 car [478, 347]
+190 car [764, 706]
+83 car [611, 441]
+0 frame changed
+
+201 car [458, 277]
+199 car [788, 434]
+198 car [645, 363]
+196 car [486, 355]
+190 car [801, 767]
+0 frame changed
+
+201 car [464, 278]
+198 car [660, 372]
+196 car [495, 362]
+190 car [842, 844]
+0 frame changed
+
+201 car [474, 281]
+198 car [681, 384]
+196 car [500, 367]
+190 car [903, 928]
+0 frame changed
+
+203 car [705, 591]
+196 car [505, 388]
+0 frame changed
+
+203 car [738, 642]
+196 car [509, 398]
+170 car [731, 411]
+0 frame changed
+
+203 car [774, 708]
+196 car [510, 408]
+170 car [761, 426]
+0 frame changed
+
+203 car [817, 779]
+170 car [796, 442]
+0 frame changed
+
+203 car [875, 864]
+0 frame changed
+
+203 car [942, 956]
+0 frame changed
+
+0 frame changed
+
+208 car [440, 492]
+207 car [463, 345]
+199 car [1188, 570]
+0 frame changed
+
+208 car [392, 515]
+207 car [477, 362]
+0 frame changed
+
+208 car [333, 535]
+207 car [497, 377]
+0 frame changed
+
+208 car [258, 545]
+207 car [515, 397]
+0 frame changed
+
+208 car [165, 564]
+207 car [526, 413]
+200 car [704, 398]
+0 frame changed
+
+208 car [102, 577]
+0 frame changed
+
+0 frame changed
+
+207 car [508, 462]
+0 frame changed
+
+207 car [482, 480]
+0 frame changed
+
+207 car [437, 498]
+0 frame changed
+
+207 car [376, 518]
+0 frame changed
+
+207 car [292, 536]
+0 frame changed
+
+216 car [910, 749]
+215 car [586, 342]
+207 car [189, 552]
+0 frame changed
+
+216 car [957, 858]
+215 car [619, 353]
+0 frame changed
+
+216 car [1025, 939]
+215 car [648, 370]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+223 car [652, 375]
+0 frame changed
+
+223 car [681, 385]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+223 car [727, 413]
+0 frame changed
+
+223 car [727, 413]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+223 car [726, 413]
+0 frame changed
+
+223 car [725, 412]
+0 frame changed
+
+223 car [725, 412]
+0 frame changed
+
+223 car [725, 412]
+0 frame changed
+
+223 car [724, 412]
+0 frame changed
+
+223 car [724, 411]
+0 frame changed
+
+223 car [723, 411]
+0 frame changed
+
+0 frame changed
+
+224 car [1623, 791]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+225 car [1653, 794]
+0 frame changed
+
+225 car [1559, 723]
+223 car [725, 412]
+0 frame changed
+
+225 car [1494, 654]
+0 frame changed
+
+225 car [1438, 598]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+223 car [724, 410]
+0 frame changed
+
+223 car [723, 410]
+0 frame changed
+
+223 car [722, 410]
+0 frame changed
+
+223 car [722, 410]
+0 frame changed
+
+223 car [722, 410]
+0 frame changed
+
+223 car [721, 410]
+0 frame changed
+
+223 car [722, 410]
+0 frame changed
+
+223 car [723, 409]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+237 car [595, 342]
+0 frame changed
+
+237 car [608, 346]
+0 frame changed
+
+237 car [615, 348]
+0 frame changed
+
+237 car [623, 350]
+223 car [723, 413]
+0 frame changed
+
+237 car [624, 350]
+223 car [724, 413]
+0 frame changed
+
+239 car [442, 336]
+237 car [624, 350]
+223 car [723, 413]
+0 frame changed
+
+239 car [457, 344]
+237 car [624, 349]
+223 car [723, 413]
+0 frame changed
+
+239 car [474, 358]
+237 car [623, 348]
+223 car [723, 413]
+0 frame changed
+
+239 car [492, 369]
+237 car [623, 348]
+223 car [724, 413]
+0 frame changed
+
+239 car [504, 382]
+237 car [621, 350]
+223 car [723, 413]
+0 frame changed
+
+239 car [523, 398]
+237 car [620, 352]
+223 car [723, 413]
+0 frame changed
+
+239 car [540, 417]
+237 car [621, 352]
+223 car [723, 413]
+0 frame changed
+
+239 car [551, 436]
+237 car [620, 352]
+223 car [722, 413]
+0 frame changed
+
+223 car [722, 414]
+0 frame changed
+
+0 frame changed
+
+248 car [615, 347]
+239 car [514, 487]
+0 frame changed
+
+248 car [615, 347]
+239 car [466, 509]
+223 car [723, 413]
+0 frame changed
+
+248 car [616, 347]
+239 car [393, 531]
+223 car [723, 413]
+0 frame changed
+
+248 car [616, 346]
+223 car [724, 413]
+0 frame changed
+
+248 car [616, 346]
+223 car [725, 413]
+0 frame changed
+
+248 car [616, 346]
+223 car [725, 413]
+0 frame changed
+
+248 car [616, 346]
+223 car [724, 413]
+0 frame changed
+
+248 car [616, 346]
+223 car [724, 413]
+0 frame changed
+
+248 car [620, 346]
+223 car [723, 412]
+0 frame changed
+
+223 car [724, 413]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+248 car [615, 347]
+223 car [724, 413]
+0 frame changed
+
+223 car [724, 413]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+258 car [426, 725]
+0 frame changed
+
+258 car [608, 706]
+248 car [619, 349]
+0 frame changed
+
+258 car [787, 683]
+223 car [723, 414]
+0 frame changed
+
+258 car [927, 662]
+223 car [723, 413]
+0 frame changed
+
+258 car [1048, 630]
+223 car [723, 414]
+0 frame changed
+
+258 car [1136, 605]
+223 car [723, 413]
+0 frame changed
+
+258 car [1200, 579]
+223 car [723, 413]
+0 frame changed
+
+260 car [545, 305]
+248 car [633, 357]
+223 car [723, 413]
+0 frame changed
+
+223 car [723, 414]
+0 frame changed
+
+267 car [1273, 519]
+223 car [724, 413]
+0 frame changed
+
+269 car [1154, 590]
+267 car [1284, 511]
+260 car [546, 303]
+248 car [634, 357]
+223 car [724, 414]
+0 frame changed
+
+269 car [1204, 569]
+268 car [1052, 666]
+267 car [1291, 488]
+260 car [545, 303]
+248 car [634, 357]
+223 car [723, 414]
+0 frame changed
+
+269 car [1242, 551]
+268 car [1143, 632]
+267 car [1295, 470]
+248 car [634, 357]
+223 car [723, 414]
+0 frame changed
+
+269 car [1273, 527]
+268 car [1208, 605]
+267 car [1291, 447]
+265 car [853, 716]
+248 car [633, 357]
+223 car [724, 414]
+0 frame changed
+
+269 car [1297, 494]
+268 car [1259, 581]
+248 car [633, 357]
+223 car [724, 414]
+0 frame changed
+
+269 car [1315, 478]
+268 car [1295, 560]
+248 car [633, 357]
+223 car [724, 413]
+0 frame changed
+
+270 car [1232, 639]
+268 car [1316, 539]
+248 car [634, 357]
+223 car [724, 413]
+0 frame changed
+
+270 car [1295, 617]
+268 car [1331, 517]
+248 car [635, 358]
+223 car [723, 414]
+0 frame changed
+
+272 car [1271, 436]
+270 car [1342, 596]
+268 car [1342, 499]
+248 car [634, 358]
+223 car [724, 414]
+0 frame changed
+
+272 car [1240, 420]
+270 car [1373, 576]
+248 car [634, 358]
+223 car [724, 414]
+0 frame changed
+
+272 car [1201, 402]
+248 car [635, 357]
+223 car [724, 413]
+0 frame changed
+
+273 car [1311, 455]
+272 car [1161, 386]
+248 car [635, 357]
+223 car [724, 414]
+0 frame changed
+
+273 car [1282, 435]
+248 car [634, 358]
+223 car [724, 414]
+0 frame changed
+
+260 car [544, 304]
+248 car [634, 358]
+223 car [723, 414]
+0 frame changed
+
+276 car [1771, 553]
+260 car [546, 304]
+248 car [634, 358]
+223 car [723, 415]
+0 frame changed
+
+276 car [1679, 539]
+273 car [1170, 387]
+260 car [545, 304]
+248 car [634, 358]
+223 car [723, 415]
+0 frame changed
+
+276 car [1577, 518]
+273 car [1131, 375]
+260 car [545, 304]
+248 car [634, 357]
+223 car [723, 414]
+0 frame changed
+
+276 car [1482, 498]
+273 car [1095, 362]
+260 car [544, 305]
+248 car [634, 358]
+223 car [724, 414]
+0 frame changed
+
+279 car [451, 270]
+276 car [1401, 473]
+273 car [1066, 349]
+260 car [544, 305]
+248 car [634, 358]
+223 car [722, 413]
+0 frame changed
+
+279 car [459, 276]
+278 car [1178, 391]
+276 car [1327, 452]
+273 car [1042, 339]
+260 car [543, 304]
+248 car [634, 358]
+223 car [722, 414]
+0 frame changed
+
+279 car [463, 280]
+276 car [1268, 431]
+273 car [1028, 332]
+260 car [544, 305]
+248 car [634, 358]
+223 car [723, 414]
+0 frame changed
+
+279 car [467, 282]
+276 car [1217, 412]
+248 car [634, 357]
+223 car [721, 413]
+0 frame changed
+
+279 car [466, 284]
+248 car [633, 357]
+0 frame changed
+
+279 car [466, 284]
+278 car [1052, 342]
+248 car [634, 357]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+279 car [467, 283]
+260 car [543, 304]
+248 car [633, 356]
+0 frame changed
+
+279 car [466, 283]
+248 car [633, 357]
+223 car [721, 415]
+0 frame changed
+
+279 car [466, 284]
+248 car [634, 356]
+223 car [720, 414]
+0 frame changed
+
+248 car [633, 357]
+223 car [721, 414]
+0 frame changed
+
+248 car [633, 357]
+223 car [721, 414]
+0 frame changed
+
+279 car [465, 284]
+248 car [630, 356]
+223 car [722, 414]
+0 frame changed
+
+279 car [465, 283]
+248 car [633, 356]
+223 car [722, 414]
+0 frame changed
+
+279 car [463, 284]
+260 car [543, 304]
+248 car [633, 356]
+223 car [722, 413]
+0 frame changed
+
+223 car [723, 414]
+0 frame changed
+
+223 car [723, 414]
+0 frame changed
+
+307 car [195, 638]
+248 car [634, 358]
+223 car [723, 413]
+0 frame changed
+
+248 car [634, 358]
+223 car [722, 410]
+0 frame changed
+
+279 car [463, 283]
+248 car [635, 358]
+223 car [722, 412]
+0 frame changed
+
+279 car [463, 282]
+248 car [634, 357]
+223 car [722, 414]
+0 frame changed
+
+322 car [1803, 563]
+299 car [886, 653]
+279 car [465, 282]
+223 car [724, 413]
+0 frame changed
+
+279 car [464, 282]
+260 car [542, 303]
+223 car [723, 414]
+0 frame changed
+
+315 car [1650, 615]
+279 car [464, 283]
+260 car [542, 305]
+248 car [634, 358]
+223 car [723, 414]
+0 frame changed
+
+322 car [1764, 561]
+295 car [1336, 611]
+279 car [463, 282]
+260 car [541, 305]
+248 car [634, 357]
+223 car [723, 413]
+0 frame changed
+
+322 car [1712, 557]
+279 car [464, 282]
+248 car [633, 357]
+223 car [723, 413]
+0 frame changed
+
+223 car [724, 414]
+0 frame changed
+
+223 car [723, 414]
+0 frame changed
+
+223 car [721, 414]
+0 frame changed
+
+248 car [633, 357]
+223 car [724, 414]
+0 frame changed
+
+322 car [1514, 517]
+248 car [633, 357]
+223 car [722, 414]
+0 frame changed
+
+322 car [1465, 502]
+279 car [466, 282]
+248 car [634, 357]
+223 car [723, 415]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+335 car [630, 202]
+322 car [1217, 403]
+279 car [466, 283]
+248 car [623, 356]
+223 car [722, 413]
+0 frame changed
+
+248 car [629, 356]
+223 car [722, 413]
+0 frame changed
+
+248 car [632, 357]
+223 car [722, 413]
+0 frame changed
+
+248 car [633, 357]
+223 car [722, 413]
+0 frame changed
+
+223 car [722, 413]
+0 frame changed
+
+223 car [722, 413]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+248 car [633, 357]
+223 car [723, 415]
+0 frame changed
+
+344 car [506, 360]
+248 car [635, 357]
+223 car [723, 415]
+0 frame changed
+
+344 car [530, 377]
+223 car [724, 415]
+0 frame changed
+
+344 car [543, 387]
+0 frame changed
+
+344 car [557, 398]
+0 frame changed
+
+344 car [570, 403]
+248 car [633, 357]
+223 car [720, 414]
+0 frame changed
+
+344 car [579, 409]
+223 car [720, 415]
+0 frame changed
+
+349 car [702, 579]
+344 car [584, 416]
+223 car [723, 415]
+0 frame changed
+
+344 car [592, 421]
+223 car [720, 413]
+0 frame changed
+
+344 car [595, 424]
+223 car [722, 413]
+0 frame changed
+
+354 car [623, 347]
+344 car [596, 425]
+334 car [1555, 672]
+279 car [463, 282]
+0 frame changed
+
+361 car [615, 203]
+360 car [420, 193]
+354 car [623, 347]
+344 car [597, 426]
+336 car [1098, 673]
+279 car [463, 282]
+0 frame changed
+
+361 car [636, 202]
+354 car [625, 347]
+344 car [595, 425]
+223 car [722, 411]
+0 frame changed
+
+354 car [625, 347]
+344 car [595, 425]
+223 car [723, 410]
+0 frame changed
+
+354 car [626, 347]
+344 car [595, 425]
+223 car [723, 412]
+0 frame changed
+
+354 car [625, 347]
+344 car [594, 424]
+279 car [464, 282]
+223 car [725, 413]
+0 frame changed
+
+354 car [623, 346]
+344 car [593, 424]
+223 car [724, 413]
+0 frame changed
+
+354 car [628, 347]
+344 car [594, 425]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [595, 425]
+223 car [721, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [594, 425]
+223 car [722, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [593, 424]
+223 car [722, 413]
+0 frame changed
+
+370 car [49, 669]
+354 car [626, 347]
+344 car [592, 423]
+223 car [722, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [594, 423]
+223 car [722, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [593, 423]
+223 car [724, 414]
+0 frame changed
+
+354 car [626, 347]
+344 car [593, 423]
+223 car [722, 414]
+0 frame changed
+
+354 car [625, 347]
+344 car [592, 422]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [591, 422]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [593, 422]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [593, 421]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [592, 420]
+223 car [723, 413]
+0 frame changed
+
+354 car [625, 347]
+344 car [593, 421]
+223 car [722, 413]
+0 frame changed
+
+354 car [627, 348]
+344 car [592, 420]
+0 frame changed
+
+354 car [627, 348]
+344 car [591, 421]
+0 frame changed
+
+385 car [634, 357]
+354 car [628, 348]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+385 car [634, 356]
+354 car [627, 347]
+344 car [591, 420]
+223 car [724, 413]
+0 frame changed
+
+385 car [633, 356]
+354 car [627, 347]
+344 car [590, 421]
+223 car [723, 410]
+0 frame changed
+
+385 car [634, 357]
+354 car [628, 348]
+344 car [590, 420]
+223 car [724, 412]
+0 frame changed
+
+354 car [627, 347]
+344 car [590, 421]
+223 car [723, 413]
+0 frame changed
+
+354 car [626, 348]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+354 car [627, 348]
+344 car [592, 422]
+223 car [722, 414]
+0 frame changed
+
+386 car [464, 282]
+354 car [626, 348]
+344 car [592, 421]
+223 car [724, 414]
+0 frame changed
+
+385 car [632, 357]
+354 car [626, 347]
+344 car [593, 422]
+223 car [723, 414]
+0 frame changed
+
+385 car [632, 357]
+354 car [625, 347]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+386 car [465, 283]
+385 car [633, 357]
+354 car [625, 347]
+344 car [592, 422]
+223 car [724, 414]
+0 frame changed
+
+385 car [633, 357]
+354 car [625, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+354 car [626, 347]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+354 car [625, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+354 car [625, 347]
+344 car [593, 421]
+223 car [722, 413]
+0 frame changed
+
+354 car [624, 347]
+344 car [593, 422]
+223 car [721, 413]
+0 frame changed
+
+354 car [624, 347]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [463, 283]
+354 car [625, 347]
+344 car [592, 421]
+223 car [722, 412]
+0 frame changed
+
+386 car [463, 283]
+354 car [625, 347]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [464, 282]
+354 car [625, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+354 car [625, 347]
+344 car [591, 421]
+223 car [722, 413]
+0 frame changed
+
+354 car [625, 347]
+344 car [592, 422]
+223 car [734, 417]
+0 frame changed
+
+354 car [624, 347]
+344 car [591, 421]
+223 car [726, 414]
+0 frame changed
+
+386 car [465, 283]
+354 car [625, 347]
+344 car [592, 421]
+223 car [724, 414]
+0 frame changed
+
+386 car [464, 282]
+354 car [625, 348]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+386 car [465, 283]
+354 car [625, 347]
+344 car [591, 421]
+223 car [724, 413]
+0 frame changed
+
+386 car [465, 282]
+354 car [626, 348]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+386 car [464, 283]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+386 car [463, 283]
+385 car [633, 356]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+394 car [544, 303]
+386 car [463, 283]
+354 car [623, 347]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+394 car [544, 303]
+386 car [464, 283]
+354 car [624, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+394 car [544, 303]
+386 car [465, 283]
+354 car [626, 348]
+344 car [593, 422]
+223 car [722, 413]
+0 frame changed
+
+394 car [544, 303]
+386 car [464, 283]
+354 car [626, 348]
+344 car [592, 422]
+223 car [723, 413]
+0 frame changed
+
+386 car [464, 282]
+354 car [626, 347]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [463, 282]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [464, 282]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+344 car [592, 422]
+223 car [721, 413]
+0 frame changed
+
+354 car [622, 347]
+344 car [591, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [624, 347]
+344 car [592, 422]
+223 car [721, 411]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+386 car [466, 281]
+354 car [623, 348]
+344 car [593, 422]
+223 car [722, 415]
+0 frame changed
+
+386 car [468, 282]
+354 car [623, 348]
+344 car [592, 421]
+223 car [723, 414]
+0 frame changed
+
+386 car [469, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+386 car [468, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+409 car [1672, 541]
+386 car [467, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+409 car [1580, 525]
+386 car [467, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+409 car [1498, 501]
+386 car [467, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [723, 413]
+0 frame changed
+
+409 car [1428, 480]
+386 car [468, 281]
+354 car [624, 347]
+344 car [593, 422]
+223 car [722, 413]
+0 frame changed
+
+409 car [1358, 457]
+386 car [467, 281]
+354 car [624, 347]
+344 car [593, 422]
+223 car [722, 413]
+0 frame changed
+
+409 car [1289, 439]
+386 car [468, 281]
+354 car [625, 347]
+344 car [593, 422]
+223 car [722, 413]
+0 frame changed
+
+409 car [1231, 421]
+386 car [467, 281]
+354 car [625, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+409 car [1180, 402]
+386 car [468, 281]
+354 car [623, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+386 car [469, 282]
+354 car [625, 347]
+344 car [592, 422]
+223 car [723, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [625, 347]
+344 car [592, 422]
+223 car [722, 413]
+0 frame changed
+
+386 car [468, 281]
+354 car [620, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [623, 346]
+344 car [592, 421]
+223 car [722, 416]
+0 frame changed
+
+386 car [467, 281]
+354 car [621, 346]
+344 car [593, 422]
+0 frame changed
+
+386 car [467, 281]
+354 car [621, 347]
+344 car [594, 422]
+0 frame changed
+
+386 car [467, 281]
+354 car [622, 346]
+344 car [593, 421]
+223 car [721, 413]
+0 frame changed
+
+412 car [567, 314]
+386 car [467, 281]
+354 car [623, 346]
+344 car [593, 422]
+0 frame changed
+
+386 car [467, 281]
+354 car [623, 346]
+344 car [592, 422]
+0 frame changed
+
+413 car [1548, 944]
+386 car [472, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+413 car [1376, 980]
+386 car [470, 282]
+354 car [623, 347]
+344 car [591, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [468, 281]
+354 car [622, 347]
+344 car [591, 421]
+223 car [721, 412]
+0 frame changed
+
+386 car [467, 282]
+354 car [621, 346]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [468, 282]
+354 car [622, 347]
+344 car [592, 421]
+223 car [720, 413]
+0 frame changed
+
+386 car [468, 282]
+354 car [622, 347]
+344 car [591, 421]
+223 car [720, 413]
+0 frame changed
+
+386 car [469, 282]
+354 car [623, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [468, 281]
+354 car [622, 347]
+344 car [592, 421]
+223 car [721, 411]
+0 frame changed
+
+386 car [467, 280]
+354 car [620, 347]
+344 car [593, 421]
+223 car [721, 412]
+0 frame changed
+
+386 car [468, 282]
+354 car [619, 346]
+344 car [591, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [622, 347]
+344 car [592, 422]
+223 car [721, 411]
+0 frame changed
+
+386 car [467, 281]
+354 car [623, 347]
+344 car [592, 422]
+223 car [720, 412]
+0 frame changed
+
+386 car [467, 282]
+354 car [624, 347]
+344 car [592, 421]
+223 car [721, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [625, 347]
+344 car [591, 421]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+386 car [467, 282]
+354 car [626, 347]
+344 car [592, 421]
+0 frame changed
+
+386 car [468, 282]
+354 car [623, 346]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+386 car [468, 281]
+354 car [623, 347]
+344 car [592, 421]
+223 car [721, 411]
+0 frame changed
+
+386 car [466, 281]
+354 car [624, 347]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+386 car [467, 281]
+354 car [623, 346]
+344 car [593, 421]
+223 car [722, 412]
+0 frame changed
+
+386 car [467, 280]
+354 car [622, 346]
+344 car [592, 421]
+223 car [722, 413]
+0 frame changed
+
+344 car [592, 421]
+0 frame changed
+
+344 car [592, 421]
+0 frame changed
+
+344 car [592, 421]
+0 frame changed
+
+354 car [624, 346]
+344 car [592, 421]
+0 frame changed
+
+386 car [467, 281]
+354 car [619, 346]
+344 car [594, 421]
+223 car [723, 410]
+0 frame changed
+
+386 car [468, 281]
+354 car [619, 345]
+344 car [593, 421]
+223 car [724, 412]
+0 frame changed
+
+386 car [467, 281]
+354 car [619, 346]
+344 car [592, 421]
+223 car [722, 412]
+0 frame changed
+
+386 car [472, 281]
+354 car [620, 346]
+344 car [592, 421]
+223 car [722, 411]
+0 frame changed
+
+425 car [741, 418]
+386 car [469, 281]
+354 car [619, 346]
+344 car [592, 422]
+223 car [722, 409]
+0 frame changed
+
+386 car [467, 280]
+354 car [619, 346]
+344 car [593, 421]
+223 car [724, 412]
+0 frame changed
+
+386 car [467, 281]
+344 car [592, 421]
+223 car [723, 411]
+0 frame changed
+
+386 car [466, 280]
+344 car [592, 421]
+223 car [723, 412]
+0 frame changed
+
+386 car [466, 281]
+344 car [591, 421]
+223 car [724, 413]
+0 frame changed
+
+386 car [467, 281]
+344 car [593, 422]
+223 car [723, 414]
+0 frame changed
+
+386 car [470, 282]
+344 car [596, 424]
+0 frame changed
+
+344 car [600, 428]
+0 frame changed
+
+344 car [604, 438]
+0 frame changed
+
+426 car [572, 319]
+386 car [470, 282]
+354 car [637, 360]
+344 car [611, 453]
+0 frame changed
+
+425 car [758, 425]
+386 car [470, 283]
+344 car [618, 465]
+0 frame changed
+
+425 car [773, 435]
+0 frame changed
+
+425 car [782, 442]
+354 car [647, 368]
+0 frame changed
+
+427 car [496, 291]
+426 car [587, 320]
+425 car [802, 449]
+354 car [658, 376]
+0 frame changed
+
+428 car [679, 614]
+427 car [502, 294]
+425 car [828, 460]
+354 car [677, 386]
+0 frame changed
+
+428 car [702, 665]
+354 car [697, 396]
+0 frame changed
+
+428 car [733, 720]
+0 frame changed
+
+428 car [772, 788]
+0 frame changed
+
+429 car [1060, 541]
+428 car [833, 891]
+0 frame changed
+
+428 car [909, 977]
+427 car [566, 320]
+425 car [833, 474]
+0 frame changed
+
+426 car [691, 383]
+0 frame changed
+
+0 frame changed
+
+427 car [632, 350]
+0 frame changed
+
+0 frame changed
+
+386 car [451, 277]
+0 frame changed
+
+386 car [465, 285]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+449 car [466, 333]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+451 car [431, 485]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+451 car [125, 553]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [1668, 687]
+0 frame changed
+
+1 car [1592, 638]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+9 car [1720, 869]
+0 frame changed
+
+9 car [1664, 806]
+0 frame changed
+
+9 car [1613, 748]
+0 frame changed
+
+9 car [1572, 700]
+0 frame changed
+
+9 car [1535, 658]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+19 car [183, 885]
+0 frame changed
+
+19 car [74, 827]
+0 frame changed
+
+0 frame changed
+
+26 car [290, 947]
+0 frame changed
+
+26 car [151, 895]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+45 car [1689, 540]
+0 frame changed
+
+45 car [1606, 525]
+0 frame changed
+
+45 car [1534, 507]
+44 car [423, 194]
+0 frame changed
+
+46 car [634, 203]
+45 car [1471, 490]
+44 car [423, 195]
+0 frame changed
+
+46 car [643, 203]
+45 car [1412, 472]
+44 car [423, 194]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+45 car [1263, 429]
+0 frame changed
+
+48 car [479, 706]
+45 car [1217, 409]
+0 frame changed
+
+48 car [695, 671]
+45 car [1181, 399]
+0 frame changed
+
+48 car [874, 642]
+45 car [1144, 386]
+0 frame changed
+
+48 car [1023, 616]
+44 car [423, 195]
+0 frame changed
+
+48 car [1137, 582]
+44 car [422, 195]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+53 car [1283, 519]
+0 frame changed
+
+53 car [1305, 496]
+0 frame changed
+
+56 car [1240, 579]
+53 car [1311, 476]
+51 car [586, 205]
+0 frame changed
+
+53 car [1307, 449]
+51 car [601, 205]
+0 frame changed
+
+51 car [616, 204]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+60 car [1170, 382]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+60 car [1036, 326]
+54 car [850, 661]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+59 car [1257, 429]
+54 car [802, 655]
+0 frame changed
+
+66 car [1277, 556]
+0 frame changed
+
+66 car [1320, 539]
+64 car [1022, 604]
+0 frame changed
+
+66 car [1348, 516]
+65 car [1159, 376]
+0 frame changed
+
+66 car [1360, 489]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+54 car [1027, 676]
+0 frame changed
+
+59 car [1246, 420]
+0 frame changed
+
+0 frame changed
+
+74 car [1354, 597]
+0 frame changed
+
+74 car [1409, 575]
+0 frame changed
+
+74 car [1440, 555]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+76 car [421, 194]
+0 frame changed
+
+76 car [422, 196]
+0 frame changed
+
+79 car [1299, 445]
+78 car [622, 198]
+0 frame changed
+
+79 car [1266, 429]
+0 frame changed
+
+79 car [1226, 414]
+0 frame changed
+
+79 car [1188, 399]
+0 frame changed
+
+76 car [421, 195]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+91 car [1753, 976]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+108 car [625, 203]
+0 frame changed
+
+87 car [1745, 662]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [421, 194]
+0 frame changed
+
+144 car [486, 286]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+159 car [148, 528]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+172 car [1496, 925]
+0 frame changed
+
+172 car [1299, 981]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+171 car [1781, 800]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+174 car [1281, 939]
+0 frame changed
+
+174 car [1114, 982]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+175 car [1830, 975]
+0 frame changed
+
+0 frame changed
+
+173 car [1799, 807]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+182 car [573, 325]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+182 car [576, 328]
+0 frame changed
+
+182 car [577, 327]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+182 car [612, 344]
+0 frame changed
+
+182 car [624, 348]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+182 car [656, 369]
+0 frame changed
+
+182 car [673, 376]
+0 frame changed
+
+182 car [689, 385]
+0 frame changed
+
+184 car [920, 473]
+182 car [703, 395]
+0 frame changed
+
+182 car [717, 402]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+194 car [1706, 807]
+0 frame changed
+
+194 car [1646, 741]
+0 frame changed
+
+194 car [1585, 681]
+0 frame changed
+
+194 car [1540, 631]
+0 frame changed
+
+197 car [1272, 915]
+194 car [1492, 587]
+0 frame changed
+
+197 car [1035, 842]
+0 frame changed
+
+197 car [800, 786]
+0 frame changed
+
+197 car [548, 739]
+194 car [1330, 467]
+0 frame changed
+
+197 car [304, 693]
+194 car [1268, 436]
+0 frame changed
+
+197 car [122, 656]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+205 car [628, 361]
+0 frame changed
+
+205 car [647, 373]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+205 car [723, 413]
+0 frame changed
+
+206 car [869, 295]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+210 car [763, 427]
+209 car [420, 193]
+0 frame changed
+
+211 car [639, 202]
+210 car [761, 426]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+210 car [761, 426]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+210 car [761, 428]
+0 frame changed
+
+210 car [761, 428]
+0 frame changed
+
+210 car [759, 428]
+0 frame changed
+
+210 car [760, 428]
+0 frame changed
+
+210 car [760, 427]
+0 frame changed
+
+218 car [1270, 476]
+210 car [761, 427]
+0 frame changed
+
+218 car [1274, 451]
+0 frame changed
+
+0 frame changed
+
+210 car [759, 426]
+0 frame changed
+
+220 car [1156, 389]
+210 car [760, 426]
+0 frame changed
+
+220 car [1103, 366]
+210 car [760, 427]
+0 frame changed
+
+220 car [1049, 345]
+0 frame changed
+
+0 frame changed
+
+210 car [760, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+210 car [761, 428]
+0 frame changed
+
+222 car [1170, 393]
+210 car [760, 428]
+0 frame changed
+
+210 car [762, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+210 car [760, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+210 car [760, 426]
+0 frame changed
+
+210 car [761, 426]
+0 frame changed
+
+210 car [760, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+227 car [422, 193]
+210 car [760, 426]
+0 frame changed
+
+228 car [460, 304]
+227 car [423, 194]
+210 car [762, 426]
+0 frame changed
+
+228 car [487, 320]
+227 car [424, 194]
+210 car [759, 426]
+0 frame changed
+
+228 car [507, 330]
+210 car [757, 426]
+0 frame changed
+
+228 car [525, 339]
+210 car [759, 427]
+0 frame changed
+
+228 car [537, 347]
+210 car [757, 427]
+0 frame changed
+
+228 car [549, 360]
+0 frame changed
+
+230 car [612, 204]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [609, 425]
+210 car [759, 427]
+0 frame changed
+
+228 car [616, 434]
+210 car [760, 427]
+0 frame changed
+
+228 car [624, 442]
+210 car [761, 428]
+0 frame changed
+
+228 car [629, 446]
+210 car [762, 430]
+0 frame changed
+
+228 car [630, 450]
+210 car [763, 430]
+0 frame changed
+
+228 car [631, 451]
+210 car [763, 428]
+0 frame changed
+
+228 car [631, 450]
+210 car [763, 429]
+0 frame changed
+
+228 car [630, 449]
+210 car [766, 429]
+0 frame changed
+
+228 car [630, 449]
+210 car [763, 429]
+0 frame changed
+
+228 car [629, 449]
+210 car [764, 429]
+0 frame changed
+
+228 car [628, 448]
+210 car [762, 429]
+0 frame changed
+
+228 car [628, 448]
+210 car [763, 428]
+0 frame changed
+
+228 car [629, 447]
+210 car [763, 429]
+0 frame changed
+
+228 car [628, 448]
+210 car [763, 428]
+0 frame changed
+
+228 car [627, 448]
+210 car [763, 428]
+0 frame changed
+
+228 car [628, 447]
+210 car [766, 428]
+0 frame changed
+
+228 car [627, 447]
+210 car [765, 429]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [627, 447]
+210 car [764, 428]
+0 frame changed
+
+228 car [627, 446]
+210 car [767, 427]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [629, 444]
+210 car [764, 427]
+0 frame changed
+
+228 car [630, 445]
+210 car [764, 428]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [630, 446]
+210 car [763, 428]
+0 frame changed
+
+228 car [631, 445]
+210 car [766, 427]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [628, 445]
+0 frame changed
+
+228 car [628, 445]
+210 car [761, 429]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [632, 446]
+210 car [759, 427]
+0 frame changed
+
+228 car [632, 446]
+210 car [761, 427]
+0 frame changed
+
+228 car [630, 446]
+210 car [760, 427]
+0 frame changed
+
+228 car [630, 445]
+210 car [761, 428]
+0 frame changed
+
+228 car [630, 444]
+210 car [760, 428]
+0 frame changed
+
+228 car [631, 444]
+210 car [765, 428]
+0 frame changed
+
+228 car [630, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [628, 443]
+210 car [762, 428]
+0 frame changed
+
+228 car [629, 444]
+210 car [758, 427]
+0 frame changed
+
+228 car [630, 445]
+210 car [758, 427]
+0 frame changed
+
+228 car [631, 445]
+210 car [760, 428]
+0 frame changed
+
+228 car [628, 445]
+210 car [761, 428]
+0 frame changed
+
+281 car [681, 369]
+228 car [628, 444]
+210 car [761, 428]
+0 frame changed
+
+228 car [628, 445]
+210 car [761, 428]
+0 frame changed
+
+228 car [627, 444]
+210 car [761, 429]
+0 frame changed
+
+228 car [628, 445]
+210 car [761, 429]
+0 frame changed
+
+228 car [627, 444]
+210 car [760, 427]
+0 frame changed
+
+228 car [628, 445]
+210 car [761, 427]
+0 frame changed
+
+228 car [627, 446]
+210 car [762, 427]
+0 frame changed
+
+281 car [683, 378]
+228 car [627, 446]
+210 car [765, 428]
+0 frame changed
+
+281 car [683, 380]
+228 car [627, 445]
+210 car [762, 427]
+0 frame changed
+
+228 car [627, 445]
+210 car [763, 428]
+0 frame changed
+
+228 car [627, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [629, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [631, 446]
+210 car [762, 428]
+0 frame changed
+
+228 car [631, 445]
+210 car [763, 429]
+0 frame changed
+
+228 car [630, 445]
+210 car [762, 429]
+0 frame changed
+
+281 car [684, 379]
+228 car [631, 445]
+210 car [763, 429]
+0 frame changed
+
+281 car [685, 380]
+228 car [629, 444]
+210 car [763, 428]
+0 frame changed
+
+281 car [685, 378]
+228 car [628, 444]
+210 car [762, 427]
+0 frame changed
+
+281 car [683, 379]
+228 car [628, 444]
+210 car [762, 428]
+0 frame changed
+
+228 car [629, 444]
+210 car [762, 428]
+0 frame changed
+
+228 car [627, 444]
+210 car [761, 428]
+0 frame changed
+
+281 car [682, 378]
+228 car [630, 445]
+210 car [763, 428]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [628, 444]
+210 car [762, 427]
+0 frame changed
+
+228 car [630, 445]
+210 car [762, 428]
+0 frame changed
+
+281 car [684, 378]
+228 car [632, 446]
+210 car [763, 427]
+0 frame changed
+
+228 car [631, 446]
+210 car [762, 428]
+0 frame changed
+
+228 car [631, 446]
+210 car [763, 428]
+0 frame changed
+
+281 car [683, 379]
+228 car [628, 446]
+210 car [762, 428]
+0 frame changed
+
+281 car [684, 381]
+228 car [627, 446]
+210 car [766, 428]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+228 car [627, 443]
+210 car [761, 428]
+0 frame changed
+
+281 car [681, 372]
+228 car [627, 442]
+210 car [762, 427]
+0 frame changed
+
+281 car [682, 375]
+228 car [629, 443]
+210 car [762, 429]
+0 frame changed
+
+281 car [683, 377]
+228 car [629, 445]
+210 car [762, 428]
+0 frame changed
+
+318 bicycle [243, 376]
+281 car [684, 380]
+228 car [630, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [630, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [630, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [628, 445]
+210 car [763, 428]
+0 frame changed
+
+228 car [628, 445]
+210 car [762, 428]
+0 frame changed
+
+228 car [628, 444]
+210 car [763, 428]
+0 frame changed
+
+281 car [681, 372]
+228 car [630, 444]
+210 car [763, 427]
+0 frame changed
+
+318 bicycle [234, 402]
+281 car [681, 372]
+228 car [630, 444]
+210 car [764, 427]
+0 frame changed
+
+318 bicycle [229, 405]
+281 car [681, 372]
+228 car [629, 444]
+210 car [763, 427]
+0 frame changed
+
+318 bicycle [227, 408]
+281 car [681, 372]
+228 car [631, 444]
+210 car [763, 427]
+0 frame changed
+
+318 bicycle [225, 410]
+281 car [681, 371]
+228 car [629, 444]
+210 car [764, 427]
+0 frame changed
+
+318 bicycle [223, 415]
+281 car [682, 371]
+228 car [631, 445]
+210 car [764, 427]
+0 frame changed
+
+318 bicycle [216, 419]
+281 car [683, 371]
+228 car [632, 444]
+210 car [763, 427]
+0 frame changed
+
+318 bicycle [207, 424]
+281 car [683, 373]
+228 car [630, 447]
+210 car [767, 428]
+0 frame changed
+
+281 car [682, 372]
+228 car [629, 445]
+210 car [764, 427]
+0 frame changed
+
+281 car [683, 372]
+228 car [631, 445]
+210 car [767, 428]
+0 frame changed
+
+281 car [682, 372]
+228 car [630, 444]
+210 car [768, 427]
+0 frame changed
+
+281 car [682, 369]
+228 car [631, 445]
+210 car [765, 427]
+0 frame changed
+
+228 car [631, 445]
+210 car [764, 427]
+0 frame changed
+
+228 car [632, 445]
+210 car [763, 427]
+0 frame changed
+
+228 car [631, 445]
+210 car [763, 426]
+0 frame changed
+
+228 car [631, 443]
+210 car [764, 427]
+0 frame changed
+
+228 car [628, 443]
+210 car [766, 426]
+0 frame changed
+
+228 car [627, 443]
+210 car [764, 427]
+0 frame changed
+
+328 bicycle [42, 472]
+228 car [627, 444]
+210 car [767, 427]
+0 frame changed
+
+228 car [627, 443]
+210 car [768, 427]
+0 frame changed
+
+228 car [628, 443]
+210 car [765, 427]
+0 frame changed
+
+228 car [630, 445]
+210 car [764, 427]
+0 frame changed
+
+281 car [683, 380]
+228 car [631, 445]
+210 car [763, 428]
+0 frame changed
+
+228 car [632, 445]
+210 car [761, 428]
+0 frame changed
+
+228 car [635, 446]
+210 car [761, 426]
+0 frame changed
+
+228 car [634, 444]
+210 car [760, 426]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+210 car [761, 427]
+0 frame changed
+
+281 car [683, 371]
+210 car [763, 426]
+0 frame changed
+
+281 car [683, 371]
+228 car [642, 453]
+210 car [763, 426]
+0 frame changed
+
+281 car [682, 372]
+210 car [763, 425]
+0 frame changed
+
+210 car [763, 424]
+0 frame changed
+
+210 car [763, 424]
+0 frame changed
+
+281 car [682, 372]
+210 car [763, 425]
+0 frame changed
+
+281 car [682, 372]
+210 car [763, 425]
+0 frame changed
+
+281 car [681, 372]
+210 car [765, 425]
+0 frame changed
+
+281 car [681, 372]
+228 car [651, 459]
+210 car [764, 425]
+0 frame changed
+
+281 car [681, 372]
+228 car [652, 459]
+210 car [764, 424]
+0 frame changed
+
+281 car [680, 372]
+228 car [652, 460]
+210 car [764, 425]
+0 frame changed
+
+281 car [680, 370]
+228 car [652, 459]
+210 car [764, 425]
+0 frame changed
+
+281 car [682, 371]
+228 car [651, 460]
+210 car [764, 425]
+0 frame changed
+
+281 car [681, 371]
+228 car [652, 460]
+210 car [761, 425]
+0 frame changed
+
+337 car [1240, 960]
+281 car [682, 372]
+228 car [652, 459]
+210 car [763, 425]
+0 frame changed
+
+4 car [592, 685]
+3 car [389, 500]
+2 car [594, 672]
+1 car [632, 444]
+0 frame changed
+
+3 car [390, 499]
+1 car [640, 444]
+0 frame changed
+
+3 car [388, 498]
+1 car [638, 443]
+0 frame changed
+
+3 car [388, 498]
+1 car [639, 443]
+0 frame changed
+
+3 car [388, 499]
+1 car [636, 442]
+0 frame changed
+
+3 car [388, 498]
+1 car [636, 444]
+0 frame changed
+
+3 car [389, 498]
+1 car [639, 443]
+0 frame changed
+
+3 car [390, 498]
+1 car [639, 444]
+0 frame changed
+
+3 car [390, 499]
+1 car [632, 444]
+0 frame changed
+
+3 car [391, 500]
+1 car [637, 443]
+0 frame changed
+
+3 car [384, 505]
+1 car [637, 443]
+0 frame changed
+
+3 car [373, 511]
+1 car [636, 443]
+0 frame changed
+
+3 car [359, 519]
+1 car [639, 443]
+0 frame changed
+
+3 car [329, 529]
+1 car [638, 444]
+0 frame changed
+
+3 car [271, 537]
+1 car [633, 443]
+0 frame changed
+
+3 car [183, 549]
+1 car [635, 444]
+0 frame changed
+
+3 car [103, 556]
+1 car [638, 444]
+0 frame changed
+
+1 car [635, 445]
+0 frame changed
+
+1 car [637, 444]
+0 frame changed
+
+1 car [638, 444]
+0 frame changed
+
+1 car [636, 444]
+0 frame changed
+
+1 car [638, 444]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+8 car [1513, 911]
+1 car [639, 444]
+0 frame changed
+
+8 car [1329, 968]
+1 car [639, 443]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [638, 444]
+0 frame changed
+
+1 car [639, 444]
+0 frame changed
+
+1 car [636, 444]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [636, 444]
+0 frame changed
+
+1 car [635, 443]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [635, 444]
+0 frame changed
+
+1 car [636, 443]
+0 frame changed
+
+1 car [636, 443]
+0 frame changed
+
+1 car [636, 442]
+0 frame changed
+
+1 car [634, 444]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+1 car [637, 443]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+1 car [639, 443]
+0 frame changed
+
+1 car [639, 444]
+0 frame changed
+
+1 car [638, 443]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [640, 443]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [640, 444]
+0 frame changed
+
+1 car [641, 445]
+0 frame changed
+
+1 car [640, 443]
+0 frame changed
+
+1 car [639, 443]
+0 frame changed
+
+1 car [639, 444]
+0 frame changed
+
+1 car [640, 445]
+0 frame changed
+
+1 car [639, 444]
+0 frame changed
+
+1 car [640, 444]
+0 frame changed
+
+1 car [639, 446]
+0 frame changed
+
+1 car [640, 447]
+0 frame changed
+
+1 car [645, 449]
+0 frame changed
+
+1 car [650, 457]
+0 frame changed
+
+1 car [659, 462]
+0 frame changed
+
+1 car [667, 476]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+15 car [727, 614]
+0 frame changed
+
+15 car [747, 659]
+0 frame changed
+
+15 car [764, 720]
+0 frame changed
+
+15 car [797, 794]
+0 frame changed
+
+15 car [843, 896]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+16 car [1661, 537]
+0 frame changed
+
+16 car [1560, 513]
+0 frame changed
+
+16 car [1471, 494]
+0 frame changed
+
+16 car [1394, 472]
+0 frame changed
+
+16 car [1332, 454]
+0 frame changed
+
+16 car [1277, 438]
+0 frame changed
+
+16 car [1226, 421]
+0 frame changed
+
+16 car [1180, 403]
+0 frame changed
+
+16 car [1132, 386]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+18 car [459, 336]
+0 frame changed
+
+18 car [474, 345]
+0 frame changed
+
+18 car [484, 360]
+0 frame changed
+
+18 car [498, 381]
+0 frame changed
+
+18 car [508, 399]
+0 frame changed
+
+18 car [514, 415]
+0 frame changed
+
+18 car [513, 427]
+0 frame changed
+
+18 car [514, 441]
+0 frame changed
+
+18 car [510, 455]
+0 frame changed
+
+18 car [507, 465]
+0 frame changed
+
+18 car [503, 471]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+18 car [491, 481]
+0 frame changed
+
+18 car [490, 481]
+0 frame changed
+
+18 car [490, 486]
+0 frame changed
+
+18 car [485, 489]
+0 frame changed
+
+18 car [482, 488]
+0 frame changed
+
+18 car [481, 489]
+0 frame changed
+
+18 car [482, 488]
+0 frame changed
+
+18 car [479, 487]
+0 frame changed
+
+18 car [475, 494]
+0 frame changed
+
+18 car [467, 497]
+0 frame changed
+
+18 car [452, 508]
+0 frame changed
+
+18 car [441, 515]
+0 frame changed
+
+18 car [421, 521]
+0 frame changed
+
+18 car [395, 531]
+0 frame changed
+
+18 car [358, 538]
+0 frame changed
+
+18 car [311, 549]
+0 frame changed
+
+18 car [244, 562]
+0 frame changed
+
+18 car [167, 573]
+0 frame changed
+
+18 car [96, 578]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+26 car [1771, 574]
+0 frame changed
+
+26 car [1702, 565]
+0 frame changed
+
+26 car [1631, 548]
+0 frame changed
+
+26 car [1569, 538]
+0 frame changed
+
+26 car [1507, 522]
+0 frame changed
+
+26 car [1451, 502]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+26 car [1321, 456]
+0 frame changed
+
+26 car [1283, 445]
+0 frame changed
+
+26 car [1246, 429]
+0 frame changed
+
+26 car [1209, 414]
+0 frame changed
+
+26 car [1173, 401]
+0 frame changed
+
+26 car [1138, 389]
+0 frame changed
+
+26 car [1108, 382]
+0 frame changed
+
+26 car [1087, 368]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+34 car [1038, 348]
+0 frame changed
+
+34 car [1033, 344]
+0 frame changed
+
+35 car [1295, 466]
+34 car [1024, 340]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+35 car [1198, 404]
+0 frame changed
+
+35 car [1165, 385]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+38 car [1263, 431]
+0 frame changed
+
+39 car [861, 292]
+38 car [1220, 413]
+0 frame changed
+
+38 car [1180, 398]
+0 frame changed
+
+38 car [1139, 383]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+38 car [1045, 343]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+43 car [422, 194]
+0 frame changed
+
+43 car [422, 195]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+43 car [424, 194]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+47 car [601, 206]
+43 car [421, 192]
+0 frame changed
+
+47 car [620, 204]
+0 frame changed
+
+47 car [634, 205]
+0 frame changed
+
+47 car [641, 202]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+51 car [212, 921]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+60 car [962, 616]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+66 car [1678, 636]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+59 car [1441, 976]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+61 car [676, 650]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+80 car [1700, 668]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+102 car [421, 193]
+0 frame changed
+
+103 car [485, 198]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+120 car [1652, 885]
+0 frame changed
+
+120 car [1480, 938]
+0 frame changed
+
+120 car [1288, 979]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+121 bicycle [1119, 356]
+119 car [1762, 859]
+0 frame changed
+
+121 bicycle [1119, 356]
+0 frame changed
+
+121 bicycle [1117, 354]
+0 frame changed
+
+123 car [1269, 981]
+121 bicycle [1117, 354]
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+121 bicycle [1117, 355]
+119 car [1671, 884]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+124 car [1219, 1009]
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+125 car [1556, 874]
+121 bicycle [1117, 355]
+0 frame changed
+
+125 car [1399, 917]
+0 frame changed
+
+125 car [1247, 958]
+0 frame changed
+
+125 car [1096, 989]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+127 car [1664, 539]
+121 bicycle [1118, 356]
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+121 bicycle [1119, 354]
+0 frame changed
+
+127 car [1345, 458]
+121 bicycle [1118, 354]
+0 frame changed
+
+127 car [1266, 434]
+0 frame changed
+
+127 car [1198, 410]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+128 car [601, 205]
+0 frame changed
+
+128 car [622, 203]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1117, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1119, 354]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1119, 354]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+121 bicycle [1118, 355]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+121 bicycle [1118, 354]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+147 car [422, 193]
+0 frame changed
+
+147 car [421, 194]
+0 frame changed
+
+147 car [420, 194]
+0 frame changed
+
+147 car [419, 193]
+0 frame changed
+
+148 car [630, 203]
+147 car [420, 194]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+149 car [552, 739]
+0 frame changed
+
+149 car [774, 712]
+0 frame changed
+
+149 car [965, 684]
+0 frame changed
+
+149 car [1107, 659]
+0 frame changed
+
+149 car [1216, 622]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+157 car [1035, 661]
+0 frame changed
+
+157 car [1156, 625]
+0 frame changed
+
+157 car [1238, 605]
+0 frame changed
+
+157 car [1296, 582]
+0 frame changed
+
+163 car [1305, 461]
+157 car [1338, 563]
+0 frame changed
+
+167 car [1246, 624]
+0 frame changed
+
+167 car [1310, 602]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+161 car [1278, 441]
+0 frame changed
+
+0 frame changed
+
+151 car [306, 735]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+172 car [1028, 340]
+0 frame changed
+
+160 car [1310, 459]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+161 car [1248, 416]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+180 car [631, 203]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+186 car [501, 310]
+0 frame changed
+
+186 car [529, 319]
+185 car [421, 195]
+0 frame changed
+
+186 car [547, 331]
+185 car [424, 196]
+0 frame changed
+
+0 frame changed
+
+188 car [638, 202]
+0 frame changed
+
+186 car [618, 356]
+0 frame changed
+
+186 car [636, 366]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+202 car [969, 602]
+0 frame changed
+
+0 frame changed
+
+203 car [184, 910]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+217 car [1506, 507]
+0 frame changed
+
+217 car [1432, 483]
+0 frame changed
+
+217 car [1365, 461]
+0 frame changed
+
+217 car [1301, 448]
+208 car [724, 411]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+208 car [725, 412]
+0 frame changed
+
+208 car [724, 412]
+0 frame changed
+
+208 car [724, 412]
+0 frame changed
+
+208 car [724, 412]
+0 frame changed
+
+228 car [1776, 684]
+0 frame changed
+
+0 frame changed
+
+231 car [596, 205]
+0 frame changed
+
+231 car [626, 202]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+208 car [724, 412]
+0 frame changed
+
+208 car [724, 413]
+0 frame changed
+
+208 car [724, 412]
+0 frame changed
+
+208 car [724, 411]
+0 frame changed
+
+208 car [724, 411]
+0 frame changed
+
+208 car [724, 413]
+0 frame changed
+
+208 car [725, 414]
+0 frame changed
+
+247 car [1104, 673]
+208 car [725, 414]
+0 frame changed
+
+214 car [630, 651]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+252 car [1606, 646]
+248 car [108, 622]
+0 frame changed
+
+235 car [1172, 641]
+0 frame changed
+
+238 car [722, 646]
+0 frame changed
+
+253 car [232, 636]
+208 car [725, 411]
+0 frame changed
+
+0 frame changed
+
+4 car [965, 637]
+3 car [916, 590]
+2 car [1773, 555]
+1 car [907, 573]
+0 frame changed
+
+7 car [515, 614]
+6 car [533, 634]
+5 car [495, 593]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+14 car [1763, 686]
+0 frame changed
+
+15 car [1468, 689]
+0 frame changed
+
+18 car [1141, 685]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+25 car [1606, 517]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+46 car [455, 277]
+0 frame changed
+
+46 car [471, 287]
+0 frame changed
+
+46 car [493, 294]
+0 frame changed
+
+46 car [514, 299]
+0 frame changed
+
+46 car [534, 309]
+0 frame changed
+
+46 car [552, 318]
+0 frame changed
+
+46 car [569, 327]
+0 frame changed
+
+46 car [582, 333]
+0 frame changed
+
+46 car [598, 341]
+0 frame changed
+
+46 car [613, 347]
+0 frame changed
+
+46 car [630, 352]
+0 frame changed
+
+46 car [642, 360]
+0 frame changed
+
+46 car [652, 367]
+0 frame changed
+
+46 car [664, 370]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+46 car [699, 387]
+0 frame changed
+
+46 car [712, 397]
+0 frame changed
+
+46 car [718, 400]
+0 frame changed
+
+46 car [724, 403]
+0 frame changed
+
+46 car [735, 406]
+0 frame changed
+
+46 car [740, 410]
+0 frame changed
+
+46 car [744, 412]
+0 frame changed
+
+46 car [746, 414]
+0 frame changed
+
+46 car [747, 413]
+0 frame changed
+
+46 car [746, 413]
+0 frame changed
+
+46 car [746, 413]
+0 frame changed
+
+46 car [747, 413]
+0 frame changed
+
+46 car [746, 412]
+0 frame changed
+
+46 car [745, 412]
+0 frame changed
+
+46 car [744, 412]
+0 frame changed
+
+46 car [744, 412]
+0 frame changed
+
+46 car [744, 412]
+0 frame changed
+
+46 car [743, 412]
+0 frame changed
+
+46 car [743, 411]
+0 frame changed
+
+46 car [743, 410]
+0 frame changed
+
+46 car [743, 412]
+0 frame changed
+
+46 car [744, 413]
+0 frame changed
+
+46 car [744, 413]
+0 frame changed
+
+46 car [744, 413]
+0 frame changed
+
+46 car [744, 413]
+0 frame changed
+
+46 car [743, 413]
+0 frame changed
+
+46 car [742, 413]
+0 frame changed
+
+46 car [743, 413]
+0 frame changed
+
+46 car [743, 413]
+0 frame changed
+
+46 car [742, 412]
+0 frame changed
+
+46 car [741, 411]
+0 frame changed
+
+46 car [741, 412]
+0 frame changed
+
+46 car [742, 412]
+0 frame changed
+
+46 car [743, 411]
+0 frame changed
+
+46 car [743, 412]
+0 frame changed
+
+46 car [742, 411]
+0 frame changed
+
+46 car [741, 410]
+0 frame changed
+
+46 car [741, 410]
+0 frame changed
+
+46 car [742, 411]
+0 frame changed
+
+46 car [742, 412]
+0 frame changed
+
+46 car [742, 411]
+0 frame changed
+
+46 car [742, 411]
+0 frame changed
+
+46 car [742, 412]
+0 frame changed
+
+67 car [1544, 945]
+46 car [741, 412]
+0 frame changed
+
+67 car [1376, 987]
+46 car [742, 412]
+0 frame changed
+
+46 car [740, 412]
+0 frame changed
+
+68 car [442, 336]
+46 car [741, 412]
+0 frame changed
+
+68 car [458, 350]
+46 car [742, 412]
+0 frame changed
+
+68 car [472, 363]
+46 car [742, 412]
+0 frame changed
+
+68 car [480, 377]
+46 car [741, 412]
+0 frame changed
+
+68 car [491, 391]
+46 car [741, 411]
+0 frame changed
+
+46 car [742, 411]
+0 frame changed
+
+46 car [742, 410]
+0 frame changed
+
+68 car [504, 414]
+46 car [740, 410]
+0 frame changed
+
+68 car [508, 417]
+46 car [741, 411]
+0 frame changed
+
+68 car [509, 417]
+46 car [741, 410]
+0 frame changed
+
+68 car [511, 418]
+46 car [741, 411]
+0 frame changed
+
+68 car [511, 425]
+46 car [740, 412]
+0 frame changed
+
+68 car [511, 430]
+46 car [740, 412]
+0 frame changed
+
+68 car [505, 436]
+46 car [740, 411]
+0 frame changed
+
+68 car [497, 447]
+46 car [741, 411]
+0 frame changed
+
+68 car [490, 459]
+46 car [740, 412]
+0 frame changed
+
+46 car [740, 412]
+0 frame changed
+
+46 car [741, 412]
+0 frame changed
+
+46 car [741, 410]
+0 frame changed
+
+71 car [371, 496]
+46 car [741, 411]
+0 frame changed
+
+71 car [358, 499]
+46 car [741, 410]
+0 frame changed
+
+71 car [346, 506]
+46 car [741, 410]
+0 frame changed
+
+71 car [339, 510]
+46 car [741, 410]
+0 frame changed
+
+71 car [338, 512]
+46 car [741, 410]
+0 frame changed
+
+71 car [338, 511]
+46 car [742, 411]
+0 frame changed
+
+71 car [337, 510]
+46 car [742, 412]
+0 frame changed
+
+71 car [338, 511]
+46 car [742, 412]
+0 frame changed
+
+71 car [337, 510]
+46 car [740, 412]
+0 frame changed
+
+71 car [338, 509]
+46 car [741, 411]
+0 frame changed
+
+71 car [339, 510]
+46 car [742, 412]
+0 frame changed
+
+71 car [340, 510]
+46 car [742, 411]
+0 frame changed
+
+71 car [340, 510]
+46 car [741, 412]
+0 frame changed
+
+71 car [341, 510]
+46 car [742, 412]
+0 frame changed
+
+71 car [340, 511]
+46 car [742, 412]
+0 frame changed
+
+71 car [340, 511]
+46 car [746, 414]
+0 frame changed
+
+71 car [340, 511]
+46 car [753, 415]
+0 frame changed
+
+71 car [341, 510]
+46 car [766, 421]
+0 frame changed
+
+71 car [340, 510]
+46 car [783, 429]
+0 frame changed
+
+71 car [340, 510]
+46 car [806, 438]
+0 frame changed
+
+71 car [341, 510]
+46 car [831, 450]
+0 frame changed
+
+71 car [341, 510]
+46 car [868, 464]
+0 frame changed
+
+71 car [341, 510]
+46 car [907, 478]
+0 frame changed
+
+71 car [341, 511]
+46 car [964, 498]
+0 frame changed
+
+71 car [341, 511]
+0 frame changed
+
+71 car [341, 511]
+0 frame changed
+
+71 car [341, 511]
+0 frame changed
+
+71 car [342, 510]
+0 frame changed
+
+71 car [341, 510]
+0 frame changed
+
+71 car [342, 510]
+0 frame changed
+
+71 car [342, 510]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [342, 509]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [342, 510]
+0 frame changed
+
+71 car [342, 511]
+0 frame changed
+
+71 car [343, 512]
+0 frame changed
+
+71 car [343, 512]
+0 frame changed
+
+71 car [342, 512]
+0 frame changed
+
+71 car [343, 512]
+0 frame changed
+
+71 car [343, 512]
+0 frame changed
+
+71 car [344, 511]
+0 frame changed
+
+71 car [343, 511]
+0 frame changed
+
+71 car [343, 511]
+0 frame changed
+
+71 car [343, 511]
+0 frame changed
+
+71 car [343, 511]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [344, 510]
+0 frame changed
+
+71 car [344, 510]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [343, 510]
+0 frame changed
+
+71 car [344, 510]
+0 frame changed
+
+71 car [344, 511]
+0 frame changed
+
+71 car [344, 511]
+0 frame changed
+
+71 car [344, 510]
+0 frame changed
+
+71 car [344, 511]
+0 frame changed
+
+71 car [344, 511]
+0 frame changed
+
+71 car [339, 509]
+0 frame changed
+
+71 car [325, 514]
+0 frame changed
+
+71 car [285, 516]
+0 frame changed
+
+71 car [224, 523]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+79 car [572, 341]
+0 frame changed
+
+79 car [596, 347]
+0 frame changed
+
+79 car [620, 357]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+79 car [720, 408]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+93 car [1301, 451]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+102 car [1692, 540]
+0 frame changed
+
+102 car [1577, 519]
+0 frame changed
+
+102 car [1478, 499]
+0 frame changed
+
+102 car [1391, 475]
+0 frame changed
+
+102 car [1319, 455]
+0 frame changed
+
+102 car [1253, 433]
+0 frame changed
+
+102 car [1191, 414]
+0 frame changed
+
+110 car [496, 299]
+0 frame changed
+
+110 car [535, 310]
+0 frame changed
+
+110 car [566, 323]
+0 frame changed
+
+110 car [593, 337]
+0 frame changed
+
+110 car [612, 344]
+0 frame changed
+
+110 car [630, 350]
+0 frame changed
+
+110 car [645, 360]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [674, 379]
+0 frame changed
+
+110 car [681, 384]
+0 frame changed
+
+110 car [685, 386]
+0 frame changed
+
+110 car [686, 386]
+0 frame changed
+
+110 car [687, 387]
+0 frame changed
+
+110 car [685, 387]
+0 frame changed
+
+110 car [686, 387]
+0 frame changed
+
+110 car [684, 387]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [683, 386]
+0 frame changed
+
+110 car [681, 385]
+0 frame changed
+
+110 car [681, 385]
+0 frame changed
+
+110 car [682, 384]
+0 frame changed
+
+148 car [632, 611]
+110 car [682, 385]
+0 frame changed
+
+0 frame changed
+
+123 car [1766, 676]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+138 car [1804, 630]
+110 car [679, 384]
+0 frame changed
+
+115 car [1529, 626]
+110 car [679, 384]
+0 frame changed
+
+110 car [680, 383]
+0 frame changed
+
+110 car [679, 383]
+0 frame changed
+
+110 car [679, 383]
+0 frame changed
+
+110 car [677, 384]
+0 frame changed
+
+110 car [678, 385]
+0 frame changed
+
+110 car [678, 384]
+0 frame changed
+
+110 car [678, 384]
+0 frame changed
+
+110 car [677, 384]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+154 car [1316, 676]
+110 car [679, 384]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+110 car [680, 384]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+110 car [678, 385]
+0 frame changed
+
+110 car [680, 384]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+172 car [780, 440]
+110 car [680, 385]
+0 frame changed
+
+172 car [777, 440]
+110 car [679, 385]
+0 frame changed
+
+172 car [782, 441]
+110 car [681, 385]
+0 frame changed
+
+172 car [786, 442]
+110 car [681, 386]
+0 frame changed
+
+187 car [774, 442]
+172 car [786, 442]
+110 car [681, 385]
+0 frame changed
+
+187 car [776, 443]
+172 car [786, 443]
+110 car [680, 385]
+0 frame changed
+
+110 car [681, 385]
+0 frame changed
+
+110 car [679, 384]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [679, 386]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+110 car [680, 385]
+0 frame changed
+
+110 car [680, 385]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [681, 385]
+0 frame changed
+
+110 car [681, 384]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+110 car [678, 386]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+110 car [680, 386]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+201 car [456, 271]
+110 car [680, 386]
+0 frame changed
+
+201 car [477, 282]
+110 car [679, 385]
+0 frame changed
+
+201 car [497, 293]
+172 car [786, 443]
+110 car [679, 385]
+0 frame changed
+
+172 car [786, 443]
+110 car [677, 385]
+0 frame changed
+
+172 car [786, 442]
+110 car [677, 385]
+0 frame changed
+
+201 car [550, 311]
+172 car [785, 442]
+110 car [675, 385]
+0 frame changed
+
+172 car [785, 442]
+110 car [676, 385]
+0 frame changed
+
+172 car [785, 442]
+110 car [675, 385]
+0 frame changed
+
+172 car [786, 443]
+110 car [676, 385]
+0 frame changed
+
+172 car [786, 442]
+110 car [676, 385]
+0 frame changed
+
+110 car [676, 385]
+0 frame changed
+
+110 car [678, 385]
+0 frame changed
+
+110 car [679, 385]
+0 frame changed
+
+172 car [787, 442]
+110 car [678, 384]
+0 frame changed
+
+209 car [466, 283]
+172 car [787, 442]
+110 car [679, 385]
+0 frame changed
+
+110 car [680, 384]
+0 frame changed
+
+110 car [680, 386]
+0 frame changed
+
+209 car [531, 306]
+172 car [786, 443]
+110 car [679, 386]
+0 frame changed
+
+172 car [786, 442]
+110 car [678, 385]
+0 frame changed
+
+172 car [786, 443]
+110 car [678, 386]
+0 frame changed
+
+210 car [560, 399]
+209 car [569, 323]
+172 car [780, 442]
+110 car [679, 385]
+0 frame changed
+
+210 car [562, 398]
+209 car [575, 325]
+172 car [773, 441]
+110 car [679, 385]
+0 frame changed
+
+210 car [564, 402]
+209 car [576, 325]
+172 car [775, 442]
+110 car [678, 385]
+0 frame changed
+
+214 car [572, 402]
+209 car [578, 326]
+172 car [776, 444]
+110 car [682, 385]
+0 frame changed
+
+215 car [453, 282]
+214 car [572, 400]
+209 car [576, 328]
+172 car [776, 445]
+110 car [682, 384]
+0 frame changed
+
+215 car [461, 285]
+214 car [572, 401]
+209 car [580, 333]
+172 car [776, 444]
+110 car [681, 385]
+0 frame changed
+
+215 car [467, 288]
+214 car [572, 401]
+172 car [776, 444]
+110 car [681, 384]
+0 frame changed
+
+217 car [576, 325]
+215 car [469, 289]
+214 car [571, 401]
+172 car [778, 446]
+110 car [681, 385]
+0 frame changed
+
+217 car [578, 328]
+215 car [473, 289]
+214 car [571, 402]
+172 car [779, 447]
+110 car [682, 386]
+0 frame changed
+
+217 car [580, 328]
+215 car [478, 292]
+210 car [567, 395]
+172 car [779, 447]
+110 car [682, 386]
+0 frame changed
+
+217 car [581, 329]
+215 car [486, 293]
+210 car [565, 395]
+172 car [781, 448]
+110 car [681, 386]
+0 frame changed
+
+217 car [579, 326]
+215 car [486, 294]
+214 car [570, 401]
+172 car [783, 448]
+110 car [681, 387]
+0 frame changed
+
+217 car [580, 327]
+215 car [484, 295]
+172 car [781, 448]
+110 car [681, 387]
+0 frame changed
+
+217 car [579, 326]
+215 car [482, 295]
+172 car [782, 448]
+110 car [681, 387]
+0 frame changed
+
+217 car [579, 327]
+215 car [482, 295]
+214 car [569, 400]
+172 car [783, 448]
+110 car [680, 388]
+0 frame changed
+
+217 car [579, 328]
+215 car [482, 294]
+210 car [565, 395]
+172 car [784, 449]
+110 car [681, 388]
+0 frame changed
+
+217 car [579, 328]
+215 car [482, 295]
+210 car [564, 395]
+172 car [783, 449]
+110 car [681, 387]
+0 frame changed
+
+217 car [580, 329]
+215 car [481, 295]
+210 car [566, 395]
+172 car [785, 448]
+110 car [682, 387]
+0 frame changed
+
+217 car [580, 329]
+215 car [481, 294]
+210 car [566, 395]
+172 car [785, 447]
+110 car [683, 387]
+0 frame changed
+
+217 car [579, 327]
+215 car [481, 294]
+210 car [567, 396]
+172 car [786, 447]
+110 car [682, 387]
+0 frame changed
+
+217 car [578, 326]
+215 car [481, 295]
+210 car [567, 398]
+172 car [785, 447]
+110 car [681, 387]
+0 frame changed
+
+217 car [577, 325]
+215 car [481, 294]
+210 car [567, 398]
+172 car [785, 450]
+110 car [681, 386]
+0 frame changed
+
+217 car [575, 324]
+215 car [481, 294]
+210 car [567, 398]
+172 car [785, 450]
+110 car [682, 386]
+0 frame changed
+
+217 car [576, 324]
+215 car [481, 294]
+210 car [568, 399]
+172 car [785, 450]
+110 car [682, 386]
+0 frame changed
+
+217 car [578, 327]
+215 car [481, 294]
+172 car [786, 450]
+110 car [682, 386]
+0 frame changed
+
+217 car [576, 326]
+215 car [481, 294]
+214 car [569, 401]
+172 car [782, 450]
+110 car [681, 387]
+0 frame changed
+
+217 car [578, 328]
+215 car [481, 294]
+214 car [570, 400]
+210 car [565, 397]
+172 car [785, 452]
+110 car [682, 388]
+0 frame changed
+
+217 car [574, 327]
+215 car [485, 295]
+214 car [569, 401]
+210 car [565, 397]
+172 car [779, 448]
+110 car [681, 387]
+0 frame changed
+
+217 car [576, 325]
+215 car [484, 294]
+210 car [563, 399]
+172 car [783, 449]
+110 car [682, 387]
+0 frame changed
+
+217 car [575, 325]
+215 car [486, 295]
+210 car [565, 398]
+172 car [781, 449]
+110 car [683, 388]
+0 frame changed
+
+217 car [578, 328]
+215 car [484, 293]
+214 car [570, 402]
+172 car [783, 451]
+110 car [683, 386]
+0 frame changed
+
+217 car [576, 325]
+215 car [483, 295]
+214 car [569, 401]
+172 car [780, 449]
+110 car [683, 386]
+0 frame changed
+
+217 car [578, 327]
+215 car [481, 295]
+210 car [565, 396]
+172 car [785, 451]
+110 car [682, 387]
+0 frame changed
+
+217 car [576, 326]
+215 car [481, 294]
+210 car [566, 396]
+172 car [786, 449]
+110 car [681, 387]
+0 frame changed
+
+217 car [579, 328]
+215 car [485, 294]
+214 car [569, 400]
+210 car [565, 395]
+172 car [786, 448]
+110 car [682, 386]
+0 frame changed
+
+217 car [576, 326]
+215 car [486, 295]
+210 car [566, 397]
+172 car [786, 451]
+110 car [682, 385]
+0 frame changed
+
+217 car [577, 325]
+215 car [482, 294]
+172 car [788, 452]
+110 car [682, 387]
+0 frame changed
+
+217 car [576, 325]
+215 car [484, 295]
+214 car [569, 401]
+172 car [787, 452]
+110 car [682, 386]
+0 frame changed
+
+217 car [578, 327]
+215 car [483, 294]
+214 car [569, 399]
+210 car [564, 395]
+172 car [787, 450]
+110 car [682, 386]
+0 frame changed
+
+217 car [577, 326]
+215 car [482, 294]
+214 car [569, 401]
+210 car [567, 395]
+172 car [783, 449]
+110 car [685, 386]
+0 frame changed
+
+217 car [579, 328]
+215 car [481, 294]
+214 car [570, 400]
+210 car [564, 394]
+172 car [785, 450]
+110 car [684, 386]
+0 frame changed
+
+217 car [578, 326]
+215 car [481, 294]
+214 car [569, 400]
+210 car [565, 395]
+172 car [784, 449]
+110 car [684, 386]
+0 frame changed
+
+217 car [579, 328]
+215 car [482, 294]
+214 car [569, 399]
+210 car [565, 393]
+172 car [786, 448]
+110 car [683, 385]
+0 frame changed
+
+217 car [578, 326]
+215 car [481, 294]
+214 car [569, 400]
+172 car [785, 448]
+110 car [684, 386]
+0 frame changed
+
+220 car [422, 194]
+217 car [579, 327]
+215 car [481, 294]
+214 car [568, 399]
+172 car [786, 448]
+110 car [684, 385]
+0 frame changed
+
+217 car [577, 325]
+215 car [480, 294]
+214 car [570, 401]
+210 car [565, 397]
+172 car [788, 448]
+110 car [683, 386]
+0 frame changed
+
+217 car [579, 327]
+215 car [481, 294]
+214 car [570, 398]
+210 car [564, 394]
+172 car [789, 449]
+110 car [683, 385]
+0 frame changed
+
+217 car [577, 325]
+215 car [480, 294]
+214 car [569, 399]
+210 car [565, 395]
+172 car [789, 449]
+110 car [683, 385]
+0 frame changed
+
+217 car [579, 327]
+215 car [481, 294]
+214 car [570, 400]
+172 car [788, 448]
+110 car [682, 385]
+0 frame changed
+
+217 car [577, 326]
+215 car [480, 294]
+214 car [570, 400]
+172 car [788, 450]
+110 car [683, 386]
+0 frame changed
+
+217 car [578, 327]
+215 car [481, 294]
+214 car [570, 400]
+172 car [791, 451]
+110 car [684, 386]
+0 frame changed
+
+217 car [575, 325]
+215 car [480, 293]
+214 car [569, 400]
+172 car [792, 452]
+110 car [683, 385]
+0 frame changed
+
+217 car [576, 326]
+215 car [480, 293]
+214 car [570, 402]
+210 car [565, 396]
+172 car [794, 452]
+110 car [682, 385]
+0 frame changed
+
+217 car [575, 327]
+215 car [481, 294]
+214 car [572, 402]
+172 car [794, 453]
+110 car [683, 386]
+0 frame changed
+
+217 car [577, 329]
+215 car [482, 294]
+172 car [798, 452]
+110 car [685, 386]
+0 frame changed
+
+217 car [577, 329]
+215 car [481, 294]
+210 car [579, 411]
+172 car [806, 457]
+110 car [683, 386]
+0 frame changed
+
+217 car [576, 327]
+215 car [484, 294]
+210 car [581, 417]
+172 car [823, 463]
+0 frame changed
+
+217 car [578, 326]
+215 car [483, 294]
+210 car [581, 426]
+172 car [845, 475]
+0 frame changed
+
+217 car [581, 328]
+215 car [486, 294]
+110 car [680, 383]
+0 frame changed
+
+215 car [488, 295]
+110 car [685, 386]
+0 frame changed
+
+222 car [597, 339]
+215 car [487, 296]
+210 car [595, 475]
+110 car [694, 397]
+0 frame changed
+
+222 car [600, 341]
+215 car [487, 296]
+110 car [708, 403]
+0 frame changed
+
+222 car [615, 345]
+215 car [489, 297]
+110 car [730, 414]
+0 frame changed
+
+224 car [614, 590]
+222 car [633, 351]
+215 car [491, 298]
+110 car [761, 433]
+0 frame changed
+
+224 car [620, 637]
+215 car [495, 299]
+0 frame changed
+
+224 car [636, 681]
+215 car [501, 302]
+0 frame changed
+
+224 car [655, 738]
+222 car [705, 390]
+215 car [510, 307]
+0 frame changed
+
+230 car [442, 264]
+224 car [682, 814]
+222 car [740, 408]
+215 car [525, 313]
+0 frame changed
+
+230 car [451, 273]
+224 car [722, 899]
+215 car [542, 319]
+0 frame changed
+
+230 car [456, 273]
+224 car [773, 973]
+110 car [820, 451]
+0 frame changed
+
+230 car [464, 277]
+217 car [576, 339]
+0 frame changed
+
+230 car [476, 283]
+217 car [604, 347]
+0 frame changed
+
+230 car [493, 292]
+0 frame changed
+
+234 car [680, 385]
+230 car [513, 300]
+0 frame changed
+
+234 car [715, 403]
+230 car [537, 310]
+0 frame changed
+
+234 car [757, 423]
+230 car [557, 321]
+0 frame changed
+
+234 car [808, 447]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+238 car [827, 445]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+246 car [452, 319]
+0 frame changed
+
+247 bicycle [229, 397]
+246 car [469, 329]
+0 frame changed
+
+247 bicycle [223, 389]
+246 car [484, 338]
+0 frame changed
+
+247 bicycle [220, 384]
+246 car [501, 344]
+0 frame changed
+
+246 car [517, 357]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+246 car [564, 388]
+0 frame changed
+
+246 car [575, 400]
+0 frame changed
+
+246 car [581, 405]
+0 frame changed
+
+248 car [578, 406]
+0 frame changed
+
+248 car [583, 412]
+0 frame changed
+
+248 car [585, 414]
+0 frame changed
+
+248 car [587, 415]
+0 frame changed
+
+248 car [587, 412]
+0 frame changed
+
+248 car [585, 414]
+0 frame changed
+
+248 car [587, 413]
+0 frame changed
+
+249 car [1678, 722]
+248 car [585, 413]
+0 frame changed
+
+249 car [1599, 653]
+248 car [586, 414]
+0 frame changed
+
+248 car [586, 413]
+0 frame changed
+
+248 car [585, 414]
+0 frame changed
+
+248 car [585, 414]
+0 frame changed
+
+248 car [586, 413]
+0 frame changed
+
+248 car [585, 413]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [583, 411]
+0 frame changed
+
+256 car [583, 412]
+0 frame changed
+
+256 car [583, 412]
+0 frame changed
+
+256 car [582, 410]
+0 frame changed
+
+256 car [582, 410]
+0 frame changed
+
+256 car [582, 411]
+0 frame changed
+
+256 car [583, 411]
+0 frame changed
+
+256 car [584, 412]
+0 frame changed
+
+256 car [586, 411]
+0 frame changed
+
+256 car [584, 411]
+0 frame changed
+
+256 car [585, 411]
+0 frame changed
+
+256 car [585, 411]
+0 frame changed
+
+256 car [584, 412]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [581, 410]
+0 frame changed
+
+256 car [584, 409]
+0 frame changed
+
+256 car [583, 410]
+0 frame changed
+
+256 car [584, 409]
+0 frame changed
+
+256 car [586, 410]
+0 frame changed
+
+256 car [584, 411]
+0 frame changed
+
+256 car [586, 411]
+0 frame changed
+
+256 car [585, 410]
+0 frame changed
+
+260 car [556, 324]
+256 car [583, 410]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+256 car [585, 410]
+0 frame changed
+
+256 car [586, 411]
+0 frame changed
+
+256 car [584, 412]
+0 frame changed
+
+256 car [584, 412]
+0 frame changed
+
+256 car [584, 413]
+0 frame changed
+
+256 car [584, 415]
+0 frame changed
+
+256 car [584, 415]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [583, 412]
+0 frame changed
+
+256 car [585, 413]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [582, 413]
+0 frame changed
+
+256 car [582, 413]
+0 frame changed
+
+256 car [583, 414]
+0 frame changed
+
+256 car [583, 414]
+0 frame changed
+
+256 car [583, 414]
+0 frame changed
+
+256 car [583, 414]
+0 frame changed
+
+256 car [583, 413]
+0 frame changed
+
+256 car [585, 412]
+0 frame changed
+
+256 car [586, 413]
+0 frame changed
+
+256 car [593, 413]
+0 frame changed
+
+256 car [589, 410]
+0 frame changed
+
+256 car [589, 410]
+0 frame changed
+
+273 car [1296, 545]
+256 car [589, 409]
+0 frame changed
+
+256 car [589, 409]
+0 frame changed
+
+256 car [588, 409]
+0 frame changed
+
+256 car [588, 410]
+0 frame changed
+
+282 car [627, 202]
+0 frame changed
+
+0 frame changed
+
+256 car [588, 409]
+0 frame changed
+
+1 car [686, 391]
+0 frame changed
+
+1 car [690, 400]
+0 frame changed
+
+1 car [692, 402]
+0 frame changed
+
+1 car [701, 404]
+0 frame changed
+
+1 car [705, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [712, 406]
+0 frame changed
+
+1 car [712, 405]
+0 frame changed
+
+3 car [530, 707]
+1 car [710, 405]
+0 frame changed
+
+3 car [741, 673]
+1 car [710, 406]
+0 frame changed
+
+3 car [909, 641]
+1 car [712, 407]
+0 frame changed
+
+3 car [1052, 607]
+1 car [711, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [707, 407]
+0 frame changed
+
+1 car [706, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+9 bicycle [1800, 510]
+1 car [710, 406]
+0 frame changed
+
+9 bicycle [1789, 506]
+1 car [710, 405]
+0 frame changed
+
+9 bicycle [1777, 501]
+1 car [708, 405]
+0 frame changed
+
+9 bicycle [1766, 493]
+1 car [709, 405]
+0 frame changed
+
+9 bicycle [1757, 487]
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [711, 405]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [711, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+15 car [602, 928]
+1 car [709, 406]
+0 frame changed
+
+19 car [1804, 611]
+1 car [708, 405]
+0 frame changed
+
+1 car [707, 405]
+0 frame changed
+
+1 car [706, 406]
+0 frame changed
+
+1 car [704, 405]
+0 frame changed
+
+1 car [705, 405]
+0 frame changed
+
+1 car [707, 405]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+38 car [1234, 616]
+1 car [711, 407]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+47 car [479, 362]
+1 car [709, 406]
+0 frame changed
+
+1 car [706, 405]
+0 frame changed
+
+1 car [708, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+47 car [532, 423]
+1 car [709, 406]
+0 frame changed
+
+47 car [539, 438]
+1 car [707, 406]
+0 frame changed
+
+1 car [708, 408]
+0 frame changed
+
+1 car [706, 407]
+0 frame changed
+
+47 car [501, 479]
+1 car [705, 406]
+0 frame changed
+
+47 car [478, 485]
+1 car [704, 406]
+0 frame changed
+
+47 car [431, 490]
+1 car [707, 406]
+0 frame changed
+
+47 car [365, 499]
+1 car [705, 406]
+0 frame changed
+
+47 car [269, 513]
+1 car [708, 407]
+0 frame changed
+
+47 car [180, 525]
+1 car [706, 406]
+0 frame changed
+
+47 car [100, 525]
+1 car [705, 405]
+0 frame changed
+
+1 car [705, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [708, 405]
+0 frame changed
+
+1 car [708, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [706, 406]
+0 frame changed
+
+1 car [707, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [707, 405]
+0 frame changed
+
+1 car [707, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 408]
+0 frame changed
+
+1 car [709, 408]
+0 frame changed
+
+1 car [709, 408]
+0 frame changed
+
+1 car [708, 408]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [706, 405]
+0 frame changed
+
+1 car [708, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [705, 406]
+0 frame changed
+
+1 car [706, 405]
+0 frame changed
+
+1 car [707, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [710, 408]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+66 car [545, 916]
+1 car [708, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [708, 407]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [711, 407]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [711, 407]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [711, 405]
+0 frame changed
+
+1 car [711, 405]
+0 frame changed
+
+1 car [711, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [708, 405]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 405]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 405]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 407]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+85 car [1720, 909]
+1 car [710, 406]
+0 frame changed
+
+85 car [1621, 937]
+1 car [710, 406]
+0 frame changed
+
+85 car [1505, 965]
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+86 car [442, 285]
+1 car [709, 406]
+0 frame changed
+
+86 car [452, 293]
+1 car [711, 406]
+0 frame changed
+
+86 car [469, 303]
+1 car [712, 406]
+0 frame changed
+
+1 car [711, 406]
+0 frame changed
+
+1 car [710, 406]
+0 frame changed
+
+86 car [506, 336]
+1 car [709, 406]
+0 frame changed
+
+86 car [516, 346]
+1 car [708, 406]
+0 frame changed
+
+86 car [524, 353]
+1 car [708, 406]
+0 frame changed
+
+1 car [709, 406]
+0 frame changed
+
+1 car [709, 407]
+0 frame changed
+
+86 car [553, 384]
+1 car [709, 407]
+0 frame changed
+
+86 car [561, 393]
+1 car [709, 407]
+0 frame changed
+
+86 car [568, 397]
+1 car [709, 407]
+0 frame changed
+
+86 car [573, 403]
+1 car [710, 407]
+0 frame changed
+
+86 car [576, 408]
+1 car [710, 407]
+0 frame changed
+
+86 car [579, 411]
+1 car [711, 411]
+0 frame changed
+
+86 car [583, 417]
+1 car [713, 413]
+0 frame changed
+
+86 car [584, 424]
+1 car [716, 415]
+0 frame changed
+
+86 car [580, 439]
+1 car [728, 419]
+0 frame changed
+
+86 car [574, 457]
+1 car [744, 424]
+0 frame changed
+
+86 car [565, 464]
+1 car [766, 436]
+0 frame changed
+
+1 car [784, 448]
+0 frame changed
+
+0 frame changed
+
+86 car [528, 524]
+0 frame changed
+
+86 car [519, 555]
+0 frame changed
+
+86 car [505, 586]
+0 frame changed
+
+86 car [493, 625]
+0 frame changed
+
+86 car [489, 669]
+0 frame changed
+
+88 car [1456, 651]
+86 car [484, 715]
+0 frame changed
+
+88 car [1659, 693]
+86 car [487, 768]
+0 frame changed
+
+88 car [1820, 729]
+86 car [490, 844]
+0 frame changed
+
+86 car [505, 921]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+101 car [486, 296]
+0 frame changed
+
+101 car [516, 304]
+0 frame changed
+
+101 car [544, 316]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+101 car [635, 357]
+0 frame changed
+
+101 car [652, 366]
+0 frame changed
+
+101 car [672, 378]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+102 car [740, 419]
+0 frame changed
+
+102 car [739, 417]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+111 car [633, 204]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+113 car [1625, 529]
+0 frame changed
+
+113 car [1527, 507]
+0 frame changed
+
+113 car [1446, 482]
+0 frame changed
+
+113 car [1374, 458]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+113 car [1205, 404]
+112 car [743, 418]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [735, 418]
+0 frame changed
+
+141 car [736, 417]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [734, 416]
+0 frame changed
+
+141 car [736, 415]
+0 frame changed
+
+141 car [736, 414]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [737, 415]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+132 car [1788, 652]
+0 frame changed
+
+147 car [1488, 654]
+0 frame changed
+
+137 car [1124, 648]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [730, 411]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+194 car [1485, 898]
+0 frame changed
+
+194 car [1313, 951]
+0 frame changed
+
+195 car [442, 316]
+0 frame changed
+
+195 car [456, 325]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+195 car [577, 414]
+0 frame changed
+
+195 car [580, 420]
+0 frame changed
+
+195 car [584, 423]
+0 frame changed
+
+195 car [586, 426]
+0 frame changed
+
+195 car [584, 429]
+0 frame changed
+
+195 car [585, 429]
+0 frame changed
+
+198 car [1766, 944]
+195 car [587, 431]
+0 frame changed
+
+195 car [586, 431]
+0 frame changed
+
+199 car [441, 336]
+195 car [588, 432]
+0 frame changed
+
+199 car [446, 339]
+195 car [585, 431]
+0 frame changed
+
+199 car [454, 343]
+195 car [586, 433]
+0 frame changed
+
+199 car [458, 345]
+195 car [585, 435]
+0 frame changed
+
+199 car [461, 351]
+195 car [585, 434]
+0 frame changed
+
+199 car [465, 354]
+195 car [584, 434]
+0 frame changed
+
+199 car [469, 359]
+195 car [581, 432]
+0 frame changed
+
+199 car [473, 362]
+195 car [580, 430]
+0 frame changed
+
+199 car [475, 363]
+195 car [581, 434]
+0 frame changed
+
+199 car [482, 366]
+195 car [580, 431]
+0 frame changed
+
+202 car [438, 301]
+199 car [488, 376]
+195 car [581, 430]
+0 frame changed
+
+202 car [441, 302]
+199 car [489, 376]
+195 car [579, 431]
+0 frame changed
+
+202 car [443, 302]
+199 car [492, 378]
+195 car [580, 431]
+0 frame changed
+
+202 car [443, 303]
+199 car [494, 380]
+195 car [584, 436]
+0 frame changed
+
+202 car [449, 306]
+199 car [496, 381]
+195 car [587, 440]
+0 frame changed
+
+202 car [455, 306]
+199 car [498, 383]
+195 car [589, 447]
+0 frame changed
+
+202 car [462, 314]
+199 car [500, 386]
+195 car [596, 457]
+0 frame changed
+
+202 car [470, 318]
+199 car [504, 390]
+195 car [602, 463]
+0 frame changed
+
+202 car [479, 323]
+199 car [511, 395]
+195 car [608, 474]
+0 frame changed
+
+207 car [727, 406]
+202 car [487, 328]
+199 car [516, 400]
+0 frame changed
+
+208 car [633, 341]
+207 car [755, 407]
+202 car [493, 336]
+199 car [526, 410]
+0 frame changed
+
+207 car [788, 420]
+202 car [500, 340]
+199 car [537, 420]
+195 car [640, 548]
+0 frame changed
+
+207 car [833, 438]
+202 car [507, 349]
+199 car [548, 435]
+195 car [657, 584]
+0 frame changed
+
+208 car [665, 366]
+207 car [887, 455]
+202 car [514, 356]
+199 car [562, 450]
+195 car [681, 635]
+0 frame changed
+
+208 car [693, 384]
+199 car [581, 463]
+195 car [709, 687]
+0 frame changed
+
+199 car [596, 477]
+0 frame changed
+
+199 car [610, 501]
+0 frame changed
+
+212 car [880, 959]
+208 car [803, 432]
+199 car [621, 529]
+0 frame changed
+
+208 car [859, 451]
+199 car [630, 555]
+0 frame changed
+
+202 car [590, 429]
+199 car [648, 592]
+0 frame changed
+
+199 car [666, 632]
+0 frame changed
+
+199 car [684, 683]
+0 frame changed
+
+199 car [709, 729]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+215 car [830, 955]
+0 frame changed
+
+0 frame changed
+
+216 car [810, 737]
+0 frame changed
+
+216 car [869, 805]
+0 frame changed
+
+216 car [924, 899]
+0 frame changed
+
+216 car [1012, 969]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+1 car [40, 565]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+6 car [203, 853]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+19 car [470, 347]
+0 frame changed
+
+19 car [489, 362]
+0 frame changed
+
+19 car [502, 380]
+0 frame changed
+
+19 car [517, 402]
+0 frame changed
+
+19 car [524, 416]
+0 frame changed
+
+19 car [523, 432]
+0 frame changed
+
+19 car [508, 456]
+0 frame changed
+
+19 car [473, 478]
+18 car [573, 204]
+0 frame changed
+
+18 car [592, 204]
+0 frame changed
+
+18 car [611, 203]
+0 frame changed
+
+18 car [622, 202]
+0 frame changed
+
+18 car [635, 202]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+28 car [1266, 638]
+0 frame changed
+
+28 car [1349, 611]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+29 car [1163, 621]
+0 frame changed
+
+29 car [1245, 594]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+30 car [1301, 450]
+0 frame changed
+
+30 car [1271, 430]
+0 frame changed
+
+30 car [1231, 412]
+0 frame changed
+
+30 car [1187, 394]
+0 frame changed
+
+31 car [1692, 540]
+0 frame changed
+
+31 car [1590, 519]
+0 frame changed
+
+31 car [1491, 497]
+30 car [1043, 341]
+0 frame changed
+
+31 car [1407, 471]
+0 frame changed
+
+31 car [1326, 452]
+0 frame changed
+
+31 car [1256, 429]
+0 frame changed
+
+31 car [1188, 410]
+0 frame changed
+
+33 car [1661, 527]
+31 car [1129, 386]
+0 frame changed
+
+33 car [1532, 498]
+0 frame changed
+
+33 car [1427, 466]
+0 frame changed
+
+33 car [1334, 445]
+0 frame changed
+
+33 car [1254, 419]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+39 car [1742, 541]
+0 frame changed
+
+39 car [1648, 526]
+0 frame changed
+
+39 car [1574, 512]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+52 car [1625, 654]
+0 frame changed
+
+52 car [1650, 620]
+0 frame changed
+
+57 car [1399, 599]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+65 car [1334, 653]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+63 car [1817, 658]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+74 car [1715, 648]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+85 car [1721, 552]
+78 car [489, 635]
+0 frame changed
+
+85 car [1623, 535]
+78 car [475, 678]
+0 frame changed
+
+85 car [1528, 509]
+0 frame changed
+
+85 car [1454, 492]
+0 frame changed
+
+85 car [1390, 467]
+0 frame changed
+
+85 car [1333, 450]
+0 frame changed
+
+85 car [1280, 433]
+0 frame changed
+
+85 car [1235, 415]
+0 frame changed
+
+85 car [1178, 398]
+0 frame changed
+
+85 car [1133, 381]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+85 car [1019, 337]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+91 car [423, 321]
+0 frame changed
+
+91 car [423, 322]
+0 frame changed
+
+91 car [423, 322]
+0 frame changed
+
+91 car [423, 322]
+0 frame changed
+
+91 car [424, 320]
+0 frame changed
+
+91 car [427, 320]
+0 frame changed
+
+91 car [428, 321]
+0 frame changed
+
+91 car [428, 320]
+0 frame changed
+
+91 car [430, 319]
+0 frame changed
+
+91 car [431, 321]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+91 car [435, 320]
+0 frame changed
+
+91 car [438, 321]
+0 frame changed
+
+100 car [447, 344]
+0 frame changed
+
+100 car [451, 344]
+0 frame changed
+
+105 car [420, 193]
+104 car [561, 206]
+100 car [457, 344]
+91 car [444, 303]
+0 frame changed
+
+104 car [587, 203]
+100 car [466, 355]
+91 car [445, 301]
+0 frame changed
+
+104 car [617, 202]
+100 car [470, 349]
+0 frame changed
+
+104 car [633, 202]
+100 car [482, 371]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+100 car [507, 395]
+0 frame changed
+
+100 car [513, 401]
+0 frame changed
+
+100 car [521, 400]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+107 car [498, 449]
+0 frame changed
+
+109 car [546, 370]
+107 car [485, 456]
+0 frame changed
+
+109 car [563, 380]
+107 car [468, 465]
+0 frame changed
+
+109 car [572, 390]
+107 car [453, 469]
+0 frame changed
+
+109 car [577, 399]
+107 car [435, 476]
+0 frame changed
+
+109 car [584, 402]
+107 car [420, 479]
+100 car [579, 404]
+0 frame changed
+
+109 car [587, 405]
+107 car [400, 484]
+0 frame changed
+
+109 car [590, 407]
+107 car [377, 493]
+0 frame changed
+
+109 car [591, 409]
+107 car [348, 499]
+0 frame changed
+
+109 car [592, 409]
+107 car [308, 503]
+0 frame changed
+
+109 car [592, 408]
+107 car [258, 512]
+0 frame changed
+
+107 car [192, 520]
+0 frame changed
+
+100 car [588, 407]
+0 frame changed
+
+117 car [72, 522]
+100 car [586, 406]
+0 frame changed
+
+100 car [587, 406]
+0 frame changed
+
+100 car [586, 406]
+0 frame changed
+
+100 car [587, 406]
+0 frame changed
+
+100 car [587, 406]
+0 frame changed
+
+100 car [588, 407]
+0 frame changed
+
+100 car [586, 406]
+0 frame changed
+
+100 car [586, 406]
+0 frame changed
+
+100 car [585, 405]
+0 frame changed
+
+100 car [587, 406]
+0 frame changed
+
+100 car [584, 406]
+0 frame changed
+
+100 car [587, 406]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 405]
+0 frame changed
+
+100 car [587, 405]
+0 frame changed
+
+100 car [588, 406]
+0 frame changed
+
+120 car [581, 405]
+100 car [587, 405]
+0 frame changed
+
+100 car [587, 405]
+0 frame changed
+
+100 car [587, 405]
+0 frame changed
+
+120 car [581, 406]
+100 car [587, 405]
+0 frame changed
+
+120 car [579, 404]
+100 car [587, 404]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 406]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 405]
+0 frame changed
+
+120 car [586, 407]
+100 car [588, 406]
+0 frame changed
+
+120 car [583, 406]
+100 car [588, 405]
+0 frame changed
+
+120 car [585, 407]
+100 car [587, 406]
+0 frame changed
+
+120 car [586, 407]
+100 car [587, 406]
+0 frame changed
+
+120 car [583, 406]
+100 car [587, 405]
+0 frame changed
+
+120 car [583, 406]
+100 car [587, 404]
+0 frame changed
+
+120 car [581, 405]
+100 car [588, 404]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 405]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 406]
+0 frame changed
+
+120 car [582, 406]
+100 car [587, 405]
+0 frame changed
+
+120 car [582, 406]
+100 car [586, 405]
+0 frame changed
+
+120 car [582, 407]
+100 car [587, 405]
+0 frame changed
+
+100 car [588, 404]
+0 frame changed
+
+100 car [588, 405]
+0 frame changed
+
+100 car [588, 406]
+0 frame changed
+
+100 car [589, 406]
+0 frame changed
+
+100 car [588, 405]
+0 frame changed
+
+100 car [588, 406]
+0 frame changed
+
+100 car [588, 406]
+0 frame changed
+
+120 car [585, 406]
+100 car [587, 406]
+0 frame changed
+
+120 car [582, 406]
+100 car [586, 405]
+0 frame changed
+
+100 car [588, 406]
+0 frame changed
+
+100 car [588, 405]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 405]
+0 frame changed
+
+120 car [582, 407]
+100 car [588, 406]
+0 frame changed
+
+120 car [582, 406]
+100 car [588, 405]
+0 frame changed
+
+120 car [582, 407]
+100 car [587, 405]
+0 frame changed
+
+120 car [585, 408]
+100 car [587, 406]
+0 frame changed
+
+120 car [587, 408]
+100 car [585, 406]
+0 frame changed
+
+120 car [584, 408]
+100 car [586, 406]
+0 frame changed
+
+120 car [583, 408]
+100 car [586, 406]
+0 frame changed
+
+120 car [585, 407]
+100 car [587, 406]
+0 frame changed
+
+120 car [586, 407]
+100 car [588, 406]
+0 frame changed
+
+120 car [583, 407]
+100 car [587, 406]
+0 frame changed
+
+100 car [587, 405]
+0 frame changed
+
+100 car [588, 405]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+100 car [585, 405]
+0 frame changed
+
+100 car [594, 407]
+0 frame changed
+
+120 car [600, 416]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+130 car [722, 539]
+0 frame changed
+
+130 car [738, 578]
+0 frame changed
+
+130 car [762, 620]
+0 frame changed
+
+130 car [787, 662]
+0 frame changed
+
+130 car [815, 719]
+0 frame changed
+
+130 car [864, 785]
+0 frame changed
+
+130 car [913, 872]
+0 frame changed
+
+130 car [984, 956]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+132 car [211, 721]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+141 car [1298, 546]
+0 frame changed
+
+141 car [1341, 528]
+0 frame changed
+
+141 car [1356, 495]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+142 car [1185, 398]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+142 car [1028, 339]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+153 car [514, 295]
+0 frame changed
+
+153 car [547, 306]
+0 frame changed
+
+153 car [573, 323]
+0 frame changed
+
+153 car [604, 336]
+0 frame changed
+
+153 car [628, 345]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+153 car [723, 390]
+0 frame changed
+
+153 car [748, 402]
+0 frame changed
+
+153 car [761, 409]
+0 frame changed
+
+153 car [774, 411]
+0 frame changed
+
+153 car [784, 418]
+0 frame changed
+
+153 car [790, 423]
+0 frame changed
+
+153 car [791, 424]
+0 frame changed
+
+153 car [792, 424]
+0 frame changed
+
+153 car [788, 425]
+0 frame changed
+
+153 car [789, 423]
+0 frame changed
+
+153 car [788, 424]
+0 frame changed
+
+153 car [789, 425]
+0 frame changed
+
+153 car [787, 424]
+0 frame changed
+
+153 car [789, 423]
+0 frame changed
+
+153 car [786, 423]
+0 frame changed
+
+153 car [788, 423]
+0 frame changed
+
+153 car [786, 423]
+0 frame changed
+
+162 car [1699, 544]
+153 car [787, 423]
+0 frame changed
+
+153 car [785, 423]
+0 frame changed
+
+153 car [785, 422]
+0 frame changed
+
+160 car [1718, 622]
+153 car [784, 422]
+0 frame changed
+
+181 car [1405, 607]
+153 car [785, 422]
+0 frame changed
+
+165 car [1070, 604]
+153 car [783, 423]
+0 frame changed
+
+153 car [784, 422]
+0 frame changed
+
+186 car [1158, 401]
+153 car [781, 421]
+0 frame changed
+
+153 car [784, 419]
+0 frame changed
+
+153 car [782, 420]
+0 frame changed
+
+153 car [783, 421]
+0 frame changed
+
+189 car [1820, 620]
+153 car [782, 421]
+0 frame changed
+
+189 car [1829, 671]
+153 car [783, 421]
+0 frame changed
+
+153 car [783, 418]
+0 frame changed
+
+153 car [783, 420]
+0 frame changed
+
+165 car [749, 675]
+153 car [783, 423]
+0 frame changed
+
+153 car [784, 422]
+0 frame changed
+
+153 car [783, 422]
+0 frame changed
+
+194 car [447, 304]
+153 car [784, 422]
+0 frame changed
+
+153 car [782, 422]
+0 frame changed
+
+153 car [783, 421]
+0 frame changed
+
+153 car [782, 423]
+0 frame changed
+
+196 car [499, 347]
+153 car [783, 422]
+0 frame changed
+
+160 car [1628, 626]
+153 car [782, 421]
+0 frame changed
+
+153 car [783, 421]
+0 frame changed
+
+196 car [531, 366]
+153 car [782, 422]
+0 frame changed
+
+196 car [537, 374]
+191 car [521, 639]
+153 car [783, 421]
+0 frame changed
+
+153 car [782, 423]
+0 frame changed
+
+153 car [782, 422]
+0 frame changed
+
+153 car [783, 421]
+0 frame changed
+
+196 car [561, 403]
+153 car [783, 422]
+0 frame changed
+
+210 car [574, 403]
+196 car [565, 404]
+153 car [783, 421]
+0 frame changed
+
+210 car [578, 404]
+153 car [783, 421]
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+0 frame changed
+
+210 car [592, 420]
+153 car [783, 423]
+0 frame changed
+
+210 car [593, 424]
+153 car [782, 423]
+0 frame changed
+
+210 car [597, 425]
+198 car [1248, 651]
+153 car [783, 422]
+0 frame changed
+
+210 car [596, 426]
+172 car [818, 657]
+153 car [782, 423]
+0 frame changed
+
+210 car [599, 425]
+183 car [398, 717]
+153 car [782, 423]
+0 frame changed
+
+210 car [599, 424]
+153 car [782, 422]
+0 frame changed
+
+210 car [599, 426]
+153 car [783, 420]
+0 frame changed
+
+210 car [600, 427]
+153 car [781, 421]
+0 frame changed
+
+210 car [600, 425]
+153 car [784, 421]
+0 frame changed
+
+210 car [600, 424]
+153 car [782, 423]
+0 frame changed
+
+210 car [597, 423]
+153 car [782, 422]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 422]
+0 frame changed
+
+210 car [599, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [600, 424]
+153 car [783, 421]
+0 frame changed
+
+210 car [601, 424]
+153 car [784, 422]
+0 frame changed
+
+210 car [599, 424]
+153 car [783, 423]
+0 frame changed
+
+210 car [599, 423]
+153 car [783, 423]
+0 frame changed
+
+210 car [599, 423]
+153 car [783, 422]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 422]
+0 frame changed
+
+210 car [598, 423]
+153 car [784, 421]
+0 frame changed
+
+210 car [598, 423]
+153 car [783, 422]
+0 frame changed
+
+210 car [598, 422]
+153 car [784, 421]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 422]
+0 frame changed
+
+210 car [598, 422]
+153 car [783, 422]
+0 frame changed
+
+210 car [599, 422]
+153 car [783, 422]
+0 frame changed
+
+210 car [598, 422]
+153 car [784, 422]
+0 frame changed
+
+210 car [599, 423]
+153 car [784, 421]
+0 frame changed
+
+210 car [599, 423]
+153 car [784, 423]
+0 frame changed
+
+210 car [599, 423]
+153 car [783, 423]
+0 frame changed
+
+210 car [599, 423]
+153 car [783, 423]
+0 frame changed
+
+210 car [600, 422]
+153 car [782, 422]
+0 frame changed
+
+210 car [600, 424]
+153 car [783, 422]
+0 frame changed
+
+210 car [600, 425]
+153 car [783, 422]
+0 frame changed
+
+210 car [599, 424]
+153 car [783, 422]
+0 frame changed
+
+210 car [598, 424]
+153 car [781, 422]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [598, 424]
+153 car [781, 422]
+0 frame changed
+
+210 car [599, 425]
+153 car [781, 421]
+0 frame changed
+
+210 car [599, 425]
+153 car [781, 422]
+0 frame changed
+
+210 car [599, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [599, 424]
+153 car [782, 422]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 422]
+0 frame changed
+
+210 car [598, 423]
+153 car [781, 423]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [599, 423]
+153 car [782, 422]
+0 frame changed
+
+210 car [599, 424]
+153 car [781, 423]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 423]
+0 frame changed
+
+210 car [598, 423]
+153 car [783, 422]
+0 frame changed
+
+210 car [596, 423]
+153 car [783, 421]
+0 frame changed
+
+210 car [597, 422]
+153 car [783, 421]
+0 frame changed
+
+210 car [598, 422]
+153 car [783, 421]
+0 frame changed
+
+210 car [599, 423]
+153 car [782, 421]
+0 frame changed
+
+210 car [599, 423]
+153 car [781, 421]
+0 frame changed
+
+210 car [599, 424]
+153 car [781, 421]
+0 frame changed
+
+210 car [599, 423]
+153 car [782, 421]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 421]
+0 frame changed
+
+210 car [600, 424]
+153 car [782, 422]
+0 frame changed
+
+210 car [596, 423]
+153 car [782, 420]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 421]
+0 frame changed
+
+234 car [909, 965]
+210 car [596, 422]
+153 car [782, 421]
+0 frame changed
+
+210 car [598, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [595, 423]
+153 car [781, 422]
+0 frame changed
+
+210 car [598, 424]
+153 car [781, 422]
+0 frame changed
+
+210 car [595, 422]
+153 car [782, 420]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 420]
+0 frame changed
+
+210 car [595, 423]
+153 car [781, 421]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 420]
+0 frame changed
+
+210 car [594, 423]
+153 car [781, 422]
+0 frame changed
+
+210 car [597, 423]
+153 car [781, 421]
+0 frame changed
+
+210 car [595, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [598, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [595, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [597, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [595, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [598, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [595, 422]
+153 car [781, 421]
+0 frame changed
+
+210 car [598, 423]
+153 car [781, 420]
+0 frame changed
+
+210 car [597, 424]
+153 car [781, 420]
+0 frame changed
+
+210 car [598, 423]
+153 car [782, 419]
+0 frame changed
+
+210 car [595, 422]
+153 car [783, 419]
+0 frame changed
+
+210 car [597, 424]
+153 car [781, 420]
+0 frame changed
+
+210 car [595, 423]
+153 car [782, 421]
+0 frame changed
+
+210 car [597, 424]
+153 car [782, 421]
+0 frame changed
+
+210 car [596, 423]
+153 car [782, 420]
+0 frame changed
+
+240 car [467, 289]
+210 car [597, 424]
+153 car [782, 421]
+0 frame changed
+
+240 car [500, 298]
+210 car [598, 425]
+153 car [781, 421]
+0 frame changed
+
+240 car [532, 307]
+210 car [599, 424]
+153 car [781, 420]
+0 frame changed
+
+240 car [562, 316]
+210 car [598, 424]
+153 car [782, 420]
+0 frame changed
+
+240 car [585, 323]
+210 car [602, 425]
+153 car [781, 421]
+0 frame changed
+
+240 car [607, 336]
+210 car [601, 427]
+153 car [781, 421]
+0 frame changed
+
+240 car [623, 343]
+210 car [603, 427]
+153 car [781, 418]
+0 frame changed
+
+240 car [639, 349]
+210 car [604, 427]
+153 car [782, 419]
+0 frame changed
+
+240 car [648, 351]
+210 car [606, 428]
+153 car [782, 420]
+0 frame changed
+
+240 car [650, 355]
+210 car [608, 431]
+153 car [782, 420]
+0 frame changed
+
+210 car [609, 433]
+153 car [783, 420]
+0 frame changed
+
+210 car [608, 434]
+153 car [783, 419]
+0 frame changed
+
+210 car [610, 432]
+153 car [783, 419]
+0 frame changed
+
+210 car [610, 433]
+153 car [783, 420]
+0 frame changed
+
