@@ -16,4 +16,6 @@ add list
 
 
 *Publications*
-- 
+- MDPI Sensors
+- MDPI Sensors
+- IEEE Access
