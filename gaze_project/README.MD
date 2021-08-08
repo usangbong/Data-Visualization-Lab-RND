@@ -14,5 +14,6 @@ add list
 - smooth pursuit identification models (paramter thresholding): I-VVT, I-VDT
 - smooth pursuit identification models (machine learing)
 
-- Publications
+
+*Publications*
 - 
