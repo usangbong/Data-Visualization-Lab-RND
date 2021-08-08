@@ -32,6 +32,12 @@ vis.sejong.ac.kr
 
 # Publications
 - Conference
-  - 
+  - 1
+  - 2
+  - 3
+  -  
 - Journal
-  -
+  - 1
+  - 2
+  - 3
+  - 
