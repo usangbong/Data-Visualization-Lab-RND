@@ -31,3 +31,4 @@ vis.sejong.ac.kr
   - (BS) Hyunjin Kang
 
 # Publications
+- Conference
