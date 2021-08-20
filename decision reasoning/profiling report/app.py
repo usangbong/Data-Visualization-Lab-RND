@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, redirect
 
 from nl4dv import NL4DV
 import missingno as msno
+import hvplot.pandas
 import pandas as pd
+import numpy as np
 import json
 import os
 
@@ -51,53 +53,60 @@ def input_query():
         if type(visType) == list:
             visType = ",".join(visType)
 
-        # 예외처리 구현 필요
-        # 값이 "으로 시작하지 않으면 키 - 값 삭제
         vlSpec = output['visList'][0]['vlSpec']
+        vlSpec['data']['values'] = data
+
+        # 예외 처리 구현 필요
         del vlSpec['mark']['tooltip']
         del vlSpec['encoding']['x']['aggregate']
         del vlSpec['encoding']['y']['aggregate']
         del vlSpec['data']['url']
         del vlSpec['data']['format']
-        vlSpec['data']['values'] = data
-        ##########
+        #####
+
+        vlSpec['width'] = "container"
+        vlSpec['height'] = "container"
 
         global cnt_create, create_div, create_vlSpec
         create_div = create_div + '''
-        <div id="vis''' + str(cnt_create) + '''" style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap;">
-            <div id="list" style="width: 33%; height: 300px;">
-                <p>attributes: ''' + attributes + '''</p>
-                <p>tasks: ''' + tasks + '''</p>
-                <p>visType: ''' + visType + '''</p>
+        <div id="vis''' + str(cnt_create) + '''" style="display: flex; height: 250px; margin-top: 5px; background-color: white; border: 1px solid #D8D8D8;">
+            <div id="overview"></div>
+            <div id="list">
+                <table>
+                    <tr>
+                        <th>attributes</th>
+                        <td>''' + attributes + '''</td>
+                    </tr>
+                    <tr>
+                        <th>tasks</th>
+                        <td>''' + tasks + '''</td>
+                    </tr>
+                    <tr>
+                        <th>visType</th>
+                        <td>''' + visType + '''</td>
+                    </tr>
+                </table>
             </div>
-            <div id="vlSpec" style="width: 33%; height: 300px;"></div>
-            <div id="recommend" style="width: 33%; height: 300px;">
-                <p>attributes: ''' + attributes + '''</p>
-                <p>tasks: ''' + tasks + '''</p>
-                <p>action: example </p>
-                <p>action: example </p>
-                <p>action: example </p>
-                <br>
-            </div>
+            <div id="vlSpec"></div>
         </div>
         '''
 
         create_vlSpec = create_vlSpec + '''
         var vlSpec = ''' + str(vlSpec) + ''';
-        vegaEmbed('#vis''' + str(cnt_create) + ''' #vlSpec', vlSpec);
+        vegaEmbed('#vis''' + str(cnt_create) + ''' #vlSpec', vlSpec, {"actions": false});
         '''
         cnt_create = cnt_create + 1
 
     return redirect('/')
 
-@app.route('/node_overview', methods=['GET', 'POST'])
-def node_overview():
+@app.route('/missingno', methods=['GET', 'POST'])
+def missingno():
     file_name = request.get_data()
     file_name = file_name.decode('utf-8')
     data = pd.read_csv(file_name)
 
     fig = msno.matrix(data).get_figure()
-    fig.savefig('static/fig.png')
+    fig.savefig('static/data/missingno.png')
 
     return redirect('/')
 
