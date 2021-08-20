@@ -1,3 +1,4 @@
+#readme
 from scipy.fft import fft, fftfreq
 # Number of sample points
 N = 600
