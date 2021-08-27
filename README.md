@@ -39,4 +39,3 @@ vis.sejong.ac.kr
 - Journal
   - 1
   - 2
-  - 3
