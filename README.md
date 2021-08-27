@@ -40,4 +40,3 @@ vis.sejong.ac.kr
   - 1
   - 2
   - 3
-  - 
