@@ -30,8 +30,3 @@ vis.sejong.ac.kr
   - (BS) Hewon Baek
   - (BS) Hyunjin Kang
 
-# Publications
-- Conference
-  - 1
-  - 2
-  - 3
