@@ -1,0 +1,128 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.point {
+  fill: #007bff;
+  stroke: #000;
+}
+.node {
+  cursor: pointer;
+}
+.node circle {
+  fill: white;
+  stroke: #007bff;
+  stroke-width: 3px;
+}
+.node text {
+  font: 12px sans-serif;
+}
+.link {
+  fill: none;
+  stroke: #D8D8D8;
+  stroke-width: 2px;
+}
+
+
+
+header {
+  height: 70px;
+  font-size: 17px;
+  color: white;
+  background-color: #2a3042;
+}
+#wrap {
+  display: flex;
+  height: 100%;
+  background-color: #F8F8F8;
+}
+#left {
+  width: 25%;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  background-color: white;
+  border: 1px solid #D8D8D8;
+}
+#tree_title {
+  height: 30px;
+  border-bottom: 1px solid #D8D8D8;
+}
+#right {
+  width: 75%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#input_query {
+  height: 30px;
+  border-bottom: 1px solid #D8D8D8;
+}
+.input_form {
+  display: flex;
+}
+.input_box {
+  width: 100%;
+  height: 30px;
+  border: none;
+}
+.input_button {
+  height: 30px;
+  background-color: #007bff;
+  color: white;
+  border: 0;
+  outline: 0;
+}
+.input_button:hover {
+  background-color: #0069D9;
+}
+footer {
+  height: 60px;
+  color: #74788D;
+  background-color: #F2F2F5;
+}
+
+#overview {
+  width: 40%;
+  border-right: 1px solid #D8D8D8;
+}
+#list {
+  width: 20%;
+  border-right: 1px solid #D8D8D8;
+}
+#vlSpec {
+  width: 40%; 
+}
+#recommend {
+  width: 60%; 
+}
+#missingno {
+  width: 30%;
+  border-right: 1px solid #D8D8D8;
+}
+#density {
+  width: 40%;
+  border-right: 1px solid #D8D8D8;
+}
+#ks_test {
+  width: 30%; 
+}
+table {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th {
+  font-weight: bold;
+  border: 1px solid black;
+  color: white;
+  background-color: #0069D9;
+}
+td {
+  border: 1px solid black;
+  background-color: #D8D8D8;
+}
