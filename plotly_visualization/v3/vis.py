@@ -83,6 +83,51 @@ class VisFunctions :
 		else :
 			print("Error!!!!!!!!")
 	
+	def _rangeAndAverage(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+			
+		tx = [];		ty = [];		tpe = [];		tme = [];	td=[]
+		for idx in arrays :
+			tx.append(_arrColumn[idx])
+			ty.append(_pandasDataset[_arrColumn[idx]].mean())
+			tempstd = _pandasDataset[_arrColumn[idx]].std()
+			td.append(_arrData[idx])
+			tpe.append(tempstd)
+			tme.append(-tempstd)
+		fig = go.Figure()
+		fig.add_trace(
+			go.Scatter(
+				x=tx, y=ty, error_y=dict(type='data', array=tme)
+			)
+		)
+		fig.update_layout(barmode='overlay')
+		fig.update_layout(title_text = "rangeAndAverage")
+		self.write_html_png_and_print_log(_FileName, fig, "rangeAndAverage")
+		
+	def _tsneView(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+		features = _pandasDataset.loc[:]
+		tsne = TSNE(n_components=2, random_state=0)
+		projections = tsne.fit_transform(features)
+		fig = px.scatter(projections, x=0, y=1)
+		fig.update_layout(title_text = "tsneView")
+		self.write_html_png_and_print_log(_FileName, fig, "tsneView")
+	
+	def _3DtsneView(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+		features = _pandasDataset.loc[:]
+		tsne = TSNE(n_components=3, random_state=0)
+		projections = tsne.fit_transform(features)
+		fig = px.scatter_3d(projections, x=0, y=1, z=2)
+		fig.update_layout(title_text = "3DtsneView")
+		self.write_html_png_and_print_log(_FileName, fig, "3DtsneView")
+		
 	def _pcaView(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
 		arrays = []
 		for i in range(len(_meaIdxArr[1])):
