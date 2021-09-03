@@ -82,7 +82,23 @@ class VisFunctions :
 			
 		else :
 			print("Error!!!!!!!!")
+	
+	def _pcaView(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+		features = [];
+		for idx in arrays :
+			features.append(_arrColumn[idx])
 			
+		pca = PCA()
+		components = pca.fit_transform(_pandasDataset[features])
+		labels = {str(i): f"PC {i+1} ({var:.1f}%)"	for i, var in enumerate(pca.explained_variance_ratio_ * 100)	}
+		fig = px.scatter_matrix(components, labels=labels, dimensions=range(len(arrays)))
+		fig.update_traces(diagonal_visible=False)
+		fig.update_layout(title_text = "pcaView")
+		self.write_html_png_and_print_log(_FileName, fig, "pcaView")
+		
 	def _parrallelCoord(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
 		fig = px.parallel_coordinates(_pandasDataset)
 		fig.update_layout(title_text = "parrallelCoord")
