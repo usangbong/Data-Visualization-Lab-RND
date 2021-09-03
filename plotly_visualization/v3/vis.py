@@ -82,6 +82,67 @@ class VisFunctions :
 			
 		else :
 			print("Error!!!!!!!!")
+			
+			
+	def _statisticalSplitViolin(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+		
+		
+		tx = [];		ty = [];		tpe = [];		tme = []
+		tempdata = _pandasDataset.copy()
+		
+		for idx in arrays :
+			tx.append(_arrColumn[idx])
+			tempmean = _pandasDataset[_arrColumn[idx]].mean()
+			temparr = []
+			for data in _pandasDataset[_arrColumn[idx]] : 
+				if data>tempmean :
+					temparr.append("high")
+				else :
+					temparr.append("low")
+			tempdata[(_arrColumn[idx]+"mean")] = temparr
+			ty.append(tempmean)
+		#print(tempdata)
+		#tempdata = _pandasDataset.copy()
+		
+		fig = make_subplots(rows=1, cols=len(arrays))
+		for idx in arrays :
+			fig.add_trace(	
+				go.Violin(
+					y=tempdata[_arrColumn[idx]][tempdata[(_arrColumn[idx]+"mean")] == "high"], 
+					legendgroup='High', scalegroup='High', name='High',
+					meanline_visible=True,
+					side='negative', 
+					line_color = 'blue',
+					x0=_arrColumn[idx]
+				), 
+				row=1, 
+				col=idx
+			)
+			fig.add_trace(	go.Violin(y=tempdata[_arrColumn[idx]][tempdata[(_arrColumn[idx]+"mean")] == "low"], x0=_arrColumn[idx], legendgroup='Low', scalegroup='Low', name='Low', meanline_visible=True, side='positive', line_color = 'orange'), row=1, col=idx)
+		fig.update_layout(title_text = "statisticalSplitViolin")
+		fig.update_layout(violingap=0, violinmode='overlay')
+		self.write_html_png_and_print_log(_FileName, fig, "statisticalSplitViolin")
+		
+	def _statisticalViolin(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		arrays = []
+		for i in range(len(_meaIdxArr[1])):
+			arrays.append(_meaIdxArr[1][i][0])
+		tx = [];		ty = [];		tpe = [];		tme = []
+		for idx in arrays :
+			tx.append(_arrColumn[idx])
+			ty.append(_pandasDataset[_arrColumn[idx]].mean())
+			tempstd = _pandasDataset[_arrColumn[idx]].std()
+			tpe.append(tempstd)
+			tme.append(-tempstd)
+		fig = make_subplots(rows=1, cols=len(arrays))
+		for idx in arrays :
+			fig.add_trace(	go.Violin(y=_pandasDataset[_arrColumn[idx]], box_visible=True, line_color='black', meanline_visible=True, fillcolor='lightseagreen', opacity=0.6, x0=_arrColumn[idx]), row=1, col=idx)
+		fig.update_layout(title_text = "statisticalViolin")
+		self.write_html_png_and_print_log(_FileName, fig, "statisticalViolin")
+		
 	
 	def _0d2m_1dhistogram(self,  _FileName, _name1, _data1, _pandasDataset, _type='group', _color=['indianred', 'lightsalmon'], _xaxis=None) :
 		fig = px.histogram(_pandasDataset, x=_name1, marginal="violin", title="1d_histogram")
