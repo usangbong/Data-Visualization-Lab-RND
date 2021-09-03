@@ -83,6 +83,11 @@ class VisFunctions :
 		else :
 			print("Error!!!!!!!!")
 			
+	def _parrallelCoord(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
+		fig = px.parallel_coordinates(_pandasDataset)
+		fig.update_layout(title_text = "parrallelCoord")
+		self.write_html_png_and_print_log(_FileName, fig, "parrallelCoord")
+		
 			
 	def _statisticalSplitViolin(self, _FileName, _dimIdxArr, _meaIdxArr, _arrColumn, _arrData, _pandasDataset):
 		arrays = []
