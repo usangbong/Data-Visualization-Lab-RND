@@ -2,10 +2,10 @@
 # =============== #
 # Unity generated #
 # =============== #
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild[s]
-/[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild[s]
+[Ll]ibrary/
 
 sysinfo.txt
 *.stackdump
