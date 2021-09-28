@@ -1,12 +1,5 @@
-VRvis/Unity/IVRTK/Library/
-VRvis/Unity/IVRTK/Assets/VRTK/
-VRvis/Unity/IVRTK/Assets/Oculus/
-VRvis/Unity/IVRTK/Assets/OvrAvatar/
-VRvis/Unity/IVRTK/Assets/Plugins/
-VRvis/Unity/IVRTK/Assets/MetaSDK/
-
-
-VRvis/Unity/IVRTK/Assets/Plugins/AppConfig.cs
+VRvis/workspace/.ipynb_checkpoints
+VRvis/workspace/capston
 
 
 *.meta
