@@ -1,0 +1,17 @@
+﻿Type,Color,ActiveColor,TextColor
+Bed,#683F28,#682E25,white
+Chair,#D6C29E,#D6B49E,black
+Table,#A38370,#A37670,black
+Desk,#E9E9E9,#E1E1E1,black
+Computer Desk,#CCA37C,#CC8F7C,black
+Low Shelf,#DCD2BC,#DCCABC,black
+Mid Shelf,#B29771,#B28771,black
+High Shelf,#936C4F,#DC874F,white
+Mirror,#E0E0E0,#D8D8D8,black
+Sofa,#C9C7C4,#C9C6C4,black
+TV,#383838,#303030,white
+Cleaner,#A40C06,#A51433,white
+Bin,#A0A0A0,#989898,black
+Pot,#A0543B,#80432F,white
+Carpet,#355B6A,#35686A,white
+Other,yellow,#FFBF00,black
