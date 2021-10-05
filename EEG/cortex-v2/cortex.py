@@ -1,4 +1,4 @@
-import websocket #'pip install websocket-client' for install
+import websocket
 from datetime import datetime
 import json
 import ssl
@@ -33,7 +33,7 @@ class Cortex(Dispatcher):
     def __init__(self, user, debug_mode=False):
         url = "wss://localhost:6868"
         self.ws = websocket.create_connection(url,
-                                            sslopt={"cert_reqs": ssl.CERT_NONE})
+                                              sslopt={"cert_reqs": ssl.CERT_NONE})
         self.user = user
         self.debug = debug_mode
 
@@ -731,6 +731,4 @@ class Cortex(Dispatcher):
 
         return result_dic
 
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
+

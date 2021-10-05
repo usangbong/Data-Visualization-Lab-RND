@@ -1,4 +1,5 @@
 from cortex import Cortex
+from user import user
 import time
 
 class Record():
@@ -53,12 +54,16 @@ class Record():
 # 
 # -----------------------------------------------------------
 
-user = {
-	"license" : "your emotivpro license, which could use for third party app",
-	"client_id" : "your client id",
-	"client_secret" : "your client secret",
-	"debit" : 100
-}
+#
+#user = {
+#	"license" : "your emotivpro license, which could use for third party app",
+#	"client_id" : "your client id",
+#	"client_secret" : "your client secret",
+#	"debit" : 100
+#}
+#
+
+# -----------------------------------------------------------
 
 r = Record()
 
