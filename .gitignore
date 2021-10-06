@@ -2,3 +2,5 @@ EEG/.ipynb_checkpoints
 EEG/cortex-v2/.idea/
 EEG/cortex-v2/user.py
 EEG/cortex-v2/__pycache__/
+EEG/cortex-v2/async/cortex_creds
+EEG/cortex-v2/async/lib/__pycache__/
