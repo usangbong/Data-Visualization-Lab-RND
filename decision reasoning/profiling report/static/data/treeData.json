@@ -1,0 +1,25 @@
+{
+    "file": "missing",
+    "name": "1",
+    "state": "current",
+    "children": [
+        {
+            "file": "missing",
+            "name": "2",
+            "state": "recommend",
+            "children": []
+        },
+        {
+            "file": "missing",
+            "name": "3",
+            "state": "recommend",
+            "children": []
+        },
+        {
+            "file": "missing",
+            "name": "4",
+            "state": "recommend",
+            "children": []
+        }
+    ]
+}
