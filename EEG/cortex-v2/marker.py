@@ -1,5 +1,6 @@
 from cortex import Cortex
 import time
+from user import user
 
 class Marker():
 	def __init__(self):
@@ -37,7 +38,7 @@ class Marker():
 		self.c.disconnect_headset()
 
 		# export record
-		record_export_data_types = ['EEG', 'MOTION', 'PM', 'BP']
+		record_export_data_types = ['EEG', 'MOTION', 'PM', 'MC', 'FE', 'BP']
 		record_export_format = 'CSV'
 		record_export_version = 'V2'
 		self.c.export_record(record_export_folder,
@@ -58,18 +59,10 @@ class Marker():
 # 	- export data file should contain marker added
 #
 # -----------------------------------------------------------
-user = {
-	"license" : "your emotivpro license, which could use for third party app",
-	"client_id" : "your client id",
-	"client_secret" : "your client secret",
-	"debit" : 100
-}
-
 m = Marker()
-
-
 # start record --> add marker --> stop record --> disconnect headset --> export record
-record_export_folder = 'your place to export, you should have write permission, example on desktop'
+record_export_folder = 'C:/EEG data'
+
 marker_numbers = 10
 m.demo_add_marker(record_export_folder, marker_numbers)
 # ----------------------------------------------

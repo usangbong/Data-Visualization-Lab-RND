@@ -36,7 +36,7 @@ async def do_stuff(cortex):
 
 
 def test():
-    cortex = Cortex('./cortex_creds')
+    cortex = Cortex('cortex_creds')
     asyncio.run(do_stuff(cortex))
     cortex.close()
 

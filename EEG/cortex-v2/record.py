@@ -41,41 +41,18 @@ class Record():
 			length+=1
 		print('end recording -------------------------')
 
-# -----------------------------------------------------------
-# 
-# SETTING
-# 	- replace your license, client_id, client_secret to user dic
-# 	- specify infor for record and export
-# 	- connect your headset with dongle or bluetooth, you should saw headset on EmotivApp
-#
-# RESULT
-# 	- export result should be csv or edf file at location you specified
-# 	- in that file will has data you specified like : eeg, motion, performance metric and band power
-# 
-# -----------------------------------------------------------
-
-#
-#user = {
-#	"license" : "your emotivpro license, which could use for third party app",
-#	"client_id" : "your client id",
-#	"client_secret" : "your client secret",
-#	"debit" : 100
-#}
-#
-
-# -----------------------------------------------------------
 
 r = Record()
 
 # record parameters
-record_name = 'your record name'
-record_description = 'your description for record'
-record_length_s = 30
+record_name = 'test3'
+record_description = 'test1_30'
+record_length_s = 2 #기록 시간(초)
 
 
 # export parameters
-record_export_folder = 'your place to export, you should have write permission, example on desktop'
-record_export_data_types = ['EEG', 'MOTION', 'PM', 'BP']
+record_export_folder = 'C:/EEG data'
+record_export_data_types = ['EEG', 'MOTION', 'PM', 'MC', 'FE', 'BP']
 record_export_format = 'CSV'
 record_export_version = 'V2'
 
