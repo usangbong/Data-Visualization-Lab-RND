@@ -572,7 +572,7 @@ class Cortex(Dispatcher):
         print('inject marker --------------------------------')
         inject_marker_request = {
             "jsonrpc": "2.0",
-            "id": INJECT_MARKER_REQUEST_ID,
+            "id": marker,
             "method": "injectMarker", 
             "params": {
                 "cortexToken": self.auth, 
