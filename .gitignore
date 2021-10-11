@@ -5,3 +5,4 @@ EEG/System/__pycache__
 EEG/System/.idea/
 EEG/System/venv/
 EEG/System/static/libs/user.py
+EEG/System/static/libs/__pycache__/
