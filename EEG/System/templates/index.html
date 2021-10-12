@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
   <meta charset="UTF-8">
   <script type="text/javascript">
     function press(f) {
@@ -10,25 +10,29 @@
     }
   </script>
 </head>
-<body>
-<br>
-<h1>실험 안내</h1>
-<br>
-<p>
-  실험은 3분의 휴식을 가진 후 시작됩니다.<br>
-  각 세트는 [시각화 문제 풀이 → 설문 → 휴식] 으로 진행됩니다.<br>
-  총 2가지의 난이도와 1개의 train 세트, 20개의 test 세트가 준비되어있습니다.<br>
-  주어진 과제의 요구 사항과 시각화 축을 주의 깊게 봐주세요.<br>
-  (축의 값이 점차 증가가 아닌 점차 감소하는 경우도 존재합니다.)<br>
-  준비 되셨으면 아래의 빈칸에 이름을 입력 후 ENTER을 눌러주세요.<br>
-</p>
-<br>
-<h1>이름을 입력해주세요</h1>
-<br>
-  <form method="get" name="formname" action="/search">
-    <input type="input" id="search" placeholder="이름 입력" required name="search" onkeypress="JavaScript:press(this.form)" />
-  </form>
-<link href="../static/css/global.css" rel="stylesheet">
-<link href="../static/css/bootstrap.css" rel="stylesheet">
+  <body>
+  <br>
+  <div><h1>실험 안내</h1></div>
+  <br>
+  <div>
+    <p>
+      실험은 3분의 휴식을 가진 후 시작됩니다.<br>
+      각 세트는 [시각화 문제 풀이 → 설문 → 휴식] 으로 진행됩니다.<br>
+      총 2가지의 난이도와 1개의 train 세트, 20개의 test 세트가 준비되어있습니다.<br>
+      주어진 과제의 요구 사항과 시각화 축을 주의 깊게 봐주세요.<br>
+      (축의 값이 점차 증가가 아닌 점차 감소하는 경우도 존재합니다.)<br>
+      준비 되셨으면 아래의 빈칸에 이름을 입력 후 ENTER을 눌러주세요.<br>
+    </p>
+  </div>
+  <br>
+  <div>
+  <div><h1>이름을 입력해주세요</h1></div>
+  <br>
+    <form method="get" name="formname" action="/search">
+      <input type="input" id="search" placeholder="이름 입력" required name="search" onkeypress="JavaScript:press(this.form)" />
+    </form>
+  </div>
+  <link href="../static/css/global.css" rel="stylesheet">
+  <link href="../static/css/bootstrap.css" rel="stylesheet">
 </body>
 </html>

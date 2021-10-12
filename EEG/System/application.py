@@ -8,11 +8,9 @@ sys.path.append("module/")
 application = Flask(__name__)
 
 global cnt, name
-global state #visualization number  100:eval, 0: rest, etc: vis
 global userAnswer, taskList, dataList
 
 cnt = 0
-state = 0
 userAnswer=[]
 dataList=os.listdir('static/data/')
 taskList=pd.read_csv('static/task.txt', sep=',')
@@ -25,34 +23,32 @@ def index():
 
 @application.route('/search')
 def searchResult():
-    global name, state
+    global name
     name = request.args.get("search")
 
     # eeg record start
     startRecording(name)
 
     #add marker in eeg record
-    injectMarker(state)
+    injectMarker(0) #100:eval, 0: rest, cnt: vis number
 
     return render_template('firstRest.html')
 
 @application.route('/visualization')
 def getVis():
-    global cnt, state, dataList, taskList
+    global cnt, dataList, taskList
     cnt += 1
-    state = cnt
     src='static/data/'+dataList[cnt-1]
     Chart(src)
     #add marker in eeg record
-    injectMarker(state)
+    injectMarker(cnt)
     return render_template('visualization.html', task=taskList.iloc[cnt-1])
 
 @application.route('/answer')
 def getAnswer():
-    global state, userAnswer
-    state = 100
+    global userAnswer
     #add marker in eeg record
-    injectMarker(state)
+    injectMarker(100)
     ans = request.args.get("answer")
     userAnswer.append(ans)
     print(ans)
@@ -60,15 +56,13 @@ def getAnswer():
 
 @application.route('/NASA-TLX')
 def getNASA():
-    global state
-    state = 100
     #add marker in eeg record
-    injectMarker(state)
+    injectMarker(100)
     return render_template('NASA-TLX.html')
 
 @application.route('/eval')
 def eval():
-    global cnt, name, userAnswer, state
+    global cnt, name, userAnswer
     print(cnt)
     score=[]
     score.append(request.args.get("Mental"))
@@ -93,16 +87,13 @@ def eval():
         stopRecording()
         return render_template('end.html')
     else:
-        state=0
-        injectMarker(state)
+        injectMarker(0)
         return render_template('rest.html')
 
 @application.route('/rest')
 def getRest():
-    global state
-    state = 0
     #add marker in eeg record
-    injectMarker(state)
+    injectMarker(0)
     return render_template('rest.html')
 
 

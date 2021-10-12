@@ -12,7 +12,7 @@ def Chart(src):
                              'xanchor': 'center', 'yanchor': 'top'},
         "xaxis": {"title": {"text": col[1]}},
         "yaxis": {"title": {"text": col[2]}}}},
-        filename ='Chart.html', auto_open = False)
+        filename ='templates/Chart.html', auto_open = False)
 
 def updateChart():
     df = pd.read_csv('static/data/KOSPI.csv', thousands=',', encoding='euc-kr')
@@ -20,6 +20,6 @@ def updateChart():
     py.offline.plot({
         'data':[Scatter(x=df['date'],y=df['actual'], name='actual'),
                 Scatter(x=df['date'],y=df['prediction'],name='prediction')]
-    },filename='Chart.html',auto_open = False)
+    },filename='templates/Chart.html',auto_open = False)
 
 
