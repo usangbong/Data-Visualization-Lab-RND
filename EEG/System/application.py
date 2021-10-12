@@ -2,7 +2,7 @@ import pandas as pd
 from flask import Flask, render_template, request
 import sys
 import os
-from static.libs.record import *
+#from static.libs.record import *
 from static.libs.drawChart import Chart
 sys.path.append("module/")
 application = Flask(__name__)
@@ -13,7 +13,7 @@ global userAnswer, taskList, dataList
 cnt = 0
 userAnswer=[]
 dataList=os.listdir('static/data/')
-taskList=pd.read_csv('static/task.txt', sep=',')
+taskList=pd.read_csv('static/task.txt')
 totalScore=[['Mental','Physical','Temporal','Effort','Performance','Frustration']]
 
 
@@ -27,10 +27,10 @@ def searchResult():
     name = request.args.get("search")
 
     # eeg record start
-    startRecording(name)
+    #startRecording(name)
 
     #add marker in eeg record
-    injectMarker(0) #100:eval, 0: rest, cnt: vis number
+    #injectMarker(0) #100:eval, 0: rest, cnt: vis number
 
     return render_template('firstRest.html')
 
@@ -39,16 +39,16 @@ def getVis():
     global cnt, dataList, taskList
     cnt += 1
     src='static/data/'+dataList[cnt-1]
-    Chart(src)
+    Chart(src, cnt-1, taskList[taskList.columns[0]][cnt-1])
     #add marker in eeg record
-    injectMarker(cnt)
-    return render_template('visualization.html', task=taskList.iloc[cnt-1])
+    #injectMarker(cnt)
+    return render_template('visualization.html')
 
 @application.route('/answer')
 def getAnswer():
     global userAnswer
     #add marker in eeg record
-    injectMarker(100)
+    #injectMarker(100)
     ans = request.args.get("answer")
     userAnswer.append(ans)
     print(ans)
@@ -57,7 +57,7 @@ def getAnswer():
 @application.route('/NASA-TLX')
 def getNASA():
     #add marker in eeg record
-    injectMarker(100)
+    #injectMarker(100)
     return render_template('NASA-TLX.html')
 
 @application.route('/eval')
@@ -84,16 +84,16 @@ def eval():
         userAnswer.to_csv('C:/EEG data/UserAnswer/'+name+'Answer.txt')
 
         # save emotiv data
-        stopRecording()
+        #stopRecording()
         return render_template('end.html')
     else:
-        injectMarker(0)
+        #injectMarker(0)
         return render_template('rest.html')
 
 @application.route('/rest')
 def getRest():
     #add marker in eeg record
-    injectMarker(0)
+    #injectMarker(0)
     return render_template('rest.html')
 
 

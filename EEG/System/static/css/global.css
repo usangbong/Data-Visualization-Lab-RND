@@ -9,4 +9,6 @@ body{
 }
 div{
     width: 100%;
+    clear: right;
+    clear: left;
 }

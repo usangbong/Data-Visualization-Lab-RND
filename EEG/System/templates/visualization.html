@@ -12,15 +12,16 @@
         <title>Visualization</title>
     </head>
     <body>
-        <div><h1>Visualization</h1></div>
+        <p><h1>Visualization</h1></p>
         <div>{% include 'Chart.html' %}</div>
         <br>
-        <div>{{task}}</div>
-        <div>
-            <form method="get" name="formname" action="/answer">
-                <input type="input" id="answer" placeholder="답변" required name="answer" onkeypress="JavaScript:press(this.form)" />
-            </form>
-        </div>
+        <p>
+            <div>
+                <form method="get" name="formname" action="/answer">
+                    <input type="input" id="answer" placeholder="답변" required name="answer" onkeypress="JavaScript:press(this.form)" />
+                </form>
+            </div>
+        </p>
         <link href="../static/css/global.css" rel="stylesheet">
         <link href="../static/css/bootstrap.css" rel="stylesheet">
     </body>
