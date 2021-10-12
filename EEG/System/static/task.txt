@@ -1,4 +1,4 @@
 task
-affairs과 yearsmarried의 연관관계는?
+기혼 연도와 만족도에 따른 바람 빈도는?
 task2
 task3

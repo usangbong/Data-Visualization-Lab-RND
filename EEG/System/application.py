@@ -3,17 +3,18 @@ from flask import Flask, render_template, request
 import sys
 import os
 #from static.libs.record import *
-from static.libs.drawChart import Chart
+
 sys.path.append("module/")
 application = Flask(__name__)
 
 global cnt, name
-global userAnswer, taskList, dataList
+global userAnswer, taskList, dataList, vis_name
 
 cnt = 0
 userAnswer=[]
 dataList=os.listdir('static/data/')
 taskList=pd.read_csv('static/task.txt')
+vis_name = pd.read_csv('static/vis_name.txt', encoding='utf-8')
 totalScore=[['Mental','Physical','Temporal','Effort','Performance','Frustration']]
 
 
@@ -36,13 +37,12 @@ def searchResult():
 
 @application.route('/visualization')
 def getVis():
-    global cnt, dataList, taskList
+    global cnt, dataList, taskList, vis_name
     cnt += 1
-    src='static/data/'+dataList[cnt-1]
-    Chart(src, cnt-1, taskList[taskList.columns[0]][cnt-1])
+    src='static/chart/'+vis_name['vis_name'][cnt-1]+'.png'
     #add marker in eeg record
     #injectMarker(cnt)
-    return render_template('visualization.html')
+    return render_template('visualization.html', image=src, task=taskList[taskList.columns[0]][cnt-1])
 
 @application.route('/answer')
 def getAnswer():
