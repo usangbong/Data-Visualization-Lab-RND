@@ -1,3 +1,4 @@
+import random
 import pandas as pd
 from flask import Flask, render_template, request
 import sys
@@ -8,13 +9,12 @@ sys.path.append("module/")
 application = Flask(__name__)
 
 global cnt, name
-global userAnswer, taskList, dataList, vis_name
+global userAnswer, chartList
 
 cnt = 0
 userAnswer=[]
-dataList=os.listdir('static/data/')
-taskList=pd.read_csv('static/task.txt')
-vis_name = pd.read_csv('static/vis_name.txt', encoding='utf-8')
+chartList=os.listdir('static/chart/')
+random.shuffle(chartList)
 totalScore=[['Mental','Physical','Temporal','Effort','Performance','Frustration']]
 
 
@@ -37,20 +37,22 @@ def searchResult():
 
 @application.route('/visualization')
 def getVis():
-    global cnt, dataList, taskList, vis_name
+    global cnt
     cnt += 1
-    src='static/chart/'+vis_name['vis_name'][cnt-1]+'.png'
+    src='../static/chart/' + chartList[cnt-1]
     #add marker in eeg record
     #injectMarker(cnt)
-    return render_template('visualization.html', image=src, task=taskList[taskList.columns[0]][cnt-1])
+    return render_template('visualization.html', image=src)
 
 @application.route('/answer')
 def getAnswer():
-    global userAnswer
+    global cnt, chartList, userAnswer
     #add marker in eeg record
     #injectMarker(100)
+    chartName = str(chartList[cnt-1]).replace('.png','')
     ans = request.args.get("answer")
-    userAnswer.append(ans)
+    print(chartName)
+    userAnswer.append([chartName, ans])
     print(ans)
     return render_template('NASA-TLX.html')
 
@@ -73,14 +75,14 @@ def eval():
     score.append(request.args.get("Frustration"))
 
     totalScore.append(score)
-    if cnt >= 1:
+    if cnt >= 21:
         userData = pd.DataFrame(totalScore)
         userData.columns=userData.iloc[0]
         userData = userData.drop(userData.index[0])
         userData.to_csv('C:/EEG data/User/'+name+'.csv')
 
         userAnswer=pd.DataFrame(userAnswer)
-        userAnswer.columns =['answer']
+        userAnswer.columns =['chartName','answer']
         userAnswer.to_csv('C:/EEG data/UserAnswer/'+name+'Answer.txt')
 
         # save emotiv data

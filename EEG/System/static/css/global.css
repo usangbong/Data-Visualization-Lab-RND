@@ -12,3 +12,8 @@ div{
     clear: right;
     clear: left;
 }
+
+.answer{
+    max-width: 70%;
+    height: auto;
+}
