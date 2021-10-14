@@ -1,160 +1,126 @@
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <script>
+    alert("{{messages[-1]}}")
+  </script>
+  {% endif %}
+{% endwith %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <style>
-      .axis path,
-      .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-      }
-      .point {
-        fill: steelblue;
-        stroke: #000;
-      }  
-      .node {
-        cursor: pointer;
-      }
-      .node circle {
-        fill: #fff;
-        stroke: steelblue;
-        stroke-width: 3px;
-      }
-      .node text {
-        font: 12px sans-serif;
-      }
-      .link {
-        fill: none;
-        stroke: #ccc;
-        stroke-width: 2px;
-      }
-
-      #wrap {
-        display: flex;
-        height: 100vh;
-      }
-      #left {
-        width: 25%;
-        padding-right: 20px;
-      }
-      #bottom_div {
-        height: 200px;
-      }
-      #right {
-        padding-left: 20px;
-        width: 75%;
-      }
-      #input_query {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      .input_form {
-        display: flex;
-        justify-content: space-between;
-      }
-      .input_box {
-        width: 100%;
-      }
-      .input_button {
-        margin: 0 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="static/css/a.css">
+    <script src="https://d3js.org/d3.v3.js"></script>
+      <script>
+        d3v3 = d3;
+        window.d3 = null;
+      </script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script>
+      d3v4 = d3;
+      window.d3 = null;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
-  <!-- load the d3.js library -->   
-
-  <script src="https://d3js.org/d3.v3.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5" charset="utf-8"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4" charset="utf-8"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6" charset="utf-8"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <header>
+    profiling report system
+    <button class="save">
+      <img src="/static/data/save.png" width = 30px; height = 30px;>
+    </button>
+  </header>
   <body>
     <div id="wrap">
       <div id="left">
-        <div id="tree"></div>
-        <div id="bottom_div">
-          {% if True %}
-          <img src="{{ url_for('static', filename=fig) }}" height = 200px>
-          {% endif %}    
+        <div id="setting_title">
+          setting
         </div>
+        <div id="setting">
+          <form method="post" action="/setting" class="setting_form">
+            recommend method
+            <div>
+              <input type="radio" name="first_radio_name" value="A">
+              based on the degree of problem reduction
+            </div>
+            <div>
+              <input type="radio" name="first_radio_name" value="B">
+              based on the degree of quality improvement
+            </div>
+            <div>
+              <input type="radio" name="first_radio_name" value="C">
+              based on expert recipes
+            </div>
+            <div id="changed_by_radio"></div>            
+          <input type="submit" value="submit" class="setting_submit"> 
+        </form>  
+        </div>
+        <div id="tree_title">
+          provenance graph view
+        </div>
+        <div id="tree"></div>
       </div>
-
       <div id="right">
+        <div id="div_title">
+          report view
+        </div>
         <div id="input_query">
-          <form method="post" action="/input_query" class="input_form">
-            <input type="text" name="input_query" class="input_box">
-            <input type="submit" value="submit" class="input_button">
+          <form method="post" action="/input_query" class="query_form">
+            <input type="text" name="input_query" class="query_box" placeholder="type your query here... (ex) create scatter plot column1, column2">
+            <input type="submit" value="submit" class="query_submit">
           </form>
         </div>
         {{create_div|safe}}
       </div>
     </div>
   </body>
+  <footer>sejong university</footer>
+
+  <!-- ************** Setting ************** -->
+  <script>
+    $(document).ready(function(){
+      $("input:radio[name=first_radio_name]").click(function(){
+        value = $('input[name="first_radio_name"]:checked').attr('value');
+        if (value == 'A'){
+          $('#changed_by_radio').html('problem<div><input type="radio" name="second_radio_name" value="B-1">missing value</div> <div><input type="radio" name="second_radio_name" value="B-2">extreme value</div> <div><input type="radio" name="second_radio_name" value="B-3">inconsistent value</div>');
+        }
+        if (value == 'B'){
+          $('#changed_by_radio').html('quality<div><input type="radio" name="second_radio_name" value="A-1">kolomogorov smironov</div> <div><input type="radio" name="second_radio_name" value="A-2">skewness</div> <div><input type="radio" name="second_radio_name" value="A-3">kurotosis</div>');                        
+        }
+        if (value == 'C'){
+          $('#changed_by_radio').html('');
+        }
+      })
+    });
+  </script>
 
   <!-- ************** Generate the tree diagram ************** -->
-  <script>
-    var treeData = [
-      {
-        "file": "root", 
-        "name": "50",
-        "parent": "null",
-        "children": [
-          {
-            "file": "1.1",
-            "name": "26",
-            "children": [
-              {"file": "2.1", "name": "12"},
-              {
-                "file": "2.2",
-                "name": "12",
-                "children": [
-                  {"file": "3.1", "name": "0"},
-                  {"file": "3.2", "name": "0"},
-                  {"file": "3.3", "name": "0"}  
-                ]
-              },
-              {
-                "file": "2.3",
-                "name": "12"
-              }
-            ]
-          },
-          {
-            "file": "1.2",
-            "name": "38",
-          },
-          {
-            "file": "1.3",
-            "name": "38",
-          }      
-        ]
-      }
-    ];
+  <script>   
+    var treeData = [{{tree_data|safe}}]
 
-    var margin = {top: 30, right: 30, bottom: 30, left: 30},
-      width = 500 - margin.right - margin.left,
+    var margin = {top: 25, right: 25, bottom: 25, left: 25},
+      width = 500,
       height = 500 - margin.top - margin.bottom;
-      
-    var i = 0,
-      duration = 750,
-      root;
 
-    var tree = d3.layout.tree()
+    var svg = d3v3.select("#tree").append("svg")
+    .attr("viewBox", "0 0 500 1000")
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var i = 0, duration = 750, root;
+
+    var tree = d3v3.layout.tree()
       .size([height, width]);
 
-    var diagonal = d3.svg.diagonal()
+    var diagonal = d3v3.svg.diagonal()
       .projection(function(d) { return [d.x, d.y]; });
 
-    var svg = d3.select("#tree").append("svg")
-      .attr("width", width + margin.right + margin.left)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     root = treeData[0];
-    root.x0 = height / 2;
+    root.x0 = 0;
     root.y0 = 0;
-      
+    
     update(root);
 
     function update(source) {
@@ -165,26 +131,24 @@
       // Normalize for fixed-depth.
       nodes.forEach(function(d) { d.y = d.depth * 130; });
 
-      // Update the nodes…
+      // Update the nodes.
       var node = svg.selectAll("g.node")
         .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
         .attr("class", "node")
-        .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
-        .on("click", click);
+        .on("click", click)
+        .on("auxclick", auxclick);
 
       nodeEnter.append("circle")
-        .attr("r", 20)
-        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+        .attr("r", 20);
 
       nodeEnter.append("text")
         .attr("x", function(d) { return 0; })
         .attr("dy", ".35em")
         .attr("text-anchor", function(d) { return "middle"; })
-        .text(function(d) { return d.name; })
-        .style("fill-opacity", 20);
+        .text(function(d) { return d.name; });
 
       // Transition nodes to their new position.
       var nodeUpdate = node.transition()
@@ -192,25 +156,20 @@
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
       nodeUpdate.select("circle")
-        .attr("r", 20)
-        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-
-      nodeUpdate.select("text")
-        .style("fill-opacity", 1);
+        .attr("r", 20);
 
       // Transition exiting nodes to the parent's new position.
       var nodeExit = node.exit().transition()
         .duration(duration)
-        .attr("transform", function(d) { return "translate(" + source.x + "," + source.y + ")"; })
         .remove();
 
       nodeExit.select("circle")
         .attr("r", 20);
 
       nodeExit.select("text")
-        .style("fill-opacity", 20);
+          .style("fill-opacity", 1);
 
-      // Update the links…
+      // Update the links.
       var link = svg.selectAll("path.link")
         .data(links, function(d) { return d.target.id; });
 
@@ -220,12 +179,22 @@
         .attr("d", function(d) {
           var o = {x: source.x0, y: source.y0};
           return diagonal({source: o, target: o});
-        });
+        })        
 
       // Transition links to their new position.
       link.transition()
         .duration(duration)
-        .attr("d", diagonal);
+        .attr("d", diagonal)
+        .style("stroke", function(d){
+          if (d.target.state == 'current' || d.target.state == 'true'){
+            return 'black';
+          }
+        })
+        .style("stroke-width", function(d){
+          if (d.target.state == 'current' || d.target.state == 'true'){
+            return '3px';
+          }
+        });
 
       // Transition exiting nodes to the parent's new position.
       link.exit().transition()
@@ -245,34 +214,75 @@
 
     // Toggle children on click.
     function click(d) {
-      if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
+      if(d.state == 'current'){
+        current(d);
       }
-      update(d);
-      node_overview(d);
+      if(d.state == 'recommend'){
+        recommend(d);
+      }
     }
 
-    function node_overview(d){
-      var file = "static/" + d.file + ".csv";
+    // Toggle children on dblclick.
+    function auxclick(d) {
+      update(d);
+      update_tree(d);
+    }
+
+    function current(d){
+      var file_name = d.file;
+      var name = d.name;
 
       $.ajax({
-        url: '/node_overview',
+        url: '/current',
         type: 'POST',
-        data: file,
-        dataType: "text"
+        data: {'file_name': file_name, 'name': name}
+      }).done(function(){
+        window.location.href = '/';
+      })
+    }
+
+    function recommend(d){
+      var file_name = d.file;
+      var name = d.name;
+
+      $.ajax({
+        url: '/recommend',
+        type: 'POST',
+        data: {'file_name': file_name, 'name': name}
+      }).done(function(){
+        window.location.href = '/';
+      })
+    }
+
+    function update_tree(d){
+      var file_name = d.file;
+      var name = d.name;
+
+      $.ajax({
+        url: '/update_tree',
+        type: 'POST',
+        data: {'file_name': file_name, 'name': name}
       }).done(function(){
         window.location.href = '/';
       })
     }
   </script>
 
-  <!-- ************** Generate the Vega-Lite ************** -->
+  <!-- ************** Generate the vega lite ************** -->
   <script>
     {{create_vlSpec|safe}}
-  </script>  
+  </script>
+  <!-- ************** Generate the barchart ************** -->
+  <script>
+    {{create_bar|safe}}
+  </script>
+  <!-- ************** Generate the heatmap ************** -->
+  <script>
+    {{create_heatmap|safe}}
+  </script>
+  <!-- ************** Generate the histogram ************** -->
+  <script>
+    {{create_histogram|safe}}
+  </script>
   </body>
 </html>
