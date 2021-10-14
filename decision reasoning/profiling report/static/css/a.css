@@ -1,97 +1,147 @@
+@font-face{
+  font-family: SeoulNamsanM;
+  src: url(./data/SeoulNamsanM.woff) format('woff');
+  font-weight: 400;
+}
+.save {
+  float: right;
+  margin-top: 5px;
+  margin-right: 5px;
+  background-color: transparent;
+  border-color: transparent;
+}
+#setting {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.setting_form {
+  font-size: 15px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
+}
+.setting_submit {
+  width: 100px;
+  height: 30px;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
+  color: white;
+  background-color: #74788D;
+}
+
+#input_query {
+  display: flex;
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.query_form {
+  width: 100%;
+}
+.query_box {
+  float: left;
+  width: 90%;
+  height: 100%;
+  border: none;
+  box-shadow: none;
+  font-size: 15px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
+  color: lightgray;
+}
+.query_submit {
+  float: right;
+  width: 100px;
+  height: 30px;
+  margin-left: 5px;
+  font-size: 15px;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
+  color: white;
+  background-color: #74788D;
+}
+
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: black;
   shape-rendering: crispEdges;
-}
-.point {
-  fill: #0069D9;
-  stroke: #000;
 }
 .node {
   cursor: pointer;
 }
 .node circle {
   fill: white;
-  stroke: #0069D9;
-  stroke-width: 3px;
+  stroke: black;
+  stroke-width: 2px;
 }
 .node text {
-  font: 12px sans-serif;
+  font: 12px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
 }
 .link {
   fill: none;
-  stroke: #D8D8D8;
+  stroke: lightgray;
   stroke-width: 2px;
 }
-
-
 
 header {
   height: 70px;
   font-size: 17px;
+  font-family: SeoulNamsanM;
+  font-weight: bold;
+  transform: skew(-0.1deg);
   color: white;
-  background-color: #2a3042;
+  background-color: #2A3042;
 }
 #wrap {
   display: flex;
   height: 100%;
-  background-color: #F8F8F8;
 }
 #left {
   width: 25%;
   margin-top: 5px;
-  margin-right: 5px;
   margin-bottom: 5px;
-  background-color: white;
-  border: 1px solid #D8D8D8;
+  margin-right: 5px;
+  background-color: #F2F2F5;
 }
-#tree_title {
+#setting_title, #tree_title, #div_title {
   height: 30px;
-  border-bottom: 1px solid #D8D8D8;
+  font-size: 17px;
+  font-family: SeoulNamsanL;
+  transform: skew(-0.1deg);
+  color: white;
+  background-color: #47597E;
 }
 #right {
   width: 75%;
   margin-top: 5px;
-  margin-bottom: 5px;
-}
-#input_query {
-  height: 30px;
-  border-bottom: 1px solid #D8D8D8;
-}
-.input_form {
-  display: flex;
-}
-.input_box {
-  width: 100%;
-  height: 30px;
-  border: none;
-}
-.input_button {
-  height: 30px;
-  background-color: #0069D9;
-  color: white;
-  border: 0;
-  outline: 0;
-}
-.input_button:hover {
-  background-color: #0069D9;
 }
 footer {
   height: 60px;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
   color: #74788D;
   background-color: #F2F2F5;
 }
 
 #list {
   width: 20%;
-  border-right: 1px solid #D8D8D8;
+  border-right: 3px solid #F2F2F5;
 }
 #vlSpec {
   width: 30%;
-  border-right: 1px solid #D8D8D8;
+  border-right: 3px solid #F2F2F5;
 }
-
 table {
   width: 80%;
   margin-left: auto;
@@ -100,12 +150,15 @@ table {
   border-collapse: collapse;
 }
 th {
-  font-weight: bold;
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
   border: 1px solid black;
   color: white;
-  background-color: #0069D9;
+  background-color: #74788D;
 }
 td {
+  font-family: SeoulNamsanM;
+  transform: skew(-0.1deg);
   border: 1px solid black;
   background-color: #D8D8D8;
 }
