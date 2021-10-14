@@ -12,13 +12,14 @@
         <title>Visualization</title>
     </head>
     <body>
-        <p><h1>주어진 과제를 아래의 시각화를 이용하여 해결하세요</h1></p>
-        <div><img src="{{ url_for('static', filename=image) }}" style="max-width: 80%; height: auto;"></div>
+        <p><h3>주어진 과제를 아래의 시각화를 이용하여 해결하세요</h3></p>
+        <p>이미지가 잘 보이지 않을 경우에는 이미지를 우 클릭해서 새 탭에서 이미지 열기를 통해 이미지를 봐주세요</p>
+        <div><img src="{{ url_for('static', filename=image) }}" style="height: 500px;"></div>
         <br>
         <p>
             <div>
                 <form method="get" name="formname" action="/answer">
-                    <input type="input" id="answer" placeholder="답변" required name="answer" onkeypress="JavaScript:press(this.form)" autocomplete="off"/>
+                    <input type="input" id="answer" placeholder="답변을 입력해주세요 ENTER을 누르면 다음 페이지로 넘어가니 주의해주세요" required name="answer" onkeypress="JavaScript:press(this.form)" autocomplete="off"  style="width:800px;height:200px;"/>
                 </form>
             </div>
         </p>
