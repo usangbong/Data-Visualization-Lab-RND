@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash
+from nl4dv import NL4DV
 
 import pandas as pd
 import numpy as np
@@ -7,16 +8,17 @@ import os
 
 import imp_list.imputation as imputation
 import imp_list.statistics as statistics
-import imp_list.div as div
-import imp_list.svg as svg
+import imp_list.recommend as recommend
+import imp_list.tree as tree
 
-from nl4dv import NL4DV
-import missingno as msno
-import matplotlib.pyplot as plt
+import temp_list.div as div
+import temp_list.svg as svg
 
-init = True
-current = ''
-treeData = ''
+recommend_method = ''
+recommend_type = ''
+
+current_file = ''
+cnt = 5
 
 cnt_create = 0
 create_div = ''
@@ -24,24 +26,40 @@ create_vlSpec = ''
 create_bar = ''
 create_heatmap = ''
 create_histogram = ''
+
 app = Flask(__name__)
 app.secret_key = "vislab"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global init, current
-    init = False
-    current = 'static/data/missing.csv'
+    with open('static/data/tree_data.json') as json_file:
+        tree_data = json.load(json_file)
 
-    return render_template("index.html", create_div = create_div, create_vlSpec = create_vlSpec, create_bar = create_bar, create_heatmap = create_heatmap, create_histogram = create_histogram)
+    root = tree.TreeNode(tree_data['file'], name = tree_data['name'], state = tree_data['state'], action = tree_data['action'])
+    root = root.dict_to_tree(tree_data['children'])
+
+    global current_file
+    current_node = root.find_state('current')
+    current_file = 'static/data/' + str(current_node.file) + '.csv'
+
+    return render_template("index.html", tree_data = tree_data, create_div = create_div, create_vlSpec = create_vlSpec, create_bar = create_bar, create_heatmap = create_heatmap, create_histogram = create_histogram)
+
+@app.route('/setting', methods=['GET', 'POST'])
+def setting():
+    global recommend_method, recommend_type
+    first_radio_name = request.form
+    recommend_method = request.form["first_radio_name"]
+    recommend_type = request.form["second_radio_name"]
+
+    return redirect('/')
 
 @app.route('/input_query', methods=['GET', 'POST'])
 def input_query():
-    global current, cnt_create, create_div, create_vlSpec, create_bar
-    file_name = current
-    nl4dv_df = pd.read_csv(file_name)
-    nl4dv_df = nl4dv_df.dropna()
+    global current_file, cnt_create, create_div, create_vlSpec, create_bar
+    file_name = current_file
+    df = pd.read_csv(file_name)
 
+    nl4dv_df = df.dropna()
     nl4dv_df = nl4dv_df.to_dict('records')
     nl4dv_instance = NL4DV(data_url = os.path.join(file_name))
     dependency_parser_config = {"name": "spacy", "model": "en_core_web_sm", "parser": None}
@@ -49,16 +67,15 @@ def input_query():
 
     result = request.form
     query = result['input_query']
-    output = nl4dv_instance.analyze_query(query)
+    nl4dv_output = nl4dv_instance.analyze_query(query)
 
     # extraction attribute, task, vistype
     try:
-        attributes = output['visList'][0]['attributes']
-        tasks = output['visList'][0]['tasks']
-        visType = output['visList'][0]['visType']
-    except:
-        if init == False:   
-            flash("please writing valid query")
+        attributes = nl4dv_output['visList'][0]['attributes']
+        tasks = nl4dv_output['visList'][0]['tasks']
+        visType = nl4dv_output['visList'][0]['visType']
+    except:   
+        flash("please writing valid query")
         return redirect('/')
 
     if type(attributes) == list:
@@ -69,7 +86,7 @@ def input_query():
         visType = ",".join(visType)
 
     # extraction vlspec
-    vlSpec = output['visList'][0]['vlSpec']
+    vlSpec = nl4dv_output['visList'][0]['vlSpec']
     vlSpec['data']['values'] = nl4dv_df
 
     vlSpec['width'] = "container"
@@ -98,17 +115,13 @@ def input_query():
     del vlSpec['data']['url']
 
     # generation div
-    try:
-        create_div = create_div + div.input_query_div(cnt_ctreate, attributes, tasks, visType)
-    except:
-        if init == False:   
-            flash("please writing valid query")
-        return redirect('/')
+    create_div = create_div + div.input_query_div(cnt_create, attributes, tasks, visType)
 
     # vlSpec
     create_vlSpec = create_vlSpec + svg.svg_vlSpec(cnt_create, vlSpec)
 
     cnt_create = cnt_create + 1
+
     return redirect('/')
 
 @app.route('/current', methods=['GET', 'POST'])
@@ -117,44 +130,87 @@ def current():
     file_name = 'static/data/' + data[0][10:] + '.csv'
     name = data[1][5:]
 
-    global current, cnt_create, create_div, create_bar
-    current = file_name
-
-    # generation div
-    create_div = create_div + div.current_div(cnt_create, name)
-
-    # barchart - each
     df = pd.read_csv(file_name)
-    col = list(df)
+    df = df[sorted(df.columns)]
+    column_list = list(df)
 
-    missing = df.isnull().sum().tolist()
-    extreme = []
+    # tree
+    with open('static/data/tree_data.json') as json_file:
+        tree_data = json.load(json_file)
+    root = tree.TreeNode(file = tree_data['file'], name = tree_data['name'], state = tree_data['state'], action = tree_data['action'])
+    root = root.dict_to_tree(tree_data['children'])
 
-    df = df.dropna()
-    for column in df:
-        q25 = np.quantile(df[column], 0.25)
-        q75 = np.quantile(df[column], 0.75)
+    # find children node
+    my_node = root.find_name(name)
+    children_node = my_node.children
 
-        iqr = q75 - q25
-        cut_off = iqr * 1.5
+    global recommend_method, cnt_create, create_div, create_bar
+    if recommend_method == 'A':
+        # current df problem
+        missing, extreme, total = recommend.quality_issue(df)
+        current_df_problem = pd.DataFrame({x for x in zip(column_list, missing, extreme, total)}, columns = ['index', 'missing', 'extreme', 'total'])
+        current_df_problem = current_df_problem.sort_values(by = 'index').reset_index(drop = True)
+        current_df_problem = current_df_problem.drop(['index'], axis = 1)
+        
+        current_df_problem = current_df_problem.sum().tolist()
 
-        lower, upper = q25 - cut_off, q75 + cut_off
-        data1 = df[df[column] > upper]     
-        data2 = df[df[column] < lower]
+        # compare current - children problem to generation div
+        action = []
+        output = [[], [], []]
+        output_percent = [[], [], []]
+        output_sign = [[], [], []]
 
-        extreme.append(data1.shape[0] + data2.shape[0])
-    
-    total = [x + y for x, y in zip(missing, extreme)]
-    max_value = max(total)
+        for i in range(0, 3):
+            action.append(children_node[i].action)
+            
+            child_df = pd.read_csv('static/data/' + children_node[i].file + '.csv')
+            child_df = child_df[sorted(child_df.columns)]
+            
+            missing, extreme, total = recommend.quality_issue(child_df)
+            child_df_problem = pd.DataFrame({x for x in zip(column_list, missing, extreme, total)}, columns = ['index', 'missing', 'extreme', 'total'])
+            child_df_problem = child_df_problem.sort_values(by = 'index').reset_index(drop = True)
+            child_df_problem = child_df_problem.drop(['index'], axis = 1)
+            
+            child_df_problem = child_df_problem.sum().tolist()
 
-    new_df = pd.DataFrame({x for x in zip(col, missing, extreme)}, columns = ['index', 'missing', 'extreme'])
-    new_df.to_csv("static/data/bar_" + str(cnt_create) + ".csv")
-    create_bar = create_bar + svg.svg_bar1(cnt_create, max_value)
+            for j in range(len(current_df_problem)):
+                diff = current_df_problem[j] - child_df_problem[j]
 
-    # barchart - total
-    create_bar = create_bar + svg.svg_bar2(cnt_create, max_value)
+                if diff > 0:
+                    diff_percent = (100 * diff)/current_df_problem[j]
+                    output_sign[i].append('감소')
+                elif diff == 0:
+                    diff_percent = 0
+                    output_sign[i].append('감소')
+                else:
+                    diff = -diff
+                    diff_percent = 0
+                    output_sign[i].append('증가')
+
+                output[i].append(diff)
+                output_percent[i].append(diff_percent)
+
+        # generation div
+        create_div = create_div + div.current_div(cnt_create, name, children_node, action, output, output_percent, output_sign)
+
+        # barchart - each
+        missing, extreme, total = recommend.quality_issue(df)
+        max_value = max(total)
+
+        bar_output_df = pd.DataFrame({x for x in zip(column_list, missing, extreme)}, columns = ['index', 'missing', 'extreme'])
+        bar_output_df = bar_output_df.sort_values(by = 'index').reset_index(drop = True)
+
+        bar_output_df.to_csv("static/data/bar_" + str(cnt_create) + ".csv", index = False)
+        create_bar = create_bar + svg.svg_bar1(cnt_create, max_value)
+
+        # barchart - total
+        create_bar = create_bar + svg.svg_bar2(cnt_create, max_value)
+
+    else:
+        print('not a')
 
     cnt_create = cnt_create + 1
+
     return redirect('/')
 
 @app.route('/recommend', methods=['GET', 'POST'])
@@ -163,160 +219,208 @@ def recommend():
     file_name = 'static/data/' + data[0][10:] + '.csv'
     name = data[1][5:]
 
-    # generation div
-    global current, cnt_create, create_div, create_heatmap, create_histogram
-    create_div = create_div + div.recommend_div(cnt_create, name)
-    
-    # heatmap - before
-    df = pd.read_csv(current)
-    col = list(df)
-    target_col = 'pm10'
-
-    tmp_index, tmp_y, tmp_value = [], [], []
-    data = {}
-    for i in range(len(col)):
-        tmp_df = df[col[i]]
-        for j in range(int(len(df)/20)):
-            slice_df = tmp_df.iloc[20*j : 20*(j + 1)]
-            value = slice_df.isnull().sum()
-
-            tmp_index.append(col[i])
-            tmp_y.append(20*(j + 1))
-            tmp_value.append(value)
-
-    data['index'] = tmp_index
-    data['y'] = tmp_y
-    data['value'] = tmp_value
-    
-    heatmap_df = pd.DataFrame(data)
-    heatmap_df.to_csv("static/data/heatmap1_" + str(cnt_create) + ".csv")
-    create_heatmap = create_heatmap + svg.svg_heatmap(cnt_create, col, target_col, 1, 'heatmap_before')
-
-    # heatmap - after
     df = pd.read_csv(file_name)
+    df = df[sorted(df.columns)]
 
-    tmp_index, tmp_y, tmp_value = [], [], []
-    data = {}
-    for i in range(len(col)):
-        tmp_df = df[col[i]]
-        for j in range(int(len(df)/20)):
-            slice_df = tmp_df.iloc[20*j : 20*(j + 1)]
-            value = slice_df.isnull().sum()
+    global recommend_method, current_file, cnt_create, create_div, create_heatmap, create_histogram
+    if recommend_method == 'A':
+        before_df = pd.read_csv(current_file)
+        before_df = before_df[sorted(df.columns)]
+        column_list = list(before_df)
 
-            tmp_index.append(col[i])
-            tmp_y.append(20*(j + 1))
-            tmp_value.append(value)
+        # generation div
+        create_div = create_div + div.recommend_div(cnt_create, name)
 
-    data['index'] = tmp_index
-    data['y'] = tmp_y
-    data['value'] = tmp_value
-    
-    heatmap_df = pd.DataFrame(data)
-    heatmap_df.to_csv("static/data/heatmap2_" + str(cnt_create) + ".csv")
-    create_heatmap = create_heatmap + svg.svg_heatmap(cnt_create, col, target_col, 2, 'heatmap_after')
+        missing, extreme, total = recommend.quality_issue(before_df)
+        df_problem = pd.DataFrame({x for x in zip(column_list, missing, extreme, total)}, columns = ['index', 'missing', 'extreme', 'total'])
+        df_problem = df_problem.sort_values(by = 'index').reset_index(drop = True)
+        target_column = df_problem.iloc[df_problem['total'].idxmax()]['index']
 
-    # histogram - before
-    df = pd.read_csv(current)
-    histogram_df = df[target_col].dropna()
+        # heatmap - before
+        heatmap_output_df = svg.make_heatmap_df(column_list, before_df)
 
-    q25 = np.quantile(histogram_df, 0.25)
-    q75 = np.quantile(histogram_df, 0.75)
+        heatmap_output_df.to_csv("static/data/heatmap1_" + str(cnt_create) + ".csv", index = False)
+        create_heatmap = create_heatmap + svg.svg_heatmap(cnt_create, column_list, target_column, 1, 'heatmap_before')
 
-    iqr = q75 - q25
-    cut_off = iqr * 1.5
-    lower, upper = q25 - cut_off, q75 + cut_off
+        # heatmap - after
+        heatmap_output_df = svg.make_heatmap_df(column_list, df)
 
-    histogram_df.to_csv("static/data/histogram1_" + str(cnt_create) + ".csv")
-    create_histogram = create_histogram + svg.svg_histogram(cnt_create, col, target_col, lower, upper, 1, 'histogram_before')
+        heatmap_output_df.to_csv("static/data/heatmap2_" + str(cnt_create) + ".csv", index = False)
+        create_heatmap = create_heatmap + svg.svg_heatmap(cnt_create, column_list, target_column, 2, 'heatmap_after')
 
-    # histogram - after
-    df = pd.read_csv(file_name)
-    histogram_df = df[target_col].dropna()
+        # histogram
+        before_df = before_df.dropna()
+        min_value = before_df[target_column].min()
+        max_value = before_df[target_column].max()
+        lower, upper = recommend.lower_upper(before_df, target_column)
 
-    q25 = np.quantile(histogram_df, 0.25)
-    q75 = np.quantile(histogram_df, 0.75)
+        before_df.to_csv("static/data/histogram1_" + str(cnt_create) + ".csv", index = False)
+        create_histogram = create_histogram + svg.svg_histogram(cnt_create, target_column, min_value, max_value, lower, upper, 1, 'histogram_before')
 
-    iqr = q75 - q25
-    cut_off = iqr * 1.5
-    lower, upper = q25 - cut_off, q75 + cut_off
+        df.to_csv("static/data/histogram2_" + str(cnt_create) + ".csv", index = False)
+        create_histogram = create_histogram + svg.svg_histogram(cnt_create, target_column, min_value, max_value, lower, upper, 2, 'histogram_after')
 
-    histogram_df.to_csv("static/data/histogram2_" + str(cnt_create) + ".csv")
-    create_histogram = create_histogram + svg.svg_histogram(cnt_create, col, target_col, lower, upper, 2, 'histogram_after')
+    else:
+        print('not a')
 
     cnt_create = cnt_create + 1
+
     return redirect('/')
 
 @app.route('/update_tree', methods=['GET', 'POST'])
 def update_tree():
-    def problem(df):
-        col = list(df)
-
-        missing = df.isnull().sum().tolist()
-        extreme = []
-
-        df = df.dropna()
-        for column in df:
-            q25 = np.quantile(df[column], 0.25)
-            q75 = np.quantile(df[column], 0.75)
-
-            iqr = q75 - q25
-            cut_off = iqr * 1.5
-
-            lower, upper = q25 - cut_off, q75 + cut_off
-            data1 = df[df[column] > upper]
-            data2 = df[df[column] < lower]
-
-            extreme.append(data1.shape[0] + data2.shape[0])
-
-        total = [x + y for x, y in zip(missing, extreme)]
-        df = pd.DataFrame({x for x in zip(col, missing, extreme, total)}, columns = ['index', 'missing', 'extreme', 'total'])
-        return df
-
-
-
     data = request.get_data().decode('utf-8').split('&')
     file_name = 'static/data/' + data[0][10:] + '.csv'
     name = data[1][5:]
 
-    # count the number of problems per column in origin df
-    origin_df = pd.read_csv(file_name)
-    origin_problem_df = problem(origin_df)
+    df = pd.read_csv(file_name)
+    df = df[sorted(df.columns)]
+    column_list = list(df)
 
-    # select the column with the most problems
-    target_col_name = origin_problem_df.iloc[origin_problem_df['total'].idxmax()]['index']
-    target_df = origin_df.loc[:, [target_col_name]]
-    remain_df = origin_df.drop([target_col_name], axis = 1)
+    with open('static/data/tree_data.json') as json_file:
+        tree_data = json.load(json_file)
 
-    # action
-    action = ['dropna', 'min', 'max', 'mean', 'median', 'em', 'locf']
-    action_df = [target_df.dropna(), imputation.custom_imp_min(target_df), imputation.custom_imp_max(target_df),
-                imputation.custom_imp_mean(target_col_name, target_df), imputation.custom_imp_median(target_col_name, target_df),
-                imputation.custom_imp_em(target_col_name, target_df), imputation.custom_imp_locf(target_col_name, target_df)]
+    root = tree.TreeNode(tree_data['file'], name = tree_data['name'], state = tree_data['state'], action = tree_data['action'])
+    root = root.dict_to_tree(tree_data['children'])
 
-    # count the number of problems per column in action df
-    after_problem_df = pd.DataFrame()
-    for i in range(0, 7):
-        df = problem(action_df[i])
-        after_problem_df = pd.concat([after_problem_df, df])
+    global recommend_method, recommend_type
+    if recommend_method == 'A':
+        # quality issue per column in current df
+        missing, extreme, total = recommend.quality_issue(df)
+        df_problem = pd.DataFrame({x for x in zip(column_list, missing, extreme, total)}, columns = ['index', 'missing', 'extreme', 'total'])
+        df_problem = df_problem.sort_values(by = 'index').reset_index(drop = True)
 
-    after_problem_df = after_problem_df.reset_index(drop = True)
-    after_problem_df = after_problem_df.sort_values('total')
+        # select the column with the most quality issue
+        target_column = df_problem.iloc[df_problem['total'].idxmax()]['index']
+        target_df = df.loc[:, [target_column]]
+        remain_df = df.drop([target_column], axis = 1)
 
-    # select the 3 actions with the least problems
-    recommend_idx = after_problem_df.head(3)
-    recommend_idx = list(recommend_idx.index.values)
+        print(target_column)
 
-    recommend_list = []
-    file_name_list = []
-    for i in range(3):
-        recommend_list.append(action[recommend_idx[i]])
-        df = action_df[recommend_idx[i]]
-        df = pd.concat([remain_df, df], axis = 1)
+        # action
+        action = ['dropna', 'min', 'max', 'mean', 'median', 'em', 'locf']
+        action_df = ['dropna', imputation.custom_imp_min(target_df), imputation.custom_imp_max(target_df),
+                    imputation.custom_imp_mean(target_column, target_df), imputation.custom_imp_median(target_column, target_df),
+                    imputation.custom_imp_em(target_column, target_df), imputation.custom_imp_locf(target_column, target_df)]
 
-        if recommend_list[i] == 'dropna':
-            df = df.dropna(subset = [target_col_name], how = 'all')
+        # current df quality issue
+        missing, extreme, total = recommend.quality_issue(df)
+        current_df_problem = pd.DataFrame({x for x in zip(column_list, total)}, columns = ['index', 'total'])
+        current_df_problem = current_df_problem.sort_values(by = 'index').reset_index(drop = True)
+        current_df_problem = current_df_problem.drop(['index'], axis = 1)
+        
+        current_df_problem = current_df_problem.sum().tolist()
 
-        df.to_csv('static/data/' + name + '_' + str(i) + '.csv')
+        # compare current - action
+        output = []
+
+        for i in range(0, 7):
+            if action[i] != 'dropna':
+                tmp_df = action_df[i]
+                tmp_df = pd.concat([remain_df, tmp_df], axis = 1)
+            else:
+                tmp_df = df.dropna(subset = [target_column], how = 'all')
+            
+            tmp_df = tmp_df[sorted(df.columns)]
+
+            missing, extreme, total = recommend.quality_issue(tmp_df)
+            tmp_df_problem = pd.DataFrame({x for x in zip(column_list, total)}, columns = ['index', 'total'])
+            tmp_df_problem = tmp_df_problem.sort_values(by = 'index').reset_index(drop = True)
+            tmp_df_problem = tmp_df_problem.drop(['index'], axis = 1)
+            
+            tmp_df_problem = tmp_df_problem.sum().tolist()
+
+            diff = current_df_problem[0] - tmp_df_problem[0]
+            output.append([i, diff])
+    
+    else:
+        drop_df = df.dropna()
+
+        # quality per column in current df
+        output = quality_metric_total(drop_df)
+        df_problem = pd.DataFrame({x for x in zip(column_list, output[0], output[1], output[2], output[3])}, columns = ['index', 'kstest', 'skewness', 'kurtosis', 'entropy'])
+        df_problem = df_problem.sort_values(by = 'index').reset_index(drop = True)
+
+        # select the column with the lowest quality
+        # kstest, entropy -> 낮을수록 좋음
+        # skewness, kurtosis -> 0 가까울수록 좋음
+        if recommend_type == 'skewness' or recommend_type == 'kurtosis':
+            df_problem[recommend_type] = df_problem[recommend_type].abs()
+
+        target_column = df_problem.iloc[df_problem[recommend_type].idxmax()]['index']
+        target_idx = df.columns.get_loc(target_column)
+        target_df = df.loc[:, [target_column]]
+        remain_df = df.drop([target_column], axis = 1)
+
+        print(target_column)
+
+        # action
+        action = ['dropna', 'min', 'max', 'mean', 'median', 'em', 'locf']
+        action_df = ['dropna', imputation.custom_imp_min(target_df), imputation.custom_imp_max(target_df),
+                    imputation.custom_imp_mean(target_column, target_df), imputation.custom_imp_median(target_column, target_df),
+                    imputation.custom_imp_em(target_column, target_df), imputation.custom_imp_locf(target_column, target_df)]
+
+        # current column quality
+        kstest, skewness, kurtosis, entropy = quality_metric(drop_df, target_idx)
+        if recommend_type == 'kstest': current_df_quality = kstest
+        elif recommend_type == 'skewness': current_df_quality = abs(skewness)
+        elif recommend_type == 'kurtosis': current_df_quality = abs(kurtosis)
+        elif recommend_type == 'entropy': current_df_quality = entropy
+
+        # compare current - action
+        output = []
+
+        for i in range(0, 7):
+            if action[i] != 'dropna':
+                tmp_df = action_df[i].loc[:, [target_column]]
+                kstest, skewness, kurtosis, entropy = quality_metric(tmp_df, 0)
+
+                if recommend_type == 'kstest':
+                    tmp_df_quality = kstest
+                elif recommend_type == 'skewness':
+                    tmp_df_quality = abs(skewness)
+                elif recommend_type == 'kurtosis':
+                    tmp_df_quality = abs(kurtosis)
+                elif recommend_type == 'entropy':
+                    tmp_df_quality = kstest
+                    
+                diff = current_df_quality - tmp_df_quality
+                output.append([i, diff])
+            else:
+                tmp_df = drop_df.loc[:, [target_column]]
+                output.append([i, 0])
+
+    output.sort(key = lambda x:-x[1])
+
+    # select the 3 actions with the most quality issue reduction
+    recommend_idx = [output[0][0], output[1][0], output[2][0]]
+    print(recommend_idx)
+
+    # recommend - children node
+    for i in range(0, 3):
+        if action[recommend_idx[i]] != 'dropna':
+            recommend_df = action_df[recommend_idx[i]]
+            recommend_df = pd.concat([remain_df, recommend_df], axis = 1)
+        else:
+            recommend_df = df.dropna(subset = [target_column], how = 'all')
+        
+        recommend_df = recommend_df[sorted(df.columns)]
+
+        global cnt
+        recommend_df.to_csv('static/data/' + str(cnt) + '.csv', index = False)
+
+        # generation children node
+        new_node = tree.TreeNode(file = str(cnt), name = str(cnt), state = '', action = action[recommend_idx[i]])
+        root.add_child_to(name, new_node)
+
+        cnt = cnt + 1
+
+    # update state
+    root.update_state(name)
+
+    output_data = root.tree_to_dict()
+    with open('static/data/tree_data.json', 'w') as f:
+        json.dump(output_data, f, indent = 4)
 
     return redirect('/')
 
