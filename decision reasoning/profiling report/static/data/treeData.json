@@ -1,24 +1,28 @@
 {
     "file": "missing",
     "name": "1",
-    "state": "current",
+    "state": "true",
+    "action": "none",
     "children": [
         {
             "file": "missing",
             "name": "2",
-            "state": "recommend",
+            "state": "false",
+            "action": "none",
             "children": []
         },
         {
             "file": "missing",
             "name": "3",
-            "state": "recommend",
+            "state": "current",
+            "action": "none",
             "children": []
         },
         {
             "file": "missing",
             "name": "4",
-            "state": "recommend",
+            "state": "false",
+            "action": "none",
             "children": []
         }
     ]
