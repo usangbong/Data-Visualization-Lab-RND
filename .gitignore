@@ -7,3 +7,4 @@ EEG/System/venv/
 EEG/System/static/libs/user.py
 EEG/System/static/libs/__pycache__/
 EEG/System/model/.ipynb_checkpoints/
+EEG/System/model/
