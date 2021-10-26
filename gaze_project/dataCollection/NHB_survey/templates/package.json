@@ -1,0 +1,49 @@
+{
+  "name": "gaze",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.21.1",
+    "classnames": "^2.2.6",
+    "cross-env": "^7.0.2",
+    "i": "^0.3.6",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-color": "^2.19.3",
+    "react-dom": "^16.13.1",
+    "react-player": "^2.9.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-select": "^3.1.0",
+    "react-table": "^7.7.0",
+    "reactcss": "^1.2.3",
+    "styled-components": "^5.2.3"
+  },
+  "scripts": {
+    "start": "cross-env NODE_PATH=src react-scripts start",
+    "build": "cross-env NODE_PATH=src react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.12.17"
+  }
+}
