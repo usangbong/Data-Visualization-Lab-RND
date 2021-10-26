@@ -9,12 +9,12 @@ vis.sejong.ac.kr
   - Yun Jang
 - Postdoc
   - Seokyeon Kim
+- Researcher
+  - (Master) Hyesook Son
 - Ph.D 
   - Sangbong Yoo
-  - Seongmin Jeong
   - (military service) Mingyu Pi
 - Master
-  - Hyesook Son
   - Hyeyeon Park
   - Yejin Kim
   - Hyein Hong
@@ -23,10 +23,11 @@ vis.sejong.ac.kr
   - Changyoung Yoon
   - Yewan Moon
   - Changyoung Jeong
+  - Soobin Y
 - Alumni
   - (Ph.D) Hanbyul Yeon
   - (Master) Daekyo Jeong
-  - (Master) 
+  - (Master) Seongmin Jeong
   - (BS) Hewon Baek
   - (BS) Hyunjin Kang
 
