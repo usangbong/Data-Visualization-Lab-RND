@@ -7,4 +7,6 @@ EEG/System/venv/
 EEG/System/static/libs/user.py
 EEG/System/static/libs/__pycache__/
 EEG/System/model/.ipynb_checkpoints/
+EEG/System/model/image_classifier/
+EEG/System/model/structured_data_classifier/
 EEG/System/model/
