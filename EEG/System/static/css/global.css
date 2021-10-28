@@ -1,0 +1,19 @@
+html{
+    text-align: center;
+    height: 100%;
+}
+body{
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+div{
+    width: 100%;
+    clear: right;
+    clear: left;
+}
+
+.answer{
+    max-width: 70%;
+    height: auto;
+}

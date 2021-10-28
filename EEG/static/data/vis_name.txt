@@ -1,2 +1,0 @@
-vis_name,x,y,color,x_col,y_col,color_col
-Affairs,yearsmarried,affairs,rating,기혼 연도,바람 빈도,결혼 만족도

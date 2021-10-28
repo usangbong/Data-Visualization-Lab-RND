@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+    function press(f) {
+      if (f.keyCode == 13) {
+        formname.submit(); //formname에 사용자가 지정한 form의 name입력
+      }
+    }
+  </script>
+</head>
+  <body>
+  <br>
+  <div><h1>실험 안내 및 주의사항</h1></div>
+  <br>
+  <div>
+    <p>
+      실험은 3분의 휴식을 가진 후 시작됩니다.<br>
+      각 세트는 [시각화 문제 풀이 → 설문 → 휴식] 으로 진행됩니다.<br>
+      총 2가지의 난이도와 1개의 train 세트, 20개의 test 세트가 준비되어있습니다.<br>
+      주어진 과제의 요구 사항과 시각화 축을 주의 깊게 봐주세요.<br>
+      (축의 값이 점차 증가가 아닌 점차 감소하는 경우도 존재합니다.)<br>
+      <br>
+      실험은 주어진 시각화를 보고 질문에 대한 답변을 입력하는 방식으로 진행됩니다.<br>
+      답변 작성 후 ENTER을 입력하면 다음 페이지로 넘어가며, 한번 넘어간 페이지는 다시 돌아갈 수 없습니다.<br>
+      <br>
+      문제 해결에 어려움을 느끼게 하기 위해 의도적으로 어렵게 표현한 시각화가 존재합니다.<br>
+      혹시라도 답을 모르겠을 경우 모르겠다고 입력하셔도 됩니다.<br>
+      <br>
+      휴식 단계에서는 처음 휴식은 1분, 이후 휴식은 30초의 휴식을 가진 후 다음 과제를 수행할s 수 있는 버튼이 나타납니다<br>
+      만약 버튼이 나타난 후에도 추가적인 휴식을 원한다면 충분한 휴식을 가진 후 다음 문제로 넘어가주세요.<br>
+      <br>
+      뇌파 데이터의 노이즈를 방지하기 위해 불필요한 말이나 움직임은 지양해 주세요.<br>
+      준비 되셨으면 아래의 빈칸에 이름을 입력 후 ENTER을 눌러주세요.<br>
+    </p>
+  </div>
+  <br>
+  <div>
+  <br>
+    <form method="get" name="formname" action="/search">
+      <input type="input" id="search" placeholder="이름을 입력해주세요" required name="search" onkeypress="JavaScript:press(this.form)" autocomplete="off"/>
+    </form>
+  </div>
+  <link href="../static/css/global.css" rel="stylesheet">
+  <link href="../static/css/bootstrap.css" rel="stylesheet">
+</body>
+</html>
