@@ -1,10 +1,7 @@
+EEG/__pycache__
 EEG/.idea/
-EEG/venv
-
-EEG/System/__pycache__
-EEG/System/.idea/
-EEG/System/venv/
-EEG/System/static/libs/user.py
-EEG/System/static/libs/__pycache__/
-EEG/System/model/.ipynb_checkpoints/
-EEG/System/model/
+EEG/venv/
+EEG/static/libs/user.py
+EEG/static/libs/__pycache__/
+EEG/model/.ipynb_checkpoints/
+EEG/model/
