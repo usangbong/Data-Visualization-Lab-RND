@@ -1,9 +1,8 @@
 EEG/.idea/
+EEG/venv
 EEG/__pycache__
-EEG/venv/
 EEG/static/libs/user.py
 EEG/static/libs/__pycache__/
 EEG/model/.ipynb_checkpoints/
-EEG/model/image_classifier/
-EEG/model/structured_data_classifier/
 EEG/model/
+gaze_project/dataCollection/NHB_survey/templates/readme.md
