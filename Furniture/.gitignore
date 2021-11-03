@@ -7,11 +7,11 @@
 # IPython
 profile_default/
 ipython_config.py
+ikea-master/
 
 dataset
 build
-__pycache__
-bpp
+_pycache_
 
 # Remove previous ipynb_checkpoints
 #   git rm -r .ipynb_checkpoints/
