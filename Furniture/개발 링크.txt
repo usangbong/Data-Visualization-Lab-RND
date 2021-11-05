@@ -1,6 +1,0 @@
-https://076923.github.io/posts/Python-tkinter-16/
-https://stackoverflow.com/questions/54767062/tkinter-using-bind-to-resize-frame-dynamically
-https://stackoverflow.com/questions/17985216/simpler-way-to-draw-a-circle-with-tkinter
-https://stackoverflow.com/questions/64210371/how-to-draw-a-right-angle-triangle-using-tkinter
-https://www.codegrepper.com/code-examples/python/center+of+circle+in+tkinter
-https://stackoverflow.com/questions/47819197/additive-color-with-tkinter
