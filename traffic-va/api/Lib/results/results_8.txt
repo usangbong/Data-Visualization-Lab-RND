@@ -1,0 +1,93 @@
+5 car [1031, 479]
+4 car [1254, 468]
+3 car [1578, 479]
+2 car [1004, 343]
+1 car [1239, 444]
+0 frame changed
+
+8 car [951, 260]
+7 car [698, 171]
+6 car [1201, 346]
+5 car [1030, 476]
+4 car [1256, 462]
+3 car [1580, 481]
+2 car [1004, 343]
+1 car [1242, 444]
+0 frame changed
+
+5 car [1030, 479]
+4 car [1256, 466]
+3 car [1579, 480]
+2 car [1005, 342]
+0 frame changed
+
+7 car [688, 176]
+5 car [1031, 478]
+4 car [1256, 463]
+3 car [1579, 480]
+2 car [1004, 341]
+0 frame changed
+
+7 car [681, 184]
+6 car [1207, 346]
+5 car [1030, 477]
+4 car [1257, 462]
+3 car [1579, 481]
+0 frame changed
+
+7 car [678, 192]
+6 car [1206, 346]
+5 car [1030, 478]
+4 car [1256, 463]
+0 frame changed
+
+5 car [1031, 479]
+4 car [1256, 466]
+0 frame changed
+
+5 car [1030, 478]
+4 car [1255, 467]
+0 frame changed
+
+6 car [1208, 349]
+5 car [1031, 478]
+4 car [1254, 467]
+3 car [1578, 480]
+2 car [1003, 343]
+0 frame changed
+
+8 car [950, 259]
+6 car [1208, 349]
+5 car [1031, 476]
+4 car [1254, 466]
+3 car [1578, 480]
+2 car [1003, 342]
+0 frame changed
+
+7 car [653, 220]
+6 car [1205, 349]
+5 car [1030, 476]
+4 car [1254, 467]
+3 car [1578, 481]
+2 car [1003, 342]
+0 frame changed
+
+7 car [648, 233]
+6 car [1207, 347]
+5 car [1031, 479]
+4 car [1256, 464]
+2 car [1004, 342]
+0 frame changed
+
+5 car [1031, 480]
+4 car [1256, 463]
+0 frame changed
+
+5 car [1030, 485]
+4 car [1255, 464]
+0 frame changed
+
+5 car [1030, 481]
+4 car [1256, 465]
+0 frame changed
+
