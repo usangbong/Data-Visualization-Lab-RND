@@ -7,6 +7,9 @@ import Aggrement from '../components/Aggrement';
 import IntroManual from '../components/IntroManual';
 import Manual from '../components/Manual';
 
+import IntroMeaning from '../components/IntroMeaning';
+import Meaning from '../components/Meaning';
+
 import IntroSubjectInfo from '../components/IntroSubjectInfo';
 import SubjectInfo from '../components/SubjectInfo';
 
@@ -31,7 +34,23 @@ const COLORS = [
 ];
 
 const PORT = 5000;
-// const PORT = 360003;
+// const PORT = 36003;
+
+const PAGE_AGRREMENT = 0;
+const PAGE_SUBJECT_INFO = 1;
+const PAGE_MANUAL = 2;
+const PAGE_MEANING = 3;
+const PAGE_SURVEY_START = 4;
+
+const M_VIDEO_URL = `http://${window.location.hostname}:${PORT}/static/manual/suvey_manual_720.mp4?`+Math.random();
+const M_IMAGE_URL = `http://${window.location.hostname}:${PORT}/static/manual/m_example.png?`+Math.random();
+const M_IMAGE_SALIENCY_INTENSITY = `http://${window.location.hostname}:${PORT}/static/manual/saliency_intensity.png?`+Math.random();
+const M_IMAGE_SALIENCY_COLOR = `http://${window.location.hostname}:${PORT}/static/manual/saliency_color.png?`+Math.random();
+const M_IMAGE_SALIENCY_ORIENTATION = `http://${window.location.hostname}:${PORT}/static/manual/saliency_orientation.png?`+Math.random();
+const M_IMAGE_MEANING_INFO = `http://${window.location.hostname}:${PORT}/static/manual/meaning_info.png?`+Math.random();
+const M_IMAGE_MEANING_CONTEXT = `http://${window.location.hostname}:${PORT}/static/manual/meaning_context.png?`+Math.random();
+const M_IMAGE_MEANING_NO_SALIENCY = `http://${window.location.hostname}:${PORT}/static/manual/meaning_nosaliency.png?`+Math.random();
+const M_IMAGE_MEANING_SALIENCY = `http://${window.location.hostname}:${PORT}/static/manual/meaning_saliency.png?`+Math.random();
 
 const Home =()=> {
   // Main
@@ -44,8 +63,8 @@ const Home =()=> {
   const [DATA_SURVEY_STEP, setSurveyStep] = useState(0);
   const [MODIFY_CELL, setModifyCellFlag] = useState(true);
 
-  // Manual
-  const [VIDEO_URL, setVideoUrl] = useState("");
+  // // Manual
+  // const [VIDEO_URL, setVideoUrl] = useState("");
 
   // LOG
   // {user} | {event} | {subEvent} | {stimulus} | {colorIdx} | {timeStamp}
@@ -88,14 +107,14 @@ const Home =()=> {
       elog = [];
     }
     elog.push(log);
-    setEventLog((): void=>elog);
+    setEventLog(elog);
     // console.log(elog);
   }
 
   const updateChangedCell=(changedCell)=>{
     setSubjectCell(changedCell);
     let userid = USER_ID.split("_")[0]+"_"+USER_ID.split("_")[1]+"_"+changedCell.split("-")[1]+changedCell.split("-")[2];
-    setUserId((): void=> userid);
+    setUserId(userid);
     // console.log(userid);
     let updatedLog = [];
     for(let i=0; i<EVENT_LOG.length; i++){
@@ -124,12 +143,12 @@ const Home =()=> {
   }
 
   const selectedColorIndexUpdate =(index)=>{
-    setSelectedColorIdx((): void => index);
+    setSelectedColorIdx(index);
   }
 
   const selectedAreaUpdate =(areaArr)=>{
     // console.log(areaArr);
-    setSelectedArea((): void => areaArr);
+    setSelectedArea(areaArr);
     let selectedAreaSize = areaArr.length;
     if(selectedAreaSize!=0){
       for(let i=0; i<areaArr.length; i++){
@@ -155,7 +174,7 @@ const Home =()=> {
   }
 
   const likertQuestionArrayUpdate =(arr)=>{
-    setLikertQuestionArray((): void => arr);
+    setLikertQuestionArray(arr);
   }
 
   const browserType=(agt)=>{
@@ -190,10 +209,10 @@ const Home =()=> {
   function onClick_pageNumberAdd_button(){
     // console.log(PAGE_NUMBER);
     // console.log(TOTAL_PAGE);
-    if(PAGE_NUMBER == 0){
+    if(PAGE_NUMBER == PAGE_AGRREMENT){
+      // PAGE_AGGREMENT = 0
       // set video url setting
-      let manualVideo = `http://${window.location.hostname}:${PORT}/static/manual/suvey_manual_720.mp4?`+Math.random();
-      setVideoUrl((): void=> manualVideo);
+      // setVideoUrl((): void=> manualVideo);
       // user env check
       // PC-Mobile
       let envFilter="win16|win32|win64|macintel|mac|";
@@ -215,7 +234,7 @@ const Home =()=> {
       }
       // Web browser
       let _browser = browserType(navigator.userAgent.toLocaleLowerCase());
-      setWebBrowser((): void=>_browser);
+      setWebBrowser(_browser);
       if(_browser == "unavailable"){
         alert("크롬(Chrome), 엣지(Microsoft Edge), 웨일 브라우저를 사용해주세요.")
       }
@@ -235,28 +254,35 @@ const Home =()=> {
             height: _height
           });
         }
-        setStiImgUrl((): void=>_stiInfo);
+        setStiImgUrl(_stiInfo);
         setStiIndex(0);
-        setTotalPageNumber(3+_stiInfo.length);
-        setPageNumber((): void=>PAGE_NUMBER+1);
+
+        // PAGE_SURVEY_START = 4
+        setTotalPageNumber(PAGE_SURVEY_START+_stiInfo.length);
+        setPageNumber(PAGE_NUMBER+1);
       })
       .catch(error =>{
         alert(`ERROR - ${error.message}`);
       });
-    }else if(PAGE_NUMBER == 1){
+    }else if(PAGE_NUMBER == PAGE_SUBJECT_INFO){
+      // PAGE_SUBJECT_INFO = 1
       if(SUBJECT_CELL == "" || SUBJECT_BIRTH == ""){
         alert("모든 항목을 입력해주세요.");
       }else{
-        setPageNumber((): void=>PAGE_NUMBER+1);
+        setPageNumber(PAGE_NUMBER+1);
         let _date = new Date().toISOString().split("T")[0];
         let _time = new Date().toTimeString().split(" ")[0].split(":");
         let dateForm = _date+"-"+_time[0]+_time[1];
         let userid = dateForm+"_"+SUBJECT_BIRTH+"_"+SUBJECT_CELL.split("-")[1]+SUBJECT_CELL.split("-")[2];
-        setUserId((): void=> userid);
+        setUserId(userid);
         // console.log(userid);
       }
-    }else if(PAGE_NUMBER == 2){
-      setPageNumber((): void=>PAGE_NUMBER+1);
+    }else if(PAGE_NUMBER == PAGE_MANUAL){
+      // PAGE_MANUAL = 2
+      setPageNumber(PAGE_NUMBER+1);
+    }else if(PAGE_NUMBER == PAGE_MEANING){
+      // PAGE_MEANING = 3
+      setPageNumber(PAGE_NUMBER+1);
       // loging
       pushEventLog({
         user: USER_ID, 
@@ -266,8 +292,8 @@ const Home =()=> {
         colorIdx: 0,
         timeStamp: getTimestamp()
       });
-    }
-    else if(PAGE_NUMBER >= 3 && PAGE_NUMBER<TOTAL_PAGE){
+    }else if(PAGE_NUMBER >= PAGE_SURVEY_START && PAGE_NUMBER<TOTAL_PAGE){
+      // PAGE_SURVEY_START = 4
       let trueDataFlag = true;
       let likertCountFlag = true;
       if(LIKERT_QUESTION_ARRAY.length<5){
@@ -302,26 +328,26 @@ const Home =()=> {
               timeStamp: getTimestamp()
             });
           }
-          setPageNumber((): void=>PAGE_NUMBER+1);
+          setPageNumber(PAGE_NUMBER+1);
           // console.log(PAGE_NUMBER-2);
-          setStiIndex(PAGE_NUMBER-2);
+          setStiIndex(PAGE_NUMBER-(PAGE_SURVEY_START-1));
           // stack selected area and init
           updateStackSelectedArea(SELECTED_AREA);
-          setSelectedArea((): void => []);
+          setSelectedArea([]);
           // stack likert question array and init
           updateStackLikertQuestionArray(LIKERT_QUESTION_ARRAY);
-          setLikertQuestionArray((): void => []);
+          setLikertQuestionArray([]);
           // init color box array
-          setColorBoxArray((): void => ["#e31a1c"]);
+          setColorBoxArray(["#e31a1c"]);
           // init selected color index
-          setSelectedColorIdx((): void => 0);
+          setSelectedColorIdx(0);
           if(PAGE_NUMBER==TOTAL_PAGE-1){
-            setNextBtnDrawFlag((): void => false);
+            setNextBtnDrawFlag(false);
           }
           // init survey step
-          setSurveyStep((): void => 0);
+          setSurveyStep(0);
         }else{
-          alert("이미지에서 최소 5개 영역을 선택하고 어느 수준의 의미를 가지는 영역인지 응답해주세요.");
+          alert("이미지에서 최소 5개 영역을 선택하고 평가해주세요.");
           // loging
           pushEventLog({
             user: USER_ID, 
@@ -333,7 +359,7 @@ const Home =()=> {
           });
         }
       }else{
-        alert("의미 점수를 선택해주세요.");
+        alert("선택한 영역들의 의미를 평가해주세요.");
       }
     }
   }
@@ -414,7 +440,7 @@ const Home =()=> {
       postData.set('EVENT_LOG', eLog);
       axios.post(`http://${window.location.hostname}:${PORT}/api/savedata`, postData)
       .then(response => {
-        setDataSaveLog((): void=>true);
+        setDataSaveLog(true);
       })
       .catch(error =>{
         alert(`ERROR - ${error.message}`);
@@ -427,7 +453,6 @@ const Home =()=> {
     // console.log(SUBJECT_EYE_COLOR_W);
     // console.log("STACK_SELECTED_AREA: ");
     // console.log(STACK_SELECTED_AREA);
-    // console.log(JSON.stringify(STACK_SELECTED_AREA));
     // console.log("STACK_LIKERT_QUESTION_ARRAY: ");
     // console.log(STACK_LIKERT_QUESTION_ARRAY);
     // console.log("SUBJECT_CELL: "+SUBJECT_CELL);
@@ -450,32 +475,32 @@ const Home =()=> {
   }
 
   const resetButtonClickFunction=()=>{
-    setSurveyStep((): void=>0);
-    setSelectedColorIdx((): void => 0);
-    setColorBoxArray((): void => ["#e31a1c"]);
-    setSelectedArea((): void => []);
-    setLikertQuestionArray((): void=> []);
+    setSurveyStep(0);
+    setSelectedColorIdx(0);
+    setColorBoxArray(["#e31a1c"]);
+    setSelectedArea([]);
+    setLikertQuestionArray([]);
   }
 
   return (
     <div className="bodyDiv">
       {/* PAGE_NUMBER = 0: private information aggrement */}
-      { PAGE_NUMBER == 0 &&
+      { PAGE_NUMBER == PAGE_AGRREMENT &&
         <div className="topDiv">
           <IntroAggrement />
         </div>
       }
-      { PAGE_NUMBER == 0 &&
+      { PAGE_NUMBER == PAGE_AGRREMENT &&
         <Aggrement />
       }
 
       {/* PAGE_NUMBER = 1: subject information A */}
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == 1 &&
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_SUBJECT_INFO &&
         <div className="topDiv">
           <IntroSubjectInfo />
         </div>
       }
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == 1 &&
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_SUBJECT_INFO &&
         <SubjectInfo 
           SUBJECT_ED_LEVEL={SUBJECT_ED_LEVEL}
           SUBJECT_EYE_COLOR_W={SUBJECT_EYE_COLOR_W}
@@ -487,17 +512,36 @@ const Home =()=> {
       }
 
       {/* PAGE_NUMBER = 2: manual */}
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == 2 &&
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_MANUAL &&
         <div className="topDiv">
           <IntroManual />
         </div>
       }
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == 2 &&
-        <Manual />
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_MANUAL &&
+        <Manual 
+          VIDEO_URL={M_VIDEO_URL}
+          IMAGE_URL={M_IMAGE_URL}
+        />
       }
 
-      {/* PAGE_NUMBER >= 3 to end-1: survey */}
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER >= 3 && PAGE_NUMBER < TOTAL_PAGE &&
+      {/* PAGE_NUMBER == 3: meaning */}
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_MEANING &&
+        <IntroMeaning />
+      }
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER == PAGE_MEANING &&
+        <Meaning 
+          IMG_URL_INTENSITY={M_IMAGE_SALIENCY_INTENSITY}
+          IMG_URL_COLOR={M_IMAGE_SALIENCY_COLOR}
+          IMG_URL_ORIENTATION={M_IMAGE_SALIENCY_ORIENTATION}
+          IMG_URL_MEAN_INFO={M_IMAGE_MEANING_INFO}
+          IMG_URL_MEAN_CONTEXT={M_IMAGE_MEANING_CONTEXT}
+          IMG_URL_MEAN_NOSALIENCY={M_IMAGE_MEANING_NO_SALIENCY}
+          IMG_URL_MEAN_SALIENCY={M_IMAGE_MEANING_SALIENCY}
+      />
+      }
+
+      {/* PAGE_NUMBER >= 4 to end-1: survey */}
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER >= PAGE_SURVEY_START && PAGE_NUMBER < TOTAL_PAGE &&
         <div className="topDiv">
           <IntroSurvey
             surveyStep={DATA_SURVEY_STEP}
@@ -506,7 +550,7 @@ const Home =()=> {
         </div>
       }
       
-      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER >= 3 && PAGE_NUMBER < TOTAL_PAGE &&
+      { BROWSER != "unavailable" && USE_ENV == "pc" && PAGE_NUMBER >= PAGE_SURVEY_START && PAGE_NUMBER < TOTAL_PAGE &&
         <div className="bodyStiDiv">
           <div className="stimulusViewDiv">
             <StimulusView
