@@ -45,6 +45,17 @@ def getVis():
     #injectMarker(cnt)
     return render_template('visualization.html', image=src)
 
+'''
+@application.route('/visualization')
+def getVis():
+    global cnt
+    cnt += 1
+    src='../static/chart/' + chartList[cnt-1]
+    #add marker in eeg record
+    #injectMarker(cnt)
+    return render_template('visualization.html', image=src)
+'''
+
 @application.route('/answer')
 def getAnswer():
     '''
