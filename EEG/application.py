@@ -91,7 +91,7 @@ def eval():
 
     totalScore.append(score)
     '''
-    if cnt >= 21:
+    if cnt >= 1:
         '''
         userData = pd.DataFrame(totalScore)
         userData.columns=userData.iloc[0]
