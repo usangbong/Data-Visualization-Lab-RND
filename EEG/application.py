@@ -24,6 +24,7 @@ def index():
 
 @application.route('/search')
 def searchResult():
+    '''
     global name
     name = request.args.get("search")
 
@@ -32,7 +33,7 @@ def searchResult():
 
     #add marker in eeg record
     injectMarker(0) #100:eval, 0: rest, cnt: vis number
-
+    '''
     return render_template('firstRest.html')
 
 @application.route('/visualization')
@@ -41,11 +42,12 @@ def getVis():
     cnt += 1
     src='../static/chart/' + chartList[cnt-1]
     #add marker in eeg record
-    injectMarker(cnt)
+    #injectMarker(cnt)
     return render_template('visualization.html', image=src)
 
 @application.route('/answer')
 def getAnswer():
+    '''
     global cnt, chartList, userAnswer
     #add marker in eeg record
     injectMarker(100)
@@ -54,16 +56,18 @@ def getAnswer():
     print(chartName)
     userAnswer.append([chartName, ans])
     print(ans)
+    '''
     return render_template('NASA-TLX.html')
 
 @application.route('/NASA-TLX')
 def getNASA():
     #add marker in eeg record
-    injectMarker(100)
+    #injectMarker(100)
     return render_template('NASA-TLX.html')
 
 @application.route('/eval')
 def eval():
+    '''
     global cnt, name, userAnswer
     print(cnt)
     score=[]
@@ -75,7 +79,9 @@ def eval():
     score.append(request.args.get("Frustration"))
 
     totalScore.append(score)
+    '''
     if cnt >= 21:
+        '''
         userData = pd.DataFrame(totalScore)
         userData.columns=userData.iloc[0]
         userData = userData.drop(userData.index[0])
@@ -87,15 +93,16 @@ def eval():
 
         # save emotiv data
         stopRecording()
+        '''
         return render_template('end.html')
     else:
-        injectMarker(0)
+        #injectMarker(0)
         return render_template('rest.html')
 
 @application.route('/rest')
 def getRest():
     #add marker in eeg record
-    injectMarker(0)
+    #injectMarker(0)
     return render_template('rest.html')
 
 
