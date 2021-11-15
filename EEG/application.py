@@ -3,7 +3,7 @@ import pandas as pd
 from flask import Flask, render_template, request
 import sys
 import os
-from static.libs.record import *
+#from static.libs.record import *
 
 sys.path.append("module/")
 application = Flask(__name__)
