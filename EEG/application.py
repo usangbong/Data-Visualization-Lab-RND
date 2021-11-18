@@ -3,6 +3,9 @@ import pandas as pd
 from flask import Flask, render_template, request
 import sys
 import os
+import json
+import plotly
+import plotly.express as px
 #from static.libs.record import *
 
 sys.path.append("module/")
@@ -17,10 +20,24 @@ chartList=os.listdir('static/chart/')
 random.shuffle(chartList)
 totalScore=[['Mental','Physical','Temporal','Effort','Performance','Frustration']]
 
-
 @application.route('/')
-def index():
-    return render_template('index.html')
+def chart1():
+    df = pd.DataFrame({
+        "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+        "Amount": [4, 1, 2, 2, 4, 5],
+        "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+    })
+
+    fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Fruit in North America"
+    description = """
+    A academic study of the number of apples, oranges and bananas in the cities of
+    San Francisco and Montreal would probably not come up with this chart.
+    """
+    return render_template('plotlyChart.html', graphJSON=graphJSON, header=header,description=description)
+
 
 @application.route('/search')
 def searchResult():
