@@ -1,0 +1,22 @@
+h1 {
+    position:absolute;
+    left:320px;
+}
+
+input[type=submit] {
+    width:250px;
+    height:100px;
+    padding:14px 20px;
+    margin: 8px 0;
+    margin-left:200px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:20px;
+}
+
+input[type=submit]:hover{
+    background-color: darkgrey;
+}
+input[type=submit]:active {
+    background-color: lightgrey;
+}
