@@ -91,8 +91,7 @@ class DCRNNModel(object):
             #             print("not use currui")
             #             result = labels[i]
             #     else:
-            #         # Return the prediction of the model in testing.
-            #         print("in testing")
+
 
 
             def _loop_function(prev, i):
