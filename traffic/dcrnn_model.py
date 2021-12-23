@@ -142,7 +142,7 @@ class DCRNNModel(object):
             attention_cell_with_projection = tf.contrib.seq2seq.AttentionWrapper(
                 cell=cell_with_projection, attention_mechanism=attention_mechanism,
                 alignment_history=False, output_attention=False)
-            print("attention_cell")
+
             print((attention_cell))
             decoding_cells = [attention_cell] * (num_rnn_layers - 1) + [attention_cell_with_projection]
 
