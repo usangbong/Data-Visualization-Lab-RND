@@ -124,7 +124,7 @@ class DCRNNModel(object):
             print(enc_output)
             print("@@@@@@@@@@@@@@@@@@@@")
             print("encstateeeeeeeee")
-            print(enc_state)
+
             # attention 구현
 
             attention_states = tf.transpose(enc_output, [1, 0, 2])
