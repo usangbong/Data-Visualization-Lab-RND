@@ -166,7 +166,7 @@ class DCRNNModel(object):
 
             print(decoder_initial_state)
             outputs, final_state = legacy_seq2seq.attention_decoder(labels, decoder_initial_state, attention_states ,decoding_cells, loop_function=_loop_function)
-            print("@@@@@@@@@@@@@@@@@@@@@23423@@@@")
+
             print(outputs)
         # Project the output to output_dim.
         outputs = tf.stack(outputs[:-1], axis=1)
