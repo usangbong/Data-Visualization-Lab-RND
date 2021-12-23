@@ -183,7 +183,7 @@ class DCRNNModel(object):
         :param k:
         :return:
         """
-        print("###global")
+
         # print((global_step))
         # print(k)
         return tf.cast(k / (k + tf.exp(global_step / k)), tf.float32)
