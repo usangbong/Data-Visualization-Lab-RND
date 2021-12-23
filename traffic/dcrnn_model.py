@@ -63,7 +63,7 @@ class DCRNNModel(object):
                 tf.reshape(self._labels[..., :output_dim], (batch_size, horizon,num_nodes * output_dim)), axis=1)
             labels.insert(0, GO_SYMBOL)
             print("라벨")
-            print(labels)
+
 
 
 
