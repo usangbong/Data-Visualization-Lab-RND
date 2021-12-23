@@ -135,7 +135,7 @@ class DCRNNModel(object):
             #어텐션 rnn unit * nodes로 바꿔보기
             attention_mechanism = tf.contrib.seq2seq.BahdanauAttention(num_nodes, attention_states,dtype=tf.float32)
 
-            print(attention_mechanism)
+
             attention_cell = tf.contrib.seq2seq.AttentionWrapper(
                 cell=cell, attention_mechanism=attention_mechanism,
                 alignment_history=False, output_attention=False)
