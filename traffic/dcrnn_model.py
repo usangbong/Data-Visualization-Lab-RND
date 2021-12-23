@@ -131,8 +131,7 @@ class DCRNNModel(object):
 
 
 
-            # source_sequence_length 이거 memoey로 바꿔보기 안되면 그냥 없애기(optional임)
-            #어텐션 rnn unit * nodes로 바꿔보기
+
             attention_mechanism = tf.contrib.seq2seq.BahdanauAttention(num_nodes, attention_states,dtype=tf.float32)
 
 
