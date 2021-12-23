@@ -68,8 +68,6 @@ class DCRNNModel(object):
             #     if is_training:
             #         # Return either the model's prediction or the previous ground truth in training.
             #
-            #         if use_curriculum_learning:
-            #             #c = tf.random_uniform((), minval=0, maxval=1.)
 
 
 
