@@ -152,7 +152,7 @@ class DCRNNModel(object):
 
             print("&&&&&decoding_cells")
             print(decoding_cells)
-            # #이거는 원래버젼
+
 
 
             decoder_initial_state = decoding_cells.zero_state(batch_size, dtype=tf.float32)
