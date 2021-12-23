@@ -123,7 +123,7 @@ class DCRNNModel(object):
             print("enc_output")
             print(enc_output)
             print("@@@@@@@@@@@@@@@@@@@@")
-            print("encstateeeeeeeee")
+
 
             # attention 구현
 
