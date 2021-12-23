@@ -163,7 +163,7 @@ class DCRNNModel(object):
             decoder_initial_state = decoder_initial_state.clone(cell_state=enc_state)
             print(type(decoder_initial_state))
             #decoder_initial_state = decoding_cells.get_initial_state(batch_size, dtype=tf.float32).clone(cell_state=enc_state)
-            print("decoder_initial_state이다아")
+
             print(decoder_initial_state)
             outputs, final_state = legacy_seq2seq.attention_decoder(labels, decoder_initial_state, attention_states ,decoding_cells, loop_function=_loop_function)
             print("@@@@@@@@@@@@@@@@@@@@@23423@@@@")
