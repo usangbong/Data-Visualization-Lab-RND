@@ -146,7 +146,6 @@ class DCRNNModel(object):
             print((attention_cell))
             decoding_cells = [attention_cell] * (num_rnn_layers - 1) + [attention_cell_with_projection]
 
-            print(decoding_cells)
             decoding_cells = tf.contrib.rnn.MultiRNNCell(decoding_cells, state_is_tuple=True)
 
 
