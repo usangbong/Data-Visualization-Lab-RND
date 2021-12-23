@@ -159,7 +159,6 @@ class DCRNNModel(object):
             #여기서 batch_size=true_batch_size * beam_width) 이거 변경해야할수도 .clone(cell_state=enc_state)
             decoder_initial_state = decoding_cells.zero_state(batch_size, dtype=tf.float32)
 
-            print(decoder_initial_state)
             decoder_initial_state = decoder_initial_state.clone(cell_state=enc_state)
             print(type(decoder_initial_state))
             #decoder_initial_state = decoding_cells.get_initial_state(batch_size, dtype=tf.float32).clone(cell_state=enc_state)
