@@ -107,7 +107,7 @@ class DCRNNModel(object):
 
                         result = prev
                     else:
-                        print(" use_curriculum_learning아님 ")
+
                         result = labels[i]
                 else:
                     # Return the prediction of the model in testing.
