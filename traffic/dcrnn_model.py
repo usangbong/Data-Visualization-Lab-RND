@@ -110,7 +110,7 @@ class DCRNNModel(object):
 
                         result = labels[i]
                 else:
-                    # Return the prediction of the model in testing.
+
                     result = prev
                 return result
                 #인코딩 실행
