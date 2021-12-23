@@ -85,9 +85,7 @@ class DCRNNModel(object):
             #
             #             print(f"labels[i]: {labels[i]}")
             #             print(f"prev: {prev}")
-            #             print("result")
-            #             print(result)
-            #         else:
+
 
 
 
