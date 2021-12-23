@@ -82,9 +82,6 @@ class DCRNNModel(object):
             #                 #일단 임시로 이걸로 바꿈 원래는 prev임
             #                 result=labels[i]
             #
-            #
-            #             print(f"labels[i]: {labels[i]}")
-            #             print(f"prev: {prev}")
 
 
 
