@@ -151,7 +151,6 @@ class DCRNNModel(object):
 
 
 
-            print(decoding_cells)
 
 
 
