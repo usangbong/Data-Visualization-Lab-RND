@@ -121,7 +121,7 @@ class DCRNNModel(object):
 
             print("@@@@@@@@@@@@@@@@@@@@")
             print("enc_output")
-            print(enc_output)
+
 
 
 
