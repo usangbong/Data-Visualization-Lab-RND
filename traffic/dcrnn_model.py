@@ -104,7 +104,7 @@ class DCRNNModel(object):
                     if use_curriculum_learning:
                         c = tf.random_uniform((), minval=0, maxval=1.)
                         threshold = self._compute_sampling_threshold(global_step, cl_decay_steps)
-                        print("쓰레시홀드 낭ㅁ")
+
                         #result = tf.cond(tf.less(c, threshold), lambda: labels[i], lambda: prev)
                         #원본은 대신
                         result = prev
