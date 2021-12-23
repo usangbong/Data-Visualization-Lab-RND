@@ -119,7 +119,7 @@ class DCRNNModel(object):
             enc_output, enc_state = tf.contrib.rnn.static_rnn(encoding_cells, inputs, dtype=tf.float32)
 
 
-            print("@@@@@@@@@@@@@@@@@@@@")
+
 
 
 
