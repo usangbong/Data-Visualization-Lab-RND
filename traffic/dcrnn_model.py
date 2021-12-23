@@ -200,14 +200,4 @@ class DCRNNModel(object):
     def loss(self):
         return self._loss
 
-    @property
-    def mae(self):
-        return self._mae
 
-    @property
-    def merged(self):
-        return self._merged
-
-    @property
-    def outputs(self):
-        return self._outputs
