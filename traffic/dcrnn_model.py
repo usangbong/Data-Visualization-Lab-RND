@@ -70,9 +70,6 @@ class DCRNNModel(object):
             #
             #         if use_curriculum_learning:
             #             #c = tf.random_uniform((), minval=0, maxval=1.)
-            #             c=random.random()
-            #             threshold = self._compute_sampling_threshold(i, cl_decay_steps)
-            #             print(f"c ===={c}")
 
 
 
