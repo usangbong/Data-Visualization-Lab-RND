@@ -156,7 +156,6 @@ class DCRNNModel(object):
             # outputs, final_state = legacy_seq2seq.rnn_decoder(labels, enc_state, decoding_cells,
             #                                                   loop_function=_loop_function)
 
-            #여기서 batch_size=true_batch_size * beam_width) 이거 변경해야할수도 .clone(cell_state=enc_state)
             decoder_initial_state = decoding_cells.zero_state(batch_size, dtype=tf.float32)
 
             decoder_initial_state = decoder_initial_state.clone(cell_state=enc_state)
