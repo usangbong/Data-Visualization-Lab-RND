@@ -96,8 +96,7 @@ class DCRNNModel(object):
             #         #일단 이거 임시로 원래는 prev
             #         result = labels[i]
             #     print("loop fun -> result")
-            #     print(result)
-            #     return result
+
             def _loop_function(prev, i):
                 if is_training:
                     # Return either the model's prediction or the previous ground truth in training.
