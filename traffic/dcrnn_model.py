@@ -203,11 +203,3 @@ class DCRNNModel(object):
     @property
     def mae(self):
         return self._mae
-
-    @property
-    def merged(self):
-        return self._merged
-
-    @property
-    def outputs(self):
-        return self._outputs
