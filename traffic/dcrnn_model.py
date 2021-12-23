@@ -66,8 +66,7 @@ class DCRNNModel(object):
             print(labels)
             # def _loop_function(prev, i):
             #     if is_training:
-            #         # Return either the model's prediction or the previous ground truth in training.
-            #
+
 
 
 
