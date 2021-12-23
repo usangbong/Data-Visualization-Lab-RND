@@ -177,12 +177,7 @@ class DCRNNModel(object):
 
     @staticmethod
     def _compute_sampling_threshold(global_step, k):
-        """
-        Computes the sampling probability for scheduled sampling using inverse sigmoid.
-        :param global_step:
-        :param k:
-        :return:
-        """
+
         print("###global")
         # print((global_step))
         # print(k)
