@@ -64,8 +64,7 @@ class DCRNNModel(object):
             labels.insert(0, GO_SYMBOL)
             print("라벨")
             print(labels)
-            # def _loop_function(prev, i):
-            #     if is_training:
+
 
 
 
