@@ -148,7 +148,7 @@ class DCRNNModel(object):
             print("멀티셀 전")
             print(decoding_cells)
             decoding_cells = tf.contrib.rnn.MultiRNNCell(decoding_cells, state_is_tuple=True)
-            # 인코딩한것을 넣는다.
+
 
             print("&&&&&decoding_cells")
             print(decoding_cells)
