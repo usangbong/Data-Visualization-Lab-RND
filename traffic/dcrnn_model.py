@@ -150,7 +150,7 @@ class DCRNNModel(object):
             decoding_cells = tf.contrib.rnn.MultiRNNCell(decoding_cells, state_is_tuple=True)
 
 
-            print("&&&&&decoding_cells")
+
             print(decoding_cells)
 
 
