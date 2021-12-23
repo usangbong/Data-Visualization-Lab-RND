@@ -73,11 +73,7 @@ class DCRNNModel(object):
             #             c=random.random()
             #             threshold = self._compute_sampling_threshold(i, cl_decay_steps)
             #             print(f"c ===={c}")
-            #             print(f"트레싷ㄹ드: {threshold}")
-            #             #result = tf.cond(tf.less(c, threshold), lambda: labels[i], lambda: prev)
-            #
-            #             if c<threshold:
-            #                 result=labels[i]
+
 
 
 
