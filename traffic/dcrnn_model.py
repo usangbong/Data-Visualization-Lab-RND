@@ -78,10 +78,7 @@ class DCRNNModel(object):
             #
             #             if c<threshold:
             #                 result=labels[i]
-            #             else:
-            #                 #일단 임시로 이걸로 바꿈 원래는 prev임
-            #                 result=labels[i]
-            #
+
 
 
 
