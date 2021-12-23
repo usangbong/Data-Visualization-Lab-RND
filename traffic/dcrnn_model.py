@@ -153,8 +153,7 @@ class DCRNNModel(object):
             print("&&&&&decoding_cells")
             print(decoding_cells)
             # #이거는 원래버젼
-            # outputs, final_state = legacy_seq2seq.rnn_decoder(labels, enc_state, decoding_cells,
-            #                                                   loop_function=_loop_function)
+
 
             decoder_initial_state = decoding_cells.zero_state(batch_size, dtype=tf.float32)
 
