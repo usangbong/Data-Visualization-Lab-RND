@@ -184,10 +184,9 @@ class DCRNNModel(object):
         :return:
         """
         print("###global")
-        # print((global_step))
-        # print(k)
+
         return tf.cast(k / (k + tf.exp(global_step / k)), tf.float32)
-        #return float(k/(k+np.exp(global_step+1/k)))
+
     @property
     def inputs(self):
         return self._inputs
