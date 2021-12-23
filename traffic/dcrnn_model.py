@@ -88,9 +88,7 @@ class DCRNNModel(object):
             #             print("result")
             #             print(result)
             #         else:
-            #             print("not use currui")
-            #             result = labels[i]
-            #     else:
+
 
 
 
