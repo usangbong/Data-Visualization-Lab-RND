@@ -1,0 +1,78 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  // margin: 10px;
+  // font-family: 'Noto Sans Korean', Arial, Helvetica;
+  font-family: 'Roboto', sans-serif;
+}
+
+.app {
+  // width:1200px;
+  width: 100%;
+  height: 100%;
+  border: 1px black solid;
+  box-sizing: border-box;
+}
+
+.content {
+  box-sizing: border-box;
+  border: 1px blue solid;
+  background-color: #fff;
+  
+  display: flex;
+  flex-direction: row;
+  // align-items: flex-start;
+  // justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  color: #555;
+  .bodyDiv{
+    // margin-right: 30px;
+    width: 100%;
+    height: 100%;
+    border: 1px red solid;
+
+    .colorViewer{
+      width: 100%;
+      height: 2%;
+      border: 1px green solid;
+      .btnColorDiv{
+        display: flex;
+        // flex-direction: column;
+        border: 1px black solid;
+        .btnArea{
+          display: flex;
+          width: 10%;
+          border: 1px black solid;
+        }
+        .colorBoxArea{
+          display: flex;
+          width: 90%;
+          border: 1px black solid;
+        }
+      }
+    }
+    .imageViewer{
+      width: 100%;
+      height: 90%;
+      border: 1px purple solid;
+    }
+    .interface{
+      width: 100%;
+      height: 5%;
+      border: 1px orange solid;
+    }
+    
+
+
+  }
+}
+
+#logo{
+  width: 28px;
+  height: 20px;
+  margin-right: 15px;
+  background-image: url("./image/logo_gray.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
