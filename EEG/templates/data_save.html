@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>rest</title>
+    </head>
+    <body>
+    <h1> 데이터 중간 저장 과정입니다. </h1>
+    <h3> 아래 Save 버튼을 누르고 화면이 전환되는 동안 잠시 기다려주세요. </h3>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+    <script>
+        function deleteSave(){
+            var s = document.getElementsByClassName('save')[0];
+            if(s!=null) {
+                s.remove();
+            }
+        }
+        </script>
+        <div id="Next" style="text-align: center">
+            <form action={{ link }} method="POST">
+                <input type="submit" value="Save" class="save" onclick="setTimeout(function() {
+    deleteSave();
+}, 300);;">
+            </form>
+        </div>
+
+      <link href="../static/css/global.css" rel="stylesheet">
+  <link href="../static/css/bootstrap.css" rel="stylesheet">
+</body>
+</html>

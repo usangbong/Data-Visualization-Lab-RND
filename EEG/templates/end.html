@@ -2,11 +2,24 @@
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
+                <link href="../static/css/global.css" rel="stylesheet">
+        <link href="../static/css/bootstrap.css" rel="stylesheet">
         <title>END</title>
+        <script>
+            window.onload = function button_hide() {
+                document.getElementById("Next").style.display = "none";
+                setTimeout( function button_show() {document.getElementById("Next").style.display = "block";}, 2000);
+            }
+        </script>
     </head>
     <body>
-        <h1>수고하셨습니다.</h1>
-        <link href="../static/css/global.css" rel="stylesheet">
-        <link href="../static/css/bootstrap.css" rel="stylesheet">
+        <h1>모든 시각화 테스트가 종료되었습니다.</h1>
+        <h3> Save 버튼을 누르고 뇌파 장치를 벗어주세요.</h3>
+
+        <div id="Next" style="text-align: center;">
+            <form action={{ link }} method='POST' style="text-align: center;">
+                <input type="submit" value="Save">
+            </form>
+        </div>
     </body>
 </html>

@@ -50,6 +50,6 @@ def injectMarker(label):
 	r.add_markers(label)
 
 def stopRecording():
-	r.export('C:/EEG data',
+	r.export('C:/EEG data/EuroVis',
 			 ['EEG', 'MOTION', 'PM', 'MC', 'FE', 'BP'],
 			 'CSV', 'V2' )

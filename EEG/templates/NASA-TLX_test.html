@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>NASA-TLX Test</title>
+    </head>
+    <body>
+    <br>
+    <br>
+        <div>
+            <form method="POST" action= {{ link }}>
+                <h4>Mental Demand (정신적 요구량)</h4>
+                <p>주어진 직무를 수행하기 위해<br>
+                    사고, 의사결정, 검색, 계산 및 기억 등과 같은<br>
+                    정신적 또는 인지적인 활동이 얼마나 많이 요구된다고 생각하십니까?</p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Mental" autocomplete="off"/>
+
+                <h4>Physical Demand (육체적 요구량)</h4>
+                <p>주어진 직무를 수행하기 위해,<br>
+                    밀기나 잡아당기기 또는 돌리기와 같은<br>
+                    육체적인 활동이 얼마나 많이 요구된다고 생각하십니까? </p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Physical" autocomplete="off"/>
+
+                <h4>Temporal Demand (시간적 요구량)</h4>
+                <p>주어진 직무를 수행하기 위해서 요구되는 시간적 압박은 어느 정도 입니까?<br>
+                    예를 들어 숨돌릴 틈도 없이 많은 조치들을 수행해야 주어진 직무를 완료할 수 있다면<br>
+                    높은 시간적 압력을 느끼는 경우에 해당합니다.</p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Temporal" autocomplete="off"/>
+
+                <h4>Effort (노력)</h4>
+                <p>주어진 직무를 수행할 경우, 얼마나 많은 노력을 기울여야 한다고 생각하십니까?<br>
+                    예를 들어 엄청난 집중 등이 요구되면 높은 노력이 필요한 직무에 해당합니다.</p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Effort" autocomplete="off"/>
+
+                <h4>Performance (직무성취도)</h4>
+                <p>주어진 직무를 수행할 경우, 얼마나 성공적으로 또는 정확하게 직무를 완료할 수 있다고 생각하십니까?</p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Performance" autocomplete="off"/>
+
+                <h4>Frustration (당혹감)</h4>
+                <p>이 직무를 수행할 경우, 느낄 수 있는 당혹감은 어느 정도라고 생각하십니까?<br>
+                    예를 들어 직무를 어떻게 하라는 것인지를 파악할 수 없는 경우나 현실적이지 못하다고 판단되는 경우 등은 높은 당혹감을 느끼는 상황에 해당됩니다.</p>
+                <input type="input" placeholder="점수 입력 (0~100)" required name="Frustration" autocomplete="off"/>
+                <br>
+                <input type="submit" value="submit">
+            </form>
+        </div>
+    <link href="../static/css/global.css" rel="stylesheet">
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+    </body>
+</html>

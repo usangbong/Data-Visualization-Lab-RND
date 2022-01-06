@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="../../../../../static/css/bar_line_base.css">
+      <script src="https://d3js.org/d3.v4.js"></script>
+    <title></title>
+    <style>
+    </style>
+  </head>
+  <body>
+  <h1> {{ task }}</h1>
+    <div class="barchart"></div>
+    <script src="../../../../../static/js/barchart.js"></script>
+    <script>
+        var dataName = 'lepidium.csv';
+        var w = 1080, h = 720;
+        var margin = {top:10, right:30, bottom:50, left:80};
+        var xaxis = 'conc', yaxis = 'weight';
+        var labelPos = [40, -35];
+        var labelRot = [0, -90];
+        var max = 13;
+        var colors = ['indianred','cornflowerblue','darkgreen','orange','mediumpurple']
+
+        drawBarChart(dataName, w, h, margin, xaxis, yaxis, labelPos, labelRot, max, colors);
+    </script>
+  <script>
+        document.addEventListener('keydown', function(event) {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+          };
+        }, true);
+    </script>
+
+    <div>
+        <form action={{ link }} method="POST">
+            <input type="text" value="" id="answer" name="answer" required autocomplete="off">
+            <br>
+            <input type="submit" value="Next">
+        </form>
+    </div>
+  </body>
+</html>

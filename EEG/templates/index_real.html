@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+  <meta charset="UTF-8">
+</head>
+  <body>
+  <br>
+  <div><h1>실험 안내 및 주의사항</h1></div>
+  <br>
+  <div>
+    <h3>지금부터 실제 실험을 시작하겠습니다.<br></h3>
+    <p>
+      실험의 각 세트는 [시각화 문제 풀이 → 설문 → 휴식] 으로 진행됩니다.<br>
+      실험은 총 10개의 연습용 문제와, 실제 실험에는 96개의 문제가 준비되어있습니다.<br>
+      실험 예상 소요시간은 1시간 30분 입니다.<br>
+      주어진 과제의 요구 사항을 주의 깊게 봐주세요.<br>
+      <br>
+      실험은 주어진 시각화를 보고 질문에 대한 답변을 입력하는 방식으로 진행됩니다.<br>
+      답변 작성 후 버튼을 클릭하면 다음 페이지로 넘어가며, 한번 넘어간 페이지는 다시 돌아갈 수 없습니다.<br>
+      <br>
+      문제 해결에 어려움을 느끼게 하기 위해 의도적으로 어렵게 표현한 시각화가 존재합니다.<br>
+      혹시라도 답을 모르겠을 경우 모르겠다고 입력하셔도 됩니다.<br>
+      <b>단, 리워드는 정답률이 너무 낮은 경우 지급되지 않습니다.<br></b>
+      <br>
+      휴식 단계에서는 3초의 휴식을 가진 후 다음 과제를 수행할 수 있는 버튼이 나타납니다<br>
+      만약 버튼이 나타난 후에도 추가적인 휴식을 원한다면 충분한 휴식을 가진 후 다음 문제로 넘어가주세요.<br>
+      <br>
+      <b>뇌파 데이터의 노이즈를 방지하기 위해 불필요한 말이나 움직임은 지양해 주세요.<br></b>
+        <br>
+        아래에 이름을 입력하고 버튼을 누르면 실험이 시작됩니다<br>
+  <br>
+  <div>
+  <br>
+    <form method="POST"  action="/next">
+      <input type="input" id="search" placeholder="이름을 입력해주세요" required name="search" autocomplete="off"/>
+        <input type="submit" value="start">
+    </form>
+  </div>
+    <link href="../static/css/global.css" rel="stylesheet">
+  <link href="../static/css/bootstrap.css" rel="stylesheet">
+</body>
+</html>
